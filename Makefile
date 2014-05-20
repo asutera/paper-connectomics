@@ -1,8 +1,10 @@
+all: article
+
 article: references.bib article.tex
-	pdflatex -shell-escape article.tex
+	pdflatex -shell-escape  -halt-on-error article.tex
 	# bibtex references
-	pdflatex -shell-escape article.tex
-	pdflatex -shell-escape article.tex
+	pdflatex -shell-escape  -halt-on-error article.tex
+	pdflatex -shell-escape  -halt-on-error article.tex
 
 partial:
 	pdflatex -shell-escape article.tex
