@@ -90,6 +90,9 @@ neuron connectivity network through dissection would be an impossible
 and daunting task.
 
 % Issue : we have data, but need to have to infer the connectome
+% TODO Shed light on the difficulty of the inverse problem:
+% noise, time scale (optical imaging speed vs neuron speed), decay of
+% fluorescent signal.
 Cutting edge optical devices (TODO CITE) allows to track simultaneously
 the neural activity of thousands of neurons through the fluorescent
 calcium indicator. The neuron connectivity network could be inferred
@@ -102,7 +105,15 @@ This is also the winning method of the Connectomics challenge.
 
 
 \section{Method}
+
 % Introduce notation
+Let us denote the $n$ time step of fluorescent calcium time series from $p$
+neurons by $X \in \mathcal{R}^{n \times p}$ and by
+$y \in \left\{0, 1 \right\}^{p \times p}$ the network connectivity graph, where
+non zero values indicate that the neuron $i$ have an outward connection to
+the neuron $j$.
+
+
 % Introduce partial correlation
 % Introduce directivity
 % Introduce filtering
