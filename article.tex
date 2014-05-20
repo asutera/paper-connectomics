@@ -106,12 +106,15 @@ This is also the winning method of the Connectomics challenge.
 
 \section{Method}
 
-% Introduce notation
-Let us denote the $n$ time step of fluorescent calcium time series from $p$
-neurons by $X \in \mathcal{R}^{n \times p}$ and by
-$y \in \left\{0, 1 \right\}^{p \times p}$ the network connectivity graph, where
+% Introduce notation + goal in mathematical score
+Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of fluorescent
+calcium concentration of size $n$ from $p$ neurons, the goal is to infer the
+connectivity network $y \in \left\{0, 1\right\}^{p \times p}$ where
 non zero values indicate that the neuron $i$ have an outward connection to
 the neuron $j$.
+
+
+
 
 
 % Introduce partial correlation
