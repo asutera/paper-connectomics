@@ -161,8 +161,32 @@ The filtering process is made of three main parts:
 \subsection{Datasets}
 
 \paragraph{Improvement of each stage of our approach\\}
-\paragraph{Comparison with other methods\\}
 
+\begin{table}[h!]
+\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
+\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 & normal-5 & normal-6 \\ \hline
+1 & Inverse correlation & & & & &  &  \\ \hline
+2 & Pre-processing & & & & &  &  \\ \hline
+3 & PCA & & & & &  &  \\ \hline
+4 & Weighting & & & & &  &  \\ \hline
+5 & Averaging & & & & &  &  \\ \hline
+
+\end{tabular}
+\end{table}
+
+Note that we choose the \textit{best} threshold for stages 1 to 4. 
+
+\paragraph{Comparison with other methods\\}
+\begin{table}[h!]
+\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
+\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 & normal-5 & normal-6 \\ \hline
+1 & Inverse correlation & & & & &  &  \\ \hline
+2 & Correlation & & & & &  &  \\ \hline
+3 & GENIE3 & & & & &  &  \\ \hline
+4 & GTE & & & & &  &  \\ \hline
+
+\end{tabular}
+\end{table}
 \subsection{Metrics}
 \subsection{Data filtering}
 \subsection{Signal distribution}
