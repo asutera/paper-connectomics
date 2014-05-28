@@ -126,27 +126,29 @@ This is also the winning method of the Connectomics challenge [todo cite].
 
 \paragraph{Problem definition\\}
 
+% Introduce notation + goal in mathematical score
+% TODO check convention for y_{ij}
 One way to emphasize the connections between neurons is to represent them by a
 (un)directed graph with $p$ nodes: each node represents a neuron, and each
 edge $y_{ij}$ represents a direct link from neuron  $i$ to neuron $j$. If the
 graph is undirected, then $y_{ij}$ is equal to $y_{ji}$  for all $i,j$.
-
-% Introduce notation + goal in mathematical score
-% TODO check convention for y_{ij}
-Formally, the unsupervised may be formulated as :
+The unsupervised task may be formulated as:
 \textit{Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of
 fluorescent calcium concentration of size $n$ from $p$ neurons, the goal is to
-infer the connectivity network $y \in \left\{0, 1\right\}^{p \times p}$ where
-non zero values indicate that the neuron $i$ have an outward connection to
-the neuron $j$.}
+infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
 
-From a probabilistic point of view, the newtwork
-
-
-
-
-% Plan:
 % introduce the notion of dependance/independance
+From a probabilistic point of view, the inference of the undirected network
+can be formulated as inferring the conditional independence between neurons
+$i$ and $j$ conditionally to all other neurons
+$i \perp j | 1,\ldots,p \backslash \left\{i, j\right\}$. Note that
+the unconditional independence $i \perp j$ between  $i$ and $j$ doesn't allow to
+infer the graph due to indirect effect. For instance if neurons $A, B, C$ have
+the connectivity graph $A \rightarrow B \rightarrow C$, then we have the
+dependence $A \not\perp C$ and the conditional independence $A \perp C | B$.
+
+
+
 % Introduce correlation => Estimator of I(X; Y)
 %                       => Issue indirect effect
 % Introduce partial correlation => Estimator of I(X; Y | Z)
