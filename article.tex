@@ -73,7 +73,7 @@
 \begin{document}
 
 \maketitle
- 
+
 
 \begin{abstract}
 Understanding how the brain works is a key to understand and to treat
@@ -110,7 +110,12 @@ the neural activity of thousands of neurons through the fluorescent
 calcium indicator. The neuron connectivity network could be inferred
 from those neuron activity signals.
 
-The neural connectivity inference consists in highlighting, from observational data, direct relationships between neurons. One way to emphasize the connections between neurons is to represent them by a (un)directed graph with $p$ nodes, where each node represents a neuron, and an edge $e_{ij}$ which represents a direct link from neuron  $i$ to neuron $j$. If the graph is undirected, then $e_{ij}$ is equal to $e_{ji}$  for all $i,j$. 
+The neural connectivity inference consists in highlighting, from observational
+data, direct relationships between neurons. One way to emphasize the
+connections between neurons is to represent them by a (un)directed graph with
+$p$ nodes, where each node represents a neuron, and an edge $e_{ij}$ which
+represents a direct link from neuron  $i$ to neuron $j$. If the graph is
+undirected, then $e_{ij}$ is equal to $e_{ji}$  for all $i,j$.
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
@@ -124,7 +129,7 @@ This is also the winning method of the Connectomics challenge [todo cite].
 
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
-Formally, the challenge problem may be formulated by the following statement : 
+Formally, the challenge problem may be formulated by the following statement :
 \textit{Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of fluorescent
 calcium concentration of size $n$ from $p$ neurons, the goal is to infer the
 connectivity network $y \in \left\{0, 1\right\}^{p \times p}$ where
@@ -132,16 +137,48 @@ non zero values indicate that the neuron $i$ have an outward connection to
 the neuron $j$.}
 
 
-The challenge was stated as an unsupervised learning problem. The particularity of unsupervised inference is the network recovery solely based on observational data. Other approaches have been considered to infer biochemical networks, e.g. gene regulatory network, such as supervised learning [todo cite] or transfer learning [todo cite], but these learning processes require, as starting point, a partial knowledge of the target network or known networks similar to the unknown one. 
+The challenge was stated as an unsupervised learning problem. The particularity
+of unsupervised inference is the network recovery solely based on
+observational data. Other approaches have been considered to infer biochemical
+networks, e.g. gene regulatory network, such as supervised learning [todo cite]
+or transfer learning [todo cite], but these learning processes require, as
+starting point, a partial knowledge of the target network or known networks
+similar to the unknown one.
 
 % Introduce partial correlation
 \paragraph{Partial correlation\\}
 
-A common association measure is the Pearson correlation coefficient. 
+A common association measure is the Pearson correlation coefficient.
 \begin{align}
 \rho_{ij} = \dfrac{cov(I,J)}{\sigma_I \sigma_J}
 \end{align}
-Even if \textit{correlation does not imply causation} [todo cite], it may give an insight on the underlying connectivity network. Nevertheless, the main challenge in inferring a network is to distinguish direct from indirect interactions [de la Fuente et al., 2004]. While the classical correlation coefficient characterize both direct and indirect interactions, the partial correlation coefficient quantifies association between variables conditionally on one or several other variables (the number of variables considered being the order of the partial correlation coefficient). [Shipley, 2002] suggests to consider correlation coefficients of all possible orders, i.e. conditioned on every subsets of the set of $p-2$ other variables, in order to take into account multiple indirect paths between a given pair of variables.  An obvious limitation to calculate high-order coefficient is the number of samples in conditioned data sets. Considering the large number of samples at our disposal in the connectomics challenge, we only consider the highest order of partial correlation coefficient. We thus try to estimate partial correlation matrix as the inferred network where a matrix element, denoted by $\rho_{ij | \mathcal{V}^{-i,j}}$, is the partial correlation coefficient of order $p-2$ between neurons $i$ and $j$. Note that this matrix is symmetric and thus it is impossible to determine the causal mechanism behind the interaction (I directly causes J, J directly causes I or both [de la Fuente, 2004])\footnote{Two other causal mechanisms may be implied by a non-zero partial coefficient. First, the pair of variables may be induced by a common (hidden) variable and second, I (respectively J) is conditionally correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].} . A way to find these coefficient [todo cite?] is to take the inverse of the covariance matrix to get the partial correlation matrix of order $p-2$, also known as the precision matrix [todo cite] .
+Even if \textit{correlation does not imply causation} [todo cite], it may give
+an insight on the underlying connectivity network. Nevertheless, the main
+challenge in inferring a network is to distinguish direct from indirect
+interactions [de la Fuente et al., 2004]. While the classical correlation
+coefficient characterize both direct and indirect interactions, the partial
+correlation coefficient quantifies association between variables conditionally
+on one or several other variables (the number of variables considered being
+the order of the partial correlation coefficient). [Shipley, 2002] suggests to
+consider correlation coefficients of all possible orders, i.e. conditioned
+on every subsets of the set of $p-2$ other variables, in order to take into
+account multiple indirect paths between a given pair of variables.  An obvious
+limitation to calculate high-order coefficient is the number of samples in
+conditioned data sets. Considering the large number of samples at our disposal
+in the connectomics challenge, we only consider the highest order of partial
+correlation coefficient. We thus try to estimate partial correlation matrix as
+the inferred network where a matrix element, denoted by
+$\rho_{ij | \mathcal{V}^{-i,j}}$, is the partial correlation coefficient of
+order $p-2$ between neurons $i$ and $j$. Note that this matrix is symmetric
+and thus it is impossible to determine the causal mechanism behind the
+interaction (I directly causes J, J directly causes I or both
+[de la Fuente, 2004])\footnote{Two other causal mechanisms may be implied
+by a non-zero partial coefficient. First, the pair of variables may be induced
+by a common (hidden) variable and second, I (respectively J) is conditionally
+correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].} .
+A way to find these coefficient [todo cite?] is to take the inverse of the
+covariance matrix to get the partial correlation matrix of order $p-2$, also
+known as the precision matrix [todo cite] .
 
 % Introduce directivity
 \paragraph{Directivity}
@@ -152,9 +189,14 @@ Even if \textit{correlation does not imply causation} [todo cite], it may give a
 The filtering process is made of three main parts:
 
 \begin{enumerate}[i.]
-\item A low-pass filter: we consider four shapes of local averaging, 
+\item A low-pass filter: we consider four shapes of local averaging,
 \item A high pass filter : we apply the asymmetric discrete derivative,
-\item A non-linear filter: we re-weight samples depending on the current activity of the systems in order to favour the association measure when directly connected neurons are firing together, while artificially reducing the association measure in case of extreme network activity, i.e. high when a network firing is happening and low when no neuron is active.
+\item A non-linear filter: we re-weight samples depending on the current
+      activity of the systems in order to favour the association measure when
+      directly connected neurons are firing together, while artificially
+      reducing the association measure in case of extreme network activity,
+      i.e. high when a network firing is happening and low when no neuron is
+      active.
 \end{enumerate}
 
 \section{Empirical experiments}
@@ -182,7 +224,7 @@ The filtering process is made of three main parts:
 \end{tabular}
 \end{table}
 
-Note that we choose the \textit{best} threshold for stages 1 to 4. 
+Note that we choose the \textit{best} threshold for stages 1 to 4.
 \paragraph{Comparison with other methods\\}
 
 \begin{table}[h!]
