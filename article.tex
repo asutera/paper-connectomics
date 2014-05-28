@@ -99,21 +99,22 @@ the anatomical and functional connectivity of the brain.
 The human brain is a complex biological organ, which is formed by 100
 billions of neurons with 7000 synaptic connections on average. Inferring the
 neuron connectivity network through dissection would be an impossible
-and daunting task.
+and a daunting task.
 
 % Issue : we have data, but need to have to infer the connectome
-% TODO Shed light on the difficulty of the inverse problem:
-% noise, time scale (optical imaging speed vs neuron speed), decay of
-% fluorescent signal.
 Cutting edge optical devices [todo cite] allows to track simultaneously
 the neural activity of thousands of neurons through the fluorescent
-calcium indicator.
+calcium indicator. Those devices have however a sampling rate smaller
+than the neuron firing speed and takes only two dimensional image, which may lead
+to superpose the activity of different neurons. Furthermore, the
+decay of the fluorescent calcium signal is slow compare to its rise.
 The neural connectivity inference consists in highlighting, from observational
 data, direct relationships between neurons. One way to emphasize the
 connections between neurons is to represent them by a (un)directed graph with
-$p$ nodes, where each node represents a neuron, and an edge $e_{ij}$ which
+$p$ nodes, where each node represents a neuron, and an edge $y_{ij}$ which
 represents a direct link from neuron  $i$ to neuron $j$. If the graph is
-undirected, then $e_{ij}$ is equal to $e_{ji}$  for all $i,j$.
+undirected, then $y_{ij}$ is equal to $y_{ji}$  for all $i,j$.
+
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
