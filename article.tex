@@ -140,7 +140,9 @@ infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
 % introduce the notion of dependence / independence
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and
-independences. Each neuron signal $i$ is a random continuous variable $X_i$,
+independences.  Even if \textit{independence
+does no imply causation}[todo cite], it gives insight on the underlying connectivity
+network. Each neuron signal $i$ is a random continuous variable $X_i$,
 which follows a probability density function $p_\mathcal{X_i}(x_i)$.
 Two neurons $X_i$, $X_j$ will be said conditionally independent
 to a set of neurons $X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$, denoted
@@ -156,30 +158,31 @@ p_{X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
 for all real numbers $x_1,\ldots,x_p $ such that
 $p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
  (x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$.
-Thus if $X_i \not\perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$,
-then we have the edge $i-j$ in the undirected graph.
 
 Under the hypothesis that the neurons follow a jointly Gaussian distribution
 $p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$
 of mean vector $\mu$ and of covariance matrix $\Sigma$, two neurons $X_i$
-and $X_j$ are independent $X_i \perp X_j$ if they have zero correlation
-coefficient and are conditionally independent to all others neurons
-$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if they
-have zero partial correlation coefficient. Even if \textit{independence
-does no imply causation}, it gives insight on the underlying connectivity
-network.
-
-% Introduce correlation => Estimator of I(X; Y) => Issue indirect effect
-The Pearson correlation coefficient $\rho_{ij}$ is an association measure
-and defined by
+and $X_j$ are independent $X_i \perp X_j$ if they have zero Pearson correlation
+coefficient
 \[
-\rho_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_i \Sigma_j}}.
+\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}}
+\]
+and are conditionally independent to all others neurons
+$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if they
+have zero partial correlation coefficient
+\[
+\rho_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}} =
+\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}.
 \]
 
+% Correlation => Issue indirect effect
+% Partial correlation => better estimate of the graph  => Symmetric measure
+
+Thus if $X_i \not\perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$,
+then we have the edge $i-j$ in the undirected graph.
 
 
-% Introduce partial correlation => Estimator of I(X; Y | Z)
-%                               => Symmetric measure
+
 
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce Filtering
