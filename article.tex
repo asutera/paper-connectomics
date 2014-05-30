@@ -1,4 +1,4 @@
- %\documentclass[wcp,gray]{jmlr} % test grayscale version
+   %\documentclass[wcp,gray]{jmlr} % test grayscale version
 \documentclass[wcp]{jmlr}
 
 
@@ -137,16 +137,28 @@ The unsupervised task may be formulated as:
 fluorescent calcium concentration of size $n$ from $p$ neurons, the goal is to
 infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
 
-% introduce the notion of dependance/independance
-% TODO add a more formal definition of independance.
+% introduce the notion of dependence / independence
+% TODO add a more formal definition of independence.
 From a probabilistic point of view, the inference of the undirected network
-can be formulated as inferring the conditional independence between neurons
-$i$ and $j$ conditionally to all other neurons
-$i \perp j | 1,\ldots,p \backslash \left\{i, j\right\}$. Note that
-the unconditional independence $i \perp j$ between  $i$ and $j$ doesn't allow to
-infer the graph due to indirect effect. For instance if neurons $A, B, C$ have
-the connectivity graph $A \rightarrow B \rightarrow C$, then we have the
-dependence $A \not\perp C$ and the conditional independence $A \perp C | B$.
+can be formulated as inferring conditional dependences and
+independences. Each neuron signal $i$ is a random continuous variable $X_i$,
+which follows a probability density function $p_\mathcal{X_i}(x_i)$.
+Two neurons $X_i$, $X_j$ will be said conditionally independent
+$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ to all
+others neuron if
+\begin{align*}
+&p_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
+    (x_i, x_j | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) \\
+=&p_{X_i | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
+    (x_i | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\})
+p_{X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
+    (x_j | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\})
+\end{align*}
+for all real numbers $x_1,\ldots,x_p $ such that
+$p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
+ (x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$.
+Thus if $X_i \not\perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$,
+then we have the edge $i-j$ in the undirected graph.
 
 
 
