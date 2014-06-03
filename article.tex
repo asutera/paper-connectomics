@@ -117,14 +117,13 @@ network or known networks highly similar to the unknown one is available,
 supervised learning [todo cite] and transfer learning  [todo cite] based
 approach could be considered to infer networks.
 
+
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge [todo cite].
 
 \section{Method}
-
-\paragraph{Problem definition\\}
 
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
@@ -136,13 +135,23 @@ The unsupervised task may be formulated as:
 \textit{Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of
 fluorescent calcium concentration of size $n$ from $p$ neurons, the goal is to
 infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
+The main challenge in the inference of the network $y$
+is to distinguish direct from indirect interactions [de la Fuente et al., 2004].
+For instance with the simple interaction graph $A \rightarrow B \rightarrow C$,
+we want to distinguish direct interactions $A \rightarrow B$ and $B \rightarrow C$
+from the indirect interaction $A \rightarrow C$.
 
 % introduce the notion of dependence / independence
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and
 independences.  Even if \textit{independence
 does no imply causation}[todo cite], it gives insight on the underlying connectivity
-network. Each neuron signal $i$ is a random continuous variable $X_i$,
+network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
+following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
+$B \not\perp C$, $B \not\perp C | A$, but $A \perp C | B$ and  $A \not\perp C$.
+
+
+Each neuron signal $i$ is a random continuous variable $X_i$,
 which follows a probability density function $p_\mathcal{X_i}(x_i)$.
 Two neurons $X_i$, $X_j$ will be said conditionally independent
 to a set of neurons $X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$, denoted
@@ -157,8 +166,8 @@ p_{X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
 \end{align*}
 for all real numbers $x_1,\ldots,x_p $ such that
 $p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
- (x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
- reciprocal is true only under additional hypotheses.
+(x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
+reciprocal is true only under additional hypotheses.
 
 Under the hypothesis that the neurons follow a jointly Gaussian distribution
 $p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$
@@ -178,56 +187,38 @@ have zero partial correlation coefficient
 
 % Correlation => Issue indirect effect
 % Partial correlation => better estimate of the graph  => Symmetric measure
+While the correlation coefficient is unable to distinguish between
+direct and indirect interaction, the partial correlation coefficient
+aims to infer only direct ones through the conditioning over all the other
+variables. In previous studies [Shipley, 2002], it has been suggested
+consider correlation coefficients of all possible orders [Shipley, 2002],
+i.e. conditioned on every subsets of the set of $p-2$ other variables, in order
+to take into account multiple indirect paths between a given pair of variables.
+An obvious limitation to calculate high-order coefficient is the number of
+samples in conditioned data sets \textcolor{red}{AJ: Est ce que ce ne sera pas
+à la fois $p$ and $n$?}. Given the high number of samples $n$
+in the Connectomics challenge, we only consider the highest order of partial
+correlation coefficient.
 
-Thus if $X_i \not\perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$,
-then we have the edge $i-j$ in the undirected graph.
 
-
-
-
-% Introduce a custom solution to make the Y matrix asymmetric
-% Introduce Filtering
-
-% Introduce partial correlation
-\paragraph{Partial correlation\\}
-
-A common association measure is the
-\begin{align}
-\rho_{ij} = \dfrac{cov(I,J)}{\sigma_I \sigma_J}
-\end{align}
-Even if \textit{correlation does not imply causation} [todo cite], it may give
-an insight on the underlying connectivity network. Nevertheless, the main
-challenge in inferring a network is to distinguish direct from indirect
-interactions [de la Fuente et al., 2004]. While the classical correlation
-coefficient characterize both direct and indirect interactions, the partial
-correlation coefficient quantifies association between variables conditionally
-on one or several other variables (the number of variables considered being
-the order of the partial correlation coefficient). [Shipley, 2002] suggests to
-consider correlation coefficients of all possible orders, i.e. conditioned
-on every subsets of the set of $p-2$ other variables, in order to take into
-account multiple indirect paths between a given pair of variables.  An obvious
-limitation to calculate high-order coefficient is the number of samples in
-conditioned data sets. Considering the large number of samples at our disposal
-in the connectomics challenge, we only consider the highest order of partial
-correlation coefficient. We thus try to estimate partial correlation matrix as
-the inferred network where a matrix element, denoted by
-$\rho_{ij | \mathcal{V}^{-i,j}}$, is the partial correlation coefficient of
-order $p-2$ between neurons $i$ and $j$. Note that this matrix is symmetric
+Note that this matrix is symmetric
 and thus it is impossible to determine the causal mechanism behind the
 interaction (I directly causes J, J directly causes I or both
 [de la Fuente, 2004])\footnote{Two other causal mechanisms may be implied
 by a non-zero partial coefficient. First, the pair of variables may be induced
 by a common (hidden) variable and second, I (respectively J) is conditionally
-correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].} .
-A way to find these coefficient [todo cite?] is to take the inverse of the
-covariance matrix to get the partial correlation matrix of order $p-2$, also
-known as the precision matrix [todo cite] .
+correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].}
+
+% Introduce a custom solution to make the Y matrix asymmetric
+% Introduce Filtering
+
+
+
+
 
 % Introduce directivity
-\paragraph{Directivity}
 
 % Introduce filtering
-\paragraph{Filtering\\}
 
 The filtering process is made of three main parts:
 
