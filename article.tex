@@ -200,8 +200,7 @@ samples in conditioned data sets \textcolor{red}{AJ: Est ce que ce ne sera pas
 in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
-%  Partial correlation => Symmetric measure
-Since this matrix is symmetric, it is not possible to infer the causal
+Since the partial correlation is symmetric, it is not possible to infer the causal
 mechanism behind the interaction (I directly causes J, J directly causes I or
 both [de la Fuente, 2004]). Furthermore two other causal mechanisms may be implied
 by a non-zero partial coefficient. First, the pair of variables may be induced
@@ -209,13 +208,16 @@ by a common (hidden) variable and second, I (respectively J) is conditionally
 correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].
 
 % Introduce a custom solution to make the Y matrix asymmetric
-% Introduce Filtering
-
-
-
-
-
 % Introduce directivity
+% TODO better link
+%      add that we make the count matrix antisymmetric (count - count.T)
+%      say that we normalize and stack
+Some causal information (directivity of the links) were retrieved from the
+data by comparing activity of each couple of neurons between two subsequent
+time steps. The directivity method tries to detect variation of fluorescence
+signal of a neuron $j$ due to a neuron $i$. This method counts the number of
+times that $X_{t+1,j} - X_{t, i} \in [f_1, f_2]$ where $f_1$ and $f_2$ are
+parameters of the method.
 
 % Introduce filtering
 
