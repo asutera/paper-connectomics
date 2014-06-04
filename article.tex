@@ -123,7 +123,7 @@ In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge [todo cite].
 
-\section{Method}
+\section{Network inference methodology}
 
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
@@ -149,7 +149,6 @@ does no imply causation}[todo cite], it gives insight on the underlying connecti
 network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
 following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
 $B \not\perp C$, $B \not\perp C | A$, but $A \perp C | B$ and  $A \not\perp C$.
-
 
 Each neuron signal $i$ is a random continuous variable $X_i$,
 which follows a probability density function $p_\mathcal{X_i}(x_i)$.
@@ -211,7 +210,7 @@ correlated to a hidden variable affecting $B$ (resp. $A$)
 % Introduce directivity
 In our last submission in hope to improve performance, some causal information
 (directivity of the links) were added by stacking the partial correlation score
-matrix with an pairwise activation heuristics. This method computes an
+matrix with an pairwise activation heuristics. This method computes an anti-symmetric
 activation score $z_{ij}$ based the variation of fluorescence signal of a neuron
 $j$ due to a neuron $i$ over all timesteps:
 \[
@@ -221,6 +220,7 @@ where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function.
 
 % Introduce filtering
+\section{Signal filtering methodology}
 
 The filtering process is made of three main parts:
 
