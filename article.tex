@@ -216,9 +216,14 @@ correlated to a hidden variable affecting J (resp. I) [de la Fuente, 2004].
 Some causal information (directivity of the links) were retrieved from the
 data by comparing activity of each couple of neurons between two subsequent
 time steps. The directivity method tries to detect variation of fluorescence
-signal of a neuron $j$ due to a neuron $i$. This method counts the number of
-times that $X_{t+1,j} - X_{t, i} \in [f_1, f_2]$ where $f_1$ and $f_2$ are
-parameters of the method.
+signal of a neuron $j$ due to a neuron $i$. A connectivity score
+between the two neurons $i$ and $j$ is given by
+\[
+z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2])
+\]
+
+where $f_1$ and $f_2$ are parameters of the method and $I(\bullet)$ is the
+indicator function.
 
 % Introduce filtering
 
