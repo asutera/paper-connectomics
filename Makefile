@@ -2,7 +2,7 @@ all: article
 
 article: references.bib article.tex
 	pdflatex -shell-escape  -halt-on-error article.tex
-	# bibtex references
+	bibtex article
 	pdflatex -shell-escape  -halt-on-error article.tex
 	pdflatex -shell-escape  -halt-on-error article.tex
 
