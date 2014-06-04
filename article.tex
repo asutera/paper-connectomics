@@ -36,7 +36,7 @@
 
  % change the arguments, as appropriate, in the following:
 \jmlrvolume{1}
-\jmlryear{2010}
+\jmlryear{2014}
 \jmlrworkshop{Neural Connectomics Workshop}
 
 \title[Connectomics challenge]{Inferring neural networks from fluorescent
@@ -190,22 +190,22 @@ have zero partial correlation coefficient
 While the correlation coefficient is unable to distinguish between
 direct and indirect interaction, the partial correlation coefficient
 aims to infer only direct ones through the conditioning over all the other
-variables. In previous study \cite{shipley2002cause}, it has been suggested
+variables. In previous study \cite{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
-i.e. conditioned on every subsets of the set of $p-2$ other variables, in order
-to take into account multiple indirect paths between a given pair of variables.
-An obvious limitation to calculate high-order coefficient is the number of
-samples in conditioned data sets \textcolor{red}{AJ: Est ce que ce ne sera pas
-à la fois $p$ and $n$?}. Given the high number of samples $n$
+i.e. conditioned on every subsets of the set of $p-2$ other variables. This
+would take into account multiple indirect paths between a given pair of
+variables. An obvious limitation to estimate correctly high-order coefficients
+is the number of samples. However given the high number of samples $n$
 in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
-Since the partial correlation is symmetric, it is not possible to infer the causal
-mechanism behind the interaction (I directly causes J, J directly causes I or
-both ). Furthermore two other causal mechanisms may be implied
-by a non-zero partial coefficient. First, the pair of variables may be induced
-by a common (hidden) variable and second, I (respectively J) is conditionally
-correlated to a hidden variable affecting J (resp. I) \cite{de2004discovery}.
+Since the partial correlation is a symmetric, the causal mechanism behind the
+interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both ) can't
+be infered. Moreover, two other causal mechanisms might be implied while having
+a non-zero partial coefficient: (i) a pair of variables is induced by a
+common (hidden) variable; (ii) $A$ (respectively $B$) is conditionally
+correlated to a hidden variable affecting $B$ (resp. $A$)
+\cite{de2004discovery}.
 
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
