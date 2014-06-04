@@ -209,25 +209,16 @@ correlated to a hidden variable affecting $B$ (resp. $A$)
 
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
-% TODO better link
-%      add that we make the count matrix antisymmetric (count - count.T)
-%      say that we normalize and stack
-%      specify f_1 and f_2
-In the hope to improve performance, some causal information (directivity of
-the links) were added by stacking the partial correlation score matrix
-with
-
-from the
-data by comparing activity of each couple of neurons between two subsequent
-time steps. The directivity method tries to detect variation of fluorescence
-signal of a neuron $j$ due to a neuron $i$. A connectivity score
-between the two neurons $i$ and $j$ is given by
+In our last submission in hope to improve performance, some causal information
+(directivity of the links) were added by stacking the partial correlation score
+matrix with an pairwise activation heuristics. This method computes an
+activation score $z_{ij}$ based the variation of fluorescence signal of a neuron
+$j$ due to a neuron $i$ over all timesteps:
 \[
-z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2])
+z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_{t, j} \in [f_1, f_2])
 \]
-
-where $f_1$ and $f_2$ are parameters of the method and $I(\bullet)$ is the
-indicator function. Finally, a
+where $f_1$ and $f_2$ are parameters of the method and $I$ is the
+indicator function.
 
 % Introduce filtering
 
