@@ -271,8 +271,8 @@ filter pattern. Formally, the stacked predicted adjacency matrix can be formulat
 \begin{align}
 y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
 \end{align}
-where $f(X, k, f_3)$ applies the filtering and inference methodologies (as described 
-in sections \ref{sec:filter} and \ref{sec:inference}) with a  given value $f_3$ for the
+where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering and inference methodologies (as described 
+in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value $f_3$ for the
 hard-threshold among a set of thresholds $T_k$ of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated 
 to a weight $w_k$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
