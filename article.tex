@@ -201,6 +201,8 @@ is the number of samples. However given the high number of samples $n$
 in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
+% Introduce a custom solution to make the Y matrix asymmetric
+% Introduce directivity
 Since the partial correlation is a symmetric, the causal mechanism behind the
 interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both ) can't
 be infered. Moreover, two other causal mechanisms might be implied while having
@@ -208,9 +210,6 @@ a non-zero partial coefficient: (i) a pair of variables is induced by a
 common (hidden) variable; (ii) $A$ (respectively $B$) is conditionally
 correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.
-
-% Introduce a custom solution to make the Y matrix asymmetric
-% Introduce directivity
 In our last submission in hope to improve performance, some causal information
 (directivity of the links) were added by stacking the partial correlation score
 matrix with an pairwise activation heuristics. This method computes an anti-symmetric
