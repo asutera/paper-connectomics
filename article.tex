@@ -228,49 +228,28 @@ indicator function.
 % TODO
 
 % Filtering methodology
-Prior inferring the network, the fluorescent calicum time series are smoothed
-using several linear and non linear filters. A low-pass filter is first applied
-for all valid value of $t$
-\[
-X^\prime_{t,i} = \sum_{l=-3}^2 a_l X_{t+l,i} \forall i
-\]
-where the $a_l$ coefficient were taken in one of the four following tuples:
+Prior inferring the network, the fluorescent calcium time series are smoothed
+using several linear and non linear filters. A low-pass filter, a high-pass
+filter and a non linear hard-thresholding based filter are
+applied for each possible time step $t$
+\begin{align}
+X^\prime_{t,i} &= \sum_{l=-3}^2 a_l X_{t+l,i} \forall i, \\
+X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
+X^{\prime\prime\prime}_{t,i} &= {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
+\end{align}
+where the $a_l$ coefficients were taken in one of the four following tuples
 $(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 1)$,
 $(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 0)$,
 $(\left\{a_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
-$(\left\{a_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$.
-
-The next step is to apply a high-pass filter to the signal:
-\[
-X^{\prime\prime}_{t,i} = X^{\prime}_{t,i} - X^{\prime}_{t-1,i}
-\forall i, \forall t \in \left\{2, \ldots, n\right\}
-\]
+$(\left\{a_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is the minimal
+fluorescence signal .
 
 
-5 kinds
-of filtering technique: (i) a low pass filter, (ii) a high pass filter, (iii)
-a high thresholding filter
 
-The filtering process is made of three main parts:
-
-
-% There are 4 filters:
-%     1/ smoothing filter (see filtering argument)
-%     2/ hard thresholding filter (see threshold argument)
-%     3/ non-linear filter: x[i] = x[i] ** 0.9
 %     4/ non-linear filter based on the neuron activations
 
 
- %  X_new = np.diff(X_new, axis=0)
- %  thresh1 = X_new < threshold * 1
- %  thresh2 = X_new >= threshold * 1
- %  X_new[thresh1] = 0
- %  X_new[thresh2] = pow(X_new[thresh2], 0.9)
-
-
 \begin{enumerate}[i.]
-\item A low-pass filter: we consider four shapes of local averaging,
-\item A high pass filter : we apply the asymmetric discrete derivative,
 \item A non-linear filter: we re-weight samples depending on the current
       activity of the systems in order to favour the association measure when
       directly connected neurons are firing together, while artificially
