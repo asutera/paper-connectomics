@@ -222,10 +222,33 @@ z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function.
 
-% Introduce filtering
 \section{Signal filtering methodology}
 
+Prior inferring the network, each time series were smoothed using 5 kinds
+of filtering technique: (i) a low pass filter, (ii) a high pass filter, (iii)
+a high thresholding filter
+
 The filtering process is made of three main parts:
+
+% Allow to choose a filter to apply on a Fluorescence signal x:
+%     'future' x_new[i] = x[i - 1] + x[i] + x[i + 1] + x[i + 2]
+%     'sym'    x_new[i] = x[i - 1] + x[i] + x[i + 1]
+%     'past'   x_new[i] = x[i] + x[i - 1] + x[i - 2] + x[i - 3]
+%     'alt'    x_new[i] = (x[i] + x[i - 1] + 0.8 * x[i - 2] +
+%                          0. 4 * x[i - 3])
+% There are 4 filters:
+%     1/ smoothing filter (see filtering argument)
+%     2/ hard thresholding filter (see threshold argument)
+%     3/ non-linear filter: x[i] = x[i] ** 0.9
+%     4/ non-linear filter based on the neuron activations
+
+
+ %  X_new = np.diff(X_new, axis=0)
+ %  thresh1 = X_new < threshold * 1
+ %  thresh2 = X_new >= threshold * 1
+ %  X_new[thresh1] = 0
+ %  X_new[thresh2] = pow(X_new[thresh2], 0.9)
+
 
 \begin{enumerate}[i.]
 \item A low-pass filter: we consider four shapes of local averaging,
