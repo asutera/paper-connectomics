@@ -266,9 +266,12 @@ where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
 b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
 parameters $b_1, b_2, b_3, f_4, f_5, f_6$.
 
+Finally since there is a high correlation between neurons, we made a
+low-rank hypothesis and perform noise filtering through a principal component
+approach [TODO cite]. From the $p$ eigen vectors, we only kept the $80\%$ of
+those which have the largest eigen value.
 
-
-% TODO speak about why averaging
+  % TODO speak about why averaging
 
 
 \section{Empirical experiments}
