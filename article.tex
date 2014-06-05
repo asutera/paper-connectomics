@@ -233,26 +233,42 @@ using several linear and non linear filters. A low-pass filter, a high-pass
 filter and a non linear hard-thresholding based filter are
 applied for each possible time step $t$
 \begin{align}
-X^\prime_{t,i} &= \sum_{l=-3}^2 a_l X_{t+l,i} \forall i, \\
+X^\prime_{t,i} &= \sum_{l=-3}^2 c_l X_{t+l,i} \forall i, \\
 X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
 X^{\prime\prime\prime}_{t,i} &= {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
 \end{align}
-where the $a_l$ coefficients were taken in one of the four following tuples
-$(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 1)$,
-$(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 0)$,
-$(\left\{a_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
-$(\left\{a_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is the minimal
-fluorescence signal .
+where the $c_l$ coefficients were taken in one of the four following tuples
+$(\left\{c_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 1)$,
+$(\left\{c_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 0)$,
+$(\left\{c_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
+$(\left\{c_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a parameter
+of the hard-threshold filter.
 
 Then we apply a non-linear filter based on the current
-activity of the systems in order to favour the association measure when
-directly connected neurons are firing together, while artificially
+activity of the systems in order to favor the association measure when
+a medium size set of neurons are firing together, while artificially
 reducing the association measure in case of extreme network activity,
 i.e. high when a network firing is happening and low when no neuron is
-active.
+active:
+\begin{align}
+a_t &= \sum_{i=1}^p X^{\prime\prime\prime}_{t,i} +
+                   \frac{1}{2} X^{\prime\prime\prime}_{t-1,i} \forall t \in T\\
+r_t &= \frac{a_t}{\max_{l \in T}{a_l}} \\
+X^{\prime\prime\prime\prime}_{t,i} &=
+\left\{
+  \begin{array}{l}
+    1  : r_t < 0\\
+    {(X^{\prime\prime\prime}_{t,i} + 1)^{(a_t^{-1} + 1)}}^{g(r_t)} : r_t \geq 0
+  \end{array}
+\right.
+\end{align}
+where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
+b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
+parameters $b_1, b_2, b_3, f_4, f_5, f_6$.
 
 
 
+% TODO speak about why averaging
 
 
 \section{Empirical experiments}
@@ -268,7 +284,8 @@ active.
 \paragraph{Improvement of each stage of our approach\\}
 
 
-\begin{table}[h!]
+\begin{table}[htb]
+\centering
 \begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
 \# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
 1 & Inverse correlation & & & & \\ \hline
@@ -283,7 +300,8 @@ active.
 Note that we choose the \textit{best} threshold for stages 1 to 4.
 \paragraph{Comparison with other methods\\}
 
-\begin{table}[h!]
+\begin{table}[htb]
+\centering
 \begin{tabular}{|c|c||c|c|c|c|} \hline
 \# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
 1 & Inverse correlation & & & &\\ \hline
