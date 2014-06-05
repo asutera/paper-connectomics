@@ -224,18 +224,36 @@ indicator function.
 
 \section{Signal filtering methodology}
 
-Prior inferring the network, each time series were smoothed using 5 kinds
+% Explain why we need to filter
+% TODO
+
+% Filtering methodology
+Prior inferring the network, the fluorescent calicum time series are smoothed
+using several linear and non linear filters. A low-pass filter is first applied
+for all valid value of $t$
+\[
+X^\prime_{t,i} = \sum_{l=-3}^2 a_l X_{t+l,i} \forall i
+\]
+where the $a_l$ coefficient were taken in one of the four following tuples:
+$(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 1)$,
+$(\left\{a_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 0)$,
+$(\left\{a_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
+$(\left\{a_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$.
+
+The next step is to apply a high-pass filter to the signal:
+\[
+X^{\prime\prime}_{t,i} = X^{\prime}_{t,i} - X^{\prime}_{t-1,i}
+\forall i, \forall t \in \left\{2, \ldots, n\right\}
+\]
+
+
+5 kinds
 of filtering technique: (i) a low pass filter, (ii) a high pass filter, (iii)
 a high thresholding filter
 
 The filtering process is made of three main parts:
 
-% Allow to choose a filter to apply on a Fluorescence signal x:
-%     'future' x_new[i] = x[i - 1] + x[i] + x[i + 1] + x[i + 2]
-%     'sym'    x_new[i] = x[i - 1] + x[i] + x[i + 1]
-%     'past'   x_new[i] = x[i] + x[i - 1] + x[i - 2] + x[i - 3]
-%     'alt'    x_new[i] = (x[i] + x[i - 1] + 0.8 * x[i - 2] +
-%                          0. 4 * x[i - 3])
+
 % There are 4 filters:
 %     1/ smoothing filter (see filtering argument)
 %     2/ hard thresholding filter (see threshold argument)
