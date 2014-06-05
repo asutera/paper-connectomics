@@ -126,8 +126,58 @@ In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge [todo cite].
 
-\section{Network inference methodology}
+\section{Signal filtering methodology}
+\label{sec:filter}
+% Explain why we need to filter
+% TODO
 
+% Filtering methodology
+Prior inferring the network, the fluorescent calcium time series are smoothed
+using several linear and non linear filters. A low-pass filter, a high-pass
+filter and a non linear hard-thresholding based filter are
+applied for each possible time step $t$
+\begin{align}
+X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \\
+X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
+X^{\prime\prime\prime}_{t,i} &= {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
+\end{align}
+where the $c_l^k$ coefficients were taken in one of the four following tuples
+$\left\{c_l^1\right\}=(0, 0, 1, 1, 1, 1)$,
+$\left\{c_l^2\right\}=(0, 0, 1, 1, 1, 0)$,
+$\left\{c_l^3\right\}=(1, 1, 1, 1, 0, 0)$ or
+$\left\{c_l^4\right\}=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a parameter
+of the hard-threshold filter.
+
+Then we apply a non-linear filter based on the current
+activity of the systems in order to favor the association measure when
+a medium size set of neurons are firing together, while artificially
+reducing the association measure in case of extreme network activity,
+i.e. high when a network firing is happening and low when no neuron is
+active:
+\begin{align}
+a_t &= \sum_{i=1}^p X^{\prime\prime\prime}_{t,i} +
+                   \frac{1}{2} X^{\prime\prime\prime}_{t-1,i} \forall t \in T\\
+r_t &= \frac{a_t}{\max_{l \in T}{a_l}} \\
+X^{\prime\prime\prime\prime}_{t,i} &=
+\left\{
+  \begin{array}{l}
+    1  : r_t < 0\\
+    {(X^{\prime\prime\prime}_{t,i} + 1)^{(a_t^{-1} + 1)}}^{g(r_t)} : r_t \geq 0
+  \end{array}
+\right.
+\end{align}
+where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
+b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
+parameters $b_1, b_2, b_3, f_4, f_5, f_6$. The coefficient were tuned
+for each set of coefficient $\left\{c_l^k\right\}$.
+
+Finally since there is a high correlation between neurons, we made a
+low-rank hypothesis and perform noise filtering through a principal component
+approach [TODO cite]. From the $p$ eigen vectors, we only kept $80\%$ of
+the eigen vectors which have the largest eigen value.
+
+\section{Network inference methodology}
+\label{sec:inference}
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
 One way to emphasize the connections between neurons is to represent them by a
@@ -201,73 +251,40 @@ is the number of samples. However given the high number of samples $n$
 in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
-\section{Signal filtering methodology}
 
-% Explain why we need to filter
-% TODO
-
-% Filtering methodology
-Prior inferring the network, the fluorescent calcium time series are smoothed
-using several linear and non linear filters. A low-pass filter, a high-pass
-filter and a non linear hard-thresholding based filter are
-applied for each possible time step $t$
-\begin{align}
-X^\prime_{t,i} &= \sum_{l=-3}^2 c_l X_{t+l,i} \forall i, \\
-X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
-X^{\prime\prime\prime}_{t,i} &= {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
-\end{align}
-where the $c_l$ coefficients were taken in one of the four following tuples
-$(\left\{c_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 1)$,
-$(\left\{c_l\right\}_{l=-3}^2)=(0, 0, 1, 1, 1, 0)$,
-$(\left\{c_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
-$(\left\{c_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a parameter
-of the hard-threshold filter.
-
-Then we apply a non-linear filter based on the current
-activity of the systems in order to favor the association measure when
-a medium size set of neurons are firing together, while artificially
-reducing the association measure in case of extreme network activity,
-i.e. high when a network firing is happening and low when no neuron is
-active:
-\begin{align}
-a_t &= \sum_{i=1}^p X^{\prime\prime\prime}_{t,i} +
-                   \frac{1}{2} X^{\prime\prime\prime}_{t-1,i} \forall t \in T\\
-r_t &= \frac{a_t}{\max_{l \in T}{a_l}} \\
-X^{\prime\prime\prime\prime}_{t,i} &=
-\left\{
-  \begin{array}{l}
-    1  : r_t < 0\\
-    {(X^{\prime\prime\prime}_{t,i} + 1)^{(a_t^{-1} + 1)}}^{g(r_t)} : r_t \geq 0
-  \end{array}
-\right.
-\end{align}
-where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
-b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
-parameters $b_1, b_2, b_3, f_4, f_5, f_6$. The coefficient were tuned
-for each set of coefficient $\left\{c_l\right\}_{l=-3}^2$.
-
-Finally since there is a high correlation between neurons, we made a
-low-rank hypothesis and perform noise filtering through a principal component
-approach [TODO cite]. From the $p$ eigen vectors, we only kept $80\%$ of
-the eigen vectors which have the largest eigen value.
 
 
 \section{Stacking methodology}
-
+\label{sec:stacking}
 % Speak about why averaging
-In order to improve performance, we stacked the partial correlation matrix
-from a reasonable of combinaison TODO continue
+%In order to improve performance, we stacked the partial correlation matrix
 
+Our first guess was that introduce an ensemble method would improve performance
+[cite papers which praise ensemble methods]. Among all parameters of our method,
+we choose to average over two parameters, i.e. over multiple combinations of the
+hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In order to 
+free ourself from the choice of a probability distribution for the $(f_3,c_l)$ combinations,
+we choose a uniform distribution for the threshold distribution (in a given interval of 
+values) within each filtering process and perform a weighted average for the low-pass 
+filter pattern. Formally, the low-pass filter 
 
+\begin{align}
+y_{stacking} = \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T} f(X, k, f_3)
+\end{align}
+where $f(X, k, f_3)$ applies the filtering and inference methodologies (as described 
+in sections \ref{sec:filter} and \ref{sec:inference}) with a  given value $f_3$ for the
+hard-threshold among a set of thresholds $T$ and the $k^{th}$ low-pass filter pattern.
+
+\section{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since the partial correlation is a symmetric, the causal mechanism behind the
 interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both ) can't
-be inferred.\footnote{Also note that two other causal mechanisms might be
+be inferred\footnote{Also note that two other causal mechanisms might be
 implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\cite{de2004discovery}.} \cite{de2004discovery}.
+\cite{de2004discovery}.}\cite{de2004discovery}.
 In our last submission in hope to improve performance, some causal information
 (directivity of the links) were added by stacking the partial correlation score
 matrix with an pairwise activation heuristics. This method computes an anti-symmetric
