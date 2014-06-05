@@ -244,19 +244,16 @@ $(\left\{a_l\right\}_{l=-3}^2)=(1, 1, 1, 1, 0, 0)$ or
 $(\left\{a_l\right\}_{l=-3}^2)=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is the minimal
 fluorescence signal .
 
+Then we apply a non-linear filter based on the current
+activity of the systems in order to favour the association measure when
+directly connected neurons are firing together, while artificially
+reducing the association measure in case of extreme network activity,
+i.e. high when a network firing is happening and low when no neuron is
+active.
 
 
-%     4/ non-linear filter based on the neuron activations
 
 
-\begin{enumerate}[i.]
-\item A non-linear filter: we re-weight samples depending on the current
-      activity of the systems in order to favour the association measure when
-      directly connected neurons are firing together, while artificially
-      reducing the association measure in case of extreme network activity,
-      i.e. high when a network firing is happening and low when no neuron is
-      active.
-\end{enumerate}
 
 \section{Empirical experiments}
 \subsection{Datasets}
