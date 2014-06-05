@@ -266,7 +266,7 @@ hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In orde
 free ourself from the choice of a probability distribution for the $(f_3,c_l)$ combinations,
 we choose a uniform distribution for the threshold distribution (in a given interval of 
 values) within each filtering process and perform a weighted average for the low-pass 
-filter pattern. Formally, the stacked predicted adjacency matrix can be formulated by
+filter pattern. Formally, the stacked predicted adjacency matrix $y_{stacking}$ can be formulated by
 
 \begin{align}
 y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
@@ -279,18 +279,24 @@ to a weight $w_k$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 \section{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
-Since the partial correlation is a symmetric, the causal mechanism behind the
-interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both ) can't
+Since the partial correlation is a symmetric measure, the causal mechanism behind the
+interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
 be inferred\footnote{Also note that two other causal mechanisms might be
 implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\cite{de2004discovery}.} \cite{de2004discovery}.
-In our last submission in hope to improve performance, some causal information
-(directivity of the links) were added by stacking the partial correlation score
-matrix with an pairwise activation heuristics. This method computes an anti-symmetric
-activation score $z_{ij}$ based the variation of fluorescence signal of a neuron
-$j$ due to a neuron $i$ over all timesteps:
+\cite{de2004discovery}.} directly from a symmetric adjacency matrix.
+
+By not taking into account the directivity for directed links, we systematically 
+make a true positive and a false positive for such links (see a more detailed 
+discussion about the chosen metric in section \ref{sec:metric}). Therefore, 
+performance might be improved by predicting an asymmetric adjacency matrix.  
+Hoping to orientate correctly the most obvious directed links, we attempt to 
+retrieve some causal information, i.e. the directivity of the links, by computing 
+and stacking with our symmetric adjacency matrix a matrix of pairwise activation 
+heuristics. This method computes an anti-symmetric activation score $z_{ij}$ 
+based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$ 
+over all timesteps:
 \[
 z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_{t, j} \in [f_1, f_2])
 \]
@@ -338,7 +344,9 @@ Note that we choose the \textit{best} threshold for stages 1 to 4.
 
 \end{tabular}
 \end{table}
-\subsection{AUPRC}
+\subsection{Discussion about the metric}
+\label{sec:metric}
+
 
 \section{Conclusion}
 
