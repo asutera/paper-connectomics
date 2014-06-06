@@ -322,16 +322,15 @@ to inferred have around 15000 arcs or a density of $0.15\%$.
 % Metrics : ROC AUC and AUPRC
 The network inference task can be viewed as a binary classification task
 where one have to correctly classified the presence or the absence of edges
-in the connectivity graph. Given the ground true network
-$y_{i,j} \in \left\{0, 1\right\}$, the connectivity score matrix
-$\hat{y}_{i,j} \in \mathcal{R}$ inferred by a given modeling technique
-can be thresholded by a value $\tau \in \mathcal{R}$ to evaluate its performance. In this
-context, we first define the notion of
+of the graph. The connectivity score matrix
+$\hat{y}_{i,j} \in \mathcal{R}$ inferred by a modeling technique
+can be thresholded by a value $\tau \in \mathcal{R}$ to evaluate its performance.
+Given the ground true network $y_{i,j} \in \left\{0, 1\right\}$, we first define the notion of
 true positive $tp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} \geq \tau)$,
 true negative $tn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} < \tau)$,
 false negative $fn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} < \tau)$ and
-false positive $fp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} \geq \tau)$,
-which is also called the confusion matrix.
+false positive $fp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} \geq \tau)$.
+Those four numbers formed the confusion matrix.
 
 We assess the accuracy of the network inference using the area under
 the ROC curve (ROC AUC) obtained by varying the threshold
@@ -339,7 +338,7 @@ $\tau$ of the true positive rate $tpr(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau
 as a function of the false positive rate
 $fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$. In section (TODO ref),
 we also compare the same methods with the area under the precision-recall
-(AUPRC) curve, an information retrieval metrics, obtained by varying the threshold
+curve (AUPRC), an information retrieval metrics, obtained by varying the threshold
 $\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
 as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
 
