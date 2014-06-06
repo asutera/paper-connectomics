@@ -116,12 +116,6 @@ three dimensional structure, which may lead to superpose the observed activity
 of different neurons. Furthermore, the decay of the fluorescent calcium signal
 is slower than its rise.
 
-Since only observational data are available, the network recovery is set as an
-unsupervised learning problem. Whenever a partial knowledge of the target
-network or known networks highly similar to the unknown one is available,
-supervised learning [todo cite] and transfer learning  [todo cite] based
-approach could be considered to infer networks.
-
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
 One way to emphasize the connections between neurons is to represent them by a
@@ -137,6 +131,12 @@ is to distinguish direct from indirect interactions \cite{de2004discovery}.
 For instance with the simple interaction graph $A \rightarrow B \rightarrow C$,
 we want to distinguish direct interactions $A \rightarrow B$ and $B \rightarrow C$
 from the indirect interaction $A \rightarrow C$.
+
+Since only observational data are available, the network recovery is set as an
+unsupervised learning problem. Whenever a partial knowledge of the target
+network or known networks highly similar to the unknown one is available,
+supervised learning [todo cite] and transfer learning  [todo cite] based
+approach could be considered to infer networks.
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
