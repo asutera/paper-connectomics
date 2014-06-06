@@ -255,29 +255,28 @@ in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
 
-
-
 \section{Stacking methodology}
 \label{sec:stacking}
+
 % Speak about why averaging
-%In order to improve performance, we stacked the partial correlation matrix
-
-Our first guess was that introduce an ensemble method would improve performance
-[cite papers which praise ensemble methods]. Among all parameters of our method,
-we choose to average over two parameters, i.e. over multiple combinations of the
-hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In order to
-free ourself from the choice of a probability distribution for the $(f_3,c_l)$ combinations,
-we choose a uniform distribution for the threshold distribution (in a given interval of
-values) within each filtering process and perform a weighted average for the low-pass
-filter pattern. Formally, the stacked predicted adjacency matrix $y_{stacking}$ can be formulated by
-
+The quality of the signal filtering and network inference is dependent upon
+good hyper-parameter selection, which are themselves dependent on the properties
+of the targeted network and measurement conditions, e.g. signal to noise ratio.
+Ensemble methods are known to improve robustness with respect to parameter
+selection [todo cite] and improve performance [todo cite].
+A weighted average $y_{stack}$ of partial correlation matrices was made
+by varying uniformly the hard-threshold value (parameter $f_3$) and the design
+of the low-pass filter (coefficients $c_l$). The stacked connectivity score
+matrix $y_{stacking}$ is given by
 \begin{align}
-y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
+y_{stack} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
 \end{align}
-where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering and inference methodologies (as described
-in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value $f_3$ for the
-hard-threshold among a set of thresholds $T_k$ of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated
-to a weight $w_k$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the
+filtering and inference methodologies (as described
+in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value
+$f_3$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
+and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ whose
+values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
 \section{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
