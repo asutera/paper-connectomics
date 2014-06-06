@@ -289,8 +289,8 @@ is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.} directly from a symmetric adjacency matrix.
 
-By not taking into account the directivity for directed links, we systematically
-make a true positive and a false positive for such links (see a more detailed
+By ignoring the directivity, we systematically
+make a true positive and a false positive for direct link (see a more detailed
 discussion about the chosen metric in section \ref{sec:metric}). Therefore,
 performance might be improved by predicting an asymmetric adjacency matrix.
 Hoping to orientate correctly the most obvious directed links, we attempt to
@@ -305,6 +305,8 @@ z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function. % TODO say that we use only the 3 first filters for this
 
+% TODO speak that we should set the diagonal to the minimum to gain some
+% performance.
 
 \section{Empirical experiments}
 \subsection{Datasets}
