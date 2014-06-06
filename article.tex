@@ -11,7 +11,7 @@
  % amsmath, amssymb, natbib, graphicx, url, algorithm2e
 
  %\usepackage{rotating}% for sideways figures and tables
-\usepackage{longtable}% for long tables
+% \usepackage{longtable}% for long tables
 
  % The booktabs package is used by this sample document
  % (it provides \toprule, \midrule and \bottomrule).
@@ -37,11 +37,25 @@
  % change the arguments, as appropriate, in the following:
 \jmlrvolume{1}
 \jmlryear{2014}
-\jmlrworkshop{Neural Connectomics Workshop}
+\jmlrworkshop{\textcolor{red}{Neural Connectomics Workshop}}
 
 \title[Connectomics challenge]{Inferring neural networks from fluorescent
                                calcium imaging using partial correlation and
-                               sample weighting}
+                               sample weighting \textcolor{red}{plus court}}
+
+Simple and robust inference of connectomes using partial correlation coefficients
+
+
+
+%% 
+Discovery/Infering/Retrieving/... connectomes 
+Robust
+Using partial correlation
+[from calcium imaging]
+
+
+\textcolor{red}{Discussion on the order of the partial correlation}
+
 
  % Use \Name{Author Name} to specify the name.
  % If the surname contains spaces, enclose the surname
@@ -58,6 +72,12 @@
  % Three or more authors with the same address:
  \author{Todo authors}
 
+%% Proposition (sujet à changements : on en discutera):
+% Antonio
+% {Aaron, Arnaud, Vincent} : aucune préférence pour ma part
+% Gilles
+% Damien?
+% Pierre?
 
  % Authors with different addresses:
  % \author{\Name{Author Name1} \Email{abc@sample.com}\\
@@ -81,40 +101,56 @@ brain pathologies and disorders such as Parkinson's disease, epilepsy.
 Retrieving the connectomes, neurons connectivity map, will shed new lights on
 the anatomical and functional connectivity of the brain.
 
-In the context of the Connectomics challenge, we propose a simple algorithm made of four stages to achieve a network inference of high quality.
+In the context of the Connectomics challenge, we propose a simple 
+algorithm made of four stages to achieve a network inference of high quality.
 
-We put in perspective our method by comparing with other inference method such as GTE [], another method proposed to infer a neural network from calcium fluorescent imaging, and Genie3 [], a tree-based approach very competitive in several gene inference challenge (i.e. DREAM4 and DREAM5).\\
+We put in perspective our method by comparing with other inference method such
+as GTE [], another method proposed to infer a neural network from calcium
+fluorescent imaging, and Genie3 [], a tree-based approach very competitive in
+several gene inference challenge (i.e. DREAM4 and DREAM5).\\
 
 % Discussion on the metrics?
 
 \end{abstract}
 
 \begin{keywords}
-Network inference - Precision matrix - GENIE3
+Network inference - Partial correlation - Precision matrix - GENIE3
 \end{keywords}
 
 
 \section{Introduction}\label{sec:intro}
 
 % BG : brain, complex organ
-Understanding how the brain works is a key to understand and to treat
-brain pathologies and disorders such as Parkinson's disease and epilepsy.
-Retrieving the connectomes, neurons connectivity map, will shed new lights on
-the anatomical and functional connectivity of the brain. However,
-the human brain is a complex biological organ, which is formed by 100
+The human brain is a complex biological organ, which is formed by 100
 billions of neurons with 7000 synaptic connections on average. Inferring the
 neuron connectivity network through dissection would be an impossible
-and a daunting task.
-
-Cutting edge optical devices [todo cite] allows to track simultaneously
-the neural activity of thousands of neurons through the fluorescent
+and a daunting task. Cutting edge optical devices [todo cite] allow to track
+simultaneously the neural activity of thousands of neurons through a fluorescent
 calcium indicator.
+
 From those observational data, the neural connectivity inference consists in
 highlighting direct relationships between neurons. However, those imaging
 systems have a sampling rate smaller than the neuron firing speed and are
-limited only two dimensional image, which may lead to superpose the activity
+limited to two dimensional image, while the neuronal network is a
+three dimensional structure, which may lead to superpose the observed activity
 of different neurons. Furthermore, the decay of the fluorescent calcium signal
-is slow compare to its rise.
+is slower than its rise.
+
+% Introduce notation + goal in mathematical score
+% TODO check convention for y_{ij}
+One way to emphasize the connections between neurons is to represent them by a
+(un)directed graph with $p$ nodes: each node represents a neuron, and each
+edge $y_{ij}$ represents a direct link from neuron  $i$ to neuron $j$. If the
+graph is undirected, then $y_{ij}$ is equal to $y_{ji}$  for all $i,j$.
+The unsupervised task may be formulated as:
+\textit{Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of
+fluorescent calcium concentration of size $n$ from $p$ neurons, the goal is to
+infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
+The main challenge in the inference of the network $y$
+is to distinguish direct from indirect interactions \cite{de2004discovery}.
+For instance with the simple interaction graph $A \rightarrow B \rightarrow C$,
+we want to distinguish direct interactions $A \rightarrow B$ and $B \rightarrow C$
+from the indirect interaction $A \rightarrow C$.
 
 Since only observational data are available, the network recovery is set as an
 unsupervised learning problem. Whenever a partial knowledge of the target
@@ -122,14 +158,17 @@ network or known networks highly similar to the unknown one is available,
 supervised learning [todo cite] and transfer learning  [todo cite] based
 approach could be considered to infer networks.
 
-
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation to infer the neural connectivity network.
-This is also the winning method of the Connectomics challenge [todo cite].
+This is also the winning method of the Connectomics challenge
+\footnote{\url{http://connectomics.chalearn.org/}}. For reproducibility, the
+source code of the method is available at
+\url{https://github.com/asutera/kaggle-connectomics} under BSD 3-clauses
+license.
 
-\section{Signal filtering methodology}
-\label{sec:filter}
+\section{Methodology}
+\section{Signal filtering} \label{sec:filter}
 % Explain why we need to filter
 % TODO
 
@@ -138,6 +177,7 @@ Prior inferring the network, the fluorescent calcium time series are smoothed
 using several linear and non linear filters. A low-pass filter, a high-pass
 filter and a non linear hard-thresholding based filter are
 applied for each possible time step $t$
+% TODO fix first equation is wrong due notation change
 \begin{align}
 X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \\
 X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
@@ -150,7 +190,7 @@ $\left\{c_l^3\right\}=(1, 1, 1, 1, 0, 0)$ or
 $\left\{c_l^4\right\}=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a parameter
 of the hard-threshold filter.
 
-Then we apply a non-linear filter based on the current
+Then we apply on all remaining timesteps $T$ a non-linear filter based on the current
 activity of the systems in order to favor the association measure when
 a medium size set of neurons are firing together, while artificially
 reducing the association measure in case of extreme network activity,
@@ -178,23 +218,11 @@ low-rank hypothesis and perform noise filtering through a principal component
 approach [TODO cite]. From the $p$ eigen vectors, we only kept $80\%$ of
 the eigen vectors which have the largest eigen value.
 
-\section{Network inference methodology}
+\subsection{Network inference through partial correlation}
 \label{sec:inference}
-% Introduce notation + goal in mathematical score
-% TODO check convention for y_{ij}
-One way to emphasize the connections between neurons is to represent them by a
-(un)directed graph with $p$ nodes: each node represents a neuron, and each
-edge $y_{ij}$ represents a direct link from neuron  $i$ to neuron $j$. If the
-graph is undirected, then $y_{ij}$ is equal to $y_{ji}$  for all $i,j$.
-The unsupervised task may be formulated as:
-\textit{Given $X \in \mathcal{R}^{n \times p}$  a set of $p$ time series of
-fluorescent calcium concentration of size $n$ from $p$ neurons, the goal is to
-infer the connectivity graph $y \in \left\{0, 1\right\}^{p \times p}$.}
-The main challenge in the inference of the network $y$
-is to distinguish direct from indirect interactions \cite{de2004discovery}.
-For instance with the simple interaction graph $A \rightarrow B \rightarrow C$,
-we want to distinguish direct interactions $A \rightarrow B$ and $B \rightarrow C$
-from the indirect interaction $A \rightarrow C$.
+
+
+\textcolor{red}{Motiviation pour l'inverse : retirer les liens indirects} \\
 
 % introduce the notion of dependence / independence
 From a probabilistic point of view, the inference of the undirected network
@@ -224,17 +252,16 @@ by  $X_i \perp X_j | \mathcal{V}^{-i,j}$,  if $p_{X_i,X_j|\mathcal{V}^{-i,j}} = 
 Under the hypothesis that the neurons follow a jointly Gaussian distribution
 $p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$
 of mean vector $\mu$ and of covariance matrix $\Sigma$, two neurons $X_i$
-and $X_j$ are independent $X_i \perp X_j$ if they have zero Pearson correlation
+and $X_j$ are independent $X_i \perp X_j$ if the Pearson correlation
 coefficient
 \[
-\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}}
-\]
+\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0,
+\] 
 and are conditionally independent to all others neurons
-$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if they
-have zero partial correlation coefficient
+$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if the partial correlation coefficient
 \[
 \rho_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}} =
-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}.
+\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.
 \]
 
 % Correlation => Issue indirect effect
@@ -252,32 +279,30 @@ in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
 
-
-
-\section{Stacking methodology}
+\subsection{Stacking partial correlation matrix}
 \label{sec:stacking}
+
 % Speak about why averaging
-%In order to improve performance, we stacked the partial correlation matrix
-
-Our first guess was that introduce an ensemble method would improve performance
-[cite papers which praise ensemble methods]. Among all parameters of our method,
-we choose to average over two parameters, i.e. over multiple combinations of the
-hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In order to 
-free ourself from the choice of a probability distribution for the $(f_3,c_l)$ combinations,
-we choose a uniform distribution for the threshold distribution (in a given interval of 
-values) within each filtering process and perform a weighted average for the low-pass 
-filter pattern. Formally, the stacked predicted adjacency matrix $y_{stacking}$ can be formulated by
-
+The quality of the signal filtering and network inference is dependent upon
+good hyper-parameter selection, which are themselves dependent on the properties
+of the targeted network and measurement conditions, e.g. signal to noise ratio.
+Ensemble methods are known to improve robustness with respect to parameter
+selection [todo cite] and improve performance [todo cite].
+A weighted average $y_{stack}$ of partial correlation matrices was made
+by varying uniformly the hard-threshold value (parameter $f_3$) and the design
+of the low-pass filter (coefficients $c_l$). The stacked connectivity score
+matrix $y_{stacking}$ is given by
 \begin{align}
-y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
+y_{stack} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
 \end{align}
-where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering 
-and inference methodologies (as described in sections \ref{sec:filter} and \ref{sec:inference}), 
-with a  given value $f_3$ for the hard-threshold among a set of thresholds $T_k$ 
-of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ 
-whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the
+filtering and inference methodologies (as described
+in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value
+$f_3$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
+and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ whose
+values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
-\section{Causal discovery methodology}
+\subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since the partial correlation is a symmetric measure, the causal mechanism behind the
@@ -288,65 +313,104 @@ is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.} from a symmetric adjacency matrix.
 
-By not taking into account the directivity for directed links, we systematically 
-make a true positive and a false positive for such links (see a more detailed 
-discussion about the chosen metric in section \ref{sec:metric}). Therefore, 
-performance might be improved by predicting an asymmetric adjacency matrix.  
-Hoping to orientate correctly the most obvious directed links, we attempt to 
-retrieve some causal information, i.e. the directivity of the links, by computing 
-and stacking with our symmetric adjacency matrix a matrix of pairwise activation 
-heuristics. This method computes an anti-symmetric activation score $z_{ij}$ 
-based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$ 
+By ignoring the directivity, we systematically
+make a true positive and a false positive for direct link (see a more detailed
+discussion about the chosen metric in section \ref{sec:metric}). Therefore,
+performance might be improved by predicting an asymmetric adjacency matrix.
+Hoping to orientate correctly the most obvious directed links, we attempt to
+retrieve some causal information, i.e. the directivity of the links, by computing
+and stacking with our symmetric adjacency matrix a matrix of pairwise activation
+heuristics. This method computes an anti-symmetric activation score $z_{ij}$
+based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$
 over all timesteps:
 \[
-z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_{t, j} \in [f_1, f_2])
-\]
+z_{ij} = \sum_{t=1}^n 1(X_{t+1,j} \ge X_{t, i} \in [f_1, f_2]) -  1(X_{t+1,i} \ge X_{t, j} \in [f_1, f_2])
+\] \textcolor{red}{to rewrite}
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function. % TODO say that we use only the 3 first filters for this
 
-\section{Empirical experiments}
-In this section, we will present some experiments on challenge datasets to show 
-the good performance of our method and compare it to other inference methods. 
-Since it was the metric used during the challenge, we will compare inference methods
-regarding the area under the ROC curve. However, we will discuss about this in section
-\ref{sec:metric}.
+% TODO speak that we should set the diagonal to the minimum to gain some
+% performance.
+
+\section{Experiments}
+
+% Datasets
+To assess our method, we have used four datasets provided by the organizer
+of the Connectomics challenge : normal-1, normal-2, normal-3, normal-4. Those
+datasets are time series of size $n=179500$ of image calcium from simulated
+neuronal network \cite{stetter2012model} with $p=1000$ neurons. The networks
+to inferred have around 15000 arcs or a density of $0.15\%$ and are similar to those
+used to rank challenge participants.
+
+Note that our parameter tuning was mainly on \textit{normal-1} dataset and
+partly on \textit{normal-4} dataset, therefore it may justify why these
+networks are better retrieved despite the fact that some might be simpler to
+infer.
+
+% Metrics : ROC AUC and AUPRC
+The network inference task can be viewed as a binary classification task
+where one have to correctly classified the presence or the absence of edges
+of the graph. The connectivity score matrix
+$\hat{y}_{i,j} \in \mathcal{R}$ inferred by a modeling technique
+can be thresholded by a value $\tau \in \mathcal{R}$ to evaluate its performance.
+Given the ground true network $y_{i,j} \in \left\{0, 1\right\}$, we first define the notion of
+true positive $tp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} \geq \tau)$,
+true negative $tn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} < \tau)$,
+false negative $fn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} < \tau)$ and
+false positive $fp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} \geq \tau)$.
+Those four numbers formed the confusion matrix.
+
+We assess the accuracy of the network inference using the area under
+the ROC curve (ROC AUC) obtained by varying the threshold
+$\tau$ of the true positive rate $tpr(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
+as a function of the false positive rate
+$fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$. In section (TODO ref),
+we also compare the same methods with the area under the precision-recall
+curve (AUPRC), an information retrieval metrics, obtained by varying the threshold
+$\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
+as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
 
 
-\paragraph{Datasets \\}
-To assess the quality of our method, we use four network, denoted as \textit{normal-\{1,2,3,4\}}, similar to networks, i.e., the same number of neurons, used to rank challenge participants. Note that our parameter tuning was mainly on \textit{normal-1} dataset and partly on \textit{normal-4} dataset, therefore it may justify why these networks are better retrieved despite the fact that some might be simpler to infer.  
- 
-\subsection{Data filtering}
-\subsection{Signal distribution}
-\subsection{ROC AUC results}
-\paragraph{Improvement of each stage of our approach\\}
+\subsection{Data filtering and Signal distribution}
+
+\subsection{Inference of neuronal network}
+
 
 \begin{table}[htb]
 \centering
-\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
-\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
-1 & Inverse correlation & & & & \\ \hline
-2 & Pre-processing & & & &\\ \hline
-3 & PCA & & & &  \\ \hline
-4 & Weighting & & & &  \\ \hline
-5 & Averaging & & & &  \\ \hline
-
+\caption{Improvement of each stage of our approach Note that we choose the
+         \textit{best} threshold for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Inverse correlation & & & & \\
+Pre-processing      & & & & \\
+PCA                 & & & & \\
+Weighting           & & & & \\
+Averaging           & & & & \\
+\bottomrule
 \end{tabular}
 \end{table}
 
-Note that we choose the \textit{best} threshold for stages 1 to 4.
-\paragraph{Comparison with other methods\\}
 
 \begin{table}[htb]
 \centering
-\begin{tabular}{|c|c||c|c|c|c|} \hline
-\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
-1 & Inverse correlation & & & &\\ \hline
-2 & Correlation & & & &\\ \hline
-3 & GENIE3 & & & & \\ \hline
-4 & GTE & & & & \\ \hline
-
+\caption{Comparison with other methods}
+\begin{tabular}{*{5}{l}}
+\toprule
+Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Correlation         & & & & \\
+Partial correlation & & & & \\
+Our approach        & & & & \\
+GENIE3              & & & & \\
+GTE                 & & & & \\
+\bottomrule
 \end{tabular}
 \end{table}
+
+
 \subsection{Discussion about the metric}
 \label{sec:metric}
 
@@ -356,6 +420,15 @@ Note that we choose the \textit{best} threshold for stages 1 to 4.
 % Possible extensions
 % partial autocorrelation function (sometimes "partial correlation function")
 % conditional independence test
+% Speak about the complexity and parallelization of the methods
+
+\begin{scriptsize}
+
+\paragraph{Acknowledgements.} A. Joly and G. Louppe are research fellows of
+the FNRS, Belgium. We also thank Damien for pizzas.  A. Sutera is supported by
+a F.R.I.A. scholarship.
+
+\end{scriptsize}
 
 \bibliography{references}
 
