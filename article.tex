@@ -80,7 +80,9 @@ Understanding how the brain works is a key to understand and to treat
 brain pathologies and disorders such as Parkinson's disease, epilepsy.
 Retrieving the connectomes, neurons connectivity map, will shed new lights on
 the anatomical and functional connectivity of the brain.
-In the context of the Connectomics challenge, we propose a pre-processing and a simple approach in order to achieve a high performance inference of the connectivity network.
+
+In the context of the Connectomics challenge, we propose a simple algorithm made of four stages to achieve a network inference of high quality.
+
 We put in perspective our method by comparing with other inference method such as GTE [], another method proposed to infer a neural network from calcium fluorescent imaging, and Genie3 [], a tree-based approach very competitive in several gene inference challenge (i.e. DREAM4 and DREAM5).\\
 
 % Discussion on the metrics?
@@ -203,23 +205,21 @@ network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
 following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
 $B \not\perp C$, $B \not\perp C | A$, but $A \perp C | B$ and  $A \not\perp C$.
 
+Let us consider that each neuron signal $i$ is a random continuous variable $X_i$
+which follows a probability distribution $p_{X_i}$ and let us denote by $p_{X_i,X_j|\mathcal{Z}}$ the 
+joint probability distribution of neurons $X_i$ and $X_j$ conditioned on a subset of variables $\mathcal{Z}$ (eventually empty). Let us define $\mathcal{V}$
+the set of all neurons $X_1, ..., X_p$ and $\mathcal{V}^{-i,j}$ the same set without
+neurons $X_i$ and $X_j$. 
+
 Each neuron signal $i$ is a random continuous variable $X_i$,
 which follows a probability density function $p_\mathcal{X_i}(x_i)$.
 Two neurons $X_i$, $X_j$ will be said conditionally independent
-to a set of neurons $X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$, denoted
-by  $X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$,  if
-\begin{align*}
-&p_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
-    (x_i, x_j | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) \\
-=&p_{X_i | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
-    (x_i | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\})
-p_{X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
-    (x_j | x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\})
-\end{align*}
-for all real numbers $x_1,\ldots,x_p $ such that
-$p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
-(x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
-reciprocal is true only under additional hypotheses.
+to a set of neurons $\mathcal{V}^{-i,j}$, denoted
+by  $X_i \perp X_j | \mathcal{V}^{-i,j}$,  if $p_{X_i,X_j|\mathcal{V}^{-i,j}} = p_{X_i|\mathcal{V}^{-i,j}}  p_{X_j|\mathcal{V}^{-i,j}} $.
+%for all real numbers $x_1,\ldots,x_p $ such that
+%$p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
+%(x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
+%reciprocal is true only under additional hypotheses.
 
 Under the hypothesis that the neurons follow a jointly Gaussian distribution
 $p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$
@@ -271,21 +271,22 @@ filter pattern. Formally, the stacked predicted adjacency matrix $y_{stacking}$ 
 \begin{align}
 y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
 \end{align}
-where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering and inference methodologies (as described 
-in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value $f_3$ for the
-hard-threshold among a set of thresholds $T_k$ of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated 
-to a weight $w_k$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering 
+and inference methodologies (as described in sections \ref{sec:filter} and \ref{sec:inference}), 
+with a  given value $f_3$ for the hard-threshold among a set of thresholds $T_k$ 
+of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ 
+whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
 \section{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since the partial correlation is a symmetric measure, the causal mechanism behind the
 interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
-be inferred\footnote{Also note that two other causal mechanisms might be
+be directly inferred\footnote{Also note that two other causal mechanisms might be
 implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\cite{de2004discovery}.} directly from a symmetric adjacency matrix.
+\cite{de2004discovery}.} from a symmetric adjacency matrix.
 
 By not taking into account the directivity for directed links, we systematically 
 make a true positive and a false positive for such links (see a more detailed 
@@ -303,19 +304,21 @@ z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function. % TODO say that we use only the 3 first filters for this
 
-
 \section{Empirical experiments}
-\subsection{Datasets}
+In this section, we will present some experiments on challenge datasets to show 
+the good performance of our method and compare it to other inference methods. 
+Since it was the metric used during the challenge, we will compare inference methods
+regarding the area under the ROC curve. However, we will discuss about this in section
+\ref{sec:metric}.
 
 
-
-
-\subsection{Metrics}
+\paragraph{Datasets \\}
+To assess the quality of our method, we use four network, denoted as \textit{normal-\{1,2,3,4\}}, similar to networks, i.e., the same number of neurons, used to rank challenge participants. Note that our parameter tuning was mainly on \textit{normal-1} dataset and partly on \textit{normal-4} dataset, therefore it may justify why these networks are better retrieved despite the fact that some might be simpler to infer.  
+ 
 \subsection{Data filtering}
 \subsection{Signal distribution}
 \subsection{ROC AUC results}
 \paragraph{Improvement of each stage of our approach\\}
-
 
 \begin{table}[htb]
 \centering
