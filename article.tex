@@ -143,8 +143,8 @@ based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge
 \footnote{\url{http://connectomics.chalearn.org/}}.
 
-\section{Signal filtering methodology}
-\label{sec:filter}
+\section{Methodology}
+\section{Signal filtering} \label{sec:filter}
 % Explain why we need to filter
 % TODO
 
@@ -194,7 +194,7 @@ low-rank hypothesis and perform noise filtering through a principal component
 approach [TODO cite]. From the $p$ eigen vectors, we only kept $80\%$ of
 the eigen vectors which have the largest eigen value.
 
-\section{Network inference methodology}
+\subsection{Network inference through partial correlation}
 \label{sec:inference}
 
 % introduce the notion of dependence / independence
@@ -255,7 +255,7 @@ in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
 
 
-\section{Stacking methodology}
+\subsection{Stacking partial correlation matrix}
 \label{sec:stacking}
 
 % Speak about why averaging
@@ -278,7 +278,7 @@ $f_3$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
 and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ whose
 values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
-\section{Causal discovery methodology}
+\subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since the partial correlation is a symmetric measure, the causal mechanism behind the
@@ -308,16 +308,18 @@ indicator function. % TODO say that we use only the 3 first filters for this
 % TODO speak that we should set the diagonal to the minimum to gain some
 % performance.
 
-\section{Empirical experiments}
-\subsection{Datasets}
+\section{Experiments}
+\subsection{Accuracy assessment protocol}
+% Datasets
 
+Simulated from \cite{stetter2012model}
 
+% Metrics : ROC AUC an AUPRC
 
+\subsection{Data filtering and Signal distribution}
 
-\subsection{Metrics}
-\subsection{Data filtering}
-\subsection{Signal distribution}
-\subsection{ROC AUC results}
+\subsection{Inference of neuronal network}
+
 \paragraph{Improvement of each stage of our approach\\}
 
 
@@ -345,7 +347,6 @@ Note that we choose the \textit{best} threshold for stages 1 to 4.
 2 & Correlation & & & &\\ \hline
 3 & GENIE3 & & & & \\ \hline
 4 & GTE & & & & \\ \hline
-
 \end{tabular}
 \end{table}
 \subsection{Discussion about the metric}
@@ -357,6 +358,7 @@ Note that we choose the \textit{best} threshold for stages 1 to 4.
 % Possible extensions
 % partial autocorrelation function (sometimes "partial correlation function")
 % conditional independence test
+% Speak about the complexity and parallelization of the methods
 
 \bibliography{references}
 
