@@ -335,14 +335,13 @@ which is also called the confusion matrix.
 
 We assess the accuracy of the network inference using the area under
 the ROC curve (ROC AUC) obtained by varying the threshold
-$\tau$ of the true positive rate $tpr(\tau) = tp(\tau) / (tp(\tau) + fn(\tau))$
+$\tau$ of the true positive rate $tpr(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
 as a function of the false positive rate
-$fpr(\tau) = tn(\tau) / (tn(\tau) + fp(\tau))$. In section (TODO ref),
+$fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$. In section (TODO ref),
 we also compare the same methods with the area under the precision-recall
-(AUPRC) curve obtained by varying the threshold
-$\tau$ of the precision $P(\tau) = tp(\tau) / (tp(\tau) + fp(\tau))$
-as a function of the recall $R(\tau) = tp(\tau) / (tp(\tau) + fn(\tau))$,
-which is an information retrieval measure.
+(AUPRC) curve, an information retrieval metrics, obtained by varying the threshold
+$\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
+as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
 
 
 \subsection{Data filtering and Signal distribution}
