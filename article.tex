@@ -153,6 +153,7 @@ Prior inferring the network, the fluorescent calcium time series are smoothed
 using several linear and non linear filters. A low-pass filter, a high-pass
 filter and a non linear hard-thresholding based filter are
 applied for each possible time step $t$
+% TODO fix first equation is wrong due notation change
 \begin{align}
 X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \\
 X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
