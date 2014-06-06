@@ -141,7 +141,10 @@ approach could be considered to infer networks.
 In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge
-\footnote{\url{http://connectomics.chalearn.org/}}.
+\footnote{\url{http://connectomics.chalearn.org/}}. For reproducibility, the
+source code of the method is available at
+\url{https://github.com/asutera/kaggle-connectomics} under 3-clause BSD
+license.
 
 \section{Methodology}
 \section{Signal filtering} \label{sec:filter}
@@ -311,10 +314,18 @@ indicator function. % TODO say that we use only the 3 first filters for this
 \section{Experiments}
 \subsection{Accuracy assessment protocol}
 % Datasets
+To assess our method, we have used four datasets provided by the organizer
+of the Connectomics challenge : normal-1, normal-2, normal-3, normal-4. Those
+datasets are time series of size $n=179500$ of image calcium from simulated
+neuronal network \cite{stetter2012model} with $p=1000$ neurons. The networks
+to inferred have around 15000 arcs or a density of $0.15\%$.
 
-Simulated from \cite{stetter2012model}
+
 
 % Metrics : ROC AUC an AUPRC
+% We assess the accuracy of the neuronal network
+
+
 
 \subsection{Data filtering and Signal distribution}
 
