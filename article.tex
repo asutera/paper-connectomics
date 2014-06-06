@@ -11,7 +11,7 @@
  % amsmath, amssymb, natbib, graphicx, url, algorithm2e
 
  %\usepackage{rotating}% for sideways figures and tables
-\usepackage{longtable}% for long tables
+% \usepackage{longtable}% for long tables
 
  % The booktabs package is used by this sample document
  % (it provides \toprule, \midrule and \bottomrule).
@@ -348,35 +348,41 @@ as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
 
 \subsection{Inference of neuronal network}
 
-\paragraph{Improvement of each stage of our approach\\}
+\begin{table}[htb]
+\centering
+\caption{Improvement of each stage of our approach Note that we choose the
+         \textit{best} threshold for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Inverse correlation & & & & \\
+Pre-processing      & & & & \\
+PCA                 & & & & \\
+Weighting           & & & & \\
+Averaging           & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \begin{table}[htb]
 \centering
-\begin{tabular}{|c|c||c|c|c|c|c|c|} \hline
-\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
-1 & Inverse correlation & & & & \\ \hline
-2 & Pre-processing & & & &\\ \hline
-3 & PCA & & & &  \\ \hline
-4 & Weighting & & & &  \\ \hline
-5 & Averaging & & & &  \\ \hline
-
+\caption{Comparison with other methods}
+\begin{tabular}{*{5}{l}}
+\toprule
+Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Correlation         & & & & \\
+Partial correlation & & & & \\
+Our approach        & & & & \\
+GENIE3              & & & & \\
+GTE                 & & & & \\
+\bottomrule
 \end{tabular}
 \end{table}
 
-Note that we choose the \textit{best} threshold for stages 1 to 4.
-\paragraph{Comparison with other methods\\}
 
-\begin{table}[htb]
-\centering
-\begin{tabular}{|c|c||c|c|c|c|} \hline
-\# & Stage & normal-1 & normal-2 & normal-3 & normal-4 \\ \hline
-1 & Inverse correlation & & & &\\ \hline
-2 & Correlation & & & &\\ \hline
-3 & GENIE3 & & & & \\ \hline
-4 & GTE & & & & \\ \hline
-\end{tabular}
-\end{table}
 \subsection{Discussion about the metric}
 \label{sec:metric}
 
