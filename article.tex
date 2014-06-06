@@ -105,12 +105,13 @@ neuron connectivity network through dissection would be an impossible
 and a daunting task.
 
 Cutting edge optical devices [todo cite] allows to track simultaneously
-the neural activity of thousands of neurons through the fluorescent
+the neural activity of thousands of neurons through a fluorescent
 calcium indicator.
 From those observational data, the neural connectivity inference consists in
 highlighting direct relationships between neurons. However, those imaging
 systems have a sampling rate smaller than the neuron firing speed and are
-limited only two dimensional image, which may lead to superpose the activity
+limited to two dimensional image, while the neuronal network is three dimensional
+structure, which may lead to superpose the observed activity
 of different neurons. Furthermore, the decay of the fluorescent calcium signal
 is slow compare to its rise.
 
@@ -262,18 +263,18 @@ correlation coefficient.
 Our first guess was that introduce an ensemble method would improve performance
 [cite papers which praise ensemble methods]. Among all parameters of our method,
 we choose to average over two parameters, i.e. over multiple combinations of the
-hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In order to 
+hard-threshold value $f_3$ and the pattern of the low-pass filter $c_l$. In order to
 free ourself from the choice of a probability distribution for the $(f_3,c_l)$ combinations,
-we choose a uniform distribution for the threshold distribution (in a given interval of 
-values) within each filtering process and perform a weighted average for the low-pass 
+we choose a uniform distribution for the threshold distribution (in a given interval of
+values) within each filtering process and perform a weighted average for the low-pass
 filter pattern. Formally, the stacked predicted adjacency matrix $y_{stacking}$ can be formulated by
 
 \begin{align}
 y_{stacking} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{f_3 \in T_k} f(X, k, f_3)
 \end{align}
-where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering and inference methodologies (as described 
+where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the filtering and inference methodologies (as described
 in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value $f_3$ for the
-hard-threshold among a set of thresholds $T_k$ of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated 
+hard-threshold among a set of thresholds $T_k$ of size $|T_k|$ and the $k^{th}$ low-pass filter pattern associated
 to a weight $w_k$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
 \section{Causal discovery methodology}
@@ -287,15 +288,15 @@ is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.} directly from a symmetric adjacency matrix.
 
-By not taking into account the directivity for directed links, we systematically 
-make a true positive and a false positive for such links (see a more detailed 
-discussion about the chosen metric in section \ref{sec:metric}). Therefore, 
-performance might be improved by predicting an asymmetric adjacency matrix.  
-Hoping to orientate correctly the most obvious directed links, we attempt to 
-retrieve some causal information, i.e. the directivity of the links, by computing 
-and stacking with our symmetric adjacency matrix a matrix of pairwise activation 
-heuristics. This method computes an anti-symmetric activation score $z_{ij}$ 
-based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$ 
+By not taking into account the directivity for directed links, we systematically
+make a true positive and a false positive for such links (see a more detailed
+discussion about the chosen metric in section \ref{sec:metric}). Therefore,
+performance might be improved by predicting an asymmetric adjacency matrix.
+Hoping to orientate correctly the most obvious directed links, we attempt to
+retrieve some causal information, i.e. the directivity of the links, by computing
+and stacking with our symmetric adjacency matrix a matrix of pairwise activation
+heuristics. This method computes an anti-symmetric activation score $z_{ij}$
+based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$
 over all timesteps:
 \[
 z_{ij} = \sum_{t=1}^n I(X_{t+1,j} - X_{t, i} \in [f_1, f_2]) -  I(X_{t+1,i} - X_{t, j} \in [f_1, f_2])
