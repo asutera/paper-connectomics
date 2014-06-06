@@ -319,7 +319,7 @@ datasets are time series of size $n=179500$ of image calcium from simulated
 neuronal network \cite{stetter2012model} with $p=1000$ neurons. The networks
 to inferred have around 15000 arcs or a density of $0.15\%$.
 
-% Metrics : ROC AUC an AUPRC
+% Metrics : ROC AUC and AUPRC
 The network inference task can be viewed as a binary classification task
 where one have to correctly classified the presence or the absence of edges
 in the connectivity graph. Given the ground true network
@@ -339,7 +339,7 @@ $\tau$ of the true positive rate $tpr(\tau) = tp(\tau) / (tp(\tau) + fn(\tau))$
 as a function of the false positive rate
 $fpr(\tau) = tn(\tau) / (tn(\tau) + fp(\tau))$. In section (TODO ref),
 we also compare the same methods with the area under the precision-recall
-curve obtained by varying the threshold
+(AUPRC) curve obtained by varying the threshold
 $\tau$ of the precision $P(\tau) = tp(\tau) / (tp(\tau) + fp(\tau))$
 as a function of the recall $R(\tau) = tp(\tau) / (tp(\tau) + fn(\tau))$,
 which is an information retrieval measure.
