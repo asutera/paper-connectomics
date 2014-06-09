@@ -93,17 +93,17 @@
 \maketitle
 
 
-\begin{abstract}
-Understanding how the brain works is a key to understand and to treat
-brain pathologies and disorders such as Parkinson's disease, epilepsy.
-Retrieving the connectomes, neurons connectivity map, will shed new lights on
-the anatomical and functional connectivity of the brain.\\
-In the context of the Connectomics challenge, we propose a simple 
-algorithm made of four stages, using preprocessing and partial correlation to achieve a network inference of high quality.\\
-We put in perspective our method by comparing with other inference method such
-as GTE \cite{stetter2012model}, another method proposed to infer a neural network from calcium
-fluorescent imaging, and Genie3 [], a tree-based approach very competitive in
-several gene inference challenge (i.e. DREAM4 and DREAM5).\\
+\begin{abstract} Understanding how the brain works is a key to understand and
+to treat brain pathologies and disorders such as Parkinson's disease,
+epilepsy. Retrieving the connectomes, neurons connectivity map, will shed new
+lights on the anatomical and functional connectivity of the brain.\\ In the
+context of the Connectomics challenge, we propose a simple  algorithm made of
+four stages, using preprocessing and partial correlation to achieve a network
+inference of high quality.\\ We put in perspective our method by comparing
+with other inference method such as GTE \cite{stetter2012model}, another
+method proposed to infer a neural network from calcium fluorescent imaging,
+and Genie3 [], a tree-based approach very competitive in several gene
+inference challenge (i.e. DREAM4 and DREAM5).\\
 
 % Discussion on the metrics?
 %\textcolor{red}{Discussion on the order of the partial correlation}
@@ -211,11 +211,11 @@ $g_3$: \begin{align} g_3(X_t^i) = X^i_t - X^i_{t-1} \end{align} where ... .
 Then we apply a non-linear filter based on the current activity of the systems
 in order to favor the association measure when a medium size set of neurons
 are firing together, while artificially reducing the association measure when
-the activity is extremely high, i.e. in case of a network burst.
-\begin{align}
-h_1(X_t^i) = (X_t^i + 1)^{\left( 1 + \dfrac{1}{a_t} \right)} &\text{ with } a_t = \sum_{i=1}^p \left ( X_t^i + \dfrac{1}{2} X_{t-1}^i \right ) \\
-h_2(X_t^i) = (X_t^i)^{r(a_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in T}{a_l}} 
-\end{align}
+the activity is extremely high, i.e. in case of a network burst. \begin{align}
+h_1(X_t^i) = (X_t^i + 1)^{\left( 1 + \dfrac{1}{a_t} \right)} &\text{ with }
+a_t = \sum_{i=1}^p \left ( X_t^i + \dfrac{1}{2} X_{t-1}^i \right ) \\
+h_2(X_t^i) = (X_t^i)^{r(a_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in
+T}{a_l}}  \end{align}
 
 where $r(x)$ is a 4-piecewise continuous functions whose parameters were tuned
 for each low-pass filter.
@@ -239,23 +239,19 @@ the eigen vectors which have the largest eigen value.
 \hrule
 \vspace{1em}
 
-% Filtering methodology
-Prior inferring the network, the fluorescent calcium time series are smoothed
-using several linear and non linear filters. A low-pass filter, a high-pass
-filter and a non linear hard-thresholding based filter are
-applied for each possible time step $t$
-% TODO fix first equation is wrong due notation change
-\begin{align}
-X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \\
-X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \\
-X^{\prime\prime\prime}_{t,i} &= {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
-\end{align}
-where the $c_l^k$ coefficients were taken in one of the four following tuples
-$\left\{c_l^1\right\}=(0, 0, 1, 1, 1, 1)$,
-$\left\{c_l^2\right\}=(0, 0, 1, 1, 1, 0)$,
-$\left\{c_l^3\right\}=(1, 1, 1, 1, 0, 0)$ or
-$\left\{c_l^4\right\}=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a parameter
-of the hard-threshold filter.
+% Filtering methodology Prior inferring the network, the fluorescent calcium
+time series are smoothed using several linear and non linear filters. A low-
+pass filter, a high-pass filter and a non linear hard-thresholding based
+filter are applied for each possible time step $t$ % TODO fix first equation
+is wrong due notation change \begin{align} X^\prime_{t,i} &= \sum_{l=-3}^2
+c_l^k X_{t+l,i} \forall i, \\ X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} -
+X^{\prime}_{t-1,i} \forall i, \\ X^{\prime\prime\prime}_{t,i} &=
+{X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i,
+\end{align} where the $c_l^k$ coefficients were taken in one of the four
+following tuples $\left\{c_l^1\right\}=(0, 0, 1, 1, 1, 1)$,
+$\left\{c_l^2\right\}=(0, 0, 1, 1, 1, 0)$, $\left\{c_l^3\right\}=(1, 1, 1, 1,
+0, 0)$ or $\left\{c_l^4\right\}=(0.4, 0.8, 1, 1, 0, 0)$ and $f_3$ is a
+parameter of the hard-threshold filter.
 
 Then we apply on all remaining timesteps $T$ a non-linear filter based on the current
 activity of the systems in order to favor the association measure when
@@ -289,7 +285,9 @@ the eigen vectors which have the largest eigen value.
 \label{sec:inference}
 
 
-\textcolor{red}{Motivation pour l'inverse : retirer les liens indirects. Pareil: proposition de AS  et certains choses pourraient être incorporées dans la version de AJ.} \\
+\textcolor{red}{Motivation pour l'inverse : retirer les liens indirects.
+\Pareil: proposition de AS  et certains choses pourraient être incorporées
+\dans la version de AJ.}
 
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and independences. Even
@@ -312,11 +310,17 @@ such matrix is the correlation coefficient between neurons $\mathcal{X}_i$ and $
 However the connectivity network to infer is only made of direct relationships
 which can be defined as a relation between neurons that still exists when
 conditioned on all other neurons or, in other words, there is not intermediary
-between those two neurons. 
-Under the hypothesis that neurons follow a jointly Gaussian distribution $p_{\mathcal{X}_1, \dots, \mathcal{X}_p} \sim \mathcal{N}(\mu; \Sigma)$, two neurons $\mathcal{X}_i$ and $\mathcal{X}_j$ are independent $\mathcal{X}_i\perp \mathcal{X}_j$ if the Pearson correlation coefficient $\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0,$
-and are conditionally independant to all others neurons $\mathcal{X}_i \perp \mathcal{X}_j |\mathcal{V}^{i,j}$ if the partial correlation coefficient (of order $p-2$) $\rho_{X_i, X_j | \mathcal{V}^{i,j}} =
-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.$ 
-Therefore, by definition, the partial correlation coefficient between two neurons only estimates the direct relationship between them. 
+between those two neurons.  Under the hypothesis that neurons follow a jointly
+Gaussian distribution $p_{\mathcal{X}_1, \dots, \mathcal{X}_p} \sim
+\mathcal{N}(\mu; \Sigma)$, two neurons $\mathcal{X}_i$ and $\mathcal{X}_j$ are
+independent $\mathcal{X}_i\perp \mathcal{X}_j$ if the Pearson correlation
+coefficient $\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
+\Sigma_{jj}}} = 0,$ and are conditionally independant to all others neurons
+$\mathcal{X}_i \perp \mathcal{X}_j |\mathcal{V}^{i,j}$ if the partial
+correlation coefficient (of order $p-2$) $\rho_{X_i, X_j | \mathcal{V}^{i,j}}
+= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.$
+Therefore, by definition, the partial correlation coefficient between two
+neurons only estimates the direct relationship between them.
 
 In previous study \cite{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
@@ -341,36 +345,35 @@ network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
 following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
 $B \not\perp C$, $B \not\perp C | A$, but $A \perp C | B$ and  $A \not\perp C$.
 
-Let us consider that each neuron signal $i$ is a random continuous variable $X_i$
-which follows a probability distribution $p_{X_i}$ and let us denote by $p_{X_i,X_j|\mathcal{Z}}$ the 
-joint probability distribution of neurons $X_i$ and $X_j$ conditioned on a subset of variables $\mathcal{Z}$ (eventually empty). Let us define $\mathcal{V}$
-the set of all neurons $X_1, ..., X_p$ and $\mathcal{V}^{-i,j}$ the same set without
-neurons $X_i$ and $X_j$. 
+Let us consider that each neuron signal $i$ is a random continuous variable
+$X_i$ which follows a probability distribution $p_{X_i}$ and let us denote by
+$p_{X_i,X_j|\mathcal{Z}}$ the  joint probability distribution of neurons $X_i$
+and $X_j$ conditioned on a subset of variables $\mathcal{Z}$ (eventually
+empty). Let us define $\mathcal{V}$ the set of all neurons $X_1, ..., X_p$ and
+$\mathcal{V}^{-i,j}$ the same set without neurons $X_i$ and $X_j$.
 
-Each neuron signal $i$ is a random continuous variable $X_i$,
-which follows a probability density function $p_\mathcal{X_i}(x_i)$.
-Two neurons $X_i$, $X_j$ will be said conditionally independent
-to a set of neurons $\mathcal{V}^{-i,j}$, denoted
-by  $X_i \perp X_j | \mathcal{V}^{-i,j}$,  if $p_{X_i,X_j|\mathcal{V}^{-i,j}} = p_{X_i|\mathcal{V}^{-i,j}}  p_{X_j|\mathcal{V}^{-i,j}} $.
+Each neuron signal $i$ is a random continuous variable $X_i$, which follows a
+probability density function $p_\mathcal{X_i}(x_i)$. Two neurons $X_i$, $X_j$
+will be said conditionally independent to a set of neurons
+$\mathcal{V}^{-i,j}$, denoted by  $X_i \perp X_j | \mathcal{V}^{-i,j}$,  if
+$p_{X_i,X_j|\mathcal{V}^{-i,j}} = p_{X_i|\mathcal{V}^{-i,j}}
+p_{X_j|\mathcal{V}^{-i,j}} $.
+
 %for all real numbers $x_1,\ldots,x_p $ such that
 %$p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
 %(x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
 %reciprocal is true only under additional hypotheses.
 
 Under the hypothesis that the neurons follow a jointly Gaussian distribution
-$p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$
-of mean vector $\mu$ and of covariance matrix $\Sigma$, two neurons $X_i$
-and $X_j$ are independent $X_i \perp X_j$ if the Pearson correlation
-coefficient
-\[
-\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0,
-\] 
-and are conditionally independent to all others neurons
-$X_i \perp X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if the partial correlation coefficient
-\[
-\rho_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}} =
-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.
-\]
+$p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$ of mean
+vector $\mu$ and of covariance matrix $\Sigma$, two neurons $X_i$ and $X_j$
+are independent $X_i \perp X_j$ if the Pearson correlation coefficient \[
+\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0, \]
+and are conditionally independent to all others neurons $X_i \perp X_j |
+X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if the partial correlation
+coefficient \[ \rho_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i,
+X_j\right\}} = \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii}
+\Sigma^{-1}_{jj}}} = 0. \]
 
 % Correlation => Issue indirect effect
 % Partial correlation => better estimate of the graph  => Symmetric measure
@@ -421,21 +424,20 @@ is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.} from a symmetric adjacency matrix.
 
-By ignoring the directivity, we systematically
-make a true positive and a false positive for direct link (see a more detailed
-discussion about the chosen metric in section \ref{sec:metric}). Therefore,
-performance might be improved by predicting an asymmetric adjacency matrix.
-Hoping to orientate correctly the most obvious directed links, we attempt to
-retrieve some causal information, i.e. the directivity of the links, by computing
-and stacking with our symmetric adjacency matrix a matrix of pairwise activation
-heuristics. This method computes an anti-symmetric activation score $z_{ij}$
-based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$
-over all timesteps:
-\[
-z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot \mathbb{1}(f_1\le X_t^i \le f_2) -  \mathbb{1}(X_{t+1,i} \ge X_{t, j}) \cdot \mathbb{1}(f_1 \le X_t^j \le f_2)
-\] 
-where $f_1$ and $f_2$ are parameters of the method and $I$ is the
-indicator function. % TODO say that we use only the 3 first filters for this
+By ignoring the directivity, we systematically make a true positive and a
+false positive for direct link (see a more detailed discussion about the
+chosen metric in section \ref{sec:metric}). Therefore, performance might be
+improved by predicting an asymmetric adjacency matrix. Hoping to orientate
+correctly the most obvious directed links, we attempt to retrieve some causal
+information, i.e. the directivity of the links, by computing and stacking with
+our symmetric adjacency matrix a matrix of pairwise activation heuristics.
+This method computes an anti-symmetric activation score $z_{ij}$ based the
+variation of fluorescence signal of a neuron $j$ due to a neuron $i$ over all
+timesteps: \[ z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot
+\mathbb{1}(f_1\le X_t^i \le f_2) -  \mathbb{1}(X_{t+1,i} \ge X_{t, j}) \cdot
+\mathbb{1}(f_1 \le X_t^j \le f_2) \]  where $f_1$ and $f_2$ are parameters of
+the method and $I$ is the indicator function. % TODO say that we use only the
+3 first filters for this
 
 % TODO speak that we should set the diagonal to the minimum to gain some
 % performance.
