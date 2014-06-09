@@ -166,14 +166,13 @@ source code of the method is available at
 \url{https://github.com/asutera/kaggle-connectomics}  BSD 3-clauses
 license.
 
-
-
-\section{Methodology}
 \section{Signal filtering} \label{sec:filter}
 % Explain why we need to filter
 % TODO
 
 \textcolor{red}{AS: Après avoir discuté avec Gilles, une autre façon de présenter les choses qui est moins rigoureuse que l'approche de AJ mais plus "motivée"}
+Prior inferring the network, the fluorescent calcium time series are smoothed
+using several linear and non linear filters.
 
 % Information in burst not in value --> filtering with hard-threshold
 % Considering the average delay between two neurons, low frequency event can be neglected --> high-pass filter
@@ -272,7 +271,7 @@ the eigen vectors which have the largest eigen value.
 % introduce the notion of dependence / independence
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and
-independences.  Even if \textit{independence
+independences.  Even if \textit{correlation
 does no imply causation}[todo cite], it gives insight on the underlying connectivity
 network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
 following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
