@@ -170,40 +170,45 @@ license.
 % Explain why we need to filter
 % TODO
 
-\textcolor{red}{AS: Après avoir discuté avec Gilles, une autre façon de présenter les choses qui est moins rigoureuse que l'approche de AJ mais plus "motivée"}
-Prior inferring the network, the fluorescent calcium time series are smoothed
-using several linear and non linear filters.
+\textcolor{red}{AS: Après avoir discuté avec Gilles, une autre façon de
+présenter les choses qui est moins rigoureuse que l'approche de AJ mais plus
+"motivée" --> Certains aspects pourraient être incorporés dans la version de AJ.} 
+
+Prior inferring the network, the fluorescent calcium time series
+are smoothed using several linear and non linear filters.
 
 % Information in burst not in value --> filtering with hard-threshold
 % Considering the average delay between two neurons, low frequency event can be neglected --> high-pass filter
 % Condidering noise, high frequency event can be neglected --> low-pass filter 
 
-%\paragraph{Motivation\\}
-Intuitively, connectivity information between two neurons may be retrieved from successive and slightly delayed burst events. In case of a directed relationship, the burst order should be the same while in case of an undirected relationship, it could change. Therefore, the fluorescent signal can be reduced to a binary signal representing the activity of a neuron. This is the idea behind the filter $g_1$: 
-\begin{align}
-g_1(X^i_t) = (X^i_t)^{0.9} \mathbb{1}(X^i_t \ge h)
-\end{align}
-where ... .
+%\paragraph{Motivation\\} Intuitively, connectivity information between two
+neurons may be retrieved from successive and slightly delayed burst events. In
+case of a directed relationship, the burst order should be the same while in
+case of an undirected relationship, it could change. Therefore, the
+fluorescent signal can be reduced to a binary signal representing the activity
+of a neuron. This is the idea behind the filter $g_1$:  \begin{align}
+g_1(X^i_t) = (X^i_t)^{0.9} \mathbb{1}(X^i_t \ge h) \end{align} where ... .
 
-Considering the short delay for a communication between neurons, slow events can be neglected to retrieve direct relationships. Note that the average time delay is about $1ms$ or $2ms$ while the fluorescent signal time resolution is $20ms$. Let us also highlight that even if two neurons are spatially far from each other, the information is expected in the same time step or at most in the next time step. It is therefore not necessary to keep low-frequency event and we thus apply a high-pass filter $g_2$:
-\begin{align}
-g_2(X^i_t) = \sum_{l=-3}^{2} c^k_l X^i_{t+l} 
-\end{align}
-where ... .
+Considering the short delay for a communication between neurons, slow events
+can be neglected to retrieve direct relationships. Note that the average time
+delay is about $1ms$ or $2ms$ while the fluorescent signal time resolution is
+$20ms$. Let us also highlight that even if two neurons are spatially far from
+each other, the information is expected in the same time step or at most in
+the next time step. It is therefore not necessary to keep low-frequency event
+and we thus apply a high-pass filter $g_2$: \begin{align} g_2(X^i_t) =
+\sum_{l=-3}^{2} c^k_l X^i_{t+l}  \end{align} where ... .
 
-However, the signal, by the imaging capture process we suppose, is very noisy. A low-pass filter seems a good way to smooth the signal and only keep relevant informations. We thus choose to consider the discrete derivative of the signal $g_3$:
-\begin{align}
-g_3(X_t^i) = X^i_t - X^i_{t-1}
-\end{align}
-where ... .
-
-We thus define our preprocessing function $g$ as 
-\begin{align}
-g(X_t^i) = g_1(g_3(g_2(X_t^i))).
-\end{align}
+However, the signal, by the imaging capture process we suppose, is very noisy.
+A low-pass filter seems a good way to smooth the signal and only keep relevant
+informations. We thus choose to consider the discrete derivative of the signal
+$g_3$: \begin{align} g_3(X_t^i) = X^i_t - X^i_{t-1} \end{align} where ... .
 
 
-Then we apply a non-linear filter based on the current activity of the systems in order to favor the association measure when a medium size set of neurons are firing together, while artificially reducing the association measure when the activity is extremely high, i.e. in case of a network burst. 
+
+Then we apply a non-linear filter based on the current activity of the systems
+in order to favor the association measure when a medium size set of neurons
+are firing together, while artificially reducing the association measure when
+the activity is extremely high, i.e. in case of a network burst.
 
 
 \begin{align}
@@ -211,9 +216,17 @@ g_4(X_t^i) = (X_t^i + 1)^{\left( 1 + \dfrac{1}{a_t} \right)} &\text{ with } a_t 
 g_5(X_t^i) = (X_t^i)^{h(r_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in T}{a_l}} \\
 \end{align}
 
-where $h(x)$ is a 4-piecewise continuous functions whose parameters were tuned for each low-pass filter. 
+where $h(x)$ is a 4-piecewise continuous functions whose parameters were tuned
+for each low-pass filter.
 
+Hence, we define our preprocessing function $G$ as 
+\begin{align}
+G(X_t^i) = g_5 \bullet g_4 \bullet g_1 \bullet g_3 \bullet g_2(X_t^i).
+\end{align}
+
+\vspace{1em}
 \hrule
+\vspace{1em}
 
 % Filtering methodology
 Prior inferring the network, the fluorescent calcium time series are smoothed
@@ -266,7 +279,48 @@ the eigen vectors which have the largest eigen value.
 \label{sec:inference}
 
 
-\textcolor{red}{Motiviation pour l'inverse : retirer les liens indirects} \\
+\textcolor{red}{Motivation pour l'inverse : retirer les liens indirects. Pareil: proposition de AS  et certains choses pourraient être incorporées dans la version de AJ.} \\
+
+From a probabilistic point of view, the inference of the undirected network
+can be formulated as inferring conditional dependences and independences. Even
+if \textit{correlation does no imply causation}[todo cite], it gives insight
+on the underlying connectivity network.
+
+Let us consider see neurons as random variables $\mathcal{X}_i$ which follows
+a probability density function $p_{\mathcal{X}_i}$ and let us denote by
+$p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}}$ the joint probability
+distribution between neurons $i$ and $j$ conditioned on a subset of neurons
+$\mathcal{Z}$ (eventually empty). Let us define $\mathcal{V}$ the set of all
+neurons $\mathcal{X}_1, \dots, \mathcal{X}_p$, and by $\mathcal{V}^{i,j}$ the
+same set without neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
+
+ First, if we want to highlight
+relationships between without considering the distinction between direct and
+indirect links, the Pearson correlation matrix, i.e. each element $(i,j)$ of a
+such matrix is the correlation coefficient between neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
+
+However the connectivity network to infer is only made of direct relationships
+which can be defined as a relation between neurons that still exists when
+conditioned on all other neurons or, in other words, there is not intermediary
+between those two neurons. 
+Under the hypothesis that neurons follow a jointly Gaussian distribution $p_{\mathcal{X}_1, \dots, \mathcal{X}_p} \sim \mathcal{N}(\mu; \Sigma)$, two neurons $\mathcal{X}_i$ and $\mathcal{X}_j$ are independent $\mathcal{X}_i\perp \mathcal{X}_j$ if the Pearson correlation coefficient $\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0,$
+and are conditionally independant to all others neurons $\mathcal{X}_i \perp \mathcal{X}_j |\mathcal{V}^{i,j}$ if the partial correlation coefficient (of order $p-2$) $\rho_{X_i, X_j | \mathcal{V}^{i,j}} =
+\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.$ 
+Therefore, by definition, the partial correlation coefficient between two neurons only estimates the direct relationship between them. 
+
+In previous study \cite{shipley2002cause}, it has been suggested to
+consider correlation coefficients of all possible orders,
+i.e. conditioned on every subsets of the set of $p-2$ other variables. This
+would take into account multiple indirect paths between a given pair of
+variables. An obvious limitation to estimate correctly high-order coefficients
+is the number of samples. However given the high number of samples $n$
+in the Connectomics challenge, we only consider the highest order of partial
+correlation coefficient.
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
 
 % introduce the notion of dependence / independence
 From a probabilistic point of view, the inference of the undirected network
