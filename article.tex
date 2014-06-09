@@ -212,11 +212,9 @@ Then we apply a non-linear filter based on the current activity of the systems
 in order to favor the association measure when a medium size set of neurons
 are firing together, while artificially reducing the association measure when
 the activity is extremely high, i.e. in case of a network burst.
-
-
 \begin{align}
 h_1(X_t^i) = (X_t^i + 1)^{\left( 1 + \dfrac{1}{a_t} \right)} &\text{ with } a_t = \sum_{i=1}^p \left ( X_t^i + \dfrac{1}{2} X_{t-1}^i \right ) \\
-h_2(X_t^i) = (X_t^i)^{r(a_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in T}{a_l}} \\
+h_2(X_t^i) = (X_t^i)^{r(a_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in T}{a_l}} 
 \end{align}
 
 where $r(x)$ is a 4-piecewise continuous functions whose parameters were tuned
@@ -434,8 +432,8 @@ heuristics. This method computes an anti-symmetric activation score $z_{ij}$
 based the variation of fluorescence signal of a neuron $j$ due to a neuron $i$
 over all timesteps:
 \[
-z_{ij} = \sum_{t=1}^n 1(X_{t+1,j} \ge X_{t, i} \in [f_1, f_2]) -  1(X_{t+1,i} \ge X_{t, j} \in [f_1, f_2])
-\] \textcolor{red}{to rewrite}
+z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot \mathbb{1}(f_1\le X_t^i \le f_2) -  \mathbb{1}(X_{t+1,i} \ge X_{t, j}) \cdot \mathbb{1}(f_1 \le X_t^j \le f_2)
+\] 
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the
 indicator function. % TODO say that we use only the 3 first filters for this
 
