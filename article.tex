@@ -4,6 +4,7 @@
 
 %% Personnal package
 \usepackage{enumerate}
+\usepackage{bbold}
 
 
 
@@ -39,12 +40,12 @@
 \jmlryear{2014}
 \jmlrworkshop{\textcolor{red}{Neural Connectomics Workshop}}
 
-\title[Connectomics challenge]{Inferring neural networks from fluorescent
-                               calcium imaging using partial correlation and
-                               sample weighting \textcolor{red}{plus court} : Simple and robust inference of connectomes using partial correlation coefficients
-?}
+% \title[Connectomics challenge]{Inferring neural networks from fluorescent
+%                                calcium imaging using partial correlation and
+%                                sample weighting \textcolor{red}{plus court} : Simple and robust inference of connectomes using partial correlation coefficients
+% ?}
 
-
+\title[Inference of connectomes using partial correlation coefficients]{Simple and robust inference of connectomes using partial correlation coefficients}
 
 
 % %% 
@@ -52,8 +53,6 @@
 % Robust
 % Using partial correlation
 % [from calcium imaging]
-
-
 
 
  % Use \Name{Author Name} to specify the name.
@@ -98,13 +97,11 @@
 Understanding how the brain works is a key to understand and to treat
 brain pathologies and disorders such as Parkinson's disease, epilepsy.
 Retrieving the connectomes, neurons connectivity map, will shed new lights on
-the anatomical and functional connectivity of the brain.
-
+the anatomical and functional connectivity of the brain.\\
 In the context of the Connectomics challenge, we propose a simple 
-algorithm made of four stages to achieve a network inference of high quality.
-
+algorithm made of four stages, using preprocessing and partial correlation to achieve a network inference of high quality.\\
 We put in perspective our method by comparing with other inference method such
-as GTE [], another method proposed to infer a neural network from calcium
+as GTE \cite{stetter2012model}, another method proposed to infer a neural network from calcium
 fluorescent imaging, and Genie3 [], a tree-based approach very competitive in
 several gene inference challenge (i.e. DREAM4 and DREAM5).\\
 
@@ -166,7 +163,7 @@ based on partial correlation to infer the neural connectivity network.
 This is also the winning method of the Connectomics challenge
 \footnote{\url{http://connectomics.chalearn.org/}}. For reproducibility, the
 source code of the method is available at
-\url{https://github.com/asutera/kaggle-connectomics} under BSD 3-clauses
+\url{https://github.com/asutera/kaggle-connectomics}  BSD 3-clauses
 license.
 
 
@@ -175,6 +172,49 @@ license.
 \section{Signal filtering} \label{sec:filter}
 % Explain why we need to filter
 % TODO
+
+\textcolor{red}{AS: Après avoir discuté avec Gilles, une autre façon de présenter les choses qui est moins rigoureuse que l'approche de AJ mais plus "motivée"}
+
+% Information in burst not in value --> filtering with hard-threshold
+% Considering the average delay between two neurons, low frequency event can be neglected --> high-pass filter
+% Condidering noise, high frequency event can be neglected --> low-pass filter 
+
+%\paragraph{Motivation\\}
+Intuitively, connectivity information between two neurons may be retrieved from successive and slightly delayed burst events. In case of a directed relationship, the burst order should be the same while in case of an undirected relationship, it could change. Therefore, the fluorescent signal can be reduced to a binary signal representing the activity of a neuron. This is the idea behind the filter $g_1$: 
+\begin{align}
+g_1(X^i_t) = (X^i_t)^{0.9} \mathbb{1}(X^i_t \ge h)
+\end{align}
+where ... .
+
+Considering the short delay for a communication between neurons, slow events can be neglected to retrieve direct relationships. Note that the average time delay is about $1ms$ or $2ms$ while the fluorescent signal time resolution is $20ms$. Let us also highlight that even if two neurons are spatially far from each other, the information is expected in the same time step or at most in the next time step. It is therefore not necessary to keep low-frequency event and we thus apply a high-pass filter $g_2$:
+\begin{align}
+g_2(X^i_t) = \sum_{l=-3}^{2} c^k_l X^i_{t+l} 
+\end{align}
+where ... .
+
+However, the signal, by the imaging capture process we suppose, is very noisy. A low-pass filter seems a good way to smooth the signal and only keep relevant informations. We thus choose to consider the discrete derivative of the signal $g_3$:
+\begin{align}
+g_3(X_t^i) = X^i_t - X^i_{t-1}
+\end{align}
+where ... .
+
+We thus define our preprocessing function $g$ as 
+\begin{align}
+g(X_t^i) = g_1(g_3(g_2(X_t^i))).
+\end{align}
+
+
+Then we apply a non-linear filter based on the current activity of the systems in order to favor the association measure when a medium size set of neurons are firing together, while artificially reducing the association measure when the activity is extremely high, i.e. in case of a network burst. 
+
+
+\begin{align}
+g_4(X_t^i) = (X_t^i + 1)^{\left( 1 + \dfrac{1}{a_t} \right)} &\text{ with } a_t = \sum_{i=1}^p \left ( X_t^i + \dfrac{1}{2} X_{t-1}^i \right ) \\
+g_5(X_t^i) = (X_t^i)^{h(r_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in T}{a_l}} \\
+\end{align}
+
+where $h(x)$ is a 4-piecewise continuous functions whose parameters were tuned for each low-pass filter. 
+
+\hrule
 
 % Filtering methodology
 Prior inferring the network, the fluorescent calcium time series are smoothed
@@ -216,6 +256,7 @@ where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
 b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
 parameters $b_1, b_2, b_3, f_4, f_5, f_6$. The coefficient were tuned
 for each set of coefficient $\left\{c_l^k\right\}$.
+\hrule
 
 Finally since there is a high correlation between neurons, we made a
 low-rank hypothesis and perform noise filtering through a principal component
