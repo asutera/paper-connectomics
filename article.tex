@@ -181,10 +181,11 @@ are smoothed using several linear and non linear filters.
 % Considering the average delay between two neurons, low frequency event can be neglected --> high-pass filter
 % Condidering noise, high frequency event can be neglected --> low-pass filter
 
-%\paragraph{Motivation\\} Intuitively, connectivity information between two
+%\paragraph{Motivation\\} 
+Intuitively, connectivity information between two
 neurons may be retrieved from successive and slightly delayed burst events. In
 case of a directed relationship, the burst order should be the same while in
-case of an undirected relationship, it could change. Therefore, the
+case of an undirected relationship, it might change. Therefore, the
 fluorescent signal can be reduced to a binary signal representing the activity
 of a neuron. This is the idea behind the filter $g_1$:  \begin{align}
 g_1^q(X^i_t) = (X^i_t)^{0.9} \mathbb{1}(X^i_t \ge q) \end{align} where ... .
@@ -195,14 +196,16 @@ delay is about $1ms$ or $2ms$ while the fluorescent signal time resolution is
 $20ms$. Let us also highlight that even if two neurons are spatially far from
 each other, the information is expected in the same time step or at most in
 the next time step. It is therefore not necessary to keep low-frequency event
-and we thus apply a high-pass filter $g_2$: \begin{align} g_2^k(X^i_t) =
-\sum_{l=-3}^{2} c^k_l X^i_{t+l}  \end{align} where ... .
+and we thus choose to consider the discrete derivative of the signal, i.e. a
+high-pass filtered version, $g_2$:  \begin{align} g_2(X_t^i) = X^i_t -
+X^i_{t-1} \end{align} where ... .
 
 However, the signal, by the imaging capture process we suppose, is very noisy.
 A low-pass filter seems a good way to smooth the signal and only keep relevant
-informations. We thus choose to consider the discrete derivative of the signal
-$g_3$: \begin{align} g_3(X_t^i) = X^i_t - X^i_{t-1} \end{align} where ... .
-
+informations. We thus apply the filter
+$g_3$: 
+\begin{align} g_3^k(X^i_t) =
+\sum_{l=-3}^{2} c^k_l X^i_{t+l}  \end{align} where ... .
 % We then define our preprocessing function $G$ as
 % \begin{align}
 % G(X_t^i) = g^q_1(g_3(g_2(X_t^i))).
@@ -217,7 +220,7 @@ a_t = \sum_{i=1}^p \left ( X_t^i + \dfrac{1}{2} X_{t-1}^i \right ) \\
 h_2(X_t^i) = (X_t^i)^{r(a_t)} &\text{ with } r_t = \frac{a_t}{\max_{l \in
 T}{a_l}}  \end{align}
 
-where $r(x)$ is a 4-piecewise continuous functions whose parameters were tuned
+\textcolor{red}{miss the case where activity < 0->1} where $r(x)$ is a 4-piecewise continuous functions whose parameters were tuned
 for each low-pass filter.
 
 % Hence, we define our preprocessing function $H$ as
@@ -227,19 +230,20 @@ for each low-pass filter.
 
 Hence, we define our preprocessing function $G$ as
 \begin{align}
-G^{q,k}(X_t^i) = h_2 \bullet h_1 \bullet g^q_1 \bullet g_3 \bullet g_2^k(X_t^i).
+G^{q,k}(X_t^i) = h_2 \bullet h_1 \bullet g^q_1 \bullet g_2 \bullet g_3^k(X_t^i).
 \end{align}
 
 Finally since there is a high correlation between neurons, we made a
 low-rank hypothesis and perform noise filtering through a principal component
 approach [TODO cite]. From the $p$ eigen vectors, we only kept $80\%$ of
-the eigen vectors which have the largest eigen value.
+the eigen vectors which have the largest eigen value \textcolor{red}{fig?}.
 
 \vspace{1em}
 \hrule
 \vspace{1em}
 
-% Filtering methodology Prior inferring the network, the fluorescent calcium
+% Filtering methodology 
+Prior inferring the network, the fluorescent calcium
 time series are smoothed using several linear and non linear filters. A low-
 pass filter, a high-pass filter and a non linear hard-thresholding based
 filter are applied for each possible time step $t$ % TODO fix first equation
@@ -294,7 +298,7 @@ can be formulated as inferring conditional dependences and independences. Even
 if \textit{correlation does no imply causation}[todo cite], it gives insight
 on the underlying connectivity network.
 
-Let us consider see neurons as random variables $\mathcal{X}_i$ which follows
+Let us consider the neurons as random variables $\mathcal{X}_i$ which follows
 a probability density function $p_{\mathcal{X}_i}$ and let us denote by
 $p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}}$ the joint probability
 distribution between neurons $i$ and $j$ conditioned on a subset of neurons
@@ -302,10 +306,14 @@ $\mathcal{Z}$ (eventually empty). Let us define $\mathcal{V}$ the set of all
 neurons $\mathcal{X}_1, \dots, \mathcal{X}_p$, and by $\mathcal{V}^{i,j}$ the
 same set without neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
 
- First, if we want to highlight
-relationships between without considering the distinction between direct and
-indirect links, the Pearson correlation matrix, i.e. each element $(i,j)$ of a
-such matrix is the correlation coefficient between neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
+% Without considering indirect/direct --> Correlation matrix
+
+First, if we want to highlight relationships between neurons without
+considering the distinction between direct and indirect links, the Pearson
+correlation matrix, i.e. each element $(i,j)$ of a such matrix is the
+correlation coefficient between neurons $\mathcal{X}_i$ and $\mathcal{X}_j$, can computed.
+
+% However, we only want direct links --> partial correlation
 
 However the connectivity network to infer is only made of direct relationships
 which can be defined as a relation between neurons that still exists when
