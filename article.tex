@@ -194,8 +194,8 @@ $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
 $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
 
 Connectivity information between two neurons may be retrieved from successive
-and slightly delayed burst events. At a local level, direct link
-between two neurons will have shorter delay between fluorescence
+and slightly delayed burst events. Direct links
+between two neurons should have shorter delay between fluorescence
 peaks than undirected links. However, the fluorescence signal has a slow
 decay compare to its rise. Therefore, we filter those unrelevant information
 with a hard thresholding filter
@@ -204,7 +204,7 @@ X^{\prime\prime\prime}_{t,i} &=
 {X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i
 \label{eq:hard-treshold-filter}
 \end{align}
-where $f_3$ is a parameter of the hard-threshold filter and the $0.9$
+where $f_3 \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
 exponent reduce the difference between peaks values.
 
 Then we apply on all remaining timesteps $T$ a non-linear filter based on the current
