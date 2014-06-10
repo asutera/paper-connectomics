@@ -245,11 +245,6 @@ challenge, this assumption was verified on all provided dataset
 \subsection{Network inference through partial correlation}
 \label{sec:inference}
 
-
-\textcolor{red}{Motivation pour l'inverse : retirer les liens indirects.
-Pareil: proposition de AS  et certains choses pourraient être incorporées
-dans la version de AJ.}
-
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and independences. Even
 if \textit{correlation does no imply causation}[todo cite], it gives insight
@@ -259,23 +254,19 @@ Let us consider the neurons as random variables $\mathcal{X}_i$ which follows
 a probability density function $p_{\mathcal{X}_i}$ and let us denote by
 $p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}}$ the joint probability
 distribution between neurons $i$ and $j$ conditioned on a subset of neurons
-$\mathcal{Z}$ (eventually empty). Let us define $\mathcal{V}$ the set of all
-neurons $\mathcal{X}_1, \dots, \mathcal{X}_p$, and by $\mathcal{V}^{i,j}$ the
+$\mathcal{Z}$ (possibly empty). Two neurons $X_i$, $X_j$
+will be said conditionally independent to a set of neurons
+$\mathcal{Z}$ (possibly empty), denoted by  $X_i \perp X_j | \mathcal{Z}$,  if
+$p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
+p_{\mathcal{X}_j|\mathcal{Z}}$. The reciprocal is not true without
+additional hypotheses.  Let us define $\mathcal{V}$ the set of all
+neurons $\mathcal{X}_1, \dots, \mathcal{X}_p$, and by $\mathcal{V}^{-i,j}$ the
 same set without neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
 
-% Without considering indirect/direct --> Correlation matrix
-
-First, if we want to highlight relationships between neurons without
-considering the distinction between direct and indirect links, the Pearson
-correlation matrix, i.e. each element $(i,j)$ of a such matrix is the
-correlation coefficient between neurons $\mathcal{X}_i$ and $\mathcal{X}_j$, can computed.
-
-% However, we only want direct links --> partial correlation
-
-However the connectivity network to infer is only made of direct relationships
-which can be defined as a relation between neurons that still exists when
-conditioned on all other neurons or, in other words, there is not intermediary
-between those two neurons.  Under the hypothesis that neurons follow a jointly
+The connectivity network to infer is only made of direct relationships
+which defined relation between neurons that still exists when
+conditioned on all other neurons. In other words, there is not intermediary
+between those two neurons. Under the hypothesis that neurons follow a jointly
 Gaussian distribution $p_{\mathcal{X}_1, \dots, \mathcal{X}_p} \sim
 \mathcal{N}(\mu; \Sigma)$, two neurons $\mathcal{X}_i$ and $\mathcal{X}_j$ are
 independent $\mathcal{X}_i\perp \mathcal{X}_j$ if the Pearson correlation
@@ -283,7 +274,8 @@ coefficient $\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
 \Sigma_{jj}}} = 0,$ and are conditionally independant to all others neurons
 $\mathcal{X}_i \perp \mathcal{X}_j |\mathcal{V}^{i,j}$ if the partial
 correlation coefficient (of order $p-2$) $\rho_{X_i, X_j | \mathcal{V}^{i,j}}
-= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.$
+= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0$,
+where $\Sigma^{-1}_$ is the inverse of the covariance matrix.
 Therefore, by definition, the partial correlation coefficient between two
 neurons only estimates the direct relationship between them.
 
@@ -295,65 +287,6 @@ variables. An obvious limitation to estimate correctly high-order coefficients
 is the number of samples. However given the high number of samples $n$
 in the Connectomics challenge, we only consider the highest order of partial
 correlation coefficient.
-
-\vspace{1em}
-\hrule
-\vspace{1em}
-
-
-% introduce the notion of dependence / independence
-From a probabilistic point of view, the inference of the undirected network
-can be formulated as inferring conditional dependences and
-independences.  Even if \textit{correlation
-does no imply causation}[todo cite], it gives insight on the underlying connectivity
-network. For instance, the graph $A \rightarrow B \rightarrow C$ translates the
-following dependances and independances: $A \not\perp B$, $A \not\perp B | C$,
-$B \not\perp C$, $B \not\perp C | A$, but $A \perp C | B$ and  $A \not\perp C$.
-
-Let us consider that each neuron signal $i$ is a random continuous variable
-$X_i$ which follows a probability distribution $p_{X_i}$ and let us denote by
-$p_{X_i,X_j|\mathcal{Z}}$ the  joint probability distribution of neurons $X_i$
-and $X_j$ conditioned on a subset of variables $\mathcal{Z}$ (eventually
-empty). Let us define $\mathcal{V}$ the set of all neurons $X_1, ..., X_p$ and
-$\mathcal{V}^{-i,j}$ the same set without neurons $X_i$ and $X_j$.
-
-Each neuron signal $i$ is a random continuous variable $X_i$, which follows a
-probability density function $p_\mathcal{X_i}(x_i)$. Two neurons $X_i$, $X_j$
-will be said conditionally independent to a set of neurons
-$\mathcal{V}^{-i,j}$, denoted by  $X_i \perp X_j | \mathcal{V}^{-i,j}$,  if
-$p_{X_i,X_j|\mathcal{V}^{-i,j}} = p_{X_i|\mathcal{V}^{-i,j}}
-p_{X_j|\mathcal{V}^{-i,j}} $.
-
-%for all real numbers $x_1,\ldots,x_p $ such that
-%$p_{X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}}
-%(x_1,\ldots,x_p \backslash \left\{x_i, x_j\right\}) > 0$. Note that this
-%reciprocal is true only under additional hypotheses.
-
-Under the hypothesis that the neurons follow a jointly Gaussian distribution
-$p_{X_1,\ldots,X_p}(x_1,\ldots,x_p) \sim \mathcal{N}(\mu; \Sigma)$ of mean
-vector $\mu$ and of covariance matrix $\Sigma$, two neurons $X_i$ and $X_j$
-are independent $X_i \perp X_j$ if the Pearson correlation coefficient \[
-\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0, \]
-and are conditionally independent to all others neurons $X_i \perp X_j |
-X_1,\ldots,X_p \backslash \left\{X_i, X_j\right\}$ if the partial correlation
-coefficient \[ \rho_{X_i, X_j | X_1,\ldots,X_p \backslash \left\{X_i,
-X_j\right\}} = \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii}
-\Sigma^{-1}_{jj}}} = 0. \]
-
-% Correlation => Issue indirect effect
-% Partial correlation => better estimate of the graph  => Symmetric measure
-While the correlation coefficient is unable to distinguish between
-direct and indirect interaction, the partial correlation coefficient
-aims to infer only direct ones through the conditioning over all the other
-variables. In previous study \cite{shipley2002cause}, it has been suggested to
-consider correlation coefficients of all possible orders,
-i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-would take into account multiple indirect paths between a given pair of
-variables. An obvious limitation to estimate correctly high-order coefficients
-is the number of samples. However given the high number of samples $n$
-in the Connectomics challenge, we only consider the highest order of partial
-correlation coefficient.
-
 
 \subsection{Stacking partial correlation matrix}
 \label{sec:stacking}
