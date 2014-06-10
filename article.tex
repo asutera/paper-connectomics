@@ -240,7 +240,7 @@ Finally since there is a high correlation between neurons, we made a
 low-rank hypothesis and perform noise filtering through a principal component
 approach. From the $p$ eigen vectors, we only kept $80\%$ of
 the eigen vectors which have the largest eigen value. In the context of the
-challenge, this assumption was verified on all provided dataset
+challenge, this assumption was deduced from ground truth of provided network.
 
 \subsection{Network inference through partial correlation}
 \label{sec:inference}
@@ -331,14 +331,15 @@ information, i.e. the directivity of the links, by computing and stacking with
 our symmetric adjacency matrix a matrix of pairwise activation heuristics.
 This method computes an anti-symmetric activation score $z_{ij}$ based the
 variation of fluorescence signal of a neuron $j$ due to a neuron $i$ over all
-timesteps: \[ z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot
+timesteps:
+\[
+z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot
 \mathbb{1}(f_1\le X_t^i \le f_2) -  \mathbb{1}(X_{t+1,i} \ge X_{t, j}) \cdot
-\mathbb{1}(f_1 \le X_t^j \le f_2) \]  where $f_1$ and $f_2$ are parameters of
-the method and $I$ is the indicator function. % TODO say that we use only the
-3 first filters for this
-
-% TODO speak that we should set the diagonal to the minimum to gain some
-% performance.
+\mathbb{1}(f_1 \le X_t^j \le f_2)
+\]
+where $f_1$ and $f_2$ are parameters of the method and $I$ is the indicator
+function. \footnote{Only the filter defined by Equations \ref{eq:low-pass},
+\ref{eq:high-pass} and \ref{eq:hard-treshold-filter}}.
 
 \section{Experiments}
 
@@ -377,7 +378,8 @@ we also compare the same methods with the area under the precision-recall
 curve (AUPRC), an information retrieval metrics, obtained by varying the threshold
 $\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
 as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
-
+Since there is no self connection (neuron connected to itself), we set
+the diagonal elements of $\hat{y}_{i,j}$ to the minimum.
 
 \subsection{Data filtering and Signal distribution}
 
