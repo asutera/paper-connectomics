@@ -48,8 +48,8 @@
 \title[Inference of connectomes using partial correlation coefficients]{Simple and robust inference of connectomes using partial correlation coefficients}
 
 
-% %% 
-% Discovery/Infering/Retrieving/... connectomes 
+% %%
+% Discovery/Infering/Retrieving/... connectomes
 % Robust
 % Using partial correlation
 % [from calcium imaging]
@@ -172,14 +172,14 @@ license.
 
 \textcolor{red}{AS: Après avoir discuté avec Gilles, une autre façon de
 présenter les choses qui est moins rigoureuse que l'approche de AJ mais plus
-"motivée" --> Certains aspects pourraient être incorporés dans la version de AJ.} 
+"motivée" --> Certains aspects pourraient être incorporés dans la version de AJ.}
 
 Prior inferring the network, the fluorescent calcium time series
 are smoothed using several linear and non linear filters.
 
 % Information in burst not in value --> filtering with hard-threshold
 % Considering the average delay between two neurons, low frequency event can be neglected --> high-pass filter
-% Condidering noise, high frequency event can be neglected --> low-pass filter 
+% Condidering noise, high frequency event can be neglected --> low-pass filter
 
 %\paragraph{Motivation\\} Intuitively, connectivity information between two
 neurons may be retrieved from successive and slightly delayed burst events. In
@@ -220,12 +220,12 @@ T}{a_l}}  \end{align}
 where $r(x)$ is a 4-piecewise continuous functions whose parameters were tuned
 for each low-pass filter.
 
-% Hence, we define our preprocessing function $H$ as 
+% Hence, we define our preprocessing function $H$ as
 % \begin{align}
 % H(X_t^i) = h_2 \bullet h_1 \bullet G(X).
 % \end{align}
 
-Hence, we define our preprocessing function $G$ as 
+Hence, we define our preprocessing function $G$ as
 \begin{align}
 G^{q,k}(X_t^i) = h_2 \bullet h_1 \bullet g^q_1 \bullet g_3 \bullet g_2^k(X_t^i).
 \end{align}
@@ -286,8 +286,8 @@ the eigen vectors which have the largest eigen value.
 
 
 \textcolor{red}{Motivation pour l'inverse : retirer les liens indirects.
-\Pareil: proposition de AS  et certains choses pourraient être incorporées
-\dans la version de AJ.}
+Pareil: proposition de AS  et certains choses pourraient être incorporées
+dans la version de AJ.}
 
 From a probabilistic point of view, the inference of the undirected network
 can be formulated as inferring conditional dependences and independences. Even
