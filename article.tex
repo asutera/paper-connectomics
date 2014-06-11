@@ -201,10 +201,10 @@ decay compare to its rise. Therefore, we filter those unrelevant information
 with a hard thresholding filter
 \begin{align}
 X^{\prime\prime\prime}_{t,i} &=
-{X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq f_3) \forall i
+{X^{\prime\prime}_{t,i}}^{0.9} I(X^{\prime\prime}_{t,i} \geq \tau) \forall i
 \label{eq:hard-treshold-filter}
 \end{align}
-where $f_3 \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
+where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
 exponent reduce the difference between peaks values.
 
 Then we apply on all remaining timesteps $T$ a non-linear filter based on the current
@@ -298,16 +298,16 @@ of the targeted network and measurement conditions, e.g. signal to noise ratio.
 Ensemble methods are known to improve robustness with respect to parameter
 selection [todo cite] and improve performance [todo cite].
 A weighted average $y_{stack}$ of partial correlation matrices was made
-by varying uniformly the hard-threshold value (parameter $f_3$) and the design
+by varying uniformly the hard-threshold value (parameter $\tau$) and the design
 of the low-pass filter (coefficients $c_l$). The stacked connectivity score
 matrix $y_{stacking}$ is given by
 \begin{align}
 y_{stack} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{q \in T_k} G^{q,k}(X_t^i)
 \end{align}
-where $f(X, k, f_3)$ gives the predicted adjacency matrix, i.e. applies the
+where $f(X, k, \tau)$ gives the predicted adjacency matrix, i.e. applies the
 filtering and inference methodologies (as described
 in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value
-$f_3$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
+$\tau$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
 and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ whose
 values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
 
@@ -338,8 +338,9 @@ z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot
 \mathbb{1}(f_1 \le X_t^j \le f_2)
 \]
 where $f_1$ and $f_2$ are parameters of the method and $I$ is the indicator
-function. \footnote{Only the filter defined by Equations \ref{eq:low-pass},
-\ref{eq:high-pass} and \ref{eq:hard-treshold-filter}}.
+function. Prior computing $z_{ij}$ only the filter defined by Equations
+\ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
+used.
 
 \section{Experiments}
 
