@@ -402,7 +402,7 @@ H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
 H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
 H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
 H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
-P-A                 & 0.925 & 0.925 & 0.924 & 0.923 \\
+P-P                 & 0.925 & 0.925 & 0.924 & 0.923 \\
 P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
 P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
 P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
@@ -428,7 +428,7 @@ H-T                 & 0.264 & 0.260 & 0.269 & 0.241\\
 H-T + PCA           & 0.266 & 0.263 & 0.273 & 0.244\\
 H-T + Weights       & 0.280 & 0.273 & 0.281 & 0.251\\
 H-T + Weights + PCA & 0.284 & 0.278 & 0.285 & 0.255\\
-PCA                 & 0.322 & 0.324 & 0.323 & 0.312\\
+P-P                 & 0.322 & 0.324 & 0.323 & 0.312\\
 P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
 P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
 P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
@@ -440,22 +440,41 @@ Averaging           & & & & \\
 
 \begin{table}[htb]
 \centering
-\caption{Correlation. Improvement of each stage of our approach. Note that we choose the
+\caption{Correlation (ROC). Improvement of each stage of our approach. Note that we choose the
          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
 \begin{tabular}{*{5}{l}}
 \toprule
 Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
 \midrule
-Nothing             & 0.681 (0.028) & & & \\
-hard-threshold      & 0.876 (0.143) & & & \\
-Pre-processing      & 0.857 (0.100) & & & \\
-PCA                 & & & & \\
-Weighting           & 0.826 (0.079) & & & \\
+Nothing             & 0.681 & 0.699 & 0.683 & 0.681\\
+Weights             & 0.695 & 0.713 & 0.697 & 0.694\\
+H-T                 & 0.876 & 0.873 & 0.877 & 0.869\\
+H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
+P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
+P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
 Averaging           & & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\begin{table}[htb]
+\centering
+\caption{Correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.028 & 0.699 & 0.025 & 0.026\\
+Weights             & 0.031 & 0.713 & 0.027 & 0.028\\
+H-T                 & 0.143 & 0.873 & 0.150 & 0.129\\
+H-T + Weights       & 0.153 & 0.884 & 0.170 & 0.132\\
+P-P                 & 0.100 & 0.850 & 0.079 & 0.083\\
+P-P + Weights       & 0.079 & 0.823 & 0.067 & 0.064\\
+Averaging           & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \begin{table}[htb]
