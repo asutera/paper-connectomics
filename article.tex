@@ -388,16 +388,24 @@ the diagonal elements of $\hat{y}_{i,j}$ to the minimum.
 
 \begin{table}[htb]
 \centering
-\caption{Improvement of each stage of our approach Note that we choose the
-         \textit{best} threshold for stages 1 to 4.}
+\caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
 \begin{tabular}{*{5}{l}}
 \toprule
 Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
 \midrule
-Inverse correlation & & & & \\
-Pre-processing      & & & & \\
-PCA                 & & & & \\
-Weighting           & & & & \\
+Nothing             & 0.777 & 0.767 & 0.772 & 0.774 \\
+PCA                 & 0.780 & 0.770 & 0.776 & 0.777 \\
+Weights             & 0.780 & 0.769 & 0.776 & 0.777 \\
+Weights + PCA       & 0.783 & 0.772 & 0.779 & 0.780 \\
+H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
+H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
+H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
+H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
+P-A                 & 0.925 & 0.925 & 0.924 & 0.923 \\
+P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
+P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
+P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
 Averaging           & & & & \\
 \bottomrule
 \end{tabular}
@@ -406,7 +414,53 @@ Averaging           & & & & \\
 
 \begin{table}[htb]
 \centering
-\caption{Comparison with other methods}
+\caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & & & & \\
+PCA                 & & & & \\
+Weights             & & & & \\
+Weights + PCA       & & & & \\
+H-T                 & & & & \\
+H-T + PCA           & & & & \\
+H-T + Weights       & & & & \\
+H-T + Weights + PCA & & & & \\
+PCA                 & & & & \\
+P-P + PCA           & & & & \\
+P-P + Weights       & & & & \\
+P-P + Weights + PCA & & & & \\
+Averaging           & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{table}[htb]
+\centering
+\caption{Correlation. Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.681 (0.028) & & & \\
+hard-threshold      & 0.876 (0.143) & & & \\
+Pre-processing      & 0.857 (0.100) & & & \\
+PCA                 & & & & \\
+Weighting           & 0.826 (0.079) & & & \\
+Averaging           & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[htb]
+\centering
+\caption{Comparison with other methods (for now, $t = 0.11$)}
 \begin{tabular}{*{5}{l}}
 \toprule
 Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
