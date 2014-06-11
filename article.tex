@@ -407,6 +407,7 @@ P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
 P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
 P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
 Averaging           & & & & \\
+Stacking            & & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -433,7 +434,6 @@ P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
 P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
 P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
 Averaging           & & & & \\
-Directivity         & & & & \\
 Stacking            & & & & \\
 \bottomrule
 \end{tabular}
@@ -455,7 +455,6 @@ H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
 P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
 P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
 Averaging           & & & & \\
-Directivity         & & & & \\
 Stacking            & & & & \\
 \bottomrule
 \end{tabular}
@@ -476,8 +475,6 @@ H-T + Weights       & 0.153 & 0.884 & 0.170 & 0.132\\
 P-P                 & 0.100 & 0.850 & 0.079 & 0.083\\
 P-P + Weights       & 0.079 & 0.823 & 0.067 & 0.064\\
 Averaging           & & & & \\
-Directivity         & & & & \\
-Stacking            & & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -485,7 +482,7 @@ Stacking            & & & & \\
 
 \begin{table}[htb]
 \centering
-\caption{Comparison with other methods (for now, $t = 0.11$)}
+\caption{Comparison (ROC) with other methods (for now, $t = 0.11$)}
 \begin{tabular}{*{5}{l}}
 \toprule
 Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
@@ -495,10 +492,30 @@ Partial correlation & & & & \\
 Our approach        & & & & \\
 GENIE3              & & & & \\
 GTE                 & & & & \\
+Directivity         & 0.535 & 0.526 & 0.533 & 0.535 \\
+Our approach + dir  & & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+
+\begin{table}[htb]
+\centering
+\caption{Comparison (P-R) with other methods (for now, $t = 0.11$)}
+\begin{tabular}{*{5}{l}}
+\toprule
+Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Correlation         & & & & \\
+Partial correlation & & & & \\
+Our approach        & & & & \\
+GENIE3              & & & & \\
+GTE                 & & & & \\
+Directivity         & 0.012 & 0.012 & 0.012 & 0.012\\
+Our approach + dir  & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Discussion about the metric}
 \label{sec:metric}
