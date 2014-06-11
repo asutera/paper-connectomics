@@ -350,37 +350,35 @@ of the Connectomics challenge : normal-1, normal-2, normal-3, normal-4. Those
 datasets are time series of size $n=179500$ of image calcium from simulated
 neuronal network \cite{stetter2012model} with $p=1000$ neurons. The networks
 to inferred have around 15000 arcs or a density of $0.15\%$ and are similar to those
-used to rank challenge participants.
-
-Note that our parameter tuning was mainly done on the \textit{normal-1} dataset
-and partly on \textit{normal-4} dataset, therefore it may justify why these
-networks are better retrieved despite the fact that some might be simpler to
-infer.
+used to rank challenge participants. Note that our parameter tuning was mainly
+done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
+therefore it may justify why these networks are better retrieved despite the
+fact that some might be simpler to infer.
 
 % Metrics : ROC AUC and AUPRC
 The network inference task can be viewed as a binary classification task
-where one have to correctly classified the presence or the absence of edges
-of the graph. The connectivity score matrix
-$\hat{y}_{i,j} \in \mathcal{R}$ inferred by a modeling technique
-can be thresholded by a value $\tau \in \mathcal{R}$ to evaluate its performance.
-Given the ground true network $y_{i,j} \in \left\{0, 1\right\}$, we first define the notion of
+where one has to correctly classified the presence or the absence of edges
+of the graph. Given the ground true network $y_{i,j} \in \left\{0, 1\right\}$,
+the connectivity score matrix $\hat{y}_{i,j} \in \mathcal{R}$
+and threshold value $\tau$, we first define the notion of
 true positive $tp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} \geq \tau)$,
 true negative $tn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} < \tau)$,
 false negative $fn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} < \tau)$ and
-false positive $fp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} \geq \tau)$.
-Those four numbers formed the confusion matrix.
+false positive $fp(\tau) = n - tp(\tau) - tn(\tau) -fn(\tau)$.
 
 We assess the accuracy of the network inference using the area under
 the ROC curve (ROC AUC) obtained by varying the threshold
 $\tau$ of the true positive rate $tpr(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
 as a function of the false positive rate
-$fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$. In section (TODO ref),
+$fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$.  As suggested in
+\cite{schrynemackers2013protocols},
 we also compare the same methods with the area under the precision-recall
-curve (AUPRC), an information retrieval metrics, obtained by varying the threshold
+curve (AUPRC) obtained by varying the threshold
 $\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
-as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$.
-Since there is no self connection (neuron connected to itself), we set
-the diagonal elements of $\hat{y}_{i,j}$ to the minimum.
+as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
+in section (todo ref).
+Since  there is no self connection (neuron connected to itself), we set
+the diagonal elements of $\hat{y}_{i,j}$ to the minimum prior evaluation.
 
 \subsection{Data filtering and Signal distribution}
 
@@ -535,7 +533,8 @@ Our approach + dir         & & & & \\
 \begin{scriptsize}
 
 \paragraph{Acknowledgements.} A. Joly and G. Louppe are research fellows of
-the FNRS, Belgium.  A. Sutera is supported by a F.R.I.A. scholarship.
+the FNRS, Belgium.  A. Sutera is  is recipient of
+a F.R.I.A. fellowship of F.R.S.-FNRS, Belgium.
 This work is supported by PASCAL2 and the IUAP DYSCO, initiated by the
 Belgian State, Science Policy Office.
 
