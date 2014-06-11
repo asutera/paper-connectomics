@@ -238,7 +238,7 @@ $\left(c_l^i\right)_{l=-3}^2$.
 
 Finally since there is a high correlation between neurons, we made a
 low-rank hypothesis and perform noise filtering through a principal component
-approach. From the $p$ eigen vectors, we only kept $80\%$ of
+analysis. From the $p$ eigen vectors, we only kept $80\%$ of
 the eigen vectors which have the largest eigen value. In the context of the
 challenge, this assumption was deduced from ground truth of provided network.
 
@@ -300,7 +300,7 @@ selection [todo cite] and improve performance [todo cite].
 A weighted average $y_{stack}$ of partial correlation matrices was made
 by varying uniformly the hard-threshold value (parameter $\tau$) and the design
 of the low-pass filter (coefficients $c_l$). The stacked connectivity score
-matrix $y_{stacking}$ is given by
+matrix $y_{stack}$ is given by
 \begin{align}
 y_{stack} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{q \in T_k} G^{q,k}(X_t^i)
 \end{align}
