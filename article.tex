@@ -297,19 +297,20 @@ good hyper-parameter selection, which are themselves dependent on the properties
 of the targeted network and measurement conditions, e.g. signal to noise ratio.
 Ensemble methods are known to improve robustness with respect to parameter
 selection [todo cite] and improve performance [todo cite].
-A weighted average $y_{stack}$ of partial correlation matrices was made
-by varying uniformly the hard-threshold value (parameter $\tau$) and the design
-of the low-pass filter (coefficients $c_l$). The stacked connectivity score
-matrix $y_{stack}$ is given by
+A weighted average $\hat{y}$ of partial correlation matrices was estimated
+from the timeseris $X \in \mathcal{R}^{n \times p}$
+by varying unifthe hard-threshold value $\tau \in \mathcal{T}$  and the design
+of the low-pass filter (coefficients
+$(c_l)_{-3}^2 \forall l \in \left\{1,\ldots,4\right\}$)
 \begin{align}
-y_{stack} =  \dfrac{1}{\sum_{k\in\{1,..,4\}} w_k |T_k|} \sum_{k=1}^{k=4}  w_k \sum_{q \in T_k} G^{q,k}(X_t^i)
+\hat{y} = \frac{1}{\sum_{l=1}^4 w_l |\mathcal{T}|} \sum_{l=1}^4  w_l \sum_{\tau \in \mathcal{T}} G^{\tau,m}(X)
 \end{align}
-where $f(X, k, \tau)$ gives the predicted adjacency matrix, i.e. applies the
-filtering and inference methodologies (as described
-in sections \ref{sec:filter} and \ref{sec:inference}), with a  given value
-$\tau$ for the hard-threshold among a set of thresholds $T_k$ of size $|T_k|$
-and the $k^{th}$ low-pass filter pattern associated to a weight $w_k$ whose
-values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+where $G^{k, \tau}(X)$ gives the connectivity score matrix for
+a given  $\tau$ and a set of coefficient $c_l$. following
+the methodology described in previous section, associated to a weight
+$w_p$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+
+
 
 \subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
