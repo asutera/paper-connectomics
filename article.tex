@@ -310,18 +310,15 @@ false positive for direct link.  Hoping to orientate
 correctly the most obvious directed links, we attempt to retrieve some causal
 information, i.e. the directivity of the links, by computing and stacking with
 our symmetric adjacency matrix a matrix of pairwise activation heuristics.
-This method computes an anti-symmetric activation score $z_{ij}$ based the
+This method computes an anti-symmetric activation score $Z$ based the
 variation of fluorescence signal of a neuron $j$ due to a neuron $i$ over all
-timesteps:
+time steps:
 \[
-z_{ij} = \sum_{t=1}^n \mathbb{1}(X_{t+1,j} \ge X_{t, i}) \cdot
-\mathbb{1}(f_1\le X_t^i \le f_2) -  \mathbb{1}(X_{t+1,i} \ge X_{t, j}) \cdot
-\mathbb{1}(f_1 \le X_t^j \le f_2)
+\hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
+    \mathbb{1}(x_{t+1,j} - x_{t, i} \in \left[f1, f2 \right]) -
+    \mathbb{1}(x_{t+1,i} - x_{t, j} \in \left[f1, f2 \right])
 \]
-where $f_1$ and $f_2$ are parameters of the method and $I$ is the indicator
-function. Prior computing $z_{ij}$ only the filter defined by Equations
-\ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
-used.
+where $f_1$ and $f_2$ are parameters of the method.
 
 \section{Experiments}
 
@@ -354,6 +351,9 @@ assessment.
 %   - discussions about the results
 %   - discussions about the metrics (Gilles' text)
 
+For the directory method, only filters defined by Equations
+\ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
+used.
 
 \begin{table}[htb]
 \centering
