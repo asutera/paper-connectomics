@@ -329,39 +329,27 @@ used.
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizer
-of the Connectomics challenge : normal-1, normal-2, normal-3, normal-4. Those
-datasets are time series of size $T=179500$ of image calcium from simulated
+of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
+Those datasets are time series of size $T=179500$ of image calcium from simulated
 neuronal network \cite{stetter2012model} with $|V|=1000$ neurons. The networks
-to inferred have around 15000 edge or a density of $0.15\%$ and are similar to those
+to inferred have around 15000 edge and are similar to those
 used to rank challenge participants. Note that our parameter tuning was mainly
 done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
 therefore it may justify why these networks are better retrieved despite the
 fact that some might be simpler to infer.
 
 % Metrics : ROC AUC and AUPRC
-The network inference task can be viewed as a binary classification task
-where one has to correctly classified the presence or the absence of edges
-of the graph. Given the ground true network $y_{i,j} \in \left\{0, 1\right\}$,
-the connectivity score matrix $\hat{y}_{i,j} \in \mathcal{R}$
-and threshold value $\tau$, we first define the notion of
-true positive $tp(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} \geq \tau)$,
-true negative $tn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 0, \hat{y}_{i,j} < \tau)$,
-false negative $fn(\tau) = \sum_{i=1}^p \sum_{j=1}^p I(y_{i,j} = 1, \hat{y}_{i,j} < \tau)$ and
-false positive $fp(\tau) = n - tp(\tau) - tn(\tau) -fn(\tau)$.
-
-We assess the accuracy of the network inference using the area under
-the ROC curve (ROC AUC) obtained by varying the threshold
-$\tau$ of the true positive rate $tpr(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
-as a function of the false positive rate
-$fpr(\tau) = \frac{tn(\tau)}{tn(\tau) + fp(\tau)}$.  As suggested in
-\cite{schrynemackers2013protocols},
-we also compare the same methods with the area under the precision-recall
-curve (AUPRC) obtained by varying the threshold
-$\tau$ of the precision $P(\tau) = \frac{tp(\tau)}{tp(\tau) + fp(\tau)}$
-as a function of the recall $R(\tau) = \frac{tp(\tau)}{tp(\tau) + fn(\tau)}$
-in section (todo ref).
-Since  there is no self connection (neuron connected to itself), we set
-the diagonal elements of $\hat{y}_{i,j}$ to the minimum prior evaluation.
+In supervised learning term, the network inference task can be viewed as a
+binary classification task where one has to correctly classified the presence
+or the absence of edges of the graph. Given the ground true adjacency matrix
+$A$ and a connectivity score matrix $\hat{A}$, we assess the accuracy of the
+network inference method using the area under the ROC curve (ROC AUC)
+and the area under the precision-recall curve (AUPRC)
+(\cite{schrynemackers2013protocols}). Since neurons are not self-connected
+($(i, i) \not E, \forall i \in V$) and some inference methods could spuriously
+leave maximal scores to the diagonal of $\hat{A}$, e.g. Pearson correlation,
+we set those elements to the minimum of $\hat{A}$ prior evaluating those
+algorithms.
 
 \subsection{Data filtering and Signal distribution}
 
