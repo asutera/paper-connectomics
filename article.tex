@@ -244,48 +244,48 @@ challenge, this assumption was deduced from ground truth of provided network.
 \label{sec:inference}
 
 Let us denote the fluorescence calcium indicators of all neuron
-as a set of random variables $V = \left\{V_1, \ldots, V_{|V|}\right\}$, which follows
-a joint probability distribution $p_\mathcal{V}$, and by
-$V^{-i,j}$ the set of all variables except $V_i$ and $V_j$.
-Two random variables $V_i$ and $V_j$ are said to be conditionally independent
-to a (possibly empty) set of random variables $Z$, denoted by $V_i \perp V_j | Z$,
+as a set of random variables $X = \left\{X_1, \ldots, X_{|V|}\right\}$, which follows
+a joint probability distribution $p_\mathcal{X}$, and by
+$X^{-i,j}$ the set of all variables except $X_i$ and $X_j$.
+Two random variables $X_i$ and $X_j$ are said to be conditionally independent
+to a (possibly empty) set of random variables $Z$, denoted by $X_i \perp X_j | Z$,
 if the joint conditional probability distribution factorizes
-$p_{\mathcal{V}_i, \mathcal{V}_j|\mathcal{Z}} = p_{\mathcal{V}_i|\mathcal{Z}}
-p_{\mathcal{V}_j|\mathcal{Z}}$.  The inference of the undirected network
+$p_{\mathcal{X}_i, \mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
+p_{\mathcal{X}_j|\mathcal{Z}}$.  The inference of the undirected network
 can be formulated as inferring conditional dependences
-$V_i \not\perp V_j | V^{-i,j}$ between all pair of fluorescence signal
+$X_i \not\perp X_j | X^{-i,j}$ between all pair of fluorescence signal
 $i$ and $j$, in other words the inferred network will be
-$\hat{A}: \hat{a}_{i,j} = I(V_i \not\perp V_j | V^{-i,j}), i, j \in V$.
+$\hat{A}: \hat{a}_{i,j} = I(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
 
 Since all neurons are assumed to be connected to at least one neuron,
-we thus have by definition $V_i \not\perp V_j$. However,  two random
+we thus have by definition $X_i \not\perp X_j$. However,  two random
 variables $A$ and $B$ might be dependent taken alone ($A \not\perp B$), but not
 once we observe a third variables $C$ ($A \perp B | C$).
-The conditioning over all other random variables $V^{-i,j}$ is thus necessary
+The conditioning over all other random variables $X^{-i,j}$ is thus necessary
 to avoid predicting an edge when two neurons are not directly connected.
 
-If the random variables $V$ follows a joint Gaussian distribution
-$p_\mathcal{V} \sim \mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and
+If the random variables $X$ follows a joint Gaussian distribution
+$p_\mathcal{X} \sim \mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and
 covariance matrix $\Sigma$, we have the conditional independence
-$V_i \perp V_j | V^{-i,j}$ if the partial correlation coefficient
+$X_i \perp X_j | X^{-i,j}$ if the partial correlation coefficient
 \[
-\rho_{V_i, V_j | V^{-i,j}}
+\rho_{X_i, X_j | X^{-i,j}}
 = \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}.
 \]
 is equal zero. The partial correlation gives a connectivity score
-$\hat{A}: \hat{a}_{i,j} = \rho_{V_i, V_j | V^{-i,j}}, i, j \in V$ between all
-pair of neuron $i$ and $j$. One could retrieve an estimated graph by thresholding
+$\hat{A}: \hat{a}_{i,j} = \rho_{X_i, X_j | X^{-i,j}}, \forall i, j \in V$ between all
+pairs of neuron $i$ and $j$. One could retrieve an estimated graph by thresholding
 the matrix $\hat{A}$.
-By contrast, we also have $V_i \perp V_j$ if the Pearson correlation
+By contrast, we also have $X_i \perp X_j$ if the Pearson correlation
 coefficient
 \[
-\rho_{V_i,V_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
+\rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
 \Sigma_{jj}}}
 \]
 is equal to zero.
 
 % Speak about why averaging
-The quality of the signal filtering and network inference depends
+The quality of the signal filtering and network inference depends on
 good hyper-parameter selection, which are themselves dependent on the properties
 of the targeted network and measurement conditions, e.g. signal to noise ratio.
 In order to improve robustness, a weighted average of partial correlation
@@ -351,12 +351,13 @@ spuriously leave maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
 correlation, we set those elements to the minimum of $\hat{A}$ prior evaluating
 those algorithms.
 
-\subsection{Data filtering and Signal distribution}
 
-\subsection{Inference of neuronal network}
+% TODO
+%   - discussions about the results
+%   - discussions about the metrics (Gilles text)
 
 
-\begin{table}[H]
+\begin{table}[htb]
 \centering
 \caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
@@ -383,7 +384,7 @@ Stacking            & 0.944 & 0.943 & 0.942 & 0.940 \\
 \end{table}
 
 
-\begin{table}[H]
+\begin{table}[htb]
 \centering
 \caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
