@@ -232,84 +232,62 @@ $\left(c_l^i\right)_{l=-3}^2$.
 
 Finally since there is a high correlation between neurons, we made a
 low-rank hypothesis and perform noise filtering through a principal component
-analysis. From the $p$ eigen vectors, we only kept $80\%$ of
+analysis. From the $p$ eigen vectors, we kept $80\%$ of
 the eigen vectors which have the largest eigen value. In the context of the
 challenge, this assumption was deduced from ground truth of provided network.
 
-\subsection{Network inference through partial correlation}
+\subsection{Network inference through weighted average partial correlation
+            coefficients}
 \label{sec:inference}
 
-% The main challenge in the inference of the network $y$
-% is to distinguish direct from indirect interactions \cite{de2004discovery}.
-% For instance with the simple interaction graph $A \rightarrow B \rightarrow C$,
-% we want to distinguish direct interactions $A \rightarrow B$ and $B \rightarrow C$
-% from the indirect interaction $A \rightarrow C$.
+Let us denote the fluorescence calcium indicators of all neuron
+as a set of random variables $V = \left\{V_1, \ldots, V_{|V|}\right\}$, which follows
+a joint probability distribution $p_\mathcal{V}$, and by
+$V^{-i,j}$ the set of all variables except $V_i$ and $V_j$.
+Two random variables $V_i$ and $V_j$ are said to be conditionally independent
+to a (possibly empty) set of random variables $Z$, denoted by $V_i \perp V_j | Z$,
+if the joint conditional probability distribution factorizes
+$p_{\mathcal{V}_i, \mathcal{V}_j|\mathcal{Z}} = p_{\mathcal{V}_i|\mathcal{Z}}
+p_{\mathcal{V}_j|\mathcal{Z}}$.  The inference of the undirected network
+can be formulated as inferring conditional dependences
+$V_i \not\perp V_j | V^{-i,j}$ between all pair of fluorescence signal
+$i$ and $j$, in other words the inferred network will be
+$\hat{A}: \hat{a}_{i,j} = I(V_i \not\perp V_j | V^{-i,j}), i, j \in V$.
 
+Since all neurons are assumed to be connected to at least one neuron,
+we thus have by definition $V_i \not\perp V_j$. However,  two random
+variables $A$ and $B$ might be dependent taken alone ($A \not\perp B$), but not
+once we observe a third variables $C$ ($A \perp B | C$).
+The conditioning over all other random variables $V^{-i,j}$ is thus necessary
+to avoid predicting an edge when two neurons are not directly connected.
 
-From a probabilistic point of view, the inference of the undirected network
-can be formulated as inferring conditional dependences and independences. Even
-if \textit{correlation does no imply causation}[todo cite], it gives insight
-on the underlying connectivity network.
-
-Let us consider the neurons as random variables $\mathcal{X}_i$ which follows
-a probability density function $p_{\mathcal{X}_i}$ and let us denote by
-$p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}}$ the joint probability
-distribution between neurons $i$ and $j$ conditioned on a subset of neurons
-$\mathcal{Z}$ (possibly empty). Two neurons $X_i$, $X_j$
-will be said conditionally independent to a set of neurons
-$\mathcal{Z}$ (possibly empty), denoted by  $X_i \perp X_j | \mathcal{Z}$,  if
-$p_{\mathcal{X}_i,\mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
-p_{\mathcal{X}_j|\mathcal{Z}}$. The reciprocal is not true without
-additional hypotheses.  Let us define $\mathcal{V}$ the set of all
-neurons $\mathcal{X}_1, \dots, \mathcal{X}_p$, and by $\mathcal{V}^{-i,j}$ the
-same set without neurons $\mathcal{X}_i$ and $\mathcal{X}_j$.
-
-The connectivity network to infer is only made of direct relationships
-which defined relation between neurons that still exists when
-conditioned on all other neurons. In other words, there is not intermediary
-between those two neurons. Under the hypothesis that neurons follow a jointly
-Gaussian distribution $p_{\mathcal{X}_1, \dots, \mathcal{X}_p} \sim
-\mathcal{N}(\mu; \Sigma)$, two neurons $\mathcal{X}_i$ and $\mathcal{X}_j$ are
-independent $\mathcal{X}_i\perp \mathcal{X}_j$ if the Pearson correlation
-coefficient $\rho_{X_iX_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
-\Sigma_{jj}}} = 0,$ and are conditionally independant to all others neurons
-$\mathcal{X}_i \perp \mathcal{X}_j |\mathcal{V}^{i,j}$ if the partial
-correlation coefficient (of order $p-2$) $\rho_{X_i, X_j | \mathcal{V}^{i,j}}
-= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0$,
-where $\Sigma^{-1}$ is the inverse of the covariance matrix.
-Therefore, by definition, the partial correlation coefficient between two
-neurons only estimates the direct relationship between them.
-
-In previous study \cite{shipley2002cause}, it has been suggested to
-consider correlation coefficients of all possible orders,
-i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-would take into account multiple indirect paths between a given pair of
-variables. An obvious limitation to estimate correctly high-order coefficients
-is the number of samples. However given the high number of samples $n$
-in the Connectomics challenge, we only consider the highest order of partial
-correlation coefficient.
-
-\subsection{Stacking partial correlation matrix}
-\label{sec:stacking}
+If the random variables $V$ follows a joint Gaussian distribution
+$p_\mathcal{V} \sim \mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and
+covariance matrix $\Sigma$, we have the conditional independence
+$V_i \perp V_j | V^{-i,j}$ if the partial correlation coefficient
+\[
+\rho_{V_i, V_j | V^{-i,j}}
+= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}.
+\]
+is equal zero. The partial correlation gives a connectivity score
+$\hat{A}: \hat{a}_{i,j} = \rho_{V_i, V_j | V^{-i,j}}, i, j \in V$ between all
+pair of neuron $i$ and $j$. One could retrieve an estimated graph by thresholding
+the matrix $\hat{A}$.
+By contrast, we also have $V_i \perp V_j$ if the Pearson correlation
+coefficient
+\[
+\rho_{V_i,V_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
+\Sigma_{jj}}}
+\]
+is equal to zero.
 
 % Speak about why averaging
-The quality of the signal filtering and network inference is dependent upon
+The quality of the signal filtering and network inference depends
 good hyper-parameter selection, which are themselves dependent on the properties
 of the targeted network and measurement conditions, e.g. signal to noise ratio.
-Ensemble methods are known to improve robustness with respect to parameter
-selection [todo cite] and improve performance [todo cite].
-A weighted average $\hat{y}$ of partial correlation matrices was estimated
-from the timeseris $X \in \mathcal{R}^{n \times p}$
-by varying unifthe hard-threshold value $\tau \in \mathcal{T}$  and the design
-of the low-pass filter (coefficients
-$(c_l)_{-3}^2 \forall l \in \left\{1,\ldots,4\right\}$)
-\begin{align}
-\hat{y} = \frac{1}{\sum_{l=1}^4 w_l |\mathcal{T}|} \sum_{l=1}^4  w_l \sum_{\tau \in \mathcal{T}} G^{\tau,m}(X)
-\end{align}
-where $G^{k, \tau}(X)$ gives the connectivity score matrix for
-a given  $\tau$ and a set of coefficient $c_l$. following
-the methodology described in previous section, associated to a weight
-$w_p$ whose values are $w_1 = 0.01 , w_2 =1, w_3 = 0.7, w_4 = 0.9$.
+In order to improve robustness, a weighted average of partial correlation
+matrices was estimated from the time series by varying the hard-threshold value
+$\tau$ and the design of the low-pass filter (coefficients $(c_l^k)_{l=-3}^k$).
 
 
 
@@ -523,6 +501,12 @@ Our approach + dir         & & & & \\
 
 
 \section{Conclusion}
+
+In previous study \cite{shipley2002cause}, it has been suggested to
+consider correlation coefficients of all possible orders,
+i.e. conditioned on every subsets of the set of $p-2$ other variables. This
+would take into account multiple indirect paths between a given pair of
+variables.
 
 % Possible extensions
 % partial autocorrelation function (sometimes "partial correlation function")
