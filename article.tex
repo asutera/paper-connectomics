@@ -346,10 +346,10 @@ $A$ and a connectivity score matrix $\hat{A}$, we assess the accuracy of the
 network inference method using the area under the ROC curve (ROC AUC)
 and the area under the precision-recall curve (AUPRC)
 (\cite{schrynemackers2013protocols}). Since neurons are not self-connected
-($(i, i) \not E, \forall i \in V$) and some inference methods could spuriously
-leave maximal scores to the diagonal of $\hat{A}$, e.g. Pearson correlation,
-we set those elements to the minimum of $\hat{A}$ prior evaluating those
-algorithms.
+($(i, i) \not \in E, \forall i \in V$) and some inference methods could
+spuriously leave maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
+correlation, we set those elements to the minimum of $\hat{A}$ prior evaluating
+those algorithms.
 
 \subsection{Data filtering and Signal distribution}
 
@@ -405,43 +405,6 @@ P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
 P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
 Averaging           & 0.403 & 0.404 & 0.398 & 0.388\\
 Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-\centering
-\caption{Correlation (ROC). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.681 & 0.699 & 0.683 & 0.681\\
-Weights             & 0.695 & 0.713 & 0.697 & 0.694\\
-H-T                 & 0.876 & 0.873 & 0.877 & 0.869\\
-H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
-P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
-P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Correlation (P-R). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.028 & 0.028 & 0.025 & 0.026\\
-Weights             & 0.031 & 0.030 & 0.027 & 0.028\\
-H-T                 & 0.143 & 0.128 & 0.150 & 0.129\\
-H-T + Weights       & 0.153 & 0.145 & 0.170 & 0.132\\
-P-P                 & 0.100 & 0.087 & 0.079 & 0.083\\
-P-P + Weights       & 0.079 & 0.071 & 0.067 & 0.064\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -522,5 +485,47 @@ Belgian State, Science Policy Office.
 % the paper.
 \bibliography{references}
 
+\newpage
+\clearpage
+
+\appendix
+
+\section{Supplementary results}
+
+\begin{table}[htbp]
+\centering
+\caption{Correlation (ROC). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.681 & 0.699 & 0.683 & 0.681\\
+Weights             & 0.695 & 0.713 & 0.697 & 0.694\\
+H-T                 & 0.876 & 0.873 & 0.877 & 0.869\\
+H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
+P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
+P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.028 & 0.028 & 0.025 & 0.026\\
+Weights             & 0.031 & 0.030 & 0.027 & 0.028\\
+H-T                 & 0.143 & 0.128 & 0.150 & 0.129\\
+H-T + Weights       & 0.153 & 0.145 & 0.170 & 0.132\\
+P-P                 & 0.100 & 0.087 & 0.079 & 0.083\\
+P-P + Weights       & 0.079 & 0.071 & 0.067 & 0.064\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \end{document}
