@@ -297,18 +297,16 @@ $\tau$ and the design of the low-pass filter (coefficients $(c_l^k)_{l=-3}^k$).
 \subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
-Since the partial correlation is a symmetric measure, the causal mechanism behind the
+Since partial correlation is a symmetric measure, the causal mechanism behind the
 interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
 be directly inferred\footnote{Also note that two other causal mechanisms might be
 implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\cite{de2004discovery}.} from a symmetric adjacency matrix.
+\cite{de2004discovery}.}.
 
 By ignoring the directivity, we systematically make a true positive and a
-false positive for direct link (see a more detailed discussion about the
-chosen metric in section \ref{sec:metric}). Therefore, performance might be
-improved by predicting an asymmetric adjacency matrix. Hoping to orientate
+false positive for direct link.  Hoping to orientate
 correctly the most obvious directed links, we attempt to retrieve some causal
 information, i.e. the directivity of the links, by computing and stacking with
 our symmetric adjacency matrix a matrix of pairwise activation heuristics.
@@ -348,8 +346,8 @@ and the area under the precision-recall curve (AUPRC)
 (\cite{schrynemackers2013protocols}). Since neurons are not self-connected
 ($(i, i) \not \in E, \forall i \in V$) and some inference methods could
 give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
-correlation, we set those elements to the minimum of $\hat{A}$ prior evaluating
-those algorithms.
+correlation, we set those elements to the minimum of $\hat{A}$ prior
+assessment.
 
 
 % TODO
