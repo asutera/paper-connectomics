@@ -135,7 +135,7 @@ the connectomes from those time series.
 
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
-The connectomes is represented by a (un)directed graph $G = (V, E)$ comprising
+The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
 V\right\}$, (un)ordered pair from $V$.
 Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
@@ -143,8 +143,8 @@ represents a direct link from a neuron $i$ to a neuron $j$.
 The network inference task is set as follows :
 \textit{Given the observations $(x_t \in \mathcal{R}^{|V|})_{t=1}^T $
 along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
-adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the graph $G$,
-where $\mathbb{1}$ is the indicator function.}
+adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
+of graph $G$, where $\mathbb{1}$ is the indicator function.}
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
@@ -253,8 +253,8 @@ if the joint conditional probability distribution factorizes
 $p_{\mathcal{X}_i, \mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
 p_{\mathcal{X}_j|\mathcal{Z}}$.  The inference of the undirected network
 can be formulated as inferring conditional dependences
-$X_i \not\perp X_j | X^{-i,j}$ between all pair of fluorescence signal
-$i$ and $j$, in other words the inferred network will be
+$X_i \not\perp X_j | X^{-i,j}$ between all pairs $i$ and $j$ of fluorescence
+signals, in other words the inferred network will be
 $\hat{A}: \hat{a}_{i,j} = \mathbb{1}(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
 
 Since all neurons are assumed to be connected to at least one neuron,
