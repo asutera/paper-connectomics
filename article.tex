@@ -180,7 +180,6 @@ Prior inferring the network, the fluorescent calcium time series
 are smoothed using several linear and non linear filters \textcolor{red}{in order to reduce the imaging process effects. We successively apply different filters listed below.} \\
 
 
-
 % However, the image fluorescence calcium signal is also very noisy. Thus,
 % A low-pass filter (Equation \ref{eq:low-pass}) is first applied followed by a
 % high-pass filter (Equation \ref{eq:high-pass}), the discrete derivative of
@@ -196,10 +195,13 @@ are smoothed using several linear and non linear filters \textcolor{red}{in orde
 % $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
 % $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
 
-\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and a low-pass filter is therefore applied to get a cleaner version of the signal where only true variations are kept, i.e. without noise variations. However, the choice of a low-pass filter is not unique. In the rest of the paper, we will focus on two types, the symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$, and an asymmetrical weighted median filter, i.e., $X_t^i \leftarrow 0.4 X_{t-3}^i + 0.6 X_{t-2}^i + 0.8 X_{t-1}^i + X_{t}^i$.}
+\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and a low-pass filter is therefore applied to get a cleaner version of the signal where only true variations are kept, i.e. without noise variations. However, the choice of a low-pass filter is not unique. In the rest of the paper, we will focus on two types, the symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$, and an asymmetrical weighted median filter, i.e., $X_t^i \leftarrow 0.4 X_{t-3}^i + 0.6 X_{t-2}^i + 0.8 X_{t-1}^i + X_{t}^i$.}\\
 
 
-\textcolor{red}{Considering the short delay for a communication between neurons, slow events can be neglected to retrieve direct relationships. Indeed, for a direct relationship, i.e. a neuron firing directly implying another neuron to fire, the average time is about $1ms$ or $2ms$ while the fluorescent signal time resolution is $20ms$. In order to find out which neurons are directly related, it is only necessary to look after the burst signal, or in other words, whether the signal varies.}
+\textcolor{red}{Considering the short delay for a communication between neurons, slow events can be neglected to retrieve direct relationships. Indeed, for a direct relationship, i.e. a neuron firing directly implying another neuron to fire, the average time is about $1ms$ or $2ms$ while the fluorescent signal time resolution is $20ms$. In order to find out which neurons are directly related, it is only necessary to look after the burst signal, or in other words, whether the signal varies. In our approach, we choose to apply an asymmetrical discrete derivative : $X_{t,d}^{i} \leftarrow X_{t}^i - X_{t-1}^i$.}\\
+
+\textcolor{red}{By nature, the firing event is really fast and in order to retrieve the connectivity from them, it is necessary to link a burst to a couple of timesteps (ideally one). The small decay for the fluorescent calcium indicator implies a signal variation during a long interval and therefore, in order to only keep rising and strong transitions, we apply a hard-tresholing filter: $X_{t,d}^i = X_{t,d}^i \mathbb{1}(X_{t,d}^i \geq \tau)$ 
+As a result, we get a binary-like signal with the true activity when a burst happens and with a true zero when the neuron is inactive.}
 
 % Considering the short delay for a communication between neurons, slow events
 % can be neglected to retrieve direct relationships. The average time
@@ -209,56 +211,62 @@ are smoothed using several linear and non linear filters \textcolor{red}{in orde
 
 
 
+% Connectivity information between two neurons may be retrieved from successive
+% and slightly delayed burst events. Direct links
+% between two neurons should have shorter delay between fluorescence
+% peaks than undirected links. However, the fluorescence signal has a slow
+% decay compare to its rise. Therefore, we filter those unrelevant information
+% with a hard thresholding filter
+% \begin{align}
+% X^{\prime\prime\prime}_{t,i} &=
+% {X^{\prime\prime}_{t,i}}^{0.9} \mathbb{1}(X^{\prime\prime}_{t,i} \geq \tau) \forall i
+% \label{eq:hard-treshold-filter}
+% \end{align}
+% where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
+% exponent reduce the difference between peaks values.
+
+\textcolor{red}{Then we apply on the entire signal a non-linear filter base on the current activity of the systems in order to favor the association measure inversely proportional to the number of neurons firing together:$ X_{t,w}^i  = (X_{t,d}^i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $. When too much neurons are firing together, i.e. a network burst, it is almost impossible to retrieve direct relationships: all neurons seem to be directly connected to each other. By favoring the association measure when the activity is low, we expect to retrieve a pair of neurons that are really directly connected together. 
+}
 
 
-Connectivity information between two neurons may be retrieved from successive
-and slightly delayed burst events. Direct links
-between two neurons should have shorter delay between fluorescence
-peaks than undirected links. However, the fluorescence signal has a slow
-decay compare to its rise. Therefore, we filter those unrelevant information
-with a hard thresholding filter
-\begin{align}
-X^{\prime\prime\prime}_{t,i} &=
-{X^{\prime\prime}_{t,i}}^{0.9} \mathbb{1}(X^{\prime\prime}_{t,i} \geq \tau) \forall i
-\label{eq:hard-treshold-filter}
-\end{align}
-where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
-exponent reduce the difference between peaks values.
 
-Then we apply on all remaining timesteps $T$ a non-linear filter based on the current
-activity of the systems in order to favor the association measure when
-a medium size set of neurons are firing together, while artificially
-reducing the association measure in case of extreme network activity,
-i.e. high when a network firing is happening and low when no neuron is
-active:
-\begin{equation}
-X^{\prime\prime\prime\prime}_{t,i} =
-\left\{
-  \begin{array}{l}
-    1  : r_t < 0\\
-    {(X^{\prime\prime\prime}_{t,i} + 1)^{(a_t^{-1} + 1)}}^{g(r_t)} : r_t \geq 0
-  \end{array}
-\right.
-\text{ with }
-\left\{
-  \begin{array}{ll}
-    a_t &= \sum_{i=1}^p X^{\prime\prime\prime}_{t,i} +
-                       \frac{1}{2} X^{\prime\prime\prime}_{t-1,i} \forall t \in T\\
-    r_t &= \frac{a_t}{\max_{l \in T}{a_l}} \\
-  \end{array}
-\right.
-\end{equation}
-where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
-b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
-parameters $b_1, b_2, b_3, f_4, f_5, f_6$. The coefficient were tuned
-for each set $i\in\left\{1, 2, 3, 4\right\}$ of coefficient
-$\left(c_l^i\right)_{l=-3}^2$.
 
-Finally since there is a high correlation between neurons, we perform noise
-filtering through a principal component analysis. From the $p$ eigen vectors,
-we kept $80\%$ of the eigen vectors which have the largest eigen value. In the
-context of the challenge, this assumption was deduced from ground truth of
-provided networks.
+
+% Then we apply on all remaining timesteps $T$ a non-linear filter based on the current activity of the systems in order to favor the association measure when a medium size set of neurons are firing together, while artificially
+% reducing the association measure in case of extreme network activity,
+% i.e. high when a network firing is happening and low when no neuron is
+% active:
+
+
+
+% \begin{equation}
+% X^{\prime\prime\prime\prime}_{t,i} =
+% \left\{
+%   \begin{array}{l}
+%     1  : r_t < 0\\
+%     {(X^{\prime\prime\prime}_{t,i} + 1)^{(a_t^{-1} + 1)}}^{g(r_t)} : r_t \geq 0
+%   \end{array}
+% \right.
+% \text{ with }
+% \left\{
+%   \begin{array}{ll}
+%     a_t &= \sum_{i=1}^p X^{\prime\prime\prime}_{t,i} +
+%                        \frac{1}{2} X^{\prime\prime\prime}_{t-1,i} \forall t \in T\\
+%     r_t &= \frac{a_t}{\max_{l \in T}{a_l}} \\
+%   \end{array}
+% \right.
+% \end{equation}
+% where $g(x) = b_1 I(f_4 < x < f_5) + b_2  I(f_5 \leq x < f_6) +
+% b_3 (I(x\leq f_4) + I(f_ 6 \leq x))$ is a piecewise continuous function of
+% parameters $b_1, b_2, b_3, f_4, f_5, f_6$. The coefficient were tuned
+% for each set $i\in\left\{1, 2, 3, 4\right\}$ of coefficient
+% $\left(c_l^i\right)_{l=-3}^2$.
+
+% Finally since there is a high correlation between neurons, we perform noise
+% filtering through a principal component analysis. From the $p$ eigen vectors,
+% we kept $80\%$ of the eigen vectors which have the largest eigen value. In the
+% context of the challenge, this assumption was deduced from ground truth of
+% provided networks.
 
 \subsection{Network inference through weighted average partial correlation
             coefficients}
