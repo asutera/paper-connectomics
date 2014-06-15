@@ -5,7 +5,7 @@
 %% Personnal package
 \usepackage{enumerate}
 \usepackage{bbold}
-
+\usepackage{wrapfig}
 
 
  % The following packages will be automatically loaded:
@@ -47,7 +47,7 @@
 
 % \title[Inference of connectomes using partial correlation coefficients]{Simple and robust inference of connectomes using partial correlation coefficients}
 
-\title{Connectome inferences using partial correlation from imaging calcium signal}
+\title{\textcolor{red}{Simple} connectome inference using partial correlation from imaging calcium signal}
 
 
 % %%
@@ -156,14 +156,19 @@ network, which is the winning method of the Connectomics challenge
 
 \section{Signal filtering} \label{sec:filter}
 
-\textcolor{red}{This section should be rewritten once we get the figure
-                which displayed the effect of the different filters.}
+% \textcolor{red}{This section should be rewritten once we get the figure
+                % which displayed the effect of the different filters.}
 
 % Defects of the imaging device
 and will have to cope with
 a slower sampling rate than the neuron firing speed, a superposition
 of the activity of several neurons and the slow decay of fluorescent calcium
 indicator.
+
+\begin{wrapfigure}{r}{0.7\linewidth}
+\caption{Filtering steps.}\label{wrap-fig:1}
+\includegraphics[width=\linewidth]{code/code/fig_filtering.png}
+\end{wrapfigure} 
 
 % Explain why we need to filter
 
