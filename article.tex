@@ -166,7 +166,7 @@ network, which is the winning method of the Connectomics challenge
 % indicator.
 
 
-The raw signal is the calcium fluorescence imaging representing neuron activity. Considering the imaging process, we have to cope with a slower sampling rate than the neuron firing frequency and the slow decay of fluorescent calcium indicator after a neuron activity burst.
+\textcolor{red}{The raw signal is the calcium fluorescence imaging representing neuron activity. Considering the imaging process, we have to cope with a slower sampling rate than the neuron firing frequency and the slow decay of fluorescent calcium indicator after a neuron activity burst.}
 
 
 \begin{wrapfigure}{r}{0.7\linewidth}
@@ -177,27 +177,39 @@ The raw signal is the calcium fluorescence imaging representing neuron activity.
 % Explain why we need to filter
 
 Prior inferring the network, the fluorescent calcium time series
-are smoothed using several linear and non linear filters.
-Considering the short delay for a communication between neurons, slow events
-can be neglected to retrieve direct relationships. The average time
-delay is indeed about $1ms$ or $2ms$ while the fluorescent signal time
-resolution is $20ms$. Let us also highlight that even if two neurons are
-spatially far from each other, the information is expected in the same time
-step or at most in the next time step. Thus very low frequency event can be neglected.
-However, the image fluorescence calcium signal is also very noisy. Thus,
-A low-pass filter (Equation \ref{eq:low-pass}) is first applied followed by a
-high-pass filter (Equation \ref{eq:high-pass}), the discrete derivative of
-the signal,
-\begin{align}
-X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \label{eq:low-pass}\\
-X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \label{eq:high-pass}
-\end{align}
-where the $c_l^k$ coefficients were taken in one of the four
-following tuples
-$\left(c_l^1\right)_{l=-3}^2=(0, 0, 1, 1, 1, 1)$,
-$\left(c_l^2\right)_{l=-3}^2=(0, 0, 1, 1, 1, 0)$,
-$\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
-$\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
+are smoothed using several linear and non linear filters \textcolor{red}{in order to reduce the imaging process effects. We successively apply different filters listed below.} \\
+
+
+
+% However, the image fluorescence calcium signal is also very noisy. Thus,
+% A low-pass filter (Equation \ref{eq:low-pass}) is first applied followed by a
+% high-pass filter (Equation \ref{eq:high-pass}), the discrete derivative of
+% the signal,
+% \begin{align}
+% X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \label{eq:low-pass}\\
+% X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \label{eq:high-pass}
+% \end{align}
+% where the $c_l^k$ coefficients were taken in one of the four
+% following tuples
+% $\left(c_l^1\right)_{l=-3}^2=(0, 0, 1, 1, 1, 1)$,
+% $\left(c_l^2\right)_{l=-3}^2=(0, 0, 1, 1, 1, 0)$,
+% $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
+% $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
+
+\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and a low-pass filter is therefore applied to get a cleaner version of the signal where only true variations are kept, i.e. without noise variations. However, the choice of a low-pass filter is not unique. In the rest of the paper, we will focus on two types, the symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$, and an asymmetrical weighted median filter, i.e., $X_t^i \leftarrow 0.4 X_{t-3}^i + 0.6 X_{t-2}^i + 0.8 X_{t-1}^i + X_{t}^i$.}
+
+
+\textcolor{red}{Considering the short delay for a communication between neurons, slow events can be neglected to retrieve direct relationships. Indeed, for a direct relationship, i.e. a neuron firing directly implying another neuron to fire, the average time is about $1ms$ or $2ms$ while the fluorescent signal time resolution is $20ms$. In order to find out which neurons are directly related, it is only necessary to look after the burst signal, or in other words, wether there is a signal variable, i.e. a burst.}
+
+% Considering the short delay for a communication between neurons, slow events
+% can be neglected to retrieve direct relationships. The average time
+% delay is indeed about $1ms$ or $2ms$ while the fluorescent signal time
+% resolution is $20ms$. Let us also highlight that even if two neurons are
+% spatially far from each other, the delay should not exceed one time step. Thus very low frequency event can be neglected.
+
+
+
+
 
 Connectivity information between two neurons may be retrieved from successive
 and slightly delayed burst events. Direct links
