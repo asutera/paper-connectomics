@@ -148,6 +148,8 @@ along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
 of graph $G$, where $\mathbb{1}$ is the indicator function.}
 
+The directivity in the network introduce causal relations through neurons. A directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$ causes $j$. The causal mechanism implies that when neuron $i$ is active, also denoted in this paper as a firing event or a burst, neuron $j$ will be consequently active aftewards. The reciprocal phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} = 1 = a_{j,i} = 1$.
+
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation\footnote{Source code is available at
@@ -168,23 +170,23 @@ network, which is the winning method of the Connectomics challenge
 % indicator.
 
 
-\textcolor{red}{The raw signal is the calcium fluorescence imaging representing
+The raw signal is the calcium fluorescence imaging representing
 neuron activity. Considering the imaging process, we have to cope with a slower
 sampling rate than the neuron firing frequency and the slow decay of fluorescent
-calcium indicator after a neuron activity burst.}
+calcium indicator after a neuron activity burst.
 
 
-\begin{wrapfigure}{r}{0.7\linewidth}
+\begin{figure}%{r}{0.7\linewidth}
 \caption{Filtering steps.}\label{wrap-fig:1}
 \includegraphics[width=\linewidth]{images/fig_filtering_recut.png}
-\end{wrapfigure}
+\end{figure}
 
 % Explain why we need to filter
 
 Prior inferring the network, the fluorescent calcium time series
-are smoothed using several linear and non linear filters \textcolor{red}{in
+are smoothed using several linear and non linear filters in
 order to reduce the imaging process effects. We successively apply different
-filters listed below.} \\
+filters listed below.
 
 
 % However, the image fluorescence calcium signal is also very noisy. Thus,
@@ -202,27 +204,27 @@ filters listed below.} \\
 % $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
 % $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
 
-\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and
+As it can be seen on \textit{fig 1}, the raw signal is very noisy and
 a low-pass filter is therefore applied to get a cleaner version of the signal where only
 true variations are kept, i.e. without noise variations. However, the choice of a low-pass
 filter is not unique. In the rest of the paper, we will focus on two types, the
 symmetrical median filter, i.e., $x^t_i \leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i$,
 and an asymmetrical weighted median filter, i.e.,
-$x^t_i \leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + X^{t}_i$.}\\
+$x^t_i \leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i$.
 
 
-\textcolor{red}{Considering the short delay for a communication between
+Considering the short delay for a communication between
 neurons, slow events can be neglected to retrieve direct relationships.
 Indeed, for a direct relationship, i.e. a neuron firing directly implying another
 neuron to fire, the average time is about $1ms$ or $2ms$ while the
 fluorescent signal time resolution is $20ms$. In order to find out which neurons
 are directly related, it is only necessary to look after the burst signal, or
 in other words, whether the signal varies. In our approach, we choose to apply
-an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - X^{t-1}_i$.}\\
+an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - x_{t-1}^i$.
 
-\textcolor{red}{By nature, the firing event is really fast and in order to
+By nature, the firing event is really fast and in order to
 retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one). 
+couple of timesteps (ideally one).
 
 
 The small decay for the fluorescent calcium
@@ -230,7 +232,7 @@ indicator implies a signal variation during a long interval and therefore, in
 order to only keep rising and strong transitions, we apply a hard-tresholing filter:
 $x^{t,d}_i = X^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where $\tau$ is a given threshold 
 As a result, we get a binary-like signal with the true activity when a burst
-happens and with a true zero when the neuron is inactive.}
+happens and with a true zero when the neuron is inactive.
 
 % Considering the short delay for a communication between neurons, slow events
 % can be neglected to retrieve direct relationships. The average time
@@ -254,17 +256,16 @@ happens and with a true zero when the neuron is inactive.}
 % where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
 % exponent reduce the difference between peaks values.
 
-\textcolor{red}{Then we apply on the entire signal a non-linear filter based on the
+Then we apply on the entire signal a non-linear filter based on the
 current activity of the systems in order to favor the association measure inversely
 proportional to the number of neurons firing together:
-$ X_{t,w}^i  = (X_{t,d}^i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $.
+$ X_{t,w}^i  = (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $.
 When too much neurons are firing together, i.e. in case of a network burst, it is almost
 impossible to retrieve direct relationships: all neurons seem to be directly
 connected to each other. By favoring the association measure when the activity is low,
 we expect to retrieve a pair of neurons that are really directly connected together.
 In concrete terms, as it can be verified on \textit{fig 1}, peak intensity may change in function
 of the activity of all neurons but the number and the locations of peaks is not modified.
-}
 
 
 
