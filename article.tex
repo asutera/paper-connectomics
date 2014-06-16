@@ -250,10 +250,7 @@ an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - x_{t-1}^
 
 By nature, the firing event is really fast and in order to
 retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one).
-
-
-The small decay for the fluorescent calcium indicator implies a signal
+couple of timesteps (ideally one). The small decay for the fluorescent calcium indicator implies a signal
 variation during a long time interval. Firing event are represented by strong
 variations in the neuron activity. Therefore we apply a hard-tresholding
 filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the
@@ -265,19 +262,21 @@ As a result, we get a binary-like signal with the true activity when a burst
 happens and with a true zero when the neuron is inactive.
 
 
-Then we apply on the entire signal a non-linear filter based on the
-current activity of the systems in order to favor the association measure inversely
-proportional to the number of neurons firing together:
-$ x^{t,w}_i  = (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x_{t,d}^j}} $.
-When too much neurons are firing together, i.e. in case of a network burst, it is almost
-impossible to retrieve direct relationships: all neurons seem to be directly
-connected to each other. By favoring the association measure when the activity is low,
-we expect to retrieve a pair of neurons that are really directly connected together.
-In concrete terms, as it can be verified on \textit{fig 1}, peak intensity may change in function
-of the activity of all neurons but the number and the locations of peaks is not modified.
+Then we apply on the entire signal a non-linear filter based on the current
+activity of the systems in order to favor the association measure inversely
+proportional to the number of neurons firing together: $ x^{t,w}_i  =
+(x^{t,d}_i + 1 )^{1 + \frac{1}{act_t}}$ where $act_t = \sum_{j} x_{t,d}^j$ is
+the activity of all neurons at time $t$. When too much neurons are firing
+together, i.e. in case of a network burst, it is almost impossible to retrieve
+direct relationships: all neurons seem to be directly connected to each other.
+By favoring the association measure when the activity is low, we expect to
+retrieve a pair of neurons that are really directly connected together. In
+concrete terms, as it can be verified on \textit{fig 1}, peak intensity may
+change in function of the activity of all neurons but the number and the
+locations of peaks is not modified.
 
 
-\subsection{Network inference through weighted average partial correlation
+\section{Network inference through weighted average partial correlation
             coefficients}
 \label{sec:inference}
 
@@ -330,7 +329,7 @@ good hyper-parameter selection, which are themselves dependent on the properties
 of the targeted network and measurement conditions, e.g. signal to noise ratio.
 In order to improve robustness, a weighted average of partial correlation
 matrices was estimated from the time series by varying the hard-threshold value
-$\tau$ and the design of the low-pass filter (coefficients $(c_l^k)_{l=-3}^k$).
+$\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:filter} and appendix \ref{app:optimized}).
 
 
 % Introduce a custom solution to make the Y matrix asymmetric
@@ -583,6 +582,10 @@ Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
 \end{table}
 
+\section{An optimized version of the algorithm to win the challenge}
+\label{app:optimized}
+
+%% Talk about filters future and past
 
 \end{document}
 
