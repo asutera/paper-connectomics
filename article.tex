@@ -133,8 +133,8 @@ billions of neurons with 7000 synaptic connections on average.
 Cutting edge optical devices delivers in real-time  2-D  images of
 the neuronal activity of thousands of neurons through a fluorescent
 calcium indicator [todo cite]. Automatic and analytical methods are required to infer
-the connectomes from those time series. Furthermore, several experimental issues
-have to be handled. Some neurons of the network might not be
+the connectomes from those time series and have to handle several
+experimental issues. Some neurons of the network might not be
 observed or are confounded with others. The lower device sampling rate with
 respect to neuronal activity speed might not allow to distinguish neuron
 activation order, especially in highly synchronous activity
@@ -176,7 +176,7 @@ network, which is the winning method of the Connectomics challenge
 
 \textcolor{red}{It may be useful to rewritte the following lines but I add it to not forget about a plan (request from AQ)}
 In section \ref{sec:filter}, we will describe how we filter the fluorescent calcium imaging signal.
-In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view. 
+In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view.
 In section \ref{sec:results}, we will present some results and give a critical comparision with other inference methods.
 In appendix \ref{app:optimized}, we describe a fully tuned version of our algorithm which has won the Connectomics challenge.
 
@@ -184,36 +184,29 @@ In appendix \ref{app:optimized}, we describe a fully tuned version of our algori
 
 \section{Signal filtering} \label{sec:filter}
 
+Given the image acquisition process, the fluorescent calcium time series
+are smoothed using several linear and non linear filters in
+order to reduce the imaging process effects. The overall filtering approach
+is displayed at Figure \ref{fig:fitlering}.
 
 
-Considering the described imaging process, we try in this
-section to cope with some of these issues and, in particular, the slower
-sampling rate than the neuron firing frequency and the slow decay of
-fluorescent calcium indicator after a neuron activity burst.
-
-
-\begin{figure}%{r}{0.7\linewidth}
-\caption{Filtering steps.}\label{wrap-fig:1}
-\includegraphics[width=\linewidth]{images/fig_filtering.pdf}
+\begin{figure}[bth]
+\includegraphics[width=\linewidth]{images/fig_filtering_recut.png}
+\caption{Filtering steps. \textcolor{red}{TODO remake in pdf}}
+\label{fig:fitlering}
 \end{figure}
 
-% Explain why we need to filter
-
-Prior inferring the network, the fluorescent calcium time series
-are smoothed using several linear and non linear filters in
-order to reduce the imaging process effects. We successively apply different
-filters listed below.
-
-As it can be seen on \textit{fig 1}, the raw signal is very noisy due to light
-scattering artifacts that ordinarily affects the quality of the recording [in
-Stetter, [6]]. Therefore, a low-pass filter is first applied to get a cleaner
-version of the signal where only true variations are kept, i.e. without noise
-variations. However, the choice of a low-pass filter is not unique. In the
-rest of the paper, we will use two particular filters giving similar results,
-the symmetrical median filter, i.e., $x^t_i \leftarrow x^{t-1}_i + x^{t}_i +
-x^{t+1}_i$, and an asymmetrical weighted median filter taking into account the
-history, i.e., $x^t_i \leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i
-+ x^{t}_i$.
+The raw signal (original signal of Figure \ref{fig:fitlering}) is very noisy
+due to light scattering artifacts that ordinarily affects the quality of the
+recording (\cite{lichtman2011big}). A low-pass filter is first applied to
+filter high frequency noise with one of the following designs
+\begin{align}
+% symmetrical median filter
+x^t_i &\leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
+% asymmetrical weighted median
+x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
+\label{eq:weighted-asymetric-median}.
+\end{align}
 
 
 Considering the short delay for a communication between
@@ -344,7 +337,7 @@ of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
 Those datasets are time series of size $T=179500$ of image calcium from simulated
 neuronal networks (\cite{stetter2012model}) with $|V|=1000$ neurons. The networks
 to inferred have around 15000 edges and are similar to those
-used to rank challenge participants. 
+used to rank challenge participants.
 
 % Metrics : ROC AUC and AUPRC
 In supervised learning terms, the network inference task can be viewed as a
@@ -408,7 +401,7 @@ gaussian assumption seems verified and thus linear method appears to be
 competitive, e.g. the method correlation already gives good results, with a
 non-linear method such as GENIE3.
 
-% Discussion about 
+% Discussion about
 
 
 \begin{table}[tbh]
@@ -499,7 +492,7 @@ Belgian State, Science Policy Office.
 \label{app:optimized}
 
 
-The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results. 
+The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results.
 
 Note that our parameter tuning was mainly
 done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
