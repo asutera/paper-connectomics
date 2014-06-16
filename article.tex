@@ -361,8 +361,6 @@ matrices was estimated from the time series by varying the hard-threshold value
 $\tau$ and the design of the low-pass filter (coefficients $(c_l^k)_{l=-3}^k$).
 
 
-
-\subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since partial correlation is a symmetric measure, the causal mechanism behind the
@@ -372,21 +370,21 @@ implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.}.
-
-By ignoring the directivity, we systematically make a true positive and a
-false positive for direct link.  Hoping to orientate
-correctly the most obvious directed links, we attempt to retrieve some causal
-information, i.e. the directivity of the links, by computing and stacking with
-our symmetric adjacency matrix a matrix of pairwise activation heuristics.
-This method computes an anti-symmetric activation score $Z$ based the
-variation of fluorescence signal of a neuron $j$ due to a neuron $i$ over all
-time steps:
+In order to retrieve causal information, we developed an
+heuristics based on the following observation. The rise of fluorescence
+indicates the activation of a neuron $i$. If a neuron $j$ have also
+an increased of fluorescence after a slight delay, this could have been
+caused by the neuron $i$. Thus, we count whenever
+such events occurred between consecutive time steps
 \[
 \hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
-    \mathbb{1}(x_{t+1,j} - x_{t, i} \in \left[f1, f2 \right]) -
-    \mathbb{1}(x_{t+1,i} - x_{t, j} \in \left[f1, f2 \right])
+    \mathbb{1}(x_j^{t+1} - x_i^t \in \left[f_1, f_2 \right]) -
+    \mathbb{1}(x_i^{t+1} - x_j^t \in \left[f_1, f_2 \right]), \forall i, j \in V
 \]
 where $f_1$ and $f_2$ are parameters of the method.
+Finally, the weighted average of correlation matrices is combined with $Z$ such
+that $Z$ has a contribution of $0.3\%$ to the connectivity score matrix.
+
 
 \section{Experiments}
 
