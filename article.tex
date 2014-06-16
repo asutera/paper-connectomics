@@ -150,7 +150,15 @@ along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
 of graph $G$, where $\mathbb{1}$ is the indicator function.}
 
-The directivity in the network introduce causal relations through neurons. A directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$ causes $j$. The causal mechanism implies that when neuron $i$ is active, also denoted in this paper as a firing event or a burst, neuron $j$ will be afterwards active consequently. The reciprocal phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} = a_{j,i} = 1$.
+The directivity in the network introduce causal relations through neurons. A
+directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$
+causes $j$. The causal mechanism implies that when neuron $i$ is active, also
+denoted in this paper as a firing event or a burst, neuron $j$ will be
+afterwards active consequently \textcolor{red}{AJ: it's not always true if
+there is more than one ancestor and not true if the activation is not
+systematic.}. The
+reciprocal phenomenon is only possible
+when the edge is bidirectionnal, i.e. $a_{i,j} = a_{j,i} = 1$.
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
@@ -240,9 +248,9 @@ couple of timesteps (ideally one).
 
 
 The small decay for the fluorescent calcium indicator implies a signal
-variation during a long time interval. Firing event are represented by 
-strong variations in the neuron activity. Therefore we apply a hard-tresholding 
-filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the threshold $\tau$ should be taken positive to keep only rising edges and non close to zeros in order to only consider strong variations. 
+variation during a long time interval. Firing event are represented by
+strong variations in the neuron activity. Therefore we apply a hard-tresholding
+filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the threshold $\tau$ should be taken positive to keep only rising edges and non close to zeros in order to only consider strong variations.
 
 
 As a result, we get a binary-like signal with the true activity when a burst
