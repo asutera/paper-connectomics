@@ -223,12 +223,16 @@ When slow signals variations are filtered (H-P signals of figure
 
 By nature, the firing event is really fast and in order to
 retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one). The small decay for the fluorescent calcium indicator implies a signal
+couple of timesteps (ideally one). The small decay for the fluorescent calcium
+indicator implies a signal
 variation during a long time interval. Firing event are represented by strong
 variations in the neuron activity. Therefore we apply a hard-tresholding
-filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the
-threshold $\tau$ should be taken positive and non-close to zero to
-respectivelty only keep rising edges and strong variations.
+filter
+\begin{align}
+x^{t,d}_i &= x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)
+\end{align}
+where the threshold $\tau$ should be taken positive and non-close to zero to
+respectively only keep rising edges and strong variations.
 
 
 As a result, we get a binary-like signal with the true activity when a burst
