@@ -130,21 +130,19 @@ Network inference - Partial correlation - Precision matrix - GENIE3
 % BG : brain, complex organ
 The human brain is a complex biological organ, formed by 100
 billions of neurons with 7000 synaptic connections on average.
-Cutting edge optical devices have been developed to track in real-time
+Cutting edge optical devices delivers in real-time  2-D  images of
 the neuronal activity of thousands of neurons through a fluorescent
-calcium indicator  [todo cite]. Automatic and analytical methods are required to infer
-the connectomes from those time series.
-
-The fluorescent calcium image delivers at each acquisition a 2-D view of the
-neuron network activities. However, some neurons might not observed or are
-confounded with others. The low device sampling rate with respect to neuronal
-activity speed might not allow to distinguish neuron activation order,
-especially in highly synchronous activity [Stetter and in Stetter [20,46,47]]
-of a large part of the network. Moreover the fluorescent concentration is
-highly reactive to a neuron activation or a spike, but have a slow decay.
+calcium indicator [todo cite]. Automatic and analytical methods are required to infer
+the connectomes from those time series. Furthermore, several experimental issues
+have to be handled. Some neurons of the network might not be
+observed or are confounded with others. The lower device sampling rate with
+respect to neuronal activity speed might not allow to distinguish neuron
+activation order, especially in highly synchronous activity
+[Stetter and in Stetter [20,46,47]] of a large part of the network. Moreover
+the fluorescent concentration is highly reactive to a neuron activation or a
+spike, but have a slow decay.
 
 % Introduce notation + goal in mathematical score
-% TODO check convention for y_{ij}
 The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
 V\right\}$, (un)ordered pair from $V$.
@@ -185,16 +183,6 @@ In appendix \ref{app:optimized}, we describe a fully tuned version of our algori
 
 
 \section{Signal filtering} \label{sec:filter}
-
-% \textcolor{red}{This section should be rewritten once we get the figure
-                % which displayed the effect of the different filters.}
-
-% Defects of the imaging device
-% and will have to cope with
-% a slower sampling rate than the neuron firing speed, a superposition
-% of the activity of several neurons and the slow decay of fluorescent calcium
-% indicator.
-
 
 
 
