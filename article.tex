@@ -111,7 +111,6 @@ context of the Connectomics challenge, we propose a simple algorithm made of
 four stages, using preprocessing and partial correlation to achieve a network
 inference of high quality. An optimized variation of this simple algorithm 
 is the winning method of the Connectomics Challenge.
-
 We put in perspective our method
 with other inference methods such as GTE (\cite{stetter2012model}) and Genie3
 (\cite{huynhthu2010inferring}).
@@ -325,12 +324,14 @@ $X_i \not\perp X_j | X^{-i,j}$ between all pairs $i$ and $j$ of fluorescence
 signals, in other words the inferred network will be
 $\hat{A}: \hat{a}_{i,j} = \mathbb{1}(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
 
-Since all neurons are assumed to be connected to at least one neuron,
-we thus have by definition $X_i \not\perp X_j$ \textcolor{red}{AS: Je ne suis pas sûr de comprendre.}. However,  two random
-variables $A$ and $B$ might be dependent taken alone ($A \not\perp B$), but not
-once we observe the set  $C$ of all other variables ($A \perp B | C$).
-The conditioning over all other random variables $X^{-i,j}$ is thus necessary
-to avoid predicting an edge when two neurons are not directly connected.
+
+Since all neurons are assumed to be connected to at least one neuron, we thus
+have by definition $X_i \not\perp X_j$ \textcolor{red}{AS: Je ne suis pas sûr
+de comprendre.}. However,  two random variables $A$ and $B$ might be
+dependent taken alone ($A \not\perp B$), but not once we observe the set  $C$
+of all other variables ($A \perp B | C$). The conditioning over all other
+random variables $X^{-i,j}$ is thus necessary to avoid predicting an edge when
+two neurons are not directly connected.
 
 If the random variables $X$ follows a joint Gaussian distribution
 $p_\mathcal{X} \sim \mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and
