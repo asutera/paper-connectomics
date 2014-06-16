@@ -420,7 +420,7 @@ In supervised learning terms, the network inference task can be viewed as a
 binary classification task where one has to correctly classify the presence
 or the absence of edges of the graph. Given the ground true adjacency matrix
 $A$ and a connectivity score matrix $\hat{A}$, we assess the accuracy of the
-network inference method using the area under the ROC curve (ROC AUC)
+network inference method using the area under the ROC curve (AUROC)
 and the area under the precision-recall curve (AUPRC)
 (\cite{schrynemackers2013protocols}). Since neurons are not self-connected
 ($(i, i) \not \in E, \forall i \in V$) and some inference methods could
@@ -437,95 +437,46 @@ For the directory method, only filters defined by Equations
 \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
 used.
 
-\begin{table}[htb]
+\begin{table}[tbh]
 \centering
-\caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
+\caption{TODO}
+\begin{tabular}{@{}l *{8}{c}@{}}
 \toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\cmidrule(r){2-5}\cmidrule(r){6-9}
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \midrule
-Nothing             & 0.777 & 0.767 & 0.772 & 0.774 \\
-PCA                 & 0.780 & 0.770 & 0.776 & 0.777 \\
-Weights             & 0.780 & 0.769 & 0.776 & 0.777 \\
-Weights + PCA       & 0.783 & 0.772 & 0.779 & 0.780 \\
-H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
-H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
-H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
-H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
-P-P                 & 0.925 & 0.925 & 0.924 & 0.923 \\
-P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
-P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
-P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
-Averaging (PCA)     & 0.943 & 0.942 & 0.942 & 0.939 \\
-Stacking            & 0.944 & 0.943 & 0.942 & 0.940 \\
+GENIE3                 & & & & & & & & \\
+Directivity            & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
+GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
+Partial correlation    & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
+Our approach           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
+Our approach + dir     & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[tbh]
+\centering
+\caption{TODO}
+\begin{tabular}{@{}l *{8}{c}@{}}
+\toprule
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\cmidrule(r){2-5}\cmidrule(r){6-9}
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+\midrule
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
+P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
+P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
+Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
 \bottomrule
 \end{tabular}
 \end{table}
 
 
-\begin{table}[htb]
-\centering
-\caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.070 & 0.064 & 0.068 & 0.072\\
-PCA                 & 0.076 & 0.070 & 0.075 & 0.079\\
-Weights             & 0.074 & 0.067 & 0.072 & 0.076\\
-Weights + PCA       & 0.080 & 0.073 & 0.079 & 0.083\\
-H-T                 & 0.264 & 0.260 & 0.269 & 0.241\\
-H-T + PCA           & 0.266 & 0.263 & 0.273 & 0.244\\
-H-T + Weights       & 0.280 & 0.273 & 0.281 & 0.251\\
-H-T + Weights + PCA & 0.284 & 0.278 & 0.285 & 0.255\\
-P-P                 & 0.322 & 0.324 & 0.323 & 0.312\\
-P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
-P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
-P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
-Averaging           & 0.403 & 0.404 & 0.398 & 0.388\\
-Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-\centering
-\caption{Comparison (ROC) with other methods (for now, $t = 0.11$)}
-\begin{tabular}{*{5}{l}}
-\toprule
-Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Correlation (best)         & 0.886 & 0.884 & 0.891 & 0.877\\
-Partial correlation (best) & 0.932 & 0.931 & 0.930 & 0.928 \\
-Our approach               & 0.943 & 0.942 & 0.942 & 0.939 \\
-GENIE3                     & & & & \\
-GTE                        & 0.890 & 0.893 & 0.894 & 0.873 \\
-Directivity                & 0.535 & 0.526 & 0.533 & 0.535 \\
-Our approach + dir         & 0.944 & 0.943 & 0.942 & 0.940\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[htb]
-\centering
-\caption{Comparison (P-R) with other methods (for now, $t = 0.11$)}
-\begin{tabular}{*{5}{l}}
-\toprule
-Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Correlation (best)         & 0.153 & 0.145 & 0.170 & 0.132 \\
-Partial correlation (best) & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach (best)        & 0.403 & 0.404 & 0.398 & 0.388 \\
-GENIE3                     & & & & \\
-GTE                        & 0.171 & 0.174 & 0.197 & 0.142 \\
-Directivity                & 0.012 & 0.012 & 0.012 & 0.012 \\
-Our approach + dir         & 0.404 & 0.405 & 0.399 & 0.389 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 
 
@@ -606,4 +557,76 @@ P-P + Weights       & 0.079 & 0.071 & 0.067 & 0.064\\
 \end{tabular}
 \end{table}
 
+\begin{table}[htb]
+\centering
+\caption{Comparison (P-R) with other methods (for now, $t = 0.11$)}
+\begin{tabular}{*{5}{l}}
+\toprule
+Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Correlation (best)         & 0.153 & 0.145 & 0.170 & 0.132 \\
+Partial correlation (best) & 0.364 & 0.366 & 0.359 & 0.344 \\
+Our approach (best)        & 0.403 & 0.404 & 0.398 & 0.388 \\
+GENIE3                     & & & & \\
+GTE                        & 0.171 & 0.174 & 0.197 & 0.142 \\
+Directivity                & 0.012 & 0.012 & 0.012 & 0.012 \\
+Our approach + dir         & 0.404 & 0.405 & 0.399 & 0.389 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.777 & 0.767 & 0.772 & 0.774 \\
+PCA                 & 0.780 & 0.770 & 0.776 & 0.777 \\
+Weights             & 0.780 & 0.769 & 0.776 & 0.777 \\
+Weights + PCA       & 0.783 & 0.772 & 0.779 & 0.780 \\
+H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
+H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
+H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
+H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
+P-P                 & 0.925 & 0.925 & 0.924 & 0.923 \\
+P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
+P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
+P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
+Averaging (PCA)     & 0.943 & 0.942 & 0.942 & 0.939 \\
+Stacking            & 0.944 & 0.943 & 0.942 & 0.940 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+\begin{tabular}{*{5}{l}}
+\toprule
+Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+\midrule
+Nothing             & 0.070 & 0.064 & 0.068 & 0.072\\
+PCA                 & 0.076 & 0.070 & 0.075 & 0.079\\
+Weights             & 0.074 & 0.067 & 0.072 & 0.076\\
+Weights + PCA       & 0.080 & 0.073 & 0.079 & 0.083\\
+H-T                 & 0.264 & 0.260 & 0.269 & 0.241\\
+H-T + PCA           & 0.266 & 0.263 & 0.273 & 0.244\\
+H-T + Weights       & 0.280 & 0.273 & 0.281 & 0.251\\
+H-T + Weights + PCA & 0.284 & 0.278 & 0.285 & 0.255\\
+P-P                 & 0.322 & 0.324 & 0.323 & 0.312\\
+P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
+P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
+P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
+Averaging           & 0.403 & 0.404 & 0.398 & 0.388\\
+Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 \end{document}
+
