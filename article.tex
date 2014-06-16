@@ -288,7 +288,7 @@ happens and with a true zero when the neuron is inactive.
 Then we apply on the entire signal a non-linear filter based on the
 current activity of the systems in order to favor the association measure inversely
 proportional to the number of neurons firing together:
-$ x^{t,w}_i  = (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $.
+$ x^{t,w}_i  = (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x_{t,d}^j}} $.
 When too much neurons are firing together, i.e. in case of a network burst, it is almost
 impossible to retrieve direct relationships: all neurons seem to be directly
 connected to each other. By favoring the association measure when the activity is low,
