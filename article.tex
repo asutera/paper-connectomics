@@ -401,13 +401,27 @@ assessment.
 %Opt: obviously when parameters are tuned/optimized, it's slightly better --> see appendix for a full description of the method
 % Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
-GTE is a method which characterizes a relationship between neurons by an estimation of the generalized transfer entropy (\cite{stetter2012model}). The goal of this method tries to see if the next time step value is better from the previous values of this time series or from time series of other neurons.
+GTE is a method which characterizes a relationship between neurons by an
+estimation of the generalized transfer entropy (\cite{stetter2012model}). The
+goal of this method tries to see if the next time step value is better from
+the previous values of this time series or from time series of other neurons.
 
-GENIE3 is a tree-based method which sees the network inference problem as $p$, the number of variables, independent supervised learning problems (todo cite: Irrthum?Van Anh?Pierre?). Formally, each sub-problem consists in the prediction of one variable, the target, from the remaining $p-1$ variables. This method uses random forests to estimate the target variable and variable importances can be derived to estimate the adjacency matrix $A$ (see (todo cite) for a more detailed description of the inference method).
+GENIE3 is a tree-based method which sees the network inference problem as $p$,
+the number of variables, independent supervised learning problems (todo cite:
+Irrthum?Van Anh?Pierre?). Formally, each sub-problem consists in the
+prediction of one variable, the target, from the remaining $p-1$ variables.
+This method uses random forests to estimate the target variable and variable
+importances can be derived to estimate the adjacency matrix $A$ (see (todo
+cite) for a more detailed description of the inference method).
 
-At first sight, it appears on \textit{Table 1} that partial correlation methods outperform other methods. Two main reasons may explain this method hierarchy.
-First, the quality of the infered network seems related to the conditioning part of the method. In every method except with partial correlation, indirect links are confounded with direct links. 
-Secondly, the gaussian assumption seems verified and thus linear method appears to be competitive, e.g. the method correlation already gives good results, with a non-linear method such as GENIE3. 
+At first sight, it appears on \textit{Table 1} that partial correlation
+methods outperform other methods. Two main reasons may explain this method
+hierarchy. First, the quality of the infered network seems related to the
+conditioning part of the method. In every method except with partial
+correlation, indirect links are confounded with direct links.  Secondly, the
+gaussian assumption seems verified and thus linear method appears to be
+competitive, e.g. the method correlation already gives good results, with a
+non-linear method such as GENIE3.
 
 % Discussion about 
 
