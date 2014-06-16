@@ -383,6 +383,23 @@ assessment.
 % used.
 
 
+% Dummy classifier?
+
+
+% GTE : Explaning the method (default parameters!)
+
+% Explaining the method (thèse de Gilles)
+% Genie3 : better in auprc while worse in auroc than GTE. Why?
+% Genie3 : "Conditioning" better and better but need a lot of trees
+% Correlation : Already give good results
+
+% Partial correlation : Obvious improvements (both metric) because of the conditioning
+
+% Directivity : ?
+
+
+%Opt: obviously when parameters are tuned/optimized, it's slightly better --> see appendix for a full description of the method
+% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
 
 \begin{table}[tbh]
@@ -395,12 +412,13 @@ assessment.
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \midrule
 GENIE3                 & & & & & & & & \\
-Directivity            & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
 Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
 GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
-Partial correlation    & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
-Our approach + dir     & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
+Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
+Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
+Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
+Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
 \bottomrule
 \end{tabular}
 \end{table}
