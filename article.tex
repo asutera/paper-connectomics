@@ -153,12 +153,12 @@ of graph $G$, where $\mathbb{1}$ is the indicator function.}
 The directivity in the network introduce causal relations through neurons. A
 directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$
 causes $j$. The causal mechanism implies that when neuron $i$ is active, also
-denoted in this paper as a firing event or a burst, neuron $j$ will be
-afterwards active consequently \textcolor{red}{AJ: it's not always true if
-there is more than one ancestor and not true if the activation is not
-systematic.}. The
-reciprocal phenomenon is only possible
-when the edge is bidirectionnal, i.e. $a_{i,j} = a_{j,i} = 1$.
+denoted in this paper as a firing event or a burst, neuron $j$ may be
+afterwards activated consequently. Let us notice that neuron $j$ depends on
+all its ancestors and its activation may not be as straightforward as we may
+think if the causal is not systematic (stochastic?). The reciprocal
+phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} =
+a_{j,i} = 1$.
 
 % Solution
 In this paper, we describe a simple and a theoretically grounded approach
