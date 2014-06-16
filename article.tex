@@ -189,7 +189,9 @@ they are confounded with another one because of the loss of the third
 dimension. The capture sample rate is also a constraint that could make
 difficult to detect in which order the neurons fire.  Moreover the activity
 indicator is highly reactive to a burst but takes some time to recover its non
-active state.  Finally, the difficulty to distinguish direct relationships when a network burst happens, defined as a highly synchronous activity [Stetter and in Stetter [20,46,47]], is increased by the slow sampling rate.
+active state.  Finally, the difficulty to distinguish direct relationships when
+ a network burst happens, defined as a highly synchronous activity
+ [Stetter and in Stetter [20,46,47]], is increased by the slow sampling rate.
 
 Considering the described imaging process, we try in this
 section to cope with some of these issues and, in particular, the slower
@@ -225,7 +227,10 @@ filters listed below.
 % $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
 % $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
 
-As it can be seen on \textit{fig 1}, the raw signal is very noisy due to light scattering artifacts that ordinarily affects the quality of the recording [in Stetter, [6]]. Therefore, a low-pass filter is first applied to get a cleaner version of the signal where only
+As it can be seen on \textit{fig 1}, the raw signal is very noisy due to light
+scattering artifacts that ordinarily affects the quality of the recording
+[in Stetter, [6]]. Therefore, a low-pass filter is first applied to get a
+cleaner version of the signal where only
 true variations are kept, i.e. without noise variations. However, the choice of a low-pass
 filter is not unique. In the rest of the paper, we will use two particular filters giving similar results, the
 symmetrical median filter, i.e., $x^t_i \leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i$,
@@ -250,7 +255,9 @@ couple of timesteps (ideally one).
 The small decay for the fluorescent calcium indicator implies a signal
 variation during a long time interval. Firing event are represented by
 strong variations in the neuron activity. Therefore we apply a hard-tresholding
-filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the threshold $\tau$ should be taken positive to keep only rising edges and non close to zeros in order to only consider strong variations.
+filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the
+threshold $\tau$ should be taken positive to keep only rising edges and non
+close to zeros in order to only consider strong variations.
 
 
 As a result, we get a binary-like signal with the true activity when a burst
