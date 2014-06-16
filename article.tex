@@ -141,8 +141,10 @@ The connectomes, the neural network, is represented by a (un)directed graph $G =
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
 V\right\}$, (un)ordered pair from $V$.
 Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
-represents a direct link from a neuron $i$ to a neuron $j$.
-The network inference task is set as follows :
+represents a direct link and interactions between neuron $i$ and a neuron $j$.
+In the directed graph, each edges also expresses a causal relationship: an
+edge $(i, j) \in E$ indicates that the state of neuron $j$ might be caused
+by the neuron $i$. The network inference task is set as follows :
 \textit{Given the observations $(x^t \in \mathcal{R}^{|V|})_{t=1}^T $
 along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
@@ -307,9 +309,6 @@ of the activity of all neurons but the number and the locations of peaks is not 
             coefficients}
 \label{sec:inference}
 
-
-
-
 Let us denote the fluorescence calcium indicators of all neuron
 as a set of random variables $X = \left\{X_1, \ldots, X_{|V|}\right\}$, which follows
 a joint probability distribution $p_\mathcal{X}$, and by
@@ -325,9 +324,8 @@ signals, in other words the inferred network will be
 $\hat{A}: \hat{a}_{i,j} = \mathbb{1}(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
 
 
-Since all neurons are assumed to be connected to at least one neuron, we thus
-have by definition $X_i \not\perp X_j$ \textcolor{red}{AS: Je ne suis pas sûr
-de comprendre.}. However,  two random variables $A$ and $B$ might be
+Since all neurons are assumed to form a connected graph, we
+have by construction $X_i \not\perp X_j$. However, two random variables $A$ and $B$ might be
 dependent taken alone ($A \not\perp B$), but not once we observe the set  $C$
 of all other variables ($A \perp B | C$). The conditioning over all other
 random variables $X^{-i,j}$ is thus necessary to avoid predicting an edge when
@@ -363,8 +361,6 @@ matrices was estimated from the time series by varying the hard-threshold value
 $\tau$ and the design of the low-pass filter (coefficients $(c_l^k)_{l=-3}^k$).
 
 
-
-\subsection{Causal discovery methodology}
 % Introduce a custom solution to make the Y matrix asymmetric
 % Introduce directivity
 Since partial correlation is a symmetric measure, the causal mechanism behind the
@@ -374,21 +370,21 @@ implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
 \cite{de2004discovery}.}.
-
-By ignoring the directivity, we systematically make a true positive and a
-false positive for direct link.  Hoping to orientate
-correctly the most obvious directed links, we attempt to retrieve some causal
-information, i.e. the directivity of the links, by computing and stacking with
-our symmetric adjacency matrix a matrix of pairwise activation heuristics.
-This method computes an anti-symmetric activation score $Z$ based the
-variation of fluorescence signal of a neuron $j$ due to a neuron $i$ over all
-time steps:
+In order to retrieve causal information, we developed an
+heuristics based on the following observation. The rise of fluorescence
+indicates the activation of a neuron $i$. If a neuron $j$ have also
+an increased of fluorescence after a slight delay, this could have been
+caused by the neuron $i$. Thus, we count whenever
+such events occurred between consecutive time steps
 \[
 \hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
-    \mathbb{1}(x_{t+1,j} - x_{t, i} \in \left[f1, f2 \right]) -
-    \mathbb{1}(x_{t+1,i} - x_{t, j} \in \left[f1, f2 \right])
+    \mathbb{1}(x_j^{t+1} - x_i^t \in \left[f_1, f_2 \right]) -
+    \mathbb{1}(x_i^{t+1} - x_j^t \in \left[f_1, f_2 \right]), \forall i, j \in V
 \]
 where $f_1$ and $f_2$ are parameters of the method.
+Finally, the weighted average of correlation matrices is combined with $Z$ such
+that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
+
 
 \section{Experiments}
 
