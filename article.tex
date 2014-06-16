@@ -107,9 +107,12 @@ Understanding how the brain works is a key
 to treat brain disorders such as Parkinson's disease,
 epilepsy. Retrieving connectomes, the neurons wiring map, will shed a new
 light on the anatomical and functional connectivity of the brain. In the
-context of the Connectomics challenge, we propose a simple  algorithm made of
+context of the Connectomics challenge, we propose a simple algorithm made of
 four stages, using preprocessing and partial correlation to achieve a network
-inference of high quality. We put in perspective our method
+inference of high quality. An optimized variation of this simple algorithm 
+is the winning method of the Connectomics Challenge.
+
+We put in perspective our method
 with other inference methods such as GTE (\cite{stetter2012model}) and Genie3
 (\cite{huynhthu2010inferring}).
 
@@ -223,7 +226,7 @@ retrieve the connectivity from them, it is necessary to link a burst to a
 couple of timesteps (ideally one). The small decay for the fluorescent calcium 
 indicator implies a signal variation during a long interval and therefore, in 
 order to only keep rising and strong transitions, we apply a hard-tresholing filter: 
-$X_{t,d}^i = X_{t,d}^i \mathbb{1}(X_{t,d}^i \geq \tau)$ 
+$X_{t,d}^i = X_{t,d}^i \mathbb{1}(X_{t,d}^i \geq \tau)$ where $\tau$ is a given threshold.
 As a result, we get a binary-like signal with the true activity when a burst 
 happens and with a true zero when the neuron is inactive.}
 
@@ -249,14 +252,16 @@ happens and with a true zero when the neuron is inactive.}
 % where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
 % exponent reduce the difference between peaks values.
 
-\textcolor{red}{Then we apply on the entire signal a non-linear filter base on the 
+\textcolor{red}{Then we apply on the entire signal a non-linear filter based on the 
 current activity of the systems in order to favor the association measure inversely 
 proportional to the number of neurons firing together:
 $ X_{t,w}^i  = (X_{t,d}^i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $. 
-When too much neurons are firing together, i.e. a network burst, it is almost 
+When too much neurons are firing together, i.e. in case of a network burst, it is almost 
 impossible to retrieve direct relationships: all neurons seem to be directly 
 connected to each other. By favoring the association measure when the activity is low, 
 we expect to retrieve a pair of neurons that are really directly connected together. 
+In concrete terms, as it can be verified on \textit{fig 1}, peak intensity may change in function 
+of the activity of all neurons but the number and the locations of peaks is not modified.
 }
 
 
