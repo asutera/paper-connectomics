@@ -206,9 +206,9 @@ filters listed below.} \\
 a low-pass filter is therefore applied to get a cleaner version of the signal where only
 true variations are kept, i.e. without noise variations. However, the choice of a low-pass
 filter is not unique. In the rest of the paper, we will focus on two types, the
-symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$,
+symmetrical median filter, i.e., $x^t_i \leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i$,
 and an asymmetrical weighted median filter, i.e.,
-$X_t^i \leftarrow 0.4 X_{t-3}^i + 0.6 X_{t-2}^i + 0.8 X_{t-1}^i + X_{t}^i$.}\\
+$x^t_i \leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + X^{t}_i$.}\\
 
 
 \textcolor{red}{Considering the short delay for a communication between
@@ -218,14 +218,17 @@ neuron to fire, the average time is about $1ms$ or $2ms$ while the
 fluorescent signal time resolution is $20ms$. In order to find out which neurons
 are directly related, it is only necessary to look after the burst signal, or
 in other words, whether the signal varies. In our approach, we choose to apply
-an asymmetrical discrete derivative : $X_{t,d}^{i} \leftarrow X_{t}^i - X_{t-1}^i$.}\\
+an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - X^{t-1}_i$.}\\
 
 \textcolor{red}{By nature, the firing event is really fast and in order to
 retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one). The small decay for the fluorescent calcium
+couple of timesteps (ideally one). 
+
+
+The small decay for the fluorescent calcium
 indicator implies a signal variation during a long interval and therefore, in
 order to only keep rising and strong transitions, we apply a hard-tresholing filter:
-$X_{t,d}^i = X_{t,d}^i \mathbb{1}(X_{t,d}^i \geq \tau)$ where $\tau$ is a given threshold.
+$x^{t,d}_i = X^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where $\tau$ is a given threshold 
 As a result, we get a binary-like signal with the true activity when a burst
 happens and with a true zero when the neuron is inactive.}
 
