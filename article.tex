@@ -161,6 +161,7 @@ phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} =
 a_{j,i} = 1$.
 
 % Solution
+
 In this paper, we describe a simple and a theoretically grounded approach
 based on partial correlation\footnote{Source code is available at
 \url{https://github.com/asutera/kaggle-connectomics}.} to infer the neural
@@ -211,22 +212,6 @@ are smoothed using several linear and non linear filters in
 order to reduce the imaging process effects. We successively apply different
 filters listed below.
 
-
-% However, the image fluorescence calcium signal is also very noisy. Thus,
-% A low-pass filter (Equation \ref{eq:low-pass}) is first applied followed by a
-% high-pass filter (Equation \ref{eq:high-pass}), the discrete derivative of
-% the signal,
-% \begin{align}
-% X^\prime_{t,i} &= \sum_{l=-3}^2 c_l^k X_{t+l,i} \forall i, \label{eq:low-pass}\\
-% X^{\prime\prime}_{t,i} &= X^{\prime}_{t,i} - X^{\prime}_{t-1,i} \forall i, \label{eq:high-pass}
-% \end{align}
-% where the $c_l^k$ coefficients were taken in one of the four
-% following tuples
-% $\left(c_l^1\right)_{l=-3}^2=(0, 0, 1, 1, 1, 1)$,
-% $\left(c_l^2\right)_{l=-3}^2=(0, 0, 1, 1, 1, 0)$,
-% $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
-% $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
-
 As it can be seen on \textit{fig 1}, the raw signal is very noisy due to light
 scattering artifacts that ordinarily affects the quality of the recording [in
 Stetter, [6]]. Therefore, a low-pass filter is first applied to get a cleaner
@@ -265,7 +250,7 @@ happens and with a true zero when the neuron is inactive.
 Then we apply on the entire signal a non-linear filter based on the current
 activity of the systems in order to favor the association measure inversely
 proportional to the number of neurons firing together: $ x^{t,w}_i  =
-(x^{t,d}_i + 1 )^{1 + \frac{1}{act_t}}$ where $act_t = \sum_{j} x_{t,d}^j$ is
+(x^{t,d}_i + 1 )^{1 + \frac{1}{act_t}}$ where $act_t = \sum_{j} x^{t,d}_j$ is
 the activity of all neurons at time $t$. When too much neurons are firing
 together, i.e. in case of a network burst, it is almost impossible to retrieve
 direct relationships: all neurons seem to be directly connected to each other.
