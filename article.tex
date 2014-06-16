@@ -213,7 +213,7 @@ device have a time resolution of $20ms$. Considering the short delay for a
 communication between neurons and slow decay of fluorescence signal, we
 can filter low frequencies through an asymmetrical discrete derivative filter
 \begin{align}
-x^{t,d}_{i} \leftarrow x^{t}_i - x_{t-1}^i.
+x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i.
 \end{align}
 When slow signals variations are filtered (H-P signals of figure
 \ref{fig:filtering}), only remains spike positions.
@@ -229,7 +229,7 @@ variation during a long time interval. Firing event are represented by strong
 variations in the neuron activity. Therefore we apply a hard-tresholding
 filter
 \begin{align}
-x^{t,d}_i &= x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)
+x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)
 \end{align}
 where the threshold $\tau$ should be taken positive and non-close to zero to
 respectively only keep rising edges and strong variations.
