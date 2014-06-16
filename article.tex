@@ -199,7 +199,7 @@ is displayed at Figure \ref{fig:fitlering}.
 The raw signal (original signal of Figure \ref{fig:fitlering}) is very noisy
 due to light scattering artifacts that ordinarily affects the quality of the
 recording (\cite{lichtman2011big}). A low-pass filter is first applied to
-filter high frequency noise with one of the following designs
+filter high frequency noises with one of the following filter designs
 \begin{align}
 % symmetrical median filter
 x^t_i &\leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
@@ -208,15 +208,18 @@ x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
 \label{eq:weighted-asymetric-median}.
 \end{align}
 
+A neuron spike lasts on average $1ms$ to $2ms$, while current optical
+device have a time resolution of $20ms$. Considering the short delay for a
+communication between neurons and slow decay of fluorescence signal, we
+can filter low frequencies through an asymmetrical discrete derivative filter
+\begin{align}
+x^{t,d}_{i} \leftarrow x^{t}_i - x_{t-1}^i.
+\end{align}
+When slow signals variations are filtered (H-P signals of figure
+\ref{fig:filtering}), only remains spike positions.
+\textcolor{red}{Pourquoi sur la figure, on a pas de signal avec une dérivée
+                négative?}
 
-Considering the short delay for a communication between
-neurons, slow events can be neglected to retrieve direct relationships.
-Indeed, for a direct relationship, i.e. a neuron firing directly implying another
-neuron to fire, the average time is about $1ms$ or $2ms$ while the
-fluorescent signal time resolution is $20ms$. In order to find out which neurons
-are directly related, it is only necessary to look after the burst signal, or
-in other words, whether the signal varies. In our approach, we choose to apply
-an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - x^{t-1}_i$.
 
 By nature, the firing event is really fast and in order to
 retrieve the connectivity from them, it is necessary to link a burst to a
