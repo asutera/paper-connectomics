@@ -309,9 +309,6 @@ of the activity of all neurons but the number and the locations of peaks is not 
             coefficients}
 \label{sec:inference}
 
-
-
-
 Let us denote the fluorescence calcium indicators of all neuron
 as a set of random variables $X = \left\{X_1, \ldots, X_{|V|}\right\}$, which follows
 a joint probability distribution $p_\mathcal{X}$, and by
@@ -327,9 +324,8 @@ signals, in other words the inferred network will be
 $\hat{A}: \hat{a}_{i,j} = \mathbb{1}(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
 
 
-Since all neurons are assumed to be connected to at least one neuron, we thus
-have by definition $X_i \not\perp X_j$ \textcolor{red}{AS: Je ne suis pas sûr
-de comprendre.}. However,  two random variables $A$ and $B$ might be
+Since all neurons are assumed to form a connected graph, we
+have by construction $X_i \not\perp X_j$. However, two random variables $A$ and $B$ might be
 dependent taken alone ($A \not\perp B$), but not once we observe the set  $C$
 of all other variables ($A \perp B | C$). The conditioning over all other
 random variables $X^{-i,j}$ is thus necessary to avoid predicting an edge when
