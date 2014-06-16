@@ -168,6 +168,13 @@ based on partial correlation\footnote{Source code is available at
 network, which is the winning method of the Connectomics challenge
 \footnote{\url{http://connectomics.chalearn.org}}.
 
+\textcolor{red}{It may be useful to rewritte the following lines but I add it to not forget about a plan (request from AQ)}
+In section \ref{sec:filter}, we will describe how we filter the fluorescent calcium imaging signal.
+In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view. 
+In section \ref{sec:results}, we will present some results and give a critical comparision with other inference methods.
+In appendix \ref{app:optimized}, we describe a fully tuned version of our algorithm which has won the Connectomics challenge.
+
+
 
 \section{Signal filtering} \label{sec:filter}
 
@@ -344,6 +351,7 @@ that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 
 
 \section{Experiments}
+\label{sec:results}
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
@@ -351,10 +359,7 @@ of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
 Those datasets are time series of size $T=179500$ of image calcium from simulated
 neuronal networks (\cite{stetter2012model}) with $|V|=1000$ neurons. The networks
 to inferred have around 15000 edges and are similar to those
-used to rank challenge participants. Note that our parameter tuning was mainly
-done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
-therefore it may justify why these networks are better retrieved despite the
-fact that some might be simpler to infer.
+used to rank challenge participants. 
 
 % Metrics : ROC AUC and AUPRC
 In supervised learning terms, the network inference task can be viewed as a
@@ -373,9 +378,12 @@ assessment.
 %   - discussions about the results
 %   - discussions about the metrics (Gilles' text)
 
-For the directory method, only filters defined by Equations
-\ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
-used.
+% For the directory method, only filters defined by Equations
+% \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
+% used.
+
+
+
 
 \begin{table}[tbh]
 \centering
@@ -458,6 +466,20 @@ Belgian State, Science Policy Office.
 \clearpage
 
 \appendix
+
+
+\section{An optimized version of the algorithm to win the challenge}
+\label{app:optimized}
+
+
+The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results. 
+
+Note that our parameter tuning was mainly
+done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
+therefore it may justify why these networks are better retrieved despite the
+fact that some might be simpler to infer.
+
+
 
 \section{Supplementary results}
 
@@ -567,8 +589,7 @@ Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
 \end{table}
 
-\section{An optimized version of the algorithm to win the challenge}
-\label{app:optimized}
+
 
 %% Talk about filters future and past
 
