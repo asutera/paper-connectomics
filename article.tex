@@ -135,6 +135,14 @@ the neuronal activity of thousands of neurons through a fluorescent
 calcium indicator  [todo cite]. Automatic and analytical methods are required to infer
 the connectomes from those time series.
 
+The fluorescent calcium image delivers at each acquisition a 2-D view of the
+neuron network activities. However, some neurons might not observed or are
+confounded with others. The low device sampling rate with respect to neuronal
+activity speed might not allow to distinguish neuron activation order,
+especially in highly synchronous activity [Stetter and in Stetter [20,46,47]]
+of a large part of the network. Moreover the fluorescent concentration is
+highly reactive to a neuron activation or a spike, but have a slow decay.
+
 % Introduce notation + goal in mathematical score
 % TODO check convention for y_{ij}
 The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
@@ -188,18 +196,7 @@ In appendix \ref{app:optimized}, we describe a fully tuned version of our algori
 % indicator.
 
 
-The raw signal is the calcium fluorescence imaging representing neuron
-activity via a capture imaging process. Observing the fluorescent calcium as
-an indicator of neuron activity delivers a 2-D view of neuron network at each
-capture which only gives a network screenshot at given time points. It implies
-obvious issues. Some neurons may be invisible because they are not observed or
-they are confounded with another one because of the loss of the third
-dimension. The capture sample rate is also a constraint that could make
-difficult to detect in which order the neurons fire.  Moreover the activity
-indicator is highly reactive to a burst but takes some time to recover its non
-active state.  Finally, the difficulty to distinguish direct relationships when
- a network burst happens, defined as a highly synchronous activity
- [Stetter and in Stetter [20,46,47]], is increased by the slow sampling rate.
+
 
 Considering the described imaging process, we try in this
 section to cope with some of these issues and, in particular, the slower
