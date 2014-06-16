@@ -141,8 +141,10 @@ The connectomes, the neural network, is represented by a (un)directed graph $G =
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
 V\right\}$, (un)ordered pair from $V$.
 Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
-represents a direct link from a neuron $i$ to a neuron $j$.
-The network inference task is set as follows :
+represents a direct link and interactions between neuron $i$ and a neuron $j$.
+In the directed graph, each edges also expresses a causal relationship: an
+edge $(i, j) \in E$ indicates that the state of neuron $j$ might be caused
+by the neuron $i$. The network inference task is set as follows :
 \textit{Given the observations $(x^t \in \mathcal{R}^{|V|})_{t=1}^T $
 along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
