@@ -109,7 +109,7 @@ epilepsy. Retrieving connectomes, the neurons wiring map, will shed a new
 light on the anatomical and functional connectivity of the brain. In the
 context of the Connectomics challenge, we propose a simple algorithm made of
 four stages, using preprocessing and partial correlation to achieve a network
-inference of high quality. An optimized variation of this simple algorithm 
+inference of high quality. An optimized variation of this simple algorithm
 is the winning method of the Connectomics Challenge.
 
 We put in perspective our method
@@ -144,7 +144,7 @@ V\right\}$, (un)ordered pair from $V$.
 Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
 represents a direct link from a neuron $i$ to a neuron $j$.
 The network inference task is set as follows :
-\textit{Given the observations $(x_t \in \mathcal{R}^{|V|})_{t=1}^T $
+\textit{Given the observations $(x^t \in \mathcal{R}^{|V|})_{t=1}^T $
 along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
 of graph $G$, where $\mathbb{1}$ is the indicator function.}
@@ -170,21 +170,21 @@ network, which is the winning method of the Connectomics challenge
 
 
 \textcolor{red}{The raw signal is the calcium fluorescence imaging representing
-neuron activity. Considering the imaging process, we have to cope with a slower 
-sampling rate than the neuron firing frequency and the slow decay of fluorescent 
+neuron activity. Considering the imaging process, we have to cope with a slower
+sampling rate than the neuron firing frequency and the slow decay of fluorescent
 calcium indicator after a neuron activity burst.}
 
 
 \begin{wrapfigure}{r}{0.7\linewidth}
 \caption{Filtering steps.}\label{wrap-fig:1}
 \includegraphics[width=\linewidth]{images/fig_filtering_recut.png}
-\end{wrapfigure} 
+\end{wrapfigure}
 
 % Explain why we need to filter
 
 Prior inferring the network, the fluorescent calcium time series
-are smoothed using several linear and non linear filters \textcolor{red}{in 
-order to reduce the imaging process effects. We successively apply different 
+are smoothed using several linear and non linear filters \textcolor{red}{in
+order to reduce the imaging process effects. We successively apply different
 filters listed below.} \\
 
 
@@ -203,31 +203,31 @@ filters listed below.} \\
 % $\left(c_l^3\right)_{l=-3}^2=(1, 1, 1, 1, 0, 0)$ or
 % $\left(c_l^4\right)_{l=-3}^2=(0.4, 0.8, 1, 1, 0, 0)$.
 
-\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and 
-a low-pass filter is therefore applied to get a cleaner version of the signal where only 
-true variations are kept, i.e. without noise variations. However, the choice of a low-pass 
-filter is not unique. In the rest of the paper, we will focus on two types, the 
-symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$, 
-and an asymmetrical weighted median filter, i.e., 
+\textcolor{red}{As it can be seen on \textit{fig 1}, the raw signal is very noisy and
+a low-pass filter is therefore applied to get a cleaner version of the signal where only
+true variations are kept, i.e. without noise variations. However, the choice of a low-pass
+filter is not unique. In the rest of the paper, we will focus on two types, the
+symmetrical median filter, i.e., $X_t^i \leftarrow X_{t-1}^i + X_{t}^i + X_{t+1}^i$,
+and an asymmetrical weighted median filter, i.e.,
 $X_t^i \leftarrow 0.4 X_{t-3}^i + 0.6 X_{t-2}^i + 0.8 X_{t-1}^i + X_{t}^i$.}\\
 
 
-\textcolor{red}{Considering the short delay for a communication between 
-neurons, slow events can be neglected to retrieve direct relationships. 
-Indeed, for a direct relationship, i.e. a neuron firing directly implying another 
-neuron to fire, the average time is about $1ms$ or $2ms$ while the 
-fluorescent signal time resolution is $20ms$. In order to find out which neurons 
-are directly related, it is only necessary to look after the burst signal, or 
-in other words, whether the signal varies. In our approach, we choose to apply 
+\textcolor{red}{Considering the short delay for a communication between
+neurons, slow events can be neglected to retrieve direct relationships.
+Indeed, for a direct relationship, i.e. a neuron firing directly implying another
+neuron to fire, the average time is about $1ms$ or $2ms$ while the
+fluorescent signal time resolution is $20ms$. In order to find out which neurons
+are directly related, it is only necessary to look after the burst signal, or
+in other words, whether the signal varies. In our approach, we choose to apply
 an asymmetrical discrete derivative : $X_{t,d}^{i} \leftarrow X_{t}^i - X_{t-1}^i$.}\\
 
-\textcolor{red}{By nature, the firing event is really fast and in order to 
-retrieve the connectivity from them, it is necessary to link a burst to a 
-couple of timesteps (ideally one). The small decay for the fluorescent calcium 
-indicator implies a signal variation during a long interval and therefore, in 
-order to only keep rising and strong transitions, we apply a hard-tresholing filter: 
+\textcolor{red}{By nature, the firing event is really fast and in order to
+retrieve the connectivity from them, it is necessary to link a burst to a
+couple of timesteps (ideally one). The small decay for the fluorescent calcium
+indicator implies a signal variation during a long interval and therefore, in
+order to only keep rising and strong transitions, we apply a hard-tresholing filter:
 $X_{t,d}^i = X_{t,d}^i \mathbb{1}(X_{t,d}^i \geq \tau)$ where $\tau$ is a given threshold.
-As a result, we get a binary-like signal with the true activity when a burst 
+As a result, we get a binary-like signal with the true activity when a burst
 happens and with a true zero when the neuron is inactive.}
 
 % Considering the short delay for a communication between neurons, slow events
@@ -252,15 +252,15 @@ happens and with a true zero when the neuron is inactive.}
 % where $\tau \geq 0$ is a parameter of the hard-threshold filter and the $0.9$
 % exponent reduce the difference between peaks values.
 
-\textcolor{red}{Then we apply on the entire signal a non-linear filter based on the 
-current activity of the systems in order to favor the association measure inversely 
+\textcolor{red}{Then we apply on the entire signal a non-linear filter based on the
+current activity of the systems in order to favor the association measure inversely
 proportional to the number of neurons firing together:
-$ X_{t,w}^i  = (X_{t,d}^i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $. 
-When too much neurons are firing together, i.e. in case of a network burst, it is almost 
-impossible to retrieve direct relationships: all neurons seem to be directly 
-connected to each other. By favoring the association measure when the activity is low, 
-we expect to retrieve a pair of neurons that are really directly connected together. 
-In concrete terms, as it can be verified on \textit{fig 1}, peak intensity may change in function 
+$ X_{t,w}^i  = (X_{t,d}^i + 1 )^{1 + \frac{1}{\sum_{j} X_{t,d}^j}} $.
+When too much neurons are firing together, i.e. in case of a network burst, it is almost
+impossible to retrieve direct relationships: all neurons seem to be directly
+connected to each other. By favoring the association measure when the activity is low,
+we expect to retrieve a pair of neurons that are really directly connected together.
+In concrete terms, as it can be verified on \textit{fig 1}, peak intensity may change in function
 of the activity of all neurons but the number and the locations of peaks is not modified.
 }
 
