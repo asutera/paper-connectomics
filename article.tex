@@ -1,83 +1,23 @@
-   %\documentclass[wcp,gray]{jmlr} % test grayscale version
 \documentclass[wcp]{jmlr}
 
-
-%% Personnal package
 \usepackage{enumerate}
 \usepackage{bbold}
-\usepackage{wrapfig}
-
-
- % The following packages will be automatically loaded:
- % amsmath, amssymb, natbib, graphicx, url, algorithm2e
-
- %\usepackage{rotating}% for sideways figures and tables
-% \usepackage{longtable}% for long tables
-
- % The booktabs package is used by this sample document
- % (it provides \toprule, \midrule and \bottomrule).
- % Remove the next line if you don't require it.
 \usepackage{booktabs}
- % The siunitx package is used by this sample document
- % to align numbers in a column by their decimal point.
- % Remove the next line if you don't require it.
-\usepackage[load-configurations=version-1]{siunitx} % newer version
- %\usepackage{siunitx}
+\usepackage{natbib}
 \usepackage[utf8]{inputenc}
 
  % The following command is just for this sample document:
 \newcommand{\cs}[1]{\texttt{\char`\\#1}}
 
-% % Define an unnumbered theorem just for this sample document:
-%\theorembodyfont{\upshape}
-%\theoremheaderfont{\scshape}
-%\theorempostheader{:}
-%\theoremsep{\newline}
-%\newtheorem*{note}{Note}
 
  % change the arguments, as appropriate, in the following:
-\jmlrvolume{1}
-\jmlryear{2014}
-\jmlrworkshop{\textcolor{red}{Neural Connectomics Workshop}}
+%\jmlrvolume{1}
+%\jmlryear{2014}
+%\jmlrworkshop{\textcolor{red}{Neural Connectomics Workshop}}
+\jmlrproceedings{}{}
 
-% \title[Connectomics challenge]{Inferring neural networks from fluorescent
-%                                calcium imaging using partial correlation and
-%                                sample weighting \textcolor{red}{plus court} : Simple and robust inference of connectomes using partial correlation coefficients
-% ?}
+\title{Simple connectome inference from partial correlation statistics in calcium imaging}
 
-% \title[Inference of connectomes using partial correlation coefficients]{Simple and robust inference of connectomes using partial correlation coefficients}
-
-\title{\textcolor{red}{Simple} connectome inference using partial correlation from imaging calcium signal}
-
-
-% %%
-% Discovery/Infering/Retrieving/... connectomes
-% Robust
-% Using partial correlation
-% [from calcium imaging]
-
-
- % Use \Name{Author Name} to specify the name.
- % If the surname contains spaces, enclose the surname
- % in braces, e.g. \Name{John {Smith Jones}} similarly
- % if the name has a "von" part, e.g \Name{Jane {de Winter}}.
- % If the first letter in the forenames is a diacritic
- % enclose the diacritic in braces, e.g. \Name{{\'E}louise Smith}
-
- % Two authors with the same address
-%  \author{\Name{Author Name1\nametag{\thanks{with a note}}} \Email{abc@sample.com}\and
-%   \Name{Author Name2} \Email{xyz@sample.com}\\
-%   \addr Address}
-
- % Three or more authors with the same address:
- % \author{ Antonio Sutera %\and
- %         % \Name{Arnaud Joly} \and
- %         % \Name{Vincent Fran\c{c}ois-Lavet} \and
- %         % \Name{Aaron Qiu} \and
- %         % \Name{Gilles Louppe} \and
- %         % \Name{Damien Ernst} \and
- %         % \name{Pierre Geurts}}
- %         }
 \author{Antonio Sutera,
         Arnaud Joly,
         Vincent François-Lavet,
@@ -101,86 +41,59 @@
 
 \maketitle
 
-
 \begin{abstract}
-Understanding how the brain works is a key
-to treat brain disorders such as Parkinson's disease,
-epilepsy. Retrieving connectomes, the neurons wiring map, will shed a new
-light on the anatomical and functional connectivity of the brain. In the
-context of the Connectomics challenge, we propose a simple algorithm made of
-four stages, using preprocessing and partial correlation to achieve a network
-inference of high quality. An optimized variation of this simple algorithm
-is the winning method of the Connectomics Challenge.
-We put in perspective our method
-with other inference methods such as GTE (\cite{stetter2012model}) and Genie3
-(\cite{huynhthu2010inferring}).
-
-% Discussion on the metrics?
-%\textcolor{red}{Discussion on the order of the partial correlation}
-
+In this work, we propose a simple and mathematically motivated method for the
+problem of connectome inference in calcium imaging data. The proposed algorithm
+consists in i) processing the raw signals to detect neural peak activities and ii)
+inferring the degree of association between neurons from partial correlation
+statistics.  This paper summarizes the methodology that led us to win the
+Connectomics Challenge, proposes a simplified version of our method and finally
+discusses our results with respect to other inference methods.
 \end{abstract}
 
 \begin{keywords}
-Network inference - Partial correlation - Precision matrix - GENIE3
+Connectomics - Network inference - Partial correlation
 \end{keywords}
 
 
 \section{Introduction}\label{sec:intro}
 
-% BG : brain, complex organ
-The human brain is a complex biological organ, formed by 100
-billions of neurons with 7000 synaptic connections on average.
-Cutting edge optical devices delivers in real-time  2-D  images of
-the neuronal activity of thousands of neurons through a fluorescent
-calcium indicator [todo cite]. Automatic and analytical methods are required to infer
-the connectomes from those time series and have to handle several
-experimental issues. Some neurons of the network might not be
-observed or are confounded with others. The lower device sampling rate with
-respect to neuronal activity speed might not allow to distinguish neuron
-activation order, especially in highly synchronous activity
-[Stetter and in Stetter [20,46,47]] of a large part of the network. Moreover
-the fluorescent concentration is highly reactive to a neuron activation or a
-spike, but have a slow decay.
+The human brain is a complex biological organ made of 100 billions of neurons,
+each connected to 7000 other neurons on average. Unfortunately, direct
+observations of the connectome, the wiring diagram of the brain, is not yet
+technically feasible. Without being perfect, calcium imaging currently allows
+the realtime and simultaneous observation of neuron activities from thousands
+of neurons, producing individual time series representing their fluoresence
+intensity. In this context,  the connectome inference problem consists in
+retrieving the synaptic connections between neurons on the basis of the
+fluoresence time series. In particular, this problem is often made difficult
+because of experimental issues, including masking effects making some of the
+neurons not to be observed or confounded with others, a low sampling rate of
+the optical device with respect to the neural activity speed or the slow decay
+of fluoresence.
 
-% Introduce notation + goal in mathematical score
-The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
-a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
-V\right\}$, (un)ordered pair from $V$.
-Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
-represents a direct link and interactions between neuron $i$ and a neuron $j$.
-In the directed graph, each edges also expresses a causal relationship: an
-edge $(i, j) \in E$ indicates that the state of neuron $j$ might be caused
-by the neuron $i$. The network inference task is set as follows :
-\textit{Given the observations $(x^t \in \mathcal{R}^{|V|})_{t=1}^T $
-along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
-adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
-of graph $G$, where $\mathbb{1}$ is the indicator function.}
+Formally, the connectome can be represented as a directed graph $G=(V,E)$,
+where $V$ is a set of $p$ nodes, representing neurons, and $E \subseteq
+\left\{(i, j) \in V \times V\right\}$ is a set of edges, representing direct
+synaptic connections between neurons. Causal interactions are expressed by the
+direction of edges: $(i, j) \in E$ indicates that the state of neuron $j$ might
+be caused by the activity of neuron $i$. In those terms,  the connectome
+inference problem is formally stated as follows:  \textit{Given the sampled
+observations $\{ x^t_i \in \mathbb{R}^{p} | i \in V, t = 1, \dots T \}$ of $p$
+neurons for $T$ time intervals, the goal is to infer the set $E$ of connections in $G$.}
 
-The directivity in the network introduce causal relations through neurons. A
-directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$
-causes $j$. The causal mechanism implies that when neuron $i$ is active, also
-denoted in this paper as a firing event or a burst, neuron $j$ may be
-afterwards activated consequently. Let us notice that neuron $j$ depends on
-all its ancestors and its activation may not be as straightforward as we may
-think if the causal activation is not systematic (stochastic?). The reciprocal
-phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} =
-a_{j,i} = 1$.
-
-% Solution
-
-In this paper, we describe a simple and a theoretically grounded approach
-based on partial correlation\footnote{Source code is available at
-\url{https://github.com/asutera/kaggle-connectomics}.} to infer the neural
-network, which is the winning method of the Connectomics challenge
-\footnote{\url{http://connectomics.chalearn.org}}.
-
-The rest of the paper is structured as follows: Section \ref{sec:filter}
-describes the pre-processing applied on fluorescent calcium timeseries;
-Section \ref{sec:inference} presents the proposed approach and
-their theoretical properties; Section \ref{sec:results} provide
-empirical analysis and comparison with other network inference method,
-whereas Section \ref{sec:conclusion} discusses our work and provides further
-research directions.
+In this paper, we describe the winning method\footnote{Code available at
+\url{https://github.com/asutera/kaggle-connectomics}} of the Connectomics
+Challenge\footnote{\url{http://connectomics.chalearn.org}}, a simple and
+theoretically grounded approach based on signal processing techniques and
+partial correlation statistics to infer the neural network. The rest of the
+paper is structured as follows: Section \ref{sec:filter} describes the signal
+processing methods applied on fluorescent calcium time series; Section
+\ref{sec:inference} then presents the proposed approach and its theoretical
+properties; Section \ref{sec:results} provides an empirical analysis and
+comparison with other network inference methods, while Section
+\ref{sec:conclusion} finally discusses our work and provides further research
+directions.
 
 
 \section{Signal filtering} \label{sec:filter}
@@ -218,7 +131,6 @@ filter low frequencies through a high pass filter
 x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter}
 \end{align}
 
-
 Whenever the low and high pass filtered have been applied, the remaining signal
 (H-P signal of Figure \ref{fig:filtered-signal}) is the discrete
 derivative of the fluorescence calcium concentration. To further filter out
@@ -249,8 +161,8 @@ eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
 value. In the context of the challenge, this assumption was deduced from ground
 truth of provided networks.
 
-\section{Network inference through weighted average partial correlation
-         coefficients}
+
+\section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
 Let us denote the fluorescence calcium indicators of all neuron
@@ -451,7 +363,7 @@ Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 
 
 
 
-\section{Conclusion} \label{sec:conclusion}
+\section{Conclusions} \label{sec:conclusion}
 
 In previous study \cite{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
@@ -467,15 +379,16 @@ variables.
 
 
 
-\begin{scriptsize}
 
-\paragraph{Acknowledgements.} A. Joly and G. Louppe are research fellows of
+\section*{Acknowledgements}
+
+A. Joly and G. Louppe are research fellows of
 the FNRS, Belgium.  A. Sutera is  is recipient of
 a F.R.I.A. fellowship of F.R.S.-FNRS, Belgium.
 This work is supported by PASCAL2 and the IUAP DYSCO, initiated by the
 Belgian State, Science Policy Office.
 
-\end{scriptsize}
+
 
 \newpage
 \clearpage
