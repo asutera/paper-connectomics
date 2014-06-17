@@ -242,8 +242,11 @@ Figure \ref{fig:filtered-signal}), peak intensities have
 changed depending on the overall network activity, but not their numbers and
 locations.
 
-\textcolor{red}{PCA?}
-
+\textcolor{red}{PCA?} Finally since there is a high correlation between neurons,
+we filter some more noise through a principal component analysis. From the $|V|$
+eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
+value. In the context of the challenge, this assumption was deduced from ground
+truth of provided networks.
 
 \section{Network inference through weighted average partial correlation
             coefficients}
