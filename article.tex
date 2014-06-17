@@ -307,16 +307,24 @@ This method uses random forests to estimate the target variable and variable
 importances can be derived to estimate the adjacency matrix $A$ (see (todo
 cite) for a more detailed description of the inference method).
 
-At first sight, it appears on \textit{Table 1} that partial correlation
-outperforms other methods. Two main reasons may explain this. First, the
-quality of the infered network seems related to the conditioning part of the
-method. In every method except with partial correlation, indirect links are
-confounded with direct links.  Secondly, the gaussian assumption seems
-verified and thus linear method appears to be competitive, e.g. the method
-correlation already gives good results, with a non-linear method such as
-GENIE3.
+At first sight, it appears on Tab.\ref{tab:tab1} that partial
+correlation outperforms other methods. Two main reasons may explain this.
+First, the quality of the infered network seems related to the conditioning
+part of the method. In every method except with partial correlation, indirect
+links are confounded with direct links.  Secondly, the gaussian assumption
+seems verified and thus linear method appears to be competitive, e.g. the
+method correlation already gives good results, with a non-linear method such
+as GENIE3.\\
 
 % Discussion about the metrics
+
+
+However, the metrics used in the contest, i.e. the ROC AUC, does not seem to be consistent with the goal of the challenge, and thus to assess the quality of the \textbf{directed} infered network. Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the \textbf{undirected} network by giving the same weights to both edges $(i,j)$ and $(j,i)$.
+
+
+
+Indeed, if we consider that the infered network is the true network undirected, i.e. if for all links $(i,j)$, back links $(j,i)$ are added, then we get a very high score (about $0.9956$) according to this metric. Therefore, if we want to maximize the ROC AUC score, we only need to detect the links, no matter their direction.  Doing that, we only give up a gain margin of about $0.005\%$ which is not really interesting in the context of this challenge. 
+We think that AUC PRC is more adapted because if we perform the same experiment, we get a score of about $0.7897$. In this case, the gain margin is about $0.2103$ which is much more interesting.
 
 
 
@@ -333,16 +341,17 @@ Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 
 Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
 Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
-GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
 GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
 GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
 GENIE3 (depth = 3)     & & & & & & & & \\
+GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
 Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
 \bottomrule
 \end{tabular}
+\label{tab:tab1}
 \end{table}
 
 \begin{table}[tbh]
