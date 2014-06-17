@@ -193,10 +193,10 @@ is displayed at Figure \ref{fig:fitlering}.
 \begin{figure}[bth]
 \includegraphics[width=\linewidth]{images/fig_filtering}
 \caption{Filtering steps. \textcolor{red}{TODO remake in pdf}}
-\label{fig:fitlering}
+\label{fig:filtered-signal}
 \end{figure}
 
-The raw signal (original signal of Figure \ref{fig:fitlering}) is very noisy
+The raw signal (original signal of Figure \ref{fig:filtered-signal}) is very noisy
 due to light scattering artifacts that ordinarily affects the quality of the
 recording (\cite{lichtman2011big}). A low-pass filter is first applied to
 filter high frequency noises with one of the following filter designs
@@ -211,32 +211,21 @@ x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
 A neuron spike lasts on average $1ms$ to $2ms$, while current optical
 device have a time resolution of $20ms$. Considering the short delay for a
 communication between neurons and slow decay of fluorescence signal, we
-can filter low frequencies through an asymmetrical discrete derivative filter
+filter low frequencies through a high pass filter
 \begin{align}
-x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i.
+% an asymmetrical discrete derivative filter
+x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter}
 \end{align}
-When slow signals variations are filtered (H-P signal of Figure
-\ref{fig:filtering}), only remains spike positions.
-\textcolor{red}{Pourquoi sur la figure, on a pas de signal avec une dérivée
-                négative?}
 
 
-By nature, the firing event is really fast and in order to
-retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one). The small decay for the fluorescent calcium
-indicator implies a signal
-variation during a long time interval. Firing event are represented by strong
-variations in the neuron activity. Therefore we apply a hard-tresholding
+Whenever the low and high pass filtered have been applied, the remaining signal
+(H-P signal of Figure \ref{fig:filtered-signal}) is the discrete
+derivative of the fluorescence calcium concentration. To further filter out
+small signal variations which are due to noise, we apply a hard-threshold
 filter
 \begin{align}
-x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)
+x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
-where the threshold $\tau$ should be taken positive and non-close to zero to
-respectively only keep rising edges and strong variations.
-
-
-As a result, we get a binary-like signal with the true activity when a burst
-happens and with a true zero when the neuron is inactive.
 
 
 Then we apply on the entire signal a non-linear filter based on the current
