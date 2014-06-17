@@ -130,13 +130,19 @@ Network inference - Partial correlation - Precision matrix - GENIE3
 % BG : brain, complex organ
 The human brain is a complex biological organ, formed by 100
 billions of neurons with 7000 synaptic connections on average.
-Cutting edge optical devices have been developed to track in real-time
+Cutting edge optical devices delivers in real-time  2-D  images of
 the neuronal activity of thousands of neurons through a fluorescent
-calcium indicator  [todo cite]. Automatic and analytical methods are required to infer
-the connectomes from those time series.
+calcium indicator [todo cite]. Automatic and analytical methods are required to infer
+the connectomes from those time series and have to handle several
+experimental issues. Some neurons of the network might not be
+observed or are confounded with others. The lower device sampling rate with
+respect to neuronal activity speed might not allow to distinguish neuron
+activation order, especially in highly synchronous activity
+[Stetter and in Stetter [20,46,47]] of a large part of the network. Moreover
+the fluorescent concentration is highly reactive to a neuron activation or a
+spike, but have a slow decay.
 
 % Introduce notation + goal in mathematical score
-% TODO check convention for y_{ij}
 The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
 V\right\}$, (un)ordered pair from $V$.
@@ -170,7 +176,7 @@ network, which is the winning method of the Connectomics challenge
 
 \textcolor{red}{It may be useful to rewritte the following lines but I add it to not forget about a plan (request from AQ)}
 In section \ref{sec:filter}, we will describe how we filter the fluorescent calcium imaging signal.
-In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view. 
+In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view.
 In section \ref{sec:results}, we will present some results and give a critical comparision with other inference methods.
 In appendix \ref{app:optimized}, we describe a fully tuned version of our algorithm which has won the Connectomics challenge.
 
@@ -178,98 +184,72 @@ In appendix \ref{app:optimized}, we describe a fully tuned version of our algori
 
 \section{Signal filtering} \label{sec:filter}
 
-% \textcolor{red}{This section should be rewritten once we get the figure
-                % which displayed the effect of the different filters.}
+Given the image acquisition process, the fluorescent calcium time series
+are smoothed using several linear and non linear filters in
+order to reduce the imaging process effects. The overall filtering approach
+is displayed at Figure \ref{fig:filtered-signal}.
 
-% Defects of the imaging device
-% and will have to cope with
-% a slower sampling rate than the neuron firing speed, a superposition
-% of the activity of several neurons and the slow decay of fluorescent calcium
-% indicator.
-
-
-The raw signal is the calcium fluorescence imaging representing neuron
-activity via a capture imaging process. Observing the fluorescent calcium as
-an indicator of neuron activity delivers a 2-D view of neuron network at each
-capture which only gives a network screenshot at given time points. It implies
-obvious issues. Some neurons may be invisible because they are not observed or
-they are confounded with another one because of the loss of the third
-dimension. The capture sample rate is also a constraint that could make
-difficult to detect in which order the neurons fire.  Moreover the activity
-indicator is highly reactive to a burst but takes some time to recover its non
-active state.  Finally, the difficulty to distinguish direct relationships when
- a network burst happens, defined as a highly synchronous activity
- [Stetter and in Stetter [20,46,47]], is increased by the slow sampling rate.
-
-Considering the described imaging process, we try in this
-section to cope with some of these issues and, in particular, the slower
-sampling rate than the neuron firing frequency and the slow decay of
-fluorescent calcium indicator after a neuron activity burst.
-
-
-\begin{figure}%{r}{0.7\linewidth}
-\caption{Filtering steps.}\label{wrap-fig:1}
-\includegraphics[width=\linewidth]{images/fig_filtering.pdf}
+\begin{figure}[bth]
+\centering
+\includegraphics[width=0.8\linewidth]{images/fig_filtering}
+\caption{Filtering steps.}
+\label{fig:filtered-signal}
 \end{figure}
 
-% Explain why we need to filter
+The raw signal (original signal of Figure \ref{fig:filtered-signal}) is very noisy
+due to light scattering artifacts that ordinarily affects the quality of the
+recording (\cite{lichtman2011big}). A low-pass filter is first applied to
+filter high frequency noises with one of the following designs
+\begin{align}
+% symmetrical median filter
+x^t_i &\leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
+% asymmetrical weighted median
+x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
+\label{eq:weighted-asymetric-median}.
+\end{align}
 
-Prior inferring the network, the fluorescent calcium time series
-are smoothed using several linear and non linear filters in
-order to reduce the imaging process effects. We successively apply different
-filters listed below.
-
-As it can be seen on \textit{fig 1}, the raw signal is very noisy due to light
-scattering artifacts that ordinarily affects the quality of the recording [in
-Stetter, [6]]. Therefore, a low-pass filter is first applied to get a cleaner
-version of the signal where only true variations are kept, i.e. without noise
-variations. However, the choice of a low-pass filter is not unique. In the
-rest of the paper, we will use two particular filters giving similar results,
-the symmetrical median filter, i.e., $x^t_i \leftarrow x^{t-1}_i + x^{t}_i +
-x^{t+1}_i$, and an asymmetrical weighted median filter taking into account the
-history, i.e., $x^t_i \leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i
-+ x^{t}_i$.
-
-
-Considering the short delay for a communication between
-neurons, slow events can be neglected to retrieve direct relationships.
-Indeed, for a direct relationship, i.e. a neuron firing directly implying another
-neuron to fire, the average time is about $1ms$ or $2ms$ while the
-fluorescent signal time resolution is $20ms$. In order to find out which neurons
-are directly related, it is only necessary to look after the burst signal, or
-in other words, whether the signal varies. In our approach, we choose to apply
-an asymmetrical discrete derivative : $x^{t,d}_{i} \leftarrow x^{t}_i - x^{t-1}_i$.
-
-By nature, the firing event is really fast and in order to
-retrieve the connectivity from them, it is necessary to link a burst to a
-couple of timesteps (ideally one). The small decay for the fluorescent calcium indicator implies a signal
-variation during a long time interval. Firing event are represented by strong
-variations in the neuron activity. Therefore we apply a hard-tresholding
-filter $x^{t,d}_i = x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau)$ where the
-threshold $\tau$ should be taken positive and non-close to zero to
-respectivelty only keep rising edges and strong variations.
+A neuron spike lasts on average $1ms$ to $2ms$, while current optical
+device have a time resolution of $20ms$. Considering the short delay for a
+communication between neurons and the slow decay of fluorescence signal, we
+filter low frequencies through a high pass filter
+\begin{align}
+% an asymmetrical discrete derivative filter
+x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter}
+\end{align}
 
 
-As a result, we get a binary-like signal with the true activity when a burst
-happens and with a true zero when the neuron is inactive.
+Whenever the low and high pass filtered have been applied, the remaining signal
+(H-P signal of Figure \ref{fig:filtered-signal}) is the discrete
+derivative of the fluorescence calcium concentration. To further filter out
+small signal variations which are due to noise, we apply a hard-threshold
+filter
+\begin{align}
+x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \tau > 0.
+\end{align}
 
+After those 3 first filters, the fluorescence signal (Thresh. signal of
+Figure \ref{fig:filtered-signal}) only contains clean spikes. However when a large
+part of the network is firing, it's difficult to detect pairwise neuron
+interactions. In order to reduce false interaction detection,
+the signal is smoothed with a non-linear filter which penalizes
+the filtered signal when a large part of the network is firing
+\textcolor{red}{This equation doesn't correspond to the what we have done.}
+\begin{align}
+ x^{t,w}_i  &\leftarrow (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t,d}_j}}.
+\end{align}
+Once this filtered has been applied (Weights signal of
+Figure \ref{fig:filtered-signal}), peak intensities have
+changed depending on the overall network activity, but not their numbers and
+locations.
 
-Then we apply on the entire signal a non-linear filter based on the current
-activity of the systems in order to favor the association measure inversely
-proportional to the number of neurons firing together: $ x^{t,w}_i  =
-(x^{t,d}_i + 1 )^{1 + \frac{1}{act_t}}$ where $act_t = \sum_{j} x^{t,d}_j$ is
-the activity of all neurons at time $t$. When too much neurons are firing
-together, i.e. in case of a network burst, it is almost impossible to retrieve
-direct relationships: all neurons seem to be directly connected to each other.
-By favoring the association measure when the activity is low, we expect to
-retrieve a pair of neurons that are really directly connected together. In
-concrete terms, as it can be verified on \textit{fig 1}, peak intensity may
-change in function of the activity of all neurons but the number and the
-locations of peaks is not modified.
-
+\textcolor{red}{PCA?} Finally since there is a high correlation between neurons,
+we filter some more noise through a principal component analysis. From the $|V|$
+eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
+value. In the context of the challenge, this assumption was deduced from ground
+truth of provided networks.
 
 \section{Network inference through weighted average partial correlation
-            coefficients}
+         coefficients}
 \label{sec:inference}
 
 Let us denote the fluorescence calcium indicators of all neuron
@@ -359,7 +339,7 @@ of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
 Those datasets are time series of size $T=179500$ of image calcium from simulated
 neuronal networks (\cite{stetter2012model}) with $|V|=1000$ neurons. The networks
 to inferred have around 15000 edges and are similar to those
-used to rank challenge participants. 
+used to rank challenge participants.
 
 % Metrics : ROC AUC and AUPRC
 In supervised learning terms, the network inference task can be viewed as a
@@ -423,7 +403,7 @@ gaussian assumption seems verified and thus linear method appears to be
 competitive, e.g. the method correlation already gives good results, with a
 non-linear method such as GENIE3.
 
-% Discussion about 
+% Discussion about
 
 
 \begin{table}[tbh]
@@ -514,7 +494,7 @@ Belgian State, Science Policy Office.
 \label{app:optimized}
 
 
-The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results. 
+The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results.
 
 Note that our parameter tuning was mainly
 done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
