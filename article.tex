@@ -174,12 +174,13 @@ based on partial correlation\footnote{Source code is available at
 network, which is the winning method of the Connectomics challenge
 \footnote{\url{http://connectomics.chalearn.org}}.
 
-\textcolor{red}{It may be useful to rewritte the following lines but I add it to not forget about a plan (request from AQ)}
-In section \ref{sec:filter}, we will describe how we filter the fluorescent calcium imaging signal.
-In section \ref{sec:inference}, we will characterize our algorithm from a theoretical point of view.
-In section \ref{sec:results}, we will present some results and give a critical comparision with other inference methods.
-In appendix \ref{app:optimized}, we describe a fully tuned version of our algorithm which has won the Connectomics challenge.
-
+The rest of the paper is structured as follows: Section \ref{sec:filter}
+describes the pre-processing applied on fluorescent calcium timeseries;
+Section \ref{sec:inference} presents the proposed approach and
+their theoretical properties; Section \ref{sec:results} provide
+empirical analysis and comparison with other network inference method,
+whereas Section \ref{sec:conclusion} discusses our work and provides further
+research directions.
 
 
 \section{Signal filtering} \label{sec:filter}
@@ -450,7 +451,7 @@ Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 
 
 
 
-\section{Conclusion}
+\section{Conclusion} \label{sec:conclusion}
 
 In previous study \cite{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
