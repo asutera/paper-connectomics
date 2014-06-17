@@ -143,28 +143,20 @@ the fluorescent concentration is highly reactive to a neuron activation or a
 spike, but have a slow decay.
 
 % Introduce notation + goal in mathematical score
-The connectomes, the neural network, is represented by a (un)directed graph $G = (V, E)$ comprising
+The connectomes, the neural network, is represented by a (un)directed graph
+$G = (V, E)$ comprising
 a set of nodes $V$ and a set of edges $E \subseteq \left\{(i, j) \in V \times
-V\right\}$, (un)ordered pair from $V$.
+V\right\}$, (un)ordered pairs from $V$.
 Each node $i \in V$ represents a neuron, and each edge $(i, j) \in E$
-represents a direct link and interactions between neuron $i$ and a neuron $j$.
-In the directed graph, each edges also expresses a causal relationship: an
-edge $(i, j) \in E$ indicates that the state of neuron $j$ might be caused
-by the neuron $i$. The network inference task is set as follows :
+represents a direct link and interaction between neuron $i$ and $j$.
+In the directed graph, edges also express causality: the
+state of a neuron $i$ might be due to the state of one or several of its
+parents $\left\{j : (j, i) \in E, j \in V\right\}$.
+The network inference task is set as follows :
 \textit{Given the observations $(x^t \in \mathcal{R}^{|V|})_{t=1}^T $
 along $T$ periods of time of the $|V|$ neurons, the goal is to infer the
 adjacency matrix $A : a_{i,j} = \mathbb{1}((i, j) \in E)$ of the neural network
 of graph $G$, where $\mathbb{1}$ is the indicator function.}
-
-The directivity in the network introduce causal relations through neurons. A
-directed edge, i.e. $a_{i,j} = 1$ and $a_{j,i} = 0$, means that neuron $i$
-causes $j$. The causal mechanism implies that when neuron $i$ is active, also
-denoted in this paper as a firing event or a burst, neuron $j$ may be
-afterwards activated consequently. Let us notice that neuron $j$ depends on
-all its ancestors and its activation may not be as straightforward as we may
-think if the causal activation is not systematic (stochastic?). The reciprocal
-phenomenon is only possible when the edge is bidirectionnal, i.e. $a_{i,j} =
-a_{j,i} = 1$.
 
 % Solution
 In this paper, we describe the winning method of the Connectomics challenge
