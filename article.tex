@@ -82,21 +82,24 @@ inference problem is formally stated as follows:  \textit{Given the sampled
 observations $\{ x^t_i \in \mathbb{R}^{p} | i \in V, t = 1, \dots T \}$ of $p$
 neurons for $T$ time intervals, the goal is to infer the set $E$ of connections in $G$.}
 
-In this paper, we describe the winning method\footnote{Code available at
-\url{https://github.com/asutera/kaggle-connectomics}} of the Connectomics
+In this paper, we present a simplified -- yet nearly as good -- version of
+the winning method\footnote{Code available at \url{https://github.com/asutera
+/kaggle-connectomics}} of the Connectomics
 Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
-partial correlation statistics. The rest of the
-paper is structured as follows: Section \ref{sec:filter} describes the signal
-processing methods applied on fluorescent calcium time series; Section
-\ref{sec:inference} then presents the proposed approach and its theoretical
-properties; Section \ref{sec:results} provides an empirical analysis and
-comparison with other network inference methods, while Section
-\ref{sec:conclusion} finally discusses our work and provides further research
-directions.
+partial correlation statistics. The rest of the paper is structured as
+follows: Section \ref{sec:filter} describes the signal processing methods
+applied on fluorescent calcium time series; Section \ref{sec:inference} then
+presents the proposed approach and its theoretical properties; Section
+\ref{sec:results} provides an empirical analysis and comparison with other
+network inference methods, while Section \ref{sec:conclusion} finally
+discusses our work and provides further research directions. Additionnaly, Appendix
+\ref{app:optimized} further describes our actual winning method, giving slightly
+better results than the method presented in the paper but highly tuned for the
+challenge.
 
 
-\section{Signal filtering} \label{sec:filter}
+\section{Signal processing} \label{sec:filter}
 
 Under the simplifying assumption that neurons are on-off units, characterized
 by short periods of intense activities, or peaks, and longer periods of
@@ -119,8 +122,8 @@ Figure~\ref{fig:filtered-signal}.
 As the first plot in Figure~\ref{fig:filtered-signal} illustrates, due to
 light scattering artifacts that ordinarily affects the quality of the
 recording~\citep{lichtman2011big}, the raw fluoresence signal is very noisy.
-Accordingly, the first step of our pipeline is to use a low-pass filter for
-filtering out high frequency noise, using one of the following designs,
+Accordingly, the first step of our pipeline is to smoothen the signal, using a low-pass filter for
+filtering out high frequency noise, applying one of the following designs and
 resulting in the second plot in the figure:
 \begin{align}
 % symmetrical median filter
@@ -130,13 +133,12 @@ x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
 \label{eq:weighted-asymetric-median}
 \end{align}
 
-Considering the short delay of communication between neurons and the slow decay
-of fluorescence signal, the second step of our pipeline consists in identifying
+Considering the short delay of communication between neurons and the slow
+decay of fluorescence, the second step of our pipeline consists in identifying
 neuron spikes -- characterized by high frequencies -- by filtering out low
 frequencies through a high-pass filter, resulting in third plot of the figure:
-\begin{align}
-% an asymmetrical discrete derivative filter
-x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter}
+\begin{align} % an asymmetrical discrete derivative filter 
+x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter} 
 \end{align}
 
 Once the low- and and high-pass filters have been applied, the remaining signal
@@ -148,7 +150,7 @@ x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \t
 \end{align}
 
 At this step, the processed signal only contains clean spikes. However, when a
-large of the network is firing, detecting pairwise neuron interactions is a
+large part of the network is firing, detecting pairwise neuron interactions is a
 difficult task. \textcolor{red}{G: say that neurons may fire because of global
 high activity, without any actual cause -- see generator.}
 Accordingly, in order to reduce false interaction detection,
@@ -158,12 +160,6 @@ neurons, thereby reducing the importance of peaks identified during global high 
  x^{t,w}_i  &\leftarrow (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t,d}_j}}.
 \end{align}
 
-\textcolor{red}{G: Let's drop that? or reformulate...}
-\textcolor{red}{PCA?} Finally since there is a high correlation between neurons,
-we filter some more noise through a principal component analysis. From the $|V|$
-eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
-value. In the context of the challenge, this assumption was deduced from ground
-truth of provided networks.
 
 \textcolor{red}{G: Change notations for $f(x^t) = ...$, $g(x^t) = ...$}
 
@@ -181,8 +177,7 @@ $p_{\mathcal{X}_i, \mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
 p_{\mathcal{X}_j|\mathcal{Z}}$.  The inference of the undirected network
 can be formulated as inferring conditional dependences
 $X_i \not\perp X_j | X^{-i,j}$ between all pairs $i$ and $j$ of fluorescence
-signals, in other words the inferred network will be
-$\hat{A}: \hat{a}_{i,j} = \mathbb{1}(X_i \not\perp X_j | X^{-i,j}), \forall i, j \in V$.
+signals.
 
 
 Since all neurons are assumed to form a connected graph, we
@@ -201,10 +196,8 @@ $X_i \perp X_j | X^{-i,j}$ if the partial correlation coefficient
 = \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}
 \]
 is equal to zero \citep{koller2009probabilistic}. The partial correlation gives
-a connectivity score
-$\hat{A}: \hat{a}_{i,j} = \rho_{X_i, X_j | X^{-i,j}}, \forall i, j \in V$ between all
-pairs of neuron $i$ and $j$. One could retrieve an estimated graph by thresholding
-the matrix $\hat{A}$.
+an estimate of the degree of association between all
+pairs of neuron $i$ and $j$. 
 Similarly, we also have $X_i \perp X_j$ if the Pearson correlation
 coefficient
 \[
@@ -222,30 +215,13 @@ matrices was estimated from the time series by varying the hard-threshold value
 $\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:filter} and appendix \ref{app:optimized}).
 
 
-% Introduce a custom solution to make the Y matrix asymmetric
-% Introduce directivity
-\textcolor{red}{Est-ce qu'on ne le ferait pas passer dans l'appendice B? Ou du moins l'équation?}
-Since partial correlation is a symmetric measure, the causal mechanism behind the
-interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
-be directly inferred\footnote{Also note that two other causal mechanisms might be
-implied while having a non-zero partial coefficient: (i) a pair of variables
-is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
-conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\citep{de2004discovery}.}.
-In order to retrieve causal information, we developed an
-heuristics based on the following observation. The rise of fluorescence
-indicates the activation of a neuron $i$. If a neuron $j$ have also
-an increased of fluorescence after a slight delay, this could have been
-caused by the neuron $i$. Thus, we count whenever
-such events occurred between consecutive time steps
-\[
-\hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
-    \mathbb{1}(x_j^{t+1} - x_i^t \in \left[f_1, f_2 \right]) -
-    \mathbb{1}(x_i^{t+1} - x_j^t \in \left[f_1, f_2 \right]), \forall i, j \in V
-\]
-where $f_1$ and $f_2$ are parameters of the method.
-Finally, the weighted average of correlation matrices is combined with $Z$ such
-that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
+\textcolor{red}{Say that we use PCA to derive the precision matrix + ref!.}
+
+Finally since there is a high correlation between neurons,
+we filter some more noise through a principal component analysis. From the $|V|$
+eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
+value. In the context of the challenge, this assumption was deduced from ground
+truth of provided networks.
 
 
 \section{Experiments}
@@ -434,7 +410,30 @@ done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
 therefore it may justify why these networks are better retrieved despite the
 fact that some might be simpler to infer.
 
-
+% Introduce a custom solution to make the Y matrix asymmetric
+% Introduce directivity
+\textcolor{red}{Est-ce qu'on ne le ferait pas passer dans l'appendice B? Ou du moins l'équation?}
+Since partial correlation is a symmetric measure, the causal mechanism behind the
+interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
+be directly inferred\footnote{Also note that two other causal mechanisms might be
+implied while having a non-zero partial coefficient: (i) a pair of variables
+is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
+conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
+\citep{de2004discovery}.}.
+In order to retrieve causal information, we developed an
+heuristics based on the following observation. The rise of fluorescence
+indicates the activation of a neuron $i$. If a neuron $j$ have also
+an increased of fluorescence after a slight delay, this could have been
+caused by the neuron $i$. Thus, we count whenever
+such events occurred between consecutive time steps
+\[
+\hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
+    \mathbb{1}(x_j^{t+1} - x_i^t \in \left[f_1, f_2 \right]) -
+    \mathbb{1}(x_i^{t+1} - x_j^t \in \left[f_1, f_2 \right]), \forall i, j \in V
+\]
+where $f_1$ and $f_2$ are parameters of the method.
+Finally, the weighted average of correlation matrices is combined with $Z$ such
+that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 
 \section{Supplementary results}
 
