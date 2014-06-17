@@ -310,17 +310,15 @@ We think that AUC PRC is more adapted because if we perform the same experiment,
 
 
 
-\begin{table}[tbh]
+\begin{table}
+\small
 \centering
-\caption{TODO}
 \begin{tabular}{@{}l *{8}{c}@{}}
-\toprule
   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
 \cmidrule(r){2-5}\cmidrule(r){6-9}
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-\midrule
-
-Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+\hline \hline
+% Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
 Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
 GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
 GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
@@ -329,17 +327,16 @@ GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 &
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
-Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
-\bottomrule
+% Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
 \end{tabular}
 \label{tab:tab1}
+\caption{TODO}
 \end{table}
 
 \begin{table}[tbh]
 \centering
 \caption{TODO}
 \begin{tabular}{@{}l *{8}{c}@{}}
-\toprule
   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
 \cmidrule(r){2-5}\cmidrule(r){6-9}
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
@@ -350,7 +347,6 @@ P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.
 P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
 Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
 Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
-\bottomrule
 \end{tabular}
 \end{table}
 
