@@ -84,9 +84,9 @@ neurons for $T$ time intervals, the goal is to infer the set $E$ of connections 
 
 In this paper, we describe the winning method\footnote{Code available at
 \url{https://github.com/asutera/kaggle-connectomics}} of the Connectomics
-Challenge\footnote{\url{http://connectomics.chalearn.org}}, a simple and
+Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
-partial correlation statistics to infer the neural network. The rest of the
+partial correlation statistics. The rest of the
 paper is structured as follows: Section \ref{sec:filter} describes the signal
 processing methods applied on fluorescent calcium time series; Section
 \ref{sec:inference} then presents the proposed approach and its theoretical
@@ -98,69 +98,74 @@ directions.
 
 \section{Signal filtering} \label{sec:filter}
 
-Given the image acquisition process, the fluorescent calcium time series
-are smoothed using several linear and non linear filters in
-order to reduce the imaging process effects. The overall filtering approach
-is displayed at Figure \ref{fig:filtered-signal}.
+Under the simplifying assumption that neurons are on-off units, characterized
+by short periods of intense activities, or peaks, and longer periods of
+inactivity, the first part of our algorithm consists in cleaning the raw
+fluoresence data. More specifically, time series are processed using standard
+signal processing filters in order to remove noise due light scattering
+effects, account for fluorescence  low decay and reduce the importance of
+global high activity in the network. The overall process is illustrated on
+Figure~\ref{fig:filtered-signal}.
 
-\begin{figure}[bth]
+\begin{figure}
 \centering
 \includegraphics[width=0.4\linewidth]{images/fig_filtering}
-\caption{Filtering steps.}
+\caption{Signal processing process.}
 \label{fig:filtered-signal}
 \end{figure}
 
-The raw signal (original signal of Figure \ref{fig:filtered-signal}) is very noisy
-due to light scattering artifacts that ordinarily affects the quality of the
-recording (\cite{lichtman2011big}). A low-pass filter is first applied to
-filter high frequency noises with one of the following designs
+
+
+As the first plot in Figure~\ref{fig:filtered-signal} illustrates, due to
+light scattering artifacts that ordinarily affects the quality of the
+recording~\citep{lichtman2011big}, the raw fluoresence signal is very noisy.
+Accordingly, the first step of our pipeline is to use a low-pass filter for
+filtering out high frequency noise, using one of the following designs,
+resulting in the second plot in the figure:
 \begin{align}
 % symmetrical median filter
 x^t_i &\leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
 % asymmetrical weighted median
 x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
-\label{eq:weighted-asymetric-median}.
+\label{eq:weighted-asymetric-median}
 \end{align}
 
-A neuron spike lasts on average $1ms$ to $2ms$, while current optical
-device have a time resolution of $20ms$. Considering the short delay for a
-communication between neurons and the slow decay of fluorescence signal, we
-filter low frequencies through a high pass filter
+Considering the short delay of communication between neurons and the slow decay
+of fluorescence signal, the second step of our pipeline consists in identifying
+neuron spikes -- characterized by high frequencies -- by filtering out low
+frequencies through a high-pass filter, resulting in third plot of the figure:
 \begin{align}
 % an asymmetrical discrete derivative filter
 x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter}
 \end{align}
 
-Whenever the low and high pass filtered have been applied, the remaining signal
-(H-P signal of Figure \ref{fig:filtered-signal}) is the discrete
-derivative of the fluorescence calcium concentration. To further filter out
-small signal variations which are due to noise, we apply a hard-threshold
-filter
+Once the low- and and high-pass filters have been applied, the remaining signal
+corresponds to the discrete derivative of the fluorescence time series. To
+further filter out small signal variations, mostly due to noise, the third step
+consists in a  hard-threshold filter, yielding the fourth plot in the figure:
 \begin{align}
 x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
 
-After those 3 first filters, the fluorescence signal (Thresh. signal of
-Figure \ref{fig:filtered-signal}) only contains clean spikes. However when a large
-part of the network is firing, it's difficult to detect pairwise neuron
-interactions. In order to reduce false interaction detection,
-the signal is smoothed with a non-linear filter which penalizes
-the filtered signal when a large part of the network is firing
-\textcolor{red}{This equation doesn't correspond to the what we have done.}
+At this step, the processed signal only contains clean spikes. However, when a
+large of the network is firing, detecting pairwise neuron interactions is a
+difficult task. \textcolor{red}{G: say that neurons may fire because of global
+high activity, without any actual cause -- see generator.}
+Accordingly, in order to reduce false interaction detection,
+peak intensities at time $t$ are regularized by the global activity of all
+neurons, thereby reducing the importance of peaks identified during global high activity periods:
 \begin{align}
  x^{t,w}_i  &\leftarrow (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t,d}_j}}.
 \end{align}
-Once this filtered has been applied (Weights signal of
-Figure \ref{fig:filtered-signal}), peak intensities have
-changed depending on the overall network activity, but not their numbers and
-locations.
 
+\textcolor{red}{G: Let's drop that? or reformulate...}
 \textcolor{red}{PCA?} Finally since there is a high correlation between neurons,
 we filter some more noise through a principal component analysis. From the $|V|$
 eigen vectors, we kept $80\%$ of the eigen vectors which have the largest eigen
 value. In the context of the challenge, this assumption was deduced from ground
 truth of provided networks.
 
+\textcolor{red}{G: Change notations for $f(x^t) = ...$, $g(x^t) = ...$}
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
@@ -195,7 +200,7 @@ $X_i \perp X_j | X^{-i,j}$ if the partial correlation coefficient
 \rho_{X_i, X_j | X^{-i,j}}
 = \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}
 \]
-is equal to zero (\cite{koller2009probabilistic}). The partial correlation gives
+is equal to zero \citep{koller2009probabilistic}. The partial correlation gives
 a connectivity score
 $\hat{A}: \hat{a}_{i,j} = \rho_{X_i, X_j | X^{-i,j}}, \forall i, j \in V$ between all
 pairs of neuron $i$ and $j$. One could retrieve an estimated graph by thresholding
@@ -226,7 +231,7 @@ be directly inferred\footnote{Also note that two other causal mechanisms might b
 implied while having a non-zero partial coefficient: (i) a pair of variables
 is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
 conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\cite{de2004discovery}.}.
+\citep{de2004discovery}.}.
 In order to retrieve causal information, we developed an
 heuristics based on the following observation. The rise of fluorescence
 indicates the activation of a neuron $i$. If a neuron $j$ have also
@@ -250,7 +255,7 @@ that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 To assess our method, we have used four datasets provided by the organizers
 of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
 Those datasets are time series of size $T=179500$ of image calcium from simulated
-neuronal networks (\cite{stetter2012model}) with $|V|=1000$ neurons. The networks
+neuronal networks \citep{stetter2012model} with $|V|=1000$ neurons. The networks
 to inferred have around 15000 edges and are similar to those
 used to rank challenge participants.
 
@@ -260,7 +265,7 @@ binary classification task where one has to correctly classify the presence
 or the absence of edges of the graph. We assess the accuracy of the
 network inference method using the area under the ROC curve (AUROC)
 and the area under the precision-recall curve (AUPRC)
-(\cite{schrynemackers2013protocols}). Since neurons are not self-connected
+\citep{schrynemackers2013protocols}. Since neurons are not self-connected
 ($(i, i) \not \in E, \forall i \in V$) and some inference methods could
 give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
 correlation, we set those elements to the minimum of $\hat{A}$ prior
@@ -295,7 +300,7 @@ assessment.
 % Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
 GTE is a method which characterizes a relationship between neurons by an
-estimation of the generalized transfer entropy (\cite{stetter2012model}). The
+estimation of the generalized transfer entropy \citep{stetter2012model}. The
 goal of this method tries to see if the next time step value is better from
 the previous values of this time series or from time series of other neurons.
 
@@ -379,7 +384,7 @@ Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 
 
 \section{Conclusions} \label{sec:conclusion}
 
-In previous study \cite{shipley2002cause}, it has been suggested to
+In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
 i.e. conditioned on every subsets of the set of $p-2$ other variables. This
 would take into account multiple indirect paths between a given pair of
