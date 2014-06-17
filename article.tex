@@ -187,12 +187,12 @@ In appendix \ref{app:optimized}, we describe a fully tuned version of our algori
 Given the image acquisition process, the fluorescent calcium time series
 are smoothed using several linear and non linear filters in
 order to reduce the imaging process effects. The overall filtering approach
-is displayed at Figure \ref{fig:fitlering}.
-
+is displayed at Figure \ref{fig:filtered-signal}.
 
 \begin{figure}[bth]
-\includegraphics[width=\linewidth]{images/fig_filtering}
-\caption{Filtering steps. \textcolor{red}{TODO remake in pdf}}
+\centering
+\includegraphics[width=0.8\linewidth]{images/fig_filtering}
+\caption{Filtering steps.}
 \label{fig:filtered-signal}
 \end{figure}
 
@@ -227,19 +227,22 @@ filter
 x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
 
+After those 3 first filters, the fluorescence signal (Thresh. signal of
+Figure \ref{fig:filtered-signal}) only contains clean spikes. However when a large
+part of the network is firing, it's difficult to detect pairwise neuron
+interactions. In order to reduce false interaction detection,
+the signal is smoothed with a non-linear filter which penalizes
+the filtered signal when a large part of the network is firing
+\textcolor{red}{This equation doesn't correspond to the what we have done.}
+\begin{align}
+ x^{t,w}_i  &\leftarrow (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t,d}_j}}.
+\end{align}
+Once this filtered has been applied (Weights signal of
+Figure \ref{fig:filtered-signal}), peak intensities have
+changed depending on the overall network activity, but not their numbers and
+locations.
 
-Then we apply on the entire signal a non-linear filter based on the current
-activity of the systems in order to favor the association measure inversely
-proportional to the number of neurons firing together: $ x^{t,w}_i  =
-(x^{t,d}_i + 1 )^{1 + \frac{1}{act_t}}$ where $act_t = \sum_{j} x^{t,d}_j$ is
-the activity of all neurons at time $t$. When too much neurons are firing
-together, i.e. in case of a network burst, it is almost impossible to retrieve
-direct relationships: all neurons seem to be directly connected to each other.
-By favoring the association measure when the activity is low, we expect to
-retrieve a pair of neurons that are really directly connected together. In
-concrete terms, as it can be verified on \textit{fig 1}, peak intensity may
-change in function of the activity of all neurons but the number and the
-locations of peaks is not modified.
+\textcolor{red}{PCA?}
 
 
 \section{Network inference through weighted average partial correlation
