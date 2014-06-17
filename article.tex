@@ -313,15 +313,17 @@ importances can be derived to estimate the adjacency matrix $A$ (see (todo
 cite) for a more detailed description of the inference method).
 
 At first sight, it appears on \textit{Table 1} that partial correlation
-methods outperform other methods. Two main reasons may explain this method
-hierarchy. First, the quality of the infered network seems related to the
-conditioning part of the method. In every method except with partial
-correlation, indirect links are confounded with direct links.  Secondly, the
-gaussian assumption seems verified and thus linear method appears to be
-competitive, e.g. the method correlation already gives good results, with a
-non-linear method such as GENIE3.
+outperforms other methods. Two main reasons may explain this. First, the
+quality of the infered network seems related to the conditioning part of the
+method. In every method except with partial correlation, indirect links are
+confounded with direct links.  Secondly, the gaussian assumption seems
+verified and thus linear method appears to be competitive, e.g. the method
+correlation already gives good results, with a non-linear method such as
+GENIE3.
 
-% Discussion about
+% Discussion about the metrics
+
+
 
 
 \begin{table}[tbh]
@@ -333,10 +335,13 @@ non-linear method such as GENIE3.
 \cmidrule(r){2-5}\cmidrule(r){6-9}
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \midrule
-GENIE3                 & & & & & & & & \\
+
 Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
 Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
 GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
+GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
+GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
+GENIE3 (depth = 3)     & & & & & & & & \\
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
