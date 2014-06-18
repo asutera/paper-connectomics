@@ -298,16 +298,7 @@ method correlation already gives good results, with a non-linear method such
 as GENIE3.\\
 
 % Discussion about the metrics
-
-
-However, the metrics used in the contest, i.e. the ROC AUC, does not seem to be consistent with the goal of the challenge, and thus to assess the quality of the \textbf{directed} infered network. Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the \textbf{undirected} network by giving the same weights to both edges $(i,j)$ and $(j,i)$.
-
-
-
-Indeed, if we consider that the infered network is the true network undirected, i.e. if for all links $(i,j)$, back links $(j,i)$ are added, then we get a very high score (about $0.9956$) according to this metric. Therefore, if we want to maximize the ROC AUC score, we only need to detect the links, no matter their direction.  Doing that, we only give up a gain margin of about $0.005\%$ which is not really interesting in the context of this challenge. 
-We think that AUC PRC is more adapted because if we perform the same experiment, we get a score of about $0.7897$. In this case, the gain margin is about $0.2103$ which is much more interesting.
-
-
+Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the \textbf{undirected} network by giving the same weights to both edges $(i,j)$ and $(j,i)$. This is quite surprising considering the goal of the challenge, namely predicted directed connections between neurons. Besides, if the true network undirected, i.e. for all links $(i,j)$, back links are added, is the infered network then the score obtained according to the ROC AUC metric is very high ($\sim 0.9956$ on \textit{normal-1}). Therefore, an undirected infered network seems sufficient to maximize the ROC AUC score without trying to identify the link direction. Indeed, predicting perfectly directivity only yields a small gain ($\sim 0.005$ on \textit{normal-1}) which is is not very rewarding. In contrast, the same experiment with the precision recall metric rewards less the undirected network and the gain margin in predicting the link directivity is large enough to be interesting. For these reason, it seems that the metric used in the contest, i.e. the ROC AUC, does not seem consistent with the goal of predicting directed connections between neurons. Another metric, such as the AUC PRC, is maybe more appropriate to assess the quality of the \textbf{directed} infered network.
 
 
 \begin{table}
@@ -329,8 +320,8 @@ Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.3
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
 % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
 \end{tabular}
-\label{tab:tab1}
 \caption{TODO}
+\label{tab:tab1}
 \end{table}
 
 \begin{table}[tbh]
