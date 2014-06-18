@@ -137,8 +137,8 @@ Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
 neuron spikes -- characterized by high frequencies -- by filtering out low
 frequencies through a high-pass filter, resulting in third plot of the figure:
-\begin{align} % an asymmetrical discrete derivative filter 
-g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter} 
+\begin{align} % an asymmetrical discrete derivative filter
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
 \end{align}
 
 Once the low- and and high-pass filters have been applied, the remaining signal
@@ -162,9 +162,9 @@ neurons, thereby reducing the importance of peaks identified during global high 
 
 The full signal processing of our approach is defined by
 \begin{align}
-w(h(g(f_k(x_i^t)))) 
+w(h(g(f_k(x_i^t))))
 \end{align}
-where $f_k$ is one of the low-pass filter designs. 
+where $f_k$ is one of the low-pass filter designs.
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
@@ -200,7 +200,7 @@ $X_i \perp X_j | X^{-i,j}$ if the partial correlation coefficient
 \]
 is equal to zero \citep{koller2009probabilistic}. The partial correlation gives
 an estimate of the degree of association between all
-pairs of neuron $i$ and $j$. 
+pairs of neuron $i$ and $j$.
 Similarly, we also have $X_i \perp X_j$ if the Pearson correlation
 coefficient
 \[
@@ -250,6 +250,30 @@ give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
 correlation, we set those elements to the minimum of $\hat{A}$ prior
 assessment.
 
+We compare our approach to the Pearson correlation, the generalized transfer
+entropy (GTE) and GENIE3.
+
+GTE, the baseline of the challenge, measures for all pairs of
+neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
+$i$ given the observation of the time series of the neuron $j$
+conditionally to the observation of past time series of neuron $i$,
+whenever the average fluorescence is over a conditioning level.
+Conditioning level was set to reproduce baseline of the challenge.
+
+GENIE3 (\cite{huynhthu2010inferring}) translates the inference of the
+network of $p$ neurons into $p$ significant variable tasks. For each task,
+the fluorescence level of a neuron is predicted from the fluorescence
+of all other neurons using a tree based ensemble such as
+random forest (\cite{breiman2001random}). The importances
+(\cite{louppe2013understanding}) given by the tree ensemble to predict
+the time series of a neuron given the others are used to infer
+a connectivity score matrix. The following parameters are used
+$10000$ trees, $\log_2{p}$ neurons are randomly selected at each tree
+node to split the data and the maximal tree depth is constrained
+to 1, 2 or 3.
+
+
+
 
 % TODO
 %   - discussions about the results
@@ -274,23 +298,7 @@ assessment.
 %Opt: obviously when parameters are tuned/optimized, it's slightly better --> see appendix for a full description of the method
 % Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
-\textcolor{red}{à vérifier} GTE is a method which characterizes a relationship
-between neurons by an estimation of the generalized transfer entropy
-\citep{stetter2012model}. The goal of this method tries to see if the next
-time step value is better from the previous values of this time series or from
-time series of other neurons. In Tab.\ref{tab:tab1}, default parameters were
-used to infer networks.
 
-
-GENIE3 is a tree-based method which sees the network inference problem as $p$,
-the number of variables, independent supervised learning problems (todo cite:
-Irrthum?Van Anh?Pierre?). Formally, each sub-problem consists in the
-prediction of one variable, the target, from the remaining $p-1$ variables.
-This method uses random forests to estimate the target variable and variable
-importances can be derived to estimate the adjacency matrix $A$ (see (todo
-cite) for a more detailed description of the inference method). We compute
-$10000$ trees for each subproblem with the randomization parameter equals to
-$\log_2{p}$ and we limite the tree max-depth to respectively $1$, $2$ and $3$.
 
 
 % Partial correlation : Obvious improvements (both metric) because of the conditioning
@@ -317,7 +325,7 @@ according to both metrics.
 
 
 
-% Discussion about the metrics 
+% Discussion about the metrics
 
 Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the
 \textbf{undirected} network by giving the same weights to both edges $(i,j)$
