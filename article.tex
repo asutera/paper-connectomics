@@ -160,10 +160,10 @@ neurons, thereby reducing the importance of peaks identified during global high 
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
 
-The full signal processing of our approach is defined by
-\begin{align}
-w(h(g(f_k(x_i^t)))) 
-\end{align}
+The full signal processing of our approach is defined by the composed function
+$
+w \cdot h \cdot g \cdot f_k 
+$
 where $f_k$ is one of the low-pass filter designs. 
 
 \section{Connectome inference from partial correlation statistics}
@@ -229,6 +229,11 @@ truth of provided networks.
 
 \section{Experiments}
 \label{sec:results}
+
+\textcolor{red}{SEUIL 0.11 for tabulars!!!}
+
+
+In this section, we will first describe datasets and methods used for the comparison. Then, on Tab.\ref{tab:tab3}, our approach is decomposed to show the contribution of each stages . Afterwards, we will perform a comparison between several methods on Tab.\ref{tab:tab1} (or Fig.?). Note that two metrics are used to evaluate the performance. The end of this section is devoted to a discussion about the choice of metric and its relevance for the challenge.
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
@@ -315,7 +320,7 @@ according to both metrics.
 % Genie3 : better in auprc while worse in auroc than GTE. Why?
 % Genie3 : "Conditioning" better and better but need a lot of trees
 
-
+\textcolor{red}{TODO : Discussion depth}
 
 % Discussion about the metrics 
 
@@ -343,12 +348,33 @@ Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
 network. It proves once again that trying to detect the link direction is more
 penalizing than rewarding.
 
+
+\begin{table}[tbh]
+\centering
+\begin{tabular}{@{}l *{8}{c}@{}}
+\hline
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
+P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
+P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
+Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+\end{tabular}
+\caption{TODO \textcolor{red}{version simple!!}}
+\label{tab:tab3}
+\end{table}
+
+
+
 \begin{table}
 \small
 \centering
 \begin{tabular}{@{}l *{8}{c}@{}}
   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\cmidrule(r){2-5}\cmidrule(r){6-9}
+\hline \hline
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \hline \hline
 % Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
@@ -358,6 +384,8 @@ GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
 GENIE3 (depth = 3)     & & & & & & & & \\
 GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
+Partial correlation (avg.) & 0.938 & & & 0.932& 0.391 & & & 0.374\\
+% Our approach simple + dir & 0.939 & & & 0.933& 0.392 & & & 0.375\\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
 % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
