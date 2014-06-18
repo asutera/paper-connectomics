@@ -229,10 +229,22 @@ assumption was deduced from ground truth of provided networks.
 \section{Experiments}
 \label{sec:results}
 
-\textcolor{red}{SEUIL 0.11 for tabulars!!!}
+%\textcolor{red}{SEUIL 0.11 for tabulars!!!}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/curves}
+\caption{Method precision-recall and roc curves.}
+\label{fig:curves}
+\end{figure}
 
-In this section, we will first describe datasets and methods used for the comparison. Then, on Tab.\ref{tab:tab3}, our approach is decomposed to show the contribution of each stages . Afterwards, we will perform a comparison between several methods on Tab.\ref{tab:tab1} (or Fig.?). Note that two metrics are used to evaluate the performance. The end of this section is devoted to a discussion about the choice of metric and its relevance for the challenge.
+In this section, we will first describe datasets and methods used for the
+comparison. Then, on Tab.\ref{tab:tab3}, our approach is decomposed to show
+the contribution of each stages . Afterwards, we will perform a comparison
+between several methods on Fig.\ref{fig:curves} and Tab.\ref{tab:tab1}. Note that two
+metrics are used to evaluate the performance and a single low-pass filter is used (Eq.\ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end of this section is
+devoted to a discussion about the choice of metric and its relevance for the
+challenge.\\
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
@@ -252,30 +264,34 @@ and the area under the precision-recall curve (AUPRC)
 ($(i, i) \not \in E, \forall i \in V$) and some inference methods could
 give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
 correlation, we set those elements to the minimum of $\hat{A}$ prior
-assessment.
+assessment.\\
+
+
+On Tab.\ref{tab:tab3}, it can be seen that each step of our approach globally improves the score on both metrics. However, processing, weights and averaging (respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as described in section \ref{sec:filter} are the key steps of our algorithm.
+
 
 We compare our approach to the Pearson correlation (see Section
 \ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3.
-\begin{description}
-\item[GTE], the baseline of the challenge, measures for all pairs of
+
+\textbf{GTE} \citep{stetter2012model}
+, the baseline of the challenge, measures for all pairs of
 neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
 $i$ given the observation of the time series of the neuron $j$
 conditionally to the observation of past time series of neuron $i$,
 whenever the average fluorescence is over a conditioning level.
 Conditioning level was set to reproduce baseline of the challenge.
 
-\item[GENIE3] (\cite{huynhthu2010inferring}) translates the inference of the
+\textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference of the
 network of $p$ neurons into $p$ supervised learning tasks. For each task,
 the fluorescence of a neuron is predicted from the fluorescence
 of all other neurons using a tree based ensemble such as
-random forest (\cite{breiman2001random}). The tree ensemble associate a
-variable importance scores (\cite{louppe2013understanding})
+random forest \citep{breiman2001random}. The tree ensemble associate a
+variable importance scores \citep{louppe2013understanding}
 to each neuron used in the predictions, which is used as a connectivity
 score. The following parameters are used
 $10000$ trees, $\log_2{p}$ neurons are randomly selected at each tree
 node to split the data and the maximal tree depth is constrained
-to 1, 2 or 3.
-\end{description}
+to 1, 2 or 3.\\
 
 
 
@@ -308,14 +324,14 @@ to 1, 2 or 3.
 % Partial correlation : Obvious improvements (both metric) because of the conditioning
 % Correlation : Already give good results
 
-At first sight, it appears on Tab.\ref{tab:tab1} that partial
-correlation outperforms other methods. Two main reasons may explain this.
-First, the quality of the infered network seems related to the conditioning
-part of the method. In every method except with partial correlation, indirect
-links are confounded with direct links.  Secondly, the gaussian assumption
-seems verified and thus linear method appears to be competitive, e.g. the
-method correlation already gives good results, with a non-linear method such
-as GENIE3.
+At first sight, it appears on Fig.\ref{fig:curves} %Tab.\ref{tab:tab1}   
+that partial correlation outperforms other methods. Two main reasons may explain
+this. First, the quality of the infered network seems related to the
+conditioning part of the method. In every method except with partial
+correlation, indirect links are confounded with direct links.  Secondly, the
+gaussian assumption seems verified and thus linear method appears to be
+competitive, e.g. the method correlation already gives good results, with a
+non-linear method such as GENIE3.
 
 % Averaging
 
@@ -368,7 +384,7 @@ P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.
 P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
 P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
 Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
-Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
 \caption{TODO \textcolor{red}{version simple!!}}
 \label{tab:tab3}
@@ -391,8 +407,8 @@ GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
 GENIE3 (depth = 3)     & & & & & & & & \\
 GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
-Partial correlation (avg.) & 0.938 & & & 0.932& 0.391 & & & 0.374\\
-% Our approach simple + dir & 0.939 & & & 0.933& 0.392 & & & 0.375\\
+Partial correlation (avg.) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
+% Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
 Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
 % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
@@ -446,11 +462,7 @@ Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 
 
 \section{Conclusions} \label{sec:conclusion}
 
-In previous study \citep{shipley2002cause}, it has been suggested to
-consider correlation coefficients of all possible orders,
-i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-would take into account multiple indirect paths between a given pair of
-variables.
+
 
 % Possible extensions
 % partial autocorrelation function (sometimes "partial correlation function")
@@ -458,6 +470,18 @@ variables.
 % Speak about the complexity and parallelization of the methods
 
 
+
+In this paper, we present the winning method of the Connectomics challenge. This approach is simple and theorically grounded. We also evaluate the method in a more detailed way and perform a comparison with other inference methods. We also discuss the relevance of the metric used in the challenge.
+
+Obviously, we give a hint about limiting the depth of trees in the GENIE3 method to infer the network. It should be interesting to see if there is a optimum value for the maxmimal depth.
+
+In previous study \citep{shipley2002cause}, it has been suggested to
+consider correlation coefficients of all possible orders,
+i.e. conditioned on every subsets of the set of $p-2$ other variables. This
+would take into account multiple indirect paths between a given pair of
+variables. Instead of considering only the highest order, it may be useful to study with accuracy the infered network at all orders. In this case, it may not be very relevant but interesting in case of dymanical networks. 
+
+As we mentionned, in order to maximize the ROC AUC, it was not necessary to discover causal relationships. It may be, in future works, promising to focus on that particular topic. 
 
 
 
