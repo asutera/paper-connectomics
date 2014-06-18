@@ -263,11 +263,7 @@ assessment.
 % GTE : Explaning the method (default parameters!)
 
 % Explaining the method (thèse de Gilles)
-% Genie3 : better in auprc while worse in auroc than GTE. Why?
-% Genie3 : "Conditioning" better and better but need a lot of trees
-% Correlation : Already give good results
 
-% Partial correlation : Obvious improvements (both metric) because of the conditioning
 
 % Directivity : ?
 
@@ -275,10 +271,13 @@ assessment.
 %Opt: obviously when parameters are tuned/optimized, it's slightly better --> see appendix for a full description of the method
 % Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
-GTE is a method which characterizes a relationship between neurons by an
-estimation of the generalized transfer entropy \citep{stetter2012model}. The
-goal of this method tries to see if the next time step value is better from
-the previous values of this time series or from time series of other neurons.
+\textcolor{red}{à vérifier} GTE is a method which characterizes a relationship
+between neurons by an estimation of the generalized transfer entropy
+\citep{stetter2012model}. The goal of this method tries to see if the next
+time step value is better from the previous values of this time series or from
+time series of other neurons. In Tab.\ref{tab:tab1}, default parameters were
+used to infer networks.
+
 
 GENIE3 is a tree-based method which sees the network inference problem as $p$,
 the number of variables, independent supervised learning problems (todo cite:
@@ -286,7 +285,13 @@ Irrthum?Van Anh?Pierre?). Formally, each sub-problem consists in the
 prediction of one variable, the target, from the remaining $p-1$ variables.
 This method uses random forests to estimate the target variable and variable
 importances can be derived to estimate the adjacency matrix $A$ (see (todo
-cite) for a more detailed description of the inference method).
+cite) for a more detailed description of the inference method). We compute
+$10000$ trees for each subproblem with the randomization parameter equals to
+$\log_2{p}$ and we limite the tree max-depth to respectively $1$, $2$ and $3$.
+
+
+% Partial correlation : Obvious improvements (both metric) because of the conditioning
+% Correlation : Already give good results
 
 At first sight, it appears on Tab.\ref{tab:tab1} that partial
 correlation outperforms other methods. Two main reasons may explain this.
@@ -300,6 +305,8 @@ as GENIE3.\\
 
 
 %% Depth -- Gilles chapitre 7
+% Genie3 : better in auprc while worse in auroc than GTE. Why?
+% Genie3 : "Conditioning" better and better but need a lot of trees
 
 
 
@@ -324,7 +331,7 @@ predicting directed connections between neurons. Another metric, such as the
 AUC PRC, is maybe more appropriate to assess the quality of the
 \textbf{directed} infered network.
 
-Interestingly, an easy way to improve results for asymmetric method (see
+Interestingly, an easy way to improve results for asymmetric methods (see
 Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
 network. It proves once again that trying to detect the link direction is more
 penalizing than rewarding.
