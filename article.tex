@@ -127,9 +127,9 @@ filtering out high frequency noise, applying one of the following designs and
 resulting in the second plot in the figure:
 \begin{align}
 % symmetrical median filter
-x^t_i &\leftarrow x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
+f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
 % asymmetrical weighted median
-x^t_i &\leftarrow 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
 \label{eq:weighted-asymetric-median}
 \end{align}
 
@@ -138,7 +138,7 @@ decay of fluorescence, the second step of our pipeline consists in identifying
 neuron spikes -- characterized by high frequencies -- by filtering out low
 frequencies through a high-pass filter, resulting in third plot of the figure:
 \begin{align} % an asymmetrical discrete derivative filter 
-x^{t,d}_{i} &\leftarrow x^{t}_i - x_{t-1}^i. \label{eq:high-pass-filter} 
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter} 
 \end{align}
 
 Once the low- and and high-pass filters have been applied, the remaining signal
@@ -146,7 +146,7 @@ corresponds to the discrete derivative of the fluorescence time series. To
 further filter out small signal variations, mostly due to noise, the third step
 consists in a  hard-threshold filter, yielding the fourth plot in the figure:
 \begin{align}
-x^{t,d}_i &\leftarrow x^{t,d}_i \mathbb{1}(x^{t,d}_i \geq \tau) \text{ with } \tau > 0.
+h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
 
 At this step, the processed signal only contains clean spikes. However, when a
@@ -157,11 +157,14 @@ Accordingly, in order to reduce false interaction detection,
 peak intensities at time $t$ are regularized by the global activity of all
 neurons, thereby reducing the importance of peaks identified during global high activity periods:
 \begin{align}
- x^{t,w}_i  &\leftarrow (x^{t,d}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t,d}_j}}.
+ w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
 
-
-\textcolor{red}{G: Change notations for $f(x^t) = ...$, $g(x^t) = ...$}
+The full signal processing of our approach is defined by
+\begin{align}
+w(h(g(f_k(x_i^t)))) 
+\end{align}
+where $f_k$ is one of the low-pass filter designs. 
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
@@ -300,9 +303,13 @@ part of the method. In every method except with partial correlation, indirect
 links are confounded with direct links.  Secondly, the gaussian assumption
 seems verified and thus linear method appears to be competitive, e.g. the
 method correlation already gives good results, with a non-linear method such
-as GENIE3.\\
+as GENIE3.
 
+% Averaging
 
+It also appears that the averaging over the low-pass filter designs and the
+threshold values increases significantly the quality of the infered network
+according to both metrics.
 
 %% Depth -- Gilles chapitre 7
 % Genie3 : better in auprc while worse in auroc than GTE. Why?
@@ -312,24 +319,24 @@ as GENIE3.\\
 
 % Discussion about the metrics 
 
-Observing Tab.\ref{tab:tab1}, it appears that
-best methods only infer the \textbf{undirected} network by giving the same
-weights to both edges $(i,j)$ and $(j,i)$. This is quite surprising
-considering the goal of the challenge, namely predicted directed connections
-between neurons. Besides, if the true network undirected, i.e. for all links
-$(i,j)$, back links are added, is the infered network then the score obtained
-according to the ROC AUC metric is very high ($\sim 0.9956$ on
-\textit{normal-1}). Therefore, an undirected infered network seems sufficient
-to maximize the ROC AUC score without trying to identify the link direction.
-Indeed, predicting perfectly directivity only yields a small gain ($\sim
-0.005$ on \textit{normal-1}) which is is not very rewarding. In contrast, the
-same experiment with the precision recall metric rewards less the undirected
-network and the gain margin in predicting the link directivity is large enough
-to be interesting. For these reason, it seems that the metric used in the
-contest, i.e. the ROC AUC, does not seem consistent with the goal of
-predicting directed connections between neurons. Another metric, such as the
-AUC PRC, is maybe more appropriate to assess the quality of the
-\textbf{directed} infered network.
+Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the
+\textbf{undirected} network by giving the same weights to both edges $(i,j)$
+and $(j,i)$. This is quite surprising considering the goal of the challenge,
+namely predicted directed connections between neurons. Besides, if the true
+network undirected, i.e. for all links $(i,j)$, back links are added, is the
+infered network then the score obtained according to the ROC AUC metric is
+very high ($\approx 0.9956$ on \textit{normal-1}). Therefore, an undirected
+infered network seems sufficient to maximize the ROC AUC score without trying
+to identify the link direction. Indeed, predicting perfectly directivity only
+yields a small gain ($\approx 0.005$ on \textit{normal-1}) which is is not
+very rewarding. In contrast, the same experiment with the precision recall
+metric rewards less the undirected network ($\approx 0.789$ on
+\textit{normal-1}) and the gain margin in predicting the link directivity is
+large enough to be interesting ($\approx 0.211$ on \textit{normal-1}). For
+these reason, it seems that the metric used in the contest, i.e. the ROC AUC,
+does not seem consistent with the goal of predicting directed connections
+between neurons. Another metric, such as the AUC PRC, is maybe more
+appropriate to assess the quality of the \textbf{directed} infered network.
 
 Interestingly, an easy way to improve results for asymmetric methods (see
 Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
@@ -422,7 +429,7 @@ variables.
 \section*{Acknowledgements}
 
 A. Joly and G. Louppe are research fellows of
-the FNRS, Belgium.  A. Sutera is  is recipient of
+the FNRS, Belgium.  A. Sutera is recipient of
 a F.R.I.A. fellowship of F.R.S.-FNRS, Belgium.
 This work is supported by PASCAL2 and the IUAP DYSCO, initiated by the
 Belgian State, Science Policy Office.
