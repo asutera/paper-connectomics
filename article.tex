@@ -250,28 +250,29 @@ give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
 correlation, we set those elements to the minimum of $\hat{A}$ prior
 assessment.
 
-We compare our approach to the Pearson correlation, the generalized transfer
-entropy (GTE) and GENIE3.
-
-GTE, the baseline of the challenge, measures for all pairs of
+We compare our approach to the Pearson correlation (see Section
+\ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3.
+\begin{description}
+\item[GTE], the baseline of the challenge, measures for all pairs of
 neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
 $i$ given the observation of the time series of the neuron $j$
 conditionally to the observation of past time series of neuron $i$,
 whenever the average fluorescence is over a conditioning level.
 Conditioning level was set to reproduce baseline of the challenge.
 
-GENIE3 (\cite{huynhthu2010inferring}) translates the inference of the
-network of $p$ neurons into $p$ significant variable tasks. For each task,
-the fluorescence level of a neuron is predicted from the fluorescence
+\item[GENIE3] (\cite{huynhthu2010inferring}) translates the inference of the
+network of $p$ neurons into $p$ supervised learning tasks. For each task,
+the fluorescence of a neuron is predicted from the fluorescence
 of all other neurons using a tree based ensemble such as
-random forest (\cite{breiman2001random}). The importances
-(\cite{louppe2013understanding}) given by the tree ensemble to predict
-the time series of a neuron given the others are used to infer
-a connectivity score matrix. The following parameters are used
+random forest (\cite{breiman2001random}). The tree ensemble associate a
+variable importance scores (\cite{louppe2013understanding})
+to each neuron used in the predictions.
+
+The following parameters are used
 $10000$ trees, $\log_2{p}$ neurons are randomly selected at each tree
 node to split the data and the maximal tree depth is constrained
 to 1, 2 or 3.
-
+\end{description}
 
 
 
