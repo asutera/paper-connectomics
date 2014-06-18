@@ -297,7 +297,15 @@ seems verified and thus linear method appears to be competitive, e.g. the
 method correlation already gives good results, with a non-linear method such
 as GENIE3.\\
 
-% Discussion about the metrics Observing Tab.\ref{tab:tab1}, it appears that
+
+
+%% Depth -- Gilles chapitre 7
+
+
+
+% Discussion about the metrics 
+
+Observing Tab.\ref{tab:tab1}, it appears that
 best methods only infer the \textbf{undirected} network by giving the same
 weights to both edges $(i,j)$ and $(j,i)$. This is quite surprising
 considering the goal of the challenge, namely predicted directed connections
@@ -316,7 +324,10 @@ predicting directed connections between neurons. Another metric, such as the
 AUC PRC, is maybe more appropriate to assess the quality of the
 \textbf{directed} infered network.
 
-Interestingly, an easy way to improve results for asymmetric method (see Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered network. 
+Interestingly, an easy way to improve results for asymmetric method (see
+Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
+network. It proves once again that trying to detect the link direction is more
+penalizing than rewarding.
 
 \begin{table}
 \small
