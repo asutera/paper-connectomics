@@ -213,7 +213,8 @@ good hyper-parameter selection, which are themselves dependent on the properties
 of the targeted network and measurement conditions, e.g. signal to noise ratio.
 In order to improve robustness, a weighted average of partial correlation
 matrices was estimated from the time series by varying the hard-threshold value
-$\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:filter} and appendix \ref{app:optimized}).
+$\tau$ and the design of the low-pass filter (mentionned in section
+\ref{sec:filter} and appendix \ref{app:optimized}).
 
 To filter even more noise before computing the partial correlation, we kept
 $80\%$ of the eigen vectors which have the largest eigen
@@ -222,21 +223,6 @@ assumption was deduced from ground truth of provided networks.
 
 
 \section{Empirical experiments} \label{sec:results}
-
-%\textcolor{red}{SEUIL 0.11 for tabulars!!!}
-
-% In this section, we will first describe datasets and methods used for the
-% comparison. Then, on Table \ref{tab:tab3}, our approach is decomposed to show
-% the contribution of each pre-processing steps. Afterwards, we will perform a comparison
-% between several methods on Figure \ref{fig:curves} and Table \ref{tab:tab1}. Note that two
-% metrics are used to evaluate the performance and a single low-pass filter is
-% used (Eq. \ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end
-% of this section is devoted to a discussion about the choice of metric and its
-% relevance for the challenge.
-
-
-
-% \subsection{Assessment methodology}
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
@@ -282,111 +268,34 @@ node and the maximal tree depth is constrained to 1, 2 or 3.
 \end{itemize}
 
 
-\subsection*{Comparison with state-of-the art methods}
+\subsection{Partial correlation compare favorably with other state-of-the art methods}
 
 Figure \ref{fig:curves} shows the ROC curve and precision-recall curve
 for correlation, GTE and partial correlation on the \textcolor{red}{normal-?}
 dataset. The partial correlation outperforms other state-of-the-art methods
-by at least factor of 2 in AUPRC and an increased of $5\%$ in AUROC. There
-are two reasons that explains such overwhelming difference: (i) among
-those methods only the partial correlation make the distinction between
-direct and indirect connection, (ii) the simulated network from the
+by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
+AUROC.
+
+Two reasons might explain such overwhelming difference: (i) among
+those methods only the partial correlation makes the distinction between
+direct and indirect connections, (ii) the simulated network from the
 \citep{stetter2012model} generator could be reduced to a linear model after
-pre-processing.
+pre-processing. \textcolor{red}{Those results generalized over the other
+datasets see Appendix REF.}
 
-
-\begin{figure}[bth]
-\centering
-\includegraphics[width=0.6\linewidth]{images/curves}
-\caption{Method precision-recall and roc curves. \textcolor{red}{GENI3?}}
-\label{fig:curves}
-\end{figure}
-
-
-
-
-
-Observing Table \ref{tab:tab1}, it appears that best methods only infer the
-\textbf{undirected} network by giving the same weights to both edges $(i,j)$
-and $(j,i)$. This is quite surprising considering the goal of the challenge,
-namely predicted directed connections between neurons. Besides, if the true
-network undirected, i.e. for all links $(i,j)$, back links are added, is the
-infered network then the score obtained according to the ROC AUC metric is
-very high ($\approx 0.9956$ on \textit{normal-1}). Therefore, an undirected
-infered network seems sufficient to maximize the ROC AUC score without trying
-to identify the link direction. Indeed, predicting perfectly directivity only
-yields a small gain ($\approx 0.005$ on \textit{normal-1}) which is is not
-very rewarding. In contrast, the same experiment with the precision recall
-metric rewards less the undirected network ($\approx 0.789$ on
-\textit{normal-1}) and the gain margin in predicting the link directivity is
-large enough to be interesting ($\approx 0.211$ on \textit{normal-1}). For
-these reason, it seems that the metric used in the contest, i.e. the ROC AUC,
-does not seem consistent with the goal of predicting directed connections
-between neurons. Another metric, such as the AUC PRC, is maybe more
-appropriate to assess the quality of the \textbf{directed} infered network.
-
-Interestingly, an easy way to improve results for asymmetric methods (see
-Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
-network. It proves once again that trying to detect the link direction is more
-penalizing than rewarding.
-
-% TODO
-%   - discussions about the results
-%   - discussions about the metrics (Gilles' text)
-
-
-% Dummy classifier?
-
-% GTE : Explaning the method (default parameters!)
-
-% Explaining the method (thèse de Gilles)
-
-
-% Directivity : ?
+\textcolor{red}{TODO: depth discussion }
 
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
-% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
 
-% Partial correlation : Obvious improvements (both metric) because of the conditioning
-% Correlation : Already give good results
-
-% Averaging
-
-%% Depth -- Gilles chapitre 7
-% Genie3 : better in auprc while worse in auroc than GTE. Why?
-% Genie3 : "Conditioning" better and better but need a lot of trees
-
-\textcolor{red}{TODO: depth discussion }
-
-% Discussion about the metrics
-
-\begin{table}
-\small
+\begin{figure}[bth]
 \centering
-\begin{tabular}{@{}l *{8}{c}@{}}
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline \hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-\hline \hline
-% Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
-Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
-GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
-GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
-GENIE3 (depth = 3)     & & & & & & & & \\
-GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
-Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
-Partial correlation (avg.) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
-% Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
-Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
-% Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
-\end{tabular}
-\caption{TODO}
-\label{tab:tab1}
-\end{table}
-
+\includegraphics[width=0.6\linewidth]{images/curves}
+\caption{Method precision-recall and roc curves. \textcolor{red}{GENI3?}
+         $\tau=0.11$}
+\label{fig:curves}
+\end{figure}
 
 % \begin{table}
 % \small
@@ -419,6 +328,13 @@ It also appears that the averaging over the low-pass filter designs and the
 threshold values increases significantly the quality of the infered network
 according to both metrics.
 
+% Explaining the method (thèse de Gilles)
+% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
+% Averaging
+
+%% Depth -- Gilles chapitre 7
+% Genie3 : better in auprc while worse in auroc than GTE. Why?
+% Genie3 : "Conditioning" better and better but need a lot of trees
 
 \begin{table}[tbh]
 \centering
@@ -438,10 +354,31 @@ Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.
 \label{tab:tab3}
 \end{table}
 
+\subsection{Area under the ROC curve is a poor metric for network inference}
+
+The best method only infers the \textbf{undirected} network by giving the
+same connectivity score to both edges $(i,j)$ and $(j,i)$. This is quite
+surprising considering the problem statement.
+
+If one would infer perfectly the undirected network, it would already yield
+high AUROC score for instance $\approx{}0.996$ on \textit{normal-1}. Trying
+to infer edge directivity is likely to be counter-productive or yield
+small AUROC gain. The area under the ROC curve is not a consistent metric
+with respect to the problem statement.
+By contrast, the same experiment with AUPRC would yield
+to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
+correctly directivity would be more rewarding in AUPRC term.
+Interestingly, methods that takes into account directivity, namely GTE and
+GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
+Trying to detect the link direction is more penalizing than rewarding.
+
+For these reasons, we strongly advice to avoid the AUROC
+for the assessment network inference using a more appropriate
+metric such as the area under the precision-recall curve (AUPRC). Those
+conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 \section{Conclusions} \label{sec:conclusion}
-
 
 
 % Possible extensions
@@ -535,6 +472,34 @@ that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 % For the directory method, only filters defined by Equations
 % \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
 % used.
+
+
+\section{Extended results}
+
+\begin{table}
+\small
+\centering
+\begin{tabular}{@{}l *{8}{c}@{}}
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline \hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+\hline \hline
+% Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
+GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
+GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
+GENIE3 (depth = 3)     & & & & & & & & \\
+GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
+Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
+Partial correlation (avg.) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
+% Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
+Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
+Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
+% Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
+\end{tabular}
+\caption{TODO}
+\label{tab:tab1}
+\end{table}
 
 
 \section{Supplementary results}
