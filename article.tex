@@ -129,7 +129,7 @@ f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i,
 \label{eq:weighted-asymetric-median}
 \end{align}
-where \textcolor{red}{$f_?$} effect is shown in the second plot in the figure.
+where $f_1$x effect is shown in the second plot in the figure.
 
 Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
@@ -222,10 +222,10 @@ predictions. Further details are provided in Appendix~\ref{app:optimized}.
 \section{Experiments} \label{sec:results}
 
 % Datasets
-To assess our method, we focus on the \textit{normal-1} dataset
+To assess our method, we focus on the \textit{normal-2} dataset
 provided by the organizers of the Connectomics challenge. Experiments
-were also carried out on  \textit{normal-2, normal-3, normal-4} and show
-similar trends.
+on \textit{normal-1, normal-3, normal-4} show similar trends to
+\textit{normal-2} and are presented in the Appendix \textcolor{red}{REF}.
 Those datasets have $p=1000$ time series of length $T=179500$ of image
 calcium from simulated neuronal networks \citep{stetter2012model}. Those
 networks have approximately 15000 edges.
@@ -275,13 +275,26 @@ dataset. The partial correlation outperforms other state-of-the-art methods
 by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
 AUROC.
 
-Two reasons might explain such overwhelming difference: (i) among
+
+\begin{figure}[bth]
+\centering
+\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
+\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
+\caption{The weighted average of partial correlation matrix, winning approach
+         of the challenge, yields better than AUROC and AUPRC than all
+         other state-of-the-art methods. (parameters: $\tau=0.11$, partial
+         correlation used filer $f_1$).}
+\label{fig:curves}
+\end{figure}
+
+Two reasons might explain such differences: (i) among
 those methods only the partial correlation makes the distinction between
 direct and indirect connections, (ii) the simulated network from the
 \citep{stetter2012model} generator could be reduced to a linear model after
 pre-processing. Those results is obviously generalized over the other
 datasets see Appendix \textcolor{red}{REF}.
 
+\textcolor{red}{AJ: GENI3 is not on the figure}
 As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
 increases with deeper trees in addition to be computationally feasible. The
 reason is twofold. First, the deeper the tree, the larger is the conditioning.
@@ -291,19 +304,12 @@ number of small trees need to be much higher than deep trees in order to
 observe - and evaluate - all pairs.  However, as suggested by
 \cite{louppe2014understanding}, limiting the maximal depth of trees may help
 to reduce the misestimation bias in variable importance computing, i.e.
-inferring the strength of a link. Therefore a trade-off of the maximal depth may give the best of both worlds.
+inferring the strength of a link. Therefore a trade-off of the maximal depth
+may give the best of both worlds.
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
 
-\begin{figure}[bth]
-\centering
-\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
-\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
-\caption{Method precision-recall and ROC curves. \textcolor{red}{GENI3?}
-         $\tau=0.11$}
-\label{fig:curves}
-\end{figure}
 
 % \begin{table}
 % \small
@@ -325,46 +331,7 @@ inferring the strength of a link. Therefore a trade-off of the maximal depth may
 % \end{table}
 
 
-\subsection*{Signal processing highly improves performance}
 
-\textcolor{red}{The whole sub-section should be moved to the appendix and
-                replace by one or two sentences.}
-
-On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
-improves the score on both metrics. However, processing, weights and averaging
-(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
-described in Section \ref{sec:filter} are the key steps of our algorithm.
-
-It also appears that the averaging over the low-pass filter designs and the
-threshold values increases significantly the quality of the inferred network
-according to both metrics.
-
-% Explaining the method (thèse de Gilles)
-% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
-% Averaging
-
-%% Depth -- Gilles chapitre 7
-% Genie3 : better in auprc while worse in auroc than GTE. Why?
-% Genie3 : "Conditioning" better and better but need a lot of trees
-
-\begin{table}[tbh]
-\centering
-\small
-\begin{tabular}{@{}l *{8}{c}@{}}
-\hline
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
-P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
-P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
-Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
-%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
-\end{tabular}
-\caption{TODO \textcolor{red}{version simple!!}}
-\label{tab:tab3}
-\end{table}
 
 \subsection*{Area under the ROC curve is a poor metric for network inference}
 
@@ -384,7 +351,8 @@ GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
 Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
-with respect to the problem statement. A clear hierarchy is also difficult to derive based on ROC curve of Figure \ref{fig:curves}. We advice to avoid the AUROC
+with respect to the problem statement. A clear hierarchy is also difficult to
+derive based on ROC curve of Figure \ref{fig:curves}. We advice to avoid the AUROC
 for the assessment of network inference method. An alternative metric would
 be the area under the precision-recall curve (AUPRC). Those
 conclusions are in line with \cite{schrynemackers2013protocols}.
@@ -623,6 +591,44 @@ Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{table}
 
 
+\section{Signal processing highly improves performance}
+
+
+On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
+improves the score on both metrics. However, processing, weights and averaging
+(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
+described in Section \ref{sec:filter} are the key steps of our algorithm.
+
+It also appears that the averaging over the low-pass filter designs and the
+threshold values increases significantly the quality of the inferred network
+according to both metrics.
+
+% Explaining the method (thèse de Gilles)
+% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
+% Averaging
+
+%% Depth -- Gilles chapitre 7
+% Genie3 : better in auprc while worse in auroc than GTE. Why?
+% Genie3 : "Conditioning" better and better but need a lot of trees
+
+\begin{table}[tbh]
+\centering
+\small
+\begin{tabular}{@{}l *{8}{c}@{}}
+\hline
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
+P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
+P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
+Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+\end{tabular}
+\caption{TODO \textcolor{red}{version simple!!}}
+\label{tab:tab3}
+\end{table}
 
 %% Talk about filters future and past
 
