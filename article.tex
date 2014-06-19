@@ -217,9 +217,6 @@ In order to improve robustness, a weighted average of partial correlation
 matrices was estimated from the time series by varying the hard-threshold value
 $\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:filter} and appendix \ref{app:optimized}).
 
-
-\textcolor{red}{Say that we use PCA to derive the precision matrix + ref!.}
-
 To filter even more noise before computing the partial correlation, we kept
 $80\%$ of the eigen vectors which have the largest eigen
 value (\cite{tipping1999mixtures}). In the context of the challenge, this
@@ -242,9 +239,10 @@ In this section, we will first describe datasets and methods used for the
 comparison. Then, on Tab.\ref{tab:tab3}, our approach is decomposed to show
 the contribution of each stages . Afterwards, we will perform a comparison
 between several methods on Fig.\ref{fig:curves} and Tab.\ref{tab:tab1}. Note that two
-metrics are used to evaluate the performance and a single low-pass filter is used (Eq.\ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end of this section is
-devoted to a discussion about the choice of metric and its relevance for the
-challenge.\\
+metrics are used to evaluate the performance and a single low-pass filter is
+used (Eq.\ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end
+of this section is devoted to a discussion about the choice of metric and its
+relevance for the challenge.
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
@@ -267,7 +265,10 @@ correlation, we set those elements to the minimum of $\hat{A}$ prior
 assessment.\\
 
 
-On Tab.\ref{tab:tab3}, it can be seen that each step of our approach globally improves the score on both metrics. However, processing, weights and averaging (respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as described in section \ref{sec:filter} are the key steps of our algorithm.
+On Tab.\ref{tab:tab3}, it can be seen that each step of our approach globally
+improves the score on both metrics. However, processing, weights and averaging
+(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
+described in section \ref{sec:filter} are the key steps of our algorithm.
 
 
 We compare our approach to the Pearson correlation (see Section
@@ -471,18 +472,26 @@ Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 
 
 
 
-In this paper, we present the winning method of the Connectomics challenge. This approach is simple and theorically grounded. We also evaluate the method in a more detailed way and perform a comparison with other inference methods. We also discuss the relevance of the metric used in the challenge.
+In this paper, we present the winning method of the Connectomics challenge.
+This approach is simple and theorically grounded. We also evaluate the method
+in a more detailed way and perform a comparison with other inference methods.
+We also discuss the relevance of the metric used in the challenge.
 
-Obviously, we give a hint about limiting the depth of trees in the GENIE3 method to infer the network. It should be interesting to see if there is a optimum value for the maxmimal depth.
+Obviously, we give a hint about limiting the depth of trees in the GENIE3
+method to infer the network. It should be interesting to see if there is a
+optimum value for the maxmimal depth.
 
 In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
 i.e. conditioned on every subsets of the set of $p-2$ other variables. This
 would take into account multiple indirect paths between a given pair of
-variables. Instead of considering only the highest order, it may be useful to study with accuracy the infered network at all orders. In this case, it may not be very relevant but interesting in case of dymanical networks.
+variables. Instead of considering only the highest order, it may be useful to
+study with accuracy the infered network at all orders. In this case, it may not
+be very relevant but interesting in case of dymanical networks.
 
-As we mentionned, in order to maximize the ROC AUC, it was not necessary to discover causal relationships. It may be, in future works, promising to focus on that particular topic.
-
+As we mentionned, in order to maximize the ROC AUC, it was not necessary to
+discover causal relationships. It may be, in future works, promising to focus
+on that particular topic.
 
 
 \section*{Acknowledgements}
