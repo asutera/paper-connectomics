@@ -160,65 +160,64 @@ neurons, thereby reducing the importance of peaks identified during global high 
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
 
-In those terms, the full signal processing pipeline of our approach is defined
-by the composed function $w \cdot h \cdot g \cdot f_1$ (resp $f_2$).
+In those terms, the full signal processing pipeline of our (simplified)
+approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
+(resp. $f_2$ for the winning method).
 
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-Let us denote the fluorescence calcium indicators of all neuron
-as a set of random variables $X = \left\{X_1, \ldots, X_{|V|}\right\}$, which follows
-a joint probability distribution $p_\mathcal{X}$, and by
-$X^{-i,j}$ the set of all variables except $X_i$ and $X_j$.
-Two random variables $X_i$ and $X_j$ are said to be conditionally independent
-to a (possibly empty) set of random variables $Z$, denoted by $X_i \perp X_j | Z$,
-if the joint conditional probability distribution factorizes
-$p_{\mathcal{X}_i, \mathcal{X}_j|\mathcal{Z}} = p_{\mathcal{X}_i|\mathcal{Z}}
-p_{\mathcal{X}_j|\mathcal{Z}}$.  The inference of the undirected network
-can be formulated as inferring conditional dependences
-$X_i \not\perp X_j | X^{-i,j}$ between all pairs $i$ and $j$ of fluorescence
-signals.
+Let us model the fluorescence indicators of all $p$ neurons as a set of random
+variables $X = \{X_1, \dots, X_p\}$ following a joint probability distribution
+$P_X$. In the statistical framework, two random variables $X_i$ and $X_j$ are
+said to be conditionally independent to a (possibly empty) set of controlling
+random variables $Z$, denoted $X_i \perp X_j | Z$, if the joint conditional
+probability distribution $P_{X_i, X_j | Z}$ factorizes into $P_{X_i|Z}
+P_{X_j|Z}$. In particular, when $X_i$ and $X_j$ are conditionally independent
+with respect to all the other variables, denoted $X_i \perp X_j | X^{-i,j}$, then the
+observation of $X_i$ given the knowledge of $X^{-i,j}$ provides no information
+about $X_j$, and vice-versa. From a graphical point of view and assuming no
+hidden variable, this indicates that $X_i$ and $X_j$ do not directly interact
+(i.e., $(i,j) \notin E$). By opposition, if $X_i$ and $X_j$ are conditionally
+dependent with respect to all other variables, denoted $X_i \not\perp X_j |
+X^{-i,j}$, then the observation of one of the two variables provides some
+information about the other, therefore highlighting a direct interaction
+between the two random variables (i.e., $(i, j) \in E$).
 
+Under that assumption that random variables follow a joint Gaussian
+distribution $\mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and covariance
+matrix $\Sigma$, $X_i$ and $X_j$ are conditionnally independent with respect to
+the other variables $X^{-i,j}$ if their \textit{partial correlation} statistic
+is null~\citep{koller2009probabilistic}, i.e., if
+\begin{equation}
+\rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.
+\end{equation}
+Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j | X^{-i,j}} \neq 0$,
+where $\rho_{X_i, X_j | X^{-i,j}}$ can now be interpreted as the degree of association
+between the two variables (i.e., the larger the value, the stronger the interaction).
+Together, the partial correlation statistics correspond to the inverse
+$\Sigma^{-1}$ of the covariance matrix, also known as the concentration of
+precision matrix. Computationnally, they can be estimated efficiently in
+$O(M^3)$ (instead of $O(p^3)$) from the $M$ first principal components
+extracted through PCA~\citep{bishop2006pattern} on the processed data. In our experiments, $M$ is set
+to $0.8 p$, thereby allowing us to further filter noise in the data.
 
-Since all neurons are assumed to form a connected graph, we
-have by construction $X_i \not\perp X_j$. However, two random variables $A$ and $B$ might be
-dependent taken alone ($A \not\perp B$), but not once we observe the set  $C$
-of all other variables ($A \perp B | C$). The conditioning over all other
-random variables $X^{-i,j}$ is thus necessary to avoid predicting an edge when
-two neurons are not directly connected.
+To highlight the benefits of measuring the partial dependence conditional to
+all other variables, we compare in Section~\ref{sec:results} with
+\textit{Pearson correlation} statistics, which measure instead the linear dependence
+between variables, independently of the others. Accordingly, $X_i$ and $X_j$ are
+independent if their Pearson correlation statistic is zero, that is if
+\begin{equation}
+\rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
+\end{equation}
 
-If the random variables $X$ follows a joint Gaussian distribution
-$p_\mathcal{X} \sim \mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and
-covariance matrix $\Sigma$, we have the conditional independence
-$X_i \perp X_j | X^{-i,j}$ if the partial correlation coefficient
-\[
-\rho_{X_i, X_j | X^{-i,j}}
-= \frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}
-\]
-is equal to zero \citep{koller2009probabilistic}. The partial correlation gives
-an estimate of the degree of association between all
-pairs of neuron $i$ and $j$.
-Similarly, we also have $X_i \perp X_j$ if the Pearson correlation
-coefficient
-\[
-\rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}
-\Sigma_{jj}}}
-\]
-is equal to zero.
-
-% Speak about why averaging
-The quality of the signal filtering and network inference depends on
-good hyper-parameter selection, which are themselves dependent on the properties
-of the targeted network and measurement conditions, e.g. signal to noise ratio.
-In order to improve robustness, a weighted average of partial correlation
-matrices was estimated from the time series by varying the hard-threshold value
-$\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:filter} and appendix \ref{app:optimized}).
-
-To filter even more noise before computing the partial correlation, we kept
-$80\%$ of the eigen vectors which have the largest eigen
-value (\cite{tipping1999mixtures}). In the context of the challenge, this
-assumption was deduced from ground truth of provided networks.
+Finally, let us remark that performance shows to be quite sensitive the choice
+of hyper-parameters in our signal processing pipeline (e.g., $f_1$ or $f_2$ or
+the value of the threshold $\tau$). To further improve robustness, the last
+step of our method therefore consists in averaging correlation statistics over
+various values of the parameters, thereby reducing the variance of our
+predictions. Further details are provided in Appendix~\ref{app:optimized}.
 
 
 \section{Empirical experiments} \label{sec:results}
