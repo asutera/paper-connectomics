@@ -118,11 +118,10 @@ Figure~\ref{fig:filtered-signal}.
 \end{figure}
 
 As the first plot in Figure~\ref{fig:filtered-signal} illustrates, the raw
-fluoresence signal is very noisy due to light scattering artifacts that
+fluorescence signal is very noisy due to light scattering artifacts that
 ordinarily affects the quality of the recording~\citep{lichtman2011big}.
-Accordingly, the first step of our pipeline is to smoothen the signal, using a
-low-pass filter for filtering out high frequency noise and resulting in the
-second plot in the figure:
+Accordingly, the first step of our pipeline is to smoothen the signal, using
+one the following low-pass filter for filtering out high frequency noise :
 \begin{align}
 % symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
@@ -130,8 +129,7 @@ f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i,
 \label{eq:weighted-asymetric-median}
 \end{align}
-where $f_1$ is the filter proposed in the simplified variant of our approach
-and $f_2$ is the filter actually used within our winning algorithm.
+where \textcolor{red}{$f_?$} effect is shown in the second plot in the figure.
 
 Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
