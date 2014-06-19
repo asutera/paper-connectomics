@@ -64,11 +64,11 @@ observations of the connectome, the wiring diagram of the brain, is not yet
 technically feasible. Without being perfect, calcium imaging currently allows
 the realtime and simultaneous observation of neuron activities from thousands
 of neurons, producing individual time series representing their fluoresence
-intensity. In this context,  the connectome inference problem consists in
+intensity. From these data, the connectome inference problem consists in
 retrieving the synaptic connections between neurons on the basis of the
 fluoresence time series. In particular, this problem is often made difficult
-because of experimental issues, including masking effects making some of the
-neurons not to be observed or confounded with others, a low sampling rate of
+because of experimental issues, including masking effects (making some of the
+neurons not to be observed or confounded with others), the low sampling rate of
 the optical device with respect to the neural activity speed or the slow decay
 of fluoresence.
 
@@ -82,20 +82,20 @@ inference problem is formally stated as follows:  \textit{Given the sampled
 observations $\{ x^t_i \in \mathbb{R}^{p} | i \in V, t = 1, \dots T \}$ of $p$
 neurons for $T$ time intervals, the goal is to infer the set $E$ of connections in $G$.}
 
-In this paper, we present a simplified -- yet nearly as good -- version of
-the winning method\footnote{Code available at \url{https://github.com/asutera
+In this paper, we present a simplified -- yet nearly as good -- version of the
+winning method\footnote{Code available at \url{https://github.com/asutera
 /kaggle-connectomics}} of the Connectomics
 Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
-partial correlation statistics. The rest of the paper is structured as
-follows: Section \ref{sec:filter} describes the signal processing methods
-applied on fluorescent calcium time series; Section \ref{sec:inference} then
-presents the proposed approach and its theoretical properties; Section
-\ref{sec:results} provides an empirical analysis and comparison with other
-network inference methods, while Section \ref{sec:conclusion} finally
-discusses our work and provides further research directions. Additionnaly, Appendix
-\ref{app:optimized} further describes our actual winning method, giving slightly
-better results than the method presented in the paper but highly tuned for the
+partial correlation statistics. The paper is structured as follows: Section
+\ref{sec:filter} describes the signal processing methods applied on fluorescent
+calcium time series; Section \ref{sec:inference} then presents the proposed
+approach and its theoretical properties; Section \ref{sec:results} provides an
+empirical analysis and comparison with other network inference methods, while
+Section \ref{sec:conclusion} finally discusses our work and provides further
+research directions. Additionnaly, Appendix \ref{app:optimized} further
+describes, in all details, our actual winning method, giving slightly better
+results than the method presented in the paper but highly tuned for the
 challenge.
 
 
@@ -113,25 +113,25 @@ Figure~\ref{fig:filtered-signal}.
 \begin{figure}
 \centering
 \includegraphics[width=0.4\linewidth]{images/fig_filtering}
-\caption{Signal processing process.}
+\caption{Signal processing process for extracting peaks from the raw fluorescence data.}
 \label{fig:filtered-signal}
 \end{figure}
 
-
-
-As the first plot in Figure~\ref{fig:filtered-signal} illustrates, due to
-light scattering artifacts that ordinarily affects the quality of the
-recording~\citep{lichtman2011big}, the raw fluoresence signal is very noisy.
-Accordingly, the first step of our pipeline is to smoothen the signal, using a low-pass filter for
-filtering out high frequency noise, applying one of the following designs and
-resulting in the second plot in the figure:
+As the first plot in Figure~\ref{fig:filtered-signal} illustrates, the raw
+fluoresence signal is very noisy due to light scattering artifacts that
+ordinarily affects the quality of the recording~\citep{lichtman2011big}.
+Accordingly, the first step of our pipeline is to smoothen the signal, using a
+low-pass filter for filtering out high frequency noise and resulting in the
+second plot in the figure:
 \begin{align}
 % symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
 % asymmetrical weighted median
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i.
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i,
 \label{eq:weighted-asymetric-median}
 \end{align}
+where $f_1$ is the filter proposed in the simplified variant of our approach
+and $f_2$ is the filter actually used within our winning algorithm.
 
 Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
@@ -160,11 +160,9 @@ neurons, thereby reducing the importance of peaks identified during global high 
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
 
-The full signal processing of our approach is defined by the composed function
-$
-w \cdot h \cdot g \cdot f_k
-$
-where $f_k$ is one of the low-pass filter designs.
+In those terms, the full signal processing pipeline of our approach is defined
+by the composed function $w \cdot h \cdot g \cdot f_1$ (resp $f_2$).
+
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
