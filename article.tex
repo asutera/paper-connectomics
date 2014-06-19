@@ -269,7 +269,7 @@ node and the maximal tree depth is constrained to 1, 2 or 3.
 \subsection*{Partial correlation improves over state-of-the-art methods}
 
 Figure \ref{fig:curves} shows the ROC curve and precision-recall curve
-for correlation, GTE and partial correlation on the \textcolor{red}{normal-?}
+for correlation, GTE and partial correlation on the \textit{normal-2}
 dataset. The partial correlation outperforms other state-of-the-art methods
 by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
 AUROC.
@@ -278,18 +278,25 @@ Two reasons might explain such overwhelming difference: (i) among
 those methods only the partial correlation makes the distinction between
 direct and indirect connections, (ii) the simulated network from the
 \citep{stetter2012model} generator could be reduced to a linear model after
-pre-processing. \textcolor{red}{Those results generalized over the other
-datasets see Appendix REF.}
+pre-processing. Those results is obviously generalized over the other
+datasets see Appendix \textcolor{red}{REF}.
 
-\textcolor{red}{TODO: depth discussion }
-
+As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
+increases with deeper trees. The reason is twofold. First, the deeper the
+tree, the larger is the conditioning. As it was observed in the comparison
+between correlation and partial correlation, it screens indirect links in the
+infered network. Second, the number of trees when trees are small need to be
+much higher in order to correctly estimate all pairs. However, as suggested by
+\cite{Gilles2014understanding}, limiting the maximal depth of trees may help
+to reduce the misestimation bias in variable importance comuting, i.e.
+infering the strengh of a link.
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
 
 \begin{figure}[bth]
 \centering
-\includegraphics[width=0.6\linewidth]{images/curves}
+\includegraphics[width=\linewidth]{images/curves}
 \caption{Method precision-recall and roc curves. \textcolor{red}{GENI3?}
          $\tau=0.11$}
 \label{fig:curves}
@@ -339,6 +346,7 @@ according to both metrics.
 
 \begin{table}[tbh]
 \centering
+\small
 \begin{tabular}{@{}l *{8}{c}@{}}
 \hline
   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
