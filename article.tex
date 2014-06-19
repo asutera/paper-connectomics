@@ -260,9 +260,8 @@ correlation, those elements are set to have minimal connectivity score prior
 assessment.
 
 We will compare our approach to the Pearson correlation (see Section
-\ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3:
+\ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3.
 \begin{itemize}
-
 \item \textbf{GTE} \citep{stetter2012model}
 , the baseline of the challenge, measures for all pairs of
 neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
@@ -270,6 +269,7 @@ $i$ given the observation of the time series of the neuron $j$
 conditionally to the observation of past time series of neuron $i$,
 whenever the average fluorescence is over a conditioning level.
 Conditioning level was set to reproduce baseline of the challenge.
+\textcolor{red}{Talk about pre-processing}
 
 \item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference of the
 network of $p$ neurons into $p$ supervised learning tasks. For each task,
@@ -286,27 +286,29 @@ node and the maximal tree depth is constrained to 1, 2 or 3.
 
 \subsection*{Comparison with state-of-the art methods}
 
-At first sight, it appears on Fig.\ref{fig:curves} %Tab.\ref{tab:tab1}
-that partial correlation outperforms other methods. Two main reasons may explain
-this. First, the quality of the infered network seems related to the
-conditioning part of the method. In every method except with partial
-correlation, indirect links are confounded with direct links.  Secondly, the
-gaussian assumption seems verified and thus linear method appears to be
-competitive, e.g. the method correlation already gives good results, with a
-non-linear method such as GENIE3.
+Figure \ref{fig:curves} shows the ROC curve and precision-recall curve
+for correlation, GTE and partial correlation on the \textcolor{red}{normal-?}
+dataset. The partial correlation outperforms other state-of-the-art methods
+by at least factor of 2 in AUPRC and an increased of $5\%$ in AUROC. There
+are two reasons that explains such overwhelming difference: (i) among
+those methods only the partial correlation make the distinction between
+direct and indirect connection, (ii) the simulated network from the
+\citep{stetter2012model} generator could be reduced to a linear model after
+pre-processing.
+
 
 \begin{figure}[bth]
 \centering
 \includegraphics[width=0.6\linewidth]{images/curves}
-\caption{Method precision-recall and roc curves.}
+\caption{Method precision-recall and roc curves. \textcolor{red}{GENI3?}}
 \label{fig:curves}
 \end{figure}
 
-It also appears that the averaging over the low-pass filter designs and the
-threshold values increases significantly the quality of the infered network
-according to both metrics.
 
-Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the
+
+
+
+Observing Table \ref{tab:tab1}, it appears that best methods only infer the
 \textbf{undirected} network by giving the same weights to both edges $(i,j)$
 and $(j,i)$. This is quite surprising considering the goal of the challenge,
 namely predicted directed connections between neurons. Besides, if the true
@@ -414,6 +416,11 @@ On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
 improves the score on both metrics. However, processing, weights and averaging
 (respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
 described in Section \ref{sec:filter} are the key steps of our algorithm.
+
+It also appears that the averaging over the low-pass filter designs and the
+threshold values increases significantly the quality of the infered network
+according to both metrics.
+
 
 \begin{table}[tbh]
 \centering
