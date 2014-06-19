@@ -162,9 +162,9 @@ neurons, thereby reducing the importance of peaks identified during global high 
 
 The full signal processing of our approach is defined by the composed function
 $
-w \cdot h \cdot g \cdot f_k 
+w \cdot h \cdot g \cdot f_k
 $
-where $f_k$ is one of the low-pass filter designs. 
+where $f_k$ is one of the low-pass filter designs.
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
@@ -220,7 +220,7 @@ $\tau$ and the design of the low-pass filter (mentionned in section \ref{sec:fil
 
 \textcolor{red}{Say that we use PCA to derive the precision matrix + ref!.}
 
-To filter more noise before computing the partial correlation, we kept
+To filter even more noise before computing the partial correlation, we kept
 $80\%$ of the eigen vectors which have the largest eigen
 value (\cite{tipping1999mixtures}). In the context of the challenge, this
 assumption was deduced from ground truth of provided networks.
@@ -324,7 +324,7 @@ to 1, 2 or 3.\\
 % Partial correlation : Obvious improvements (both metric) because of the conditioning
 % Correlation : Already give good results
 
-At first sight, it appears on Fig.\ref{fig:curves} %Tab.\ref{tab:tab1}   
+At first sight, it appears on Fig.\ref{fig:curves} %Tab.\ref{tab:tab1}
 that partial correlation outperforms other methods. Two main reasons may explain
 this. First, the quality of the infered network seems related to the
 conditioning part of the method. In every method except with partial
@@ -479,9 +479,9 @@ In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
 i.e. conditioned on every subsets of the set of $p-2$ other variables. This
 would take into account multiple indirect paths between a given pair of
-variables. Instead of considering only the highest order, it may be useful to study with accuracy the infered network at all orders. In this case, it may not be very relevant but interesting in case of dymanical networks. 
+variables. Instead of considering only the highest order, it may be useful to study with accuracy the infered network at all orders. In this case, it may not be very relevant but interesting in case of dymanical networks.
 
-As we mentionned, in order to maximize the ROC AUC, it was not necessary to discover causal relationships. It may be, in future works, promising to focus on that particular topic. 
+As we mentionned, in order to maximize the ROC AUC, it was not necessary to discover causal relationships. It may be, in future works, promising to focus on that particular topic.
 
 
 
