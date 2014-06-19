@@ -325,7 +325,7 @@ improves the score on both metrics. However, processing, weights and averaging
 described in Section \ref{sec:filter} are the key steps of our algorithm.
 
 It also appears that the averaging over the low-pass filter designs and the
-threshold values increases significantly the quality of the infered network
+threshold values increases significantly the quality of the inferred network
 according to both metrics.
 
 % Explaining the method (thèse de Gilles)
@@ -360,11 +360,10 @@ The best method only infers the \textbf{undirected} network by giving the
 same connectivity score to both edges $(i,j)$ and $(j,i)$. This is quite
 surprising considering the problem statement.
 
-If one would infer perfectly the undirected network, it would already yield
+If the undirected network is perfectly, it would already yield
 high AUROC score for instance $\approx{}0.996$ on \textit{normal-1}. Trying
 to infer edge directivity is likely to be counter-productive or yield
-small AUROC gain. The area under the ROC curve is not a consistent metric
-with respect to the problem statement.
+small gain.
 By contrast, the same experiment with AUPRC would yield
 to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
@@ -372,9 +371,10 @@ Interestingly, methods that takes into account directivity, namely GTE and
 GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
 Trying to detect the link direction is more penalizing than rewarding.
 
-For these reasons, we strongly advice to avoid the AUROC
-for the assessment network inference using a more appropriate
-metric such as the area under the precision-recall curve (AUPRC). Those
+The area under the ROC curve is not consistent metric
+with respect to the problem statement. We strongly advice to avoid the AUROC
+for the assessment of network inference method. An alternative metric would
+be to use the area under the precision-recall curve (AUPRC). Those
 conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
