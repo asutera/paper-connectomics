@@ -223,34 +223,29 @@ value (\cite{tipping1999mixtures}). In the context of the challenge, this
 assumption was deduced from ground truth of provided networks.
 
 
-\section{Experiments}
-\label{sec:results}
+\section{Empirical experiments} \label{sec:results}
 
 %\textcolor{red}{SEUIL 0.11 for tabulars!!!}
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{images/curves}
-\caption{Method precision-recall and roc curves.}
-\label{fig:curves}
-\end{figure}
+% In this section, we will first describe datasets and methods used for the
+% comparison. Then, on Table \ref{tab:tab3}, our approach is decomposed to show
+% the contribution of each pre-processing steps. Afterwards, we will perform a comparison
+% between several methods on Figure \ref{fig:curves} and Table \ref{tab:tab1}. Note that two
+% metrics are used to evaluate the performance and a single low-pass filter is
+% used (Eq. \ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end
+% of this section is devoted to a discussion about the choice of metric and its
+% relevance for the challenge.
 
-In this section, we will first describe datasets and methods used for the
-comparison. Then, on Tab.\ref{tab:tab3}, our approach is decomposed to show
-the contribution of each stages . Afterwards, we will perform a comparison
-between several methods on Fig.\ref{fig:curves} and Tab.\ref{tab:tab1}. Note that two
-metrics are used to evaluate the performance and a single low-pass filter is
-used (Eq.\ref{eq:symetric-median}) and a threshold, i.e. $\tau = 0.11$. The end
-of this section is devoted to a discussion about the choice of metric and its
-relevance for the challenge.
+
+
+% \subsection{Assessment methodology}
 
 % Datasets
 To assess our method, we have used four datasets provided by the organizers
 of the Connectomics challenge : \textit{normal-1, normal-2, normal-3, normal-4}.
-Those datasets are time series of size $T=179500$ of image calcium from simulated
-neuronal networks \citep{stetter2012model} with $|V|=1000$ neurons. The networks
-to inferred have around 15000 edges and are similar to those
-used to rank challenge participants.
+Those datasets have $|V|=1000$ time series of length $T=179500$ of image
+calcium from simulated neuronal networks \citep{stetter2012model}. Those
+networks have approximately 15000 edges.
 
 % Metrics : ROC AUC and AUPRC
 In supervised learning terms, the network inference task can be viewed as a
@@ -260,21 +255,15 @@ network inference method using the area under the ROC curve (AUROC)
 and the area under the precision-recall curve (AUPRC)
 \citep{schrynemackers2013protocols}. Since neurons are not self-connected
 ($(i, i) \not \in E, \forall i \in V$) and some inference methods could
-give maximal scores to the diagonal of $\hat{A}$, e.g. Pearson
-correlation, we set those elements to the minimum of $\hat{A}$ prior
-assessment.\\
+give maximal scores to those edges, e.g. Pearson
+correlation, those elements are set to have minimal connectivity score prior
+assessment.
 
+We will compare our approach to the Pearson correlation (see Section
+\ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3:
+\begin{itemize}
 
-On Tab.\ref{tab:tab3}, it can be seen that each step of our approach globally
-improves the score on both metrics. However, processing, weights and averaging
-(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
-described in section \ref{sec:filter} are the key steps of our algorithm.
-
-
-We compare our approach to the Pearson correlation (see Section
-\ref{sec:inference}), the generalized transfer entropy (GTE) and GENIE3.
-
-\textbf{GTE} \citep{stetter2012model}
+\item \textbf{GTE} \citep{stetter2012model}
 , the baseline of the challenge, measures for all pairs of
 neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
 $i$ given the observation of the time series of the neuron $j$
@@ -282,7 +271,7 @@ conditionally to the observation of past time series of neuron $i$,
 whenever the average fluorescence is over a conditioning level.
 Conditioning level was set to reproduce baseline of the challenge.
 
-\textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference of the
+\item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference of the
 network of $p$ neurons into $p$ supervised learning tasks. For each task,
 the fluorescence of a neuron is predicted from the fluorescence
 of all other neurons using a tree based ensemble such as
@@ -290,40 +279,12 @@ random forest \citep{breiman2001random}. The tree ensemble associate a
 variable importance scores \citep{louppe2013understanding}
 to each neuron used in the predictions, which is used as a connectivity
 score. The following parameters are used
-$10000$ trees, $\log_2{p}$ neurons are randomly selected at each tree
-node to split the data and the maximal tree depth is constrained
-to 1, 2 or 3.\\
+$10000$ trees, $\log_2{p}$ variables are randomly selected to split a tree
+node and the maximal tree depth is constrained to 1, 2 or 3.
+\end{itemize}
 
 
-
-% TODO
-%   - discussions about the results
-%   - discussions about the metrics (Gilles' text)
-
-% For the directory method, only filters defined by Equations
-% \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
-% used.
-
-
-% Dummy classifier?
-
-
-% GTE : Explaning the method (default parameters!)
-
-% Explaining the method (thèse de Gilles)
-
-
-% Directivity : ?
-
-
-%Opt: obviously when parameters are tuned/optimized, it's slightly better --> see appendix for a full description of the method
-% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
-
-
-
-
-% Partial correlation : Obvious improvements (both metric) because of the conditioning
-% Correlation : Already give good results
+\subsection*{Comparison with state-of-the art methods}
 
 At first sight, it appears on Fig.\ref{fig:curves} %Tab.\ref{tab:tab1}
 that partial correlation outperforms other methods. Two main reasons may explain
@@ -334,19 +295,16 @@ gaussian assumption seems verified and thus linear method appears to be
 competitive, e.g. the method correlation already gives good results, with a
 non-linear method such as GENIE3.
 
-% Averaging
+\begin{figure}[bth]
+\centering
+\includegraphics[width=0.6\linewidth]{images/curves}
+\caption{Method precision-recall and roc curves.}
+\label{fig:curves}
+\end{figure}
 
 It also appears that the averaging over the low-pass filter designs and the
 threshold values increases significantly the quality of the infered network
 according to both metrics.
-
-%% Depth -- Gilles chapitre 7
-% Genie3 : better in auprc while worse in auroc than GTE. Why?
-% Genie3 : "Conditioning" better and better but need a lot of trees
-
-\textcolor{red}{TODO : Discussion depth}
-
-% Discussion about the metrics
 
 Observing Tab.\ref{tab:tab1}, it appears that best methods only infer the
 \textbf{undirected} network by giving the same weights to both edges $(i,j)$
@@ -372,26 +330,37 @@ Tab.\ref{tab:tab2}), namely GTE and GENIE3, is to make undirected the infered
 network. It proves once again that trying to detect the link direction is more
 penalizing than rewarding.
 
-
-\begin{table}[tbh]
-\centering
-\begin{tabular}{@{}l *{8}{c}@{}}
-\hline
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
-P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
-P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
-Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
-%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
-\end{tabular}
-\caption{TODO \textcolor{red}{version simple!!}}
-\label{tab:tab3}
-\end{table}
+% TODO
+%   - discussions about the results
+%   - discussions about the metrics (Gilles' text)
 
 
+% Dummy classifier?
+
+% GTE : Explaning the method (default parameters!)
+
+% Explaining the method (thèse de Gilles)
+
+
+% Directivity : ?
+
+
+% Opt: obviously when parameters are tuned/optimized, it's slightly better -->
+% see appendix for a full description of the method
+% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
+
+% Partial correlation : Obvious improvements (both metric) because of the conditioning
+% Correlation : Already give good results
+
+% Averaging
+
+%% Depth -- Gilles chapitre 7
+% Genie3 : better in auprc while worse in auroc than GTE. Why?
+% Genie3 : "Conditioning" better and better but need a lot of trees
+
+\textcolor{red}{TODO: depth discussion }
+
+% Discussion about the metrics
 
 \begin{table}
 \small
@@ -419,45 +388,50 @@ Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 &
 \end{table}
 
 
-\begin{table}
-\small
-\centering
-\begin{tabular}{@{}l *{8}{c}@{}}
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\cmidrule(r){2-5}\cmidrule(r){6-9}
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-\hline \hline
-% Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
-GENIE3 (depth = 1)     &  & & & & & & & \\
-GENIE3 (depth = 2)     &  & & & & & & & \\
-GENIE3 (depth = 3)     &  & & & & & & & \\
-GTE                    &  & & & & & & & \\
-% Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
-\end{tabular}
-\caption{TODO (network are undirected)}
-\label{tab:tab2}
-\end{table}
+% \begin{table}
+% \small
+% \centering
+% \begin{tabular}{@{}l *{8}{c}@{}}
+%   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+% \cmidrule(r){2-5}\cmidrule(r){6-9}
+% Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+% \hline \hline
+% % Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+% GENIE3 (depth = 1)     &  & & & & & & & \\
+% GENIE3 (depth = 2)     &  & & & & & & & \\
+% GENIE3 (depth = 3)     &  & & & & & & & \\
+% GTE                    &  & & & & & & & \\
+% % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
+% \end{tabular}
+% \caption{TODO (network are undirected)}
+% \label{tab:tab2}
+% \end{table}
 
 
+\subsection*{Signal processing highly improves performance}
+
+On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
+improves the score on both metrics. However, processing, weights and averaging
+(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
+described in Section \ref{sec:filter} are the key steps of our algorithm.
 
 \begin{table}[tbh]
 \centering
-\caption{TODO}
 \begin{tabular}{@{}l *{8}{c}@{}}
+\hline
   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\cmidrule(r){2-5}\cmidrule(r){6-9}
+\hline
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-\midrule
 No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
 P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
 P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
 P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
 Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
-Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
+\caption{TODO \textcolor{red}{version simple!!}}
+\label{tab:tab3}
 \end{table}
-
-
 
 
 
@@ -495,7 +469,6 @@ on that particular topic.
 
 
 \section*{Acknowledgements}
-
 A. Joly and G. Louppe are research fellows of
 the FNRS, Belgium.  A. Sutera is recipient of
 a F.R.I.A. fellowship of F.R.S.-FNRS, Belgium.
@@ -553,6 +526,11 @@ such events occurred between consecutive time steps
 where $f_1$ and $f_2$ are parameters of the method.
 Finally, the weighted average of correlation matrices is combined with $Z$ such
 that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
+
+% For the directory method, only filters defined by Equations
+% \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
+% used.
+
 
 \section{Supplementary results}
 
