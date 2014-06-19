@@ -62,15 +62,15 @@ The human brain is a complex biological organ made of 100 billions of neurons,
 each connected to 7000 other neurons on average. Unfortunately, direct
 observations of the connectome, the wiring diagram of the brain, is not yet
 technically feasible. Without being perfect, calcium imaging currently allows
-the realtime and simultaneous observation of neuron activities from thousands
-of neurons, producing individual time series representing their fluoresence
+the real-time and simultaneous observation of neuron activities from thousands
+of neurons, producing individual time series representing their fluorescence
 intensity. From these data, the connectome inference problem consists in
 retrieving the synaptic connections between neurons on the basis of the
-fluoresence time series. In particular, this problem is often made difficult
+fluorescence time series. In particular, this problem is often made difficult
 because of experimental issues, including masking effects (making some of the
 neurons not to be observed or confounded with others), the low sampling rate of
 the optical device with respect to the neural activity speed or the slow decay
-of fluoresence.
+of fluorescence.
 
 Formally, the connectome can be represented as a directed graph $G=(V,E)$,
 where $V$ is a set of $p$ nodes, representing neurons, and $E \subseteq
@@ -93,7 +93,7 @@ calcium time series; Section \ref{sec:inference} then presents the proposed
 approach and its theoretical properties; Section \ref{sec:results} provides an
 empirical analysis and comparison with other network inference methods, while
 Section \ref{sec:conclusion} finally discusses our work and provides further
-research directions. Additionnaly, Appendix \ref{app:optimized} further
+research directions. Additionally, Appendix \ref{app:optimized} further
 describes, in all details, our actual winning method, giving slightly better
 results than the method presented in the paper but highly tuned for the
 challenge.
@@ -104,7 +104,7 @@ challenge.
 Under the simplifying assumption that neurons are on-off units, characterized
 by short periods of intense activities, or peaks, and longer periods of
 inactivity, the first part of our algorithm consists in cleaning the raw
-fluoresence data. More specifically, time series are processed using standard
+fluorescence data. More specifically, time series are processed using standard
 signal processing filters in order to remove noise due light scattering
 effects, account for fluorescence  low decay and reduce the importance of
 global high activity in the network. The overall process is illustrated on
@@ -185,7 +185,7 @@ between the two random variables (i.e., $(i, j) \in E$).
 
 Under that assumption that random variables follow a joint Gaussian
 distribution $\mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and covariance
-matrix $\Sigma$, $X_i$ and $X_j$ are conditionnally independent with respect to
+matrix $\Sigma$, $X_i$ and $X_j$ are conditionally independent with respect to
 the other variables $X^{-i,j}$ if their \textit{partial correlation} statistic
 is null~\citep{koller2009probabilistic}, i.e., if
 \begin{equation}
@@ -196,7 +196,7 @@ where $\rho_{X_i, X_j | X^{-i,j}}$ can now be interpreted as the degree of assoc
 between the two variables (i.e., the larger the value, the stronger the interaction).
 Together, the partial correlation statistics correspond to the inverse
 $\Sigma^{-1}$ of the covariance matrix, also known as the concentration of
-precision matrix. Computationnally, they can be estimated efficiently in
+precision matrix. Computationally, they can be estimated efficiently in
 $O(M^3)$ (instead of $O(p^3)$) from the $M$ first principal components
 extracted through PCA~\citep{bishop2006pattern} on the processed data. In our experiments, $M$ is set
 to $0.8 p$, thereby allowing us to further filter noise in the data.
@@ -279,15 +279,15 @@ pre-processing. Those results is obviously generalized over the other
 datasets see Appendix \textcolor{red}{REF}.
 
 As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
-increases with deeper trees in addition to be computionnally feasible. The
+increases with deeper trees in addition to be computationally feasible. The
 reason is twofold. First, the deeper the tree, the larger is the conditioning.
 As it was observed in the comparison between correlation and partial
-correlation, it screens indirect links in the infered network. Second, the
+correlation, it screens indirect links in the inferred network. Second, the
 number of small trees need to be much higher than deep trees in order to
 observe - and evaluate - all pairs.  However, as suggested by
 \cite{louppe2014understanding}, limiting the maximal depth of trees may help
-to reduce the misestimation bias in variable importance comuting, i.e.
-infering the strengh of a link. Therefore a trade-off of the maximal depth may give the best of both worlds.
+to reduce the misestimation bias in variable importance computing, i.e.
+inferring the strength of a link. Therefore a trade-off of the maximal depth may give the best of both worlds.
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
@@ -295,7 +295,7 @@ infering the strengh of a link. Therefore a trade-off of the maximal depth may g
 \begin{figure}[bth]
 \centering
 \includegraphics[width=\linewidth]{images/curves}
-\caption{Method precision-recall and roc curves. \textcolor{red}{GENI3?}
+\caption{Method precision-recall and ROC curves. \textcolor{red}{GENI3?}
          $\tau=0.11$}
 \label{fig:curves}
 \end{figure}
@@ -379,7 +379,7 @@ GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
 Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
-with respect to the problem statement. A clear hierachy is also difficult to derive based on ROC curve of Figure \ref{fig:curves}. We advice to avoid the AUROC
+with respect to the problem statement. A clear hierarchy is also difficult to derive based on ROC curve of Figure \ref{fig:curves}. We advice to avoid the AUROC
 for the assessment of network inference method. An alternative metric would
 be the area under the precision-recall curve (AUPRC). Those
 conclusions are in line with \cite{schrynemackers2013protocols}.
@@ -396,28 +396,28 @@ conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 In this paper, we present the winning method of the Connectomics challenge.
-This approach is simple and theorically grounded. We also evaluate the method
+This approach is simple and theoretically grounded. We also evaluate the method
 in a more detailed way and perform a comparison with other inference methods.
 We also discuss the relevance of the metric used in the challenge.
 
 In the discussion, we give hints about limiting the depth of trees in the GENIE3
 method to infer the network. It should be interesting to see if there is a
-optimum value for the maxmimal depth. And of course, it may also rewarding to increase considerably the number of trees to get more stable predictions.
+optimum value for the maximal depth. And of course, it may also rewarding to increase considerably the number of trees to get more stable predictions.
 
 In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
 i.e. conditioned on every subsets of the set of $p-2$ other variables. This
 would take into account multiple indirect paths between a given pair of
 variables. Instead of considering only the highest order, it may be useful to
-study with accuracy the infered network at all orders. In this case, it may not
-be very relevant but interesting in case of dymanical networks.
+study with accuracy the inferred network at all orders. In this case, it may not
+be very relevant but interesting in case of dynamical networks.
 
-As we mentionned, in order to maximize the ROC AUC, it was not necessary to
+As we mentioned, in order to maximize the ROC AUC, it was not necessary to
 discover causal relationships. It may be, in future works, promising to focus
 on that particular topic.
 
 
-\section*{Acknowledgements}
+\section*{Acknowledgments}
 A. Joly and G. Louppe are research fellows of
 the FNRS, Belgium.  A. Sutera is recipient of
 a F.R.I.A. fellowship of F.R.S.-FNRS, Belgium.
