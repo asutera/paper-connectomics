@@ -58,7 +58,7 @@ Connectomics - Network inference - Partial correlation
 
 \section{Introduction}\label{sec:intro}
 
-The human brain is a complex biological organ made of 100 billions of neurons,
+\textcolor{red}{To improve (style):} The human brain is a complex biological organ made of 100 billions of neurons,
 each connected to 7000 other neurons on average. Unfortunately, direct
 observations of the connectome, the wiring diagram of the brain, is not yet
 technically feasible. Without being perfect, calcium imaging currently allows
@@ -194,6 +194,7 @@ is null~\citep{koller2009probabilistic}, i.e., if
 Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j | X^{-i,j}} \neq 0$,
 where $\rho_{X_i, X_j | X^{-i,j}}$ can now be interpreted as the degree of association
 between the two variables (i.e., the larger the value, the stronger the interaction).
+Note however that the partial correlation statistic is symmetric (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i | X^{-j,i}}$) and therefore does not account for the direction of the interaction.
 Together, the partial correlation statistics correspond to the inverse
 $\Sigma^{-1}$ of the covariance matrix, also known as the concentration or
 precision matrix. Computationally, they can be estimated efficiently in
@@ -215,13 +216,9 @@ of hyper-parameters in the signal processing pipeline (e.g., $f_1$ or $f_2$ or
 the value of the threshold $\tau$). To further improve robustness, the last
 step of our method therefore consists in averaging correlation statistics over
 various values of the parameters, thereby reducing the variance of our
-predictions. Further details are provided in Appendix~\ref{app:optimized}.
-
-\textcolor{red}{G: Mention that correlation statistics are symmetric and do not account for direction.}
+predictions. In this case, the method is referred to as \textit{Averaged Partial correlation} statistics. Further details are provided in Appendix~\ref{app:optimized}.
 
 \section{Experiments} \label{sec:results}
-
-\textcolor{red}{AJ: It's not clear on which dataset we focus on}
 
 % Datasets
 To assess our method, we focus on the \textit{normal-2} dataset
@@ -260,10 +257,9 @@ challenge.
 network of $p$ neurons into $p$ supervised learning tasks. For each task,
 the fluorescence of a neuron is predicted from the fluorescence
 of all other neurons using a tree based ensemble such as
-random forest \citep{breiman2001random}. The tree ensemble associate a
-variable importance scores \citep{louppe2013understanding}
-to each neuron used in the predictions, which is used as a connectivity
-score. The following parameters are used
+random forest \citep{breiman2001random}. The tree ensemble associates a
+variable importance score \citep{louppe2013understanding}
+to each neuron used in the predictions, which is used as a degree of associate. The following parameters are used
 $10000$ trees, $\log_2{p}$ variables are randomly selected to split tree
 nodes and the maximal tree depth is constrained to 1, 2 or 3.
 \end{itemize}
@@ -350,9 +346,9 @@ to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
 Interestingly, methods that takes into account directivity, namely GTE and
 GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
-(see GTE and GTE(undirected) in Figure \ref{fig:curves}
+(in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
 \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
-especially pr-curve.}).
+especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
 Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
@@ -378,9 +374,10 @@ This approach is simple and theoretically grounded. We also evaluate the method
 in a more detailed way and perform a comparison with other inference methods.
 We also discuss the relevance of the metric used in the challenge.
 
-In the discussion, we give hints about limiting the depth of trees in the GENIE3
-method to infer the network. It should be interesting to see if there is a
-optimum value for the maximal depth. And of course, it may also rewarding to increase considerably the number of trees to get more stable predictions.
+In the discussion, we give hints about limiting the depth of trees in the
+GENIE3 method to infer the network. It should be interesting to see if there
+is a optimum value for the maximal depth. And of course, it may also rewarding
+to increase considerably the number of trees to get more stable predictions.
 
 In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
@@ -470,7 +467,7 @@ that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \hline \hline
 % Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
-Correlation            & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
+Pearson correlation    & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
 GENIE3 (depth = 1)     & 0.878 & & & & 0.184 & & & \\
 GENIE3 (depth = 2)     & 0.889 & & & & 0.217 & & & \\
 GENIE3 (depth = 3)     & & & & & & & & \\
