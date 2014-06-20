@@ -221,7 +221,7 @@ predictions. Further details are provided in Appendix~\ref{app:optimized}.
 
 \section{Experiments} \label{sec:results}
 
-\textcolor{red}{AJ: It's not clear on which datset we focus on}
+\textcolor{red}{AJ: It's not clear on which dataset we focus on}
 
 % Datasets
 To assess our method, we focus on the \textit{normal-2} dataset
@@ -271,27 +271,26 @@ nodes and the maximal tree depth is constrained to 1, 2 or 3.
 
 \subsection*{Partial correlation improves over state-of-the-art methods}
 
-Figure \ref{fig:curves} shows the ROC curve and precision-recall curve
+Figure \ref{fig:curves} shows the ROC curve  and precision-recall curve
 for correlation, GTE and partial correlation on the \textit{normal-2}
 dataset. The partial correlation outperforms other state-of-the-art methods
 by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
-AUROC.
-
-Two reasons might explain such differences: (i) among
+AUROC. Two reasons might explain such differences: (i) among
 those methods only the partial correlation makes the distinction between
 direct and indirect connections, (ii) the simulated network from the
-\citep{stetter2012model} generator could be reduced to a linear model after
-pre-processing. Those results is obviously generalized over the other
-datasets see Appendix \textcolor{red}{REF}.
+\citep{stetter2012model} generator or the neural network in general could be
+reduced to a linear model after pre-processing. Those results is obviously
+generalized over the other datasets see Appendix \textcolor{red}{REF}.
 
 \begin{figure}[bth]
 \centering
-\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
-\subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
+\subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
+\subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
 \caption{The weighted average of partial correlation matrix, winning approach
          of the challenge, yields better than AUROC and AUPRC than all
          other state-of-the-art methods. (parameters: $\tau=0.11$ except for
-         averaging method, partial correlation used filer $f_1$).}
+         averaged partial correlation method, partial correlation used
+         filter $f_1$).}
 \label{fig:curves}
 \end{figure}
 
@@ -351,6 +350,9 @@ to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
 Interestingly, methods that takes into account directivity, namely GTE and
 GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
+(see GTE and GTE(undirected) in Figure \ref{fig:curves}
+\textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
+especially pr-curve.}).
 Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
