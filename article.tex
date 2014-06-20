@@ -221,6 +221,8 @@ predictions. Further details are provided in Appendix~\ref{app:optimized}.
 
 \section{Experiments} \label{sec:results}
 
+\textcolor{red}{AJ: It's not clear on which datset we focus on}
+
 % Datasets
 To assess our method, we focus on the \textit{normal-2} dataset
 provided by the organizers of the Connectomics challenge. Experiments
@@ -275,6 +277,12 @@ dataset. The partial correlation outperforms other state-of-the-art methods
 by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
 AUROC.
 
+Two reasons might explain such differences: (i) among
+those methods only the partial correlation makes the distinction between
+direct and indirect connections, (ii) the simulated network from the
+\citep{stetter2012model} generator could be reduced to a linear model after
+pre-processing. Those results is obviously generalized over the other
+datasets see Appendix \textcolor{red}{REF}.
 
 \begin{figure}[bth]
 \centering
@@ -282,17 +290,12 @@ AUROC.
 \subfigure[]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
 \caption{The weighted average of partial correlation matrix, winning approach
          of the challenge, yields better than AUROC and AUPRC than all
-         other state-of-the-art methods. (parameters: $\tau=0.11$, partial
-         correlation used filer $f_1$).}
+         other state-of-the-art methods. (parameters: $\tau=0.11$ except for
+         averaging method, partial correlation used filer $f_1$).}
 \label{fig:curves}
 \end{figure}
 
-Two reasons might explain such differences: (i) among
-those methods only the partial correlation makes the distinction between
-direct and indirect connections, (ii) the simulated network from the
-\citep{stetter2012model} generator could be reduced to a linear model after
-pre-processing. Those results is obviously generalized over the other
-datasets see Appendix \textcolor{red}{REF}.
+
 
 \textcolor{red}{AJ: GENI3 is not on the figure}
 As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
@@ -333,7 +336,7 @@ may give the best of both worlds.
 
 
 
-\subsection*{Area under the ROC curve is a poor metric for network inference}
+\subsection*{Area under the ROC curve a poor metric for network inference}
 
 The best method only infers the \textbf{undirected} network by giving the
 same connectivity score to both edges $(i,j)$ and $(j,i)$. This is quite
