@@ -304,9 +304,6 @@ generalized over the other datasets see Appendix \textcolor{red}{REF}.
 \label{fig:curves}
 \end{figure}
 
-
-
-\textcolor{red}{AJ: GENI3 is not on the figure}
 As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
 increases with deeper trees in addition to be computationally feasible. The
 reason is twofold. First, the deeper the tree, the larger is the conditioning.
@@ -315,8 +312,8 @@ correlation, it screens indirect links in the inferred network. Second, the
 number of small trees need to be much higher than deep trees in order to
 observe - and evaluate - all pairs.  However, as suggested by
 \cite{louppe2014understanding}, limiting the maximal depth of trees may help
-to reduce the misestimation bias in variable importance computing, i.e.
-inferring the strength of a link. Therefore a trade-off of the maximal depth
+to improve the variable importance computing, i.e.
+inferring the degree of association. Therefore a trade-off of the maximal depth
 may give the best of both worlds.
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
@@ -389,26 +386,28 @@ conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 In this paper, we present the winning method of the Connectomics challenge.
-This approach is simple and theoretically grounded. We also evaluate the method
+Our approach is simple and theoretically sounded and made of two main stages: the signal is first preprocessed with several filters and then we derive the degree of association matrix by computing the partial correlation statistics matrix. We also evaluate the method
 in a more detailed way and perform a comparison with other inference methods.
-We also discuss the relevance of the metric used in the challenge.
+We finally discuss the relevance of the metric used in the challenge and we point out that it was not necessary to
+discover causal relationships to maximize the ROC AUC. Thus, it may be  promising to focus
+on that particular topic in future works.
 
-In the discussion, we give hints about limiting the depth of trees in the
-GENIE3 method to infer the network. It should be interesting to see if there
-is a optimum value for the maximal depth. And of course, it may also rewarding
-to increase considerably the number of trees to get more stable predictions.
+% In the discussion, we give hints about limiting the depth of trees in the
+% GENIE3 method to infer the network. It should be interesting to see if there
+% is a optimum value for the maximal depth. And of course, it may also rewarding
+% to increase considerably the number of trees to get more stable predictions.
 
-In previous study \citep{shipley2002cause}, it has been suggested to
-consider correlation coefficients of all possible orders,
-i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-would take into account multiple indirect paths between a given pair of
-variables. Instead of considering only the highest order, it may be useful to
-study with accuracy the inferred network at all orders. In this case, it may not
-be very relevant but interesting in case of dynamical networks.
+% In previous study \citep{shipley2002cause}, it has been suggested to
+% consider correlation coefficients of all possible orders,
+% i.e. conditioned on every subsets of the set of $p-2$ other variables. This
+% would take into account multiple indirect paths between a given pair of
+% variables. Instead of considering only the highest order, it may be useful to
+% study with accuracy the inferred network at all orders. In this case, it may not
+% be very relevant but interesting in case of dynamical networks.
 
-As we mentioned, in order to maximize the ROC AUC, it was not necessary to
-discover causal relationships. It may be, in future works, promising to focus
-on that particular topic.
+% As we mentioned, in order to maximize the ROC AUC, it was not necessary to
+% discover causal relationships. It may be, in future works, promising to focus
+% on that particular topic.
 
 
 \section*{Acknowledgments}
