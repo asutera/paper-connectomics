@@ -134,7 +134,7 @@ where $f_1$x effect is shown in the second plot in the figure.
 Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
 neuron spikes -- characterized by high frequencies -- by filtering out low
-frequencies through a high-pass filter, resulting in third plot of the figure:
+frequencies through a high-pass filter, resulting in the third plot of the figure:
 \begin{align} % an asymmetrical discrete derivative filter
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
 \end{align}
@@ -183,7 +183,7 @@ X^{-i,j}$, then the observation of one of the two variables provides some
 information about the other, therefore highlighting a direct interaction
 between the two random variables (i.e., $(i, j) \in E$).
 
-Under that assumption that random variables follow a joint Gaussian
+Under the assumption that random variables follow a joint Gaussian
 distribution $\mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and covariance
 matrix $\Sigma$, $X_i$ and $X_j$ are conditionally independent with respect to
 the other variables $X^{-i,j}$ if their \textit{partial correlation} statistic
@@ -202,7 +202,7 @@ extracted through PCA~\citep{bishop2006pattern} on the processed data. In our ex
 to $0.8 p$, thereby allowing us to further filter noise in the data.
 
 To highlight the benefits of measuring the partial dependence conditional to
-all other variables, we compare in Section~\ref{sec:results} with
+all other variables, we compare in Section~\ref{sec:results} with the
 \textit{Pearson correlation} statistics, which measure instead the linear dependence
 between variables, independently of the others. Accordingly, $X_i$ and $X_j$ are
 independent if their Pearson correlation statistic is zero, that is if
@@ -210,8 +210,8 @@ independent if their Pearson correlation statistic is zero, that is if
 \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
 \end{equation}
 
-Finally, let us remark that performance shows to be quite sensitive the choice
-of hyper-parameters in our signal processing pipeline (e.g., $f_1$ or $f_2$ or
+Finally, let us remark that performance shows to be quite sensitive to the choice
+of hyper-parameters in the signal processing pipeline (e.g., $f_1$ or $f_2$ or
 the value of the threshold $\tau$). To further improve robustness, the last
 step of our method therefore consists in averaging correlation statistics over
 various values of the parameters, thereby reducing the variance of our
