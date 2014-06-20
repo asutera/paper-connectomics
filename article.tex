@@ -349,10 +349,10 @@ By contrast, the same experiment with AUPRC would yield
 to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
 Interestingly, methods that takes into account directivity, namely GTE and
-GENIE3, slightly improve their AUROC and AUPRC by giving the same way to directed edges.
-(see GTE and GTE(undirected) in Figure \ref{fig:curves}
+GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
+(see GTE and GTE(undirected) in particular Figure \ref{fig:pr_curve}
 \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
-especially pr-curve.}).
+especially pr-curve.} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
 Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
@@ -378,9 +378,10 @@ This approach is simple and theoretically grounded. We also evaluate the method
 in a more detailed way and perform a comparison with other inference methods.
 We also discuss the relevance of the metric used in the challenge.
 
-In the discussion, we give hints about limiting the depth of trees in the GENIE3
-method to infer the network. It should be interesting to see if there is a
-optimum value for the maximal depth. And of course, it may also rewarding to increase considerably the number of trees to get more stable predictions.
+In the discussion, we give hints about limiting the depth of trees in the
+GENIE3 method to infer the network. It should be interesting to see if there
+is a optimum value for the maximal depth. And of course, it may also rewarding
+to increase considerably the number of trees to get more stable predictions.
 
 In previous study \citep{shipley2002cause}, it has been suggested to
 consider correlation coefficients of all possible orders,
