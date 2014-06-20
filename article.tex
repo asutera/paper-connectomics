@@ -41,15 +41,14 @@
 
 \maketitle
 
-\begin{abstract}
-In this work, we propose a simple and mathematically motivated method for the
-problem of connectome inference in calcium imaging data. The proposed algorithm
-consists in i) processing the raw signals to detect neural peak activities and ii)
-inferring the degree of association between neurons from partial correlation
-statistics.  This paper summarizes the methodology that led us to win the
-Connectomics Challenge, proposes a simplified version of our method and finally
-discusses our results with respect to other inference methods.
-\end{abstract}
+\begin{abstract} In this work, we propose a simple and mathematically
+motivated method for the problem of connectome inference in calcium imaging
+data. The proposed algorithm is made of two steps. First, processing the raw
+signals to detect neural peak activities. Second, inferring the degree of
+association between neurons from partial correlation statistics. This paper
+summarizes the methodology that led us to win the Connectomics Challenge,
+proposes a simplified version of our method and finally discusses our results
+with respect to other inference methods. \end{abstract}
 
 \begin{keywords}
 Connectomics - Network inference - Partial correlation
@@ -58,19 +57,21 @@ Connectomics - Network inference - Partial correlation
 
 \section{Introduction}\label{sec:intro}
 
-\textcolor{red}{To improve (style):} The human brain is a complex biological organ made of 100 billions of neurons,
-each connected to 7000 other neurons on average. Unfortunately, direct
-observations of the connectome, the wiring diagram of the brain, is not yet
-technically feasible. Without being perfect, calcium imaging currently allows
-the real-time and simultaneous observation of neuron activities from thousands
-of neurons, producing individual time series representing their fluorescence
-intensity. From these data, the connectome inference problem consists in
-retrieving the synaptic connections between neurons on the basis of the
-fluorescence time series. In particular, this problem is often made difficult
-because of experimental issues, including masking effects (making some of the
-neurons not to be observed or confounded with others), the low sampling rate of
-the optical device with respect to the neural activity speed or the slow decay
-of fluorescence.
+%%%%%%% !!!!!!!! \textcolor{red}{To improve (style):} !!!! %%%%%%%%
+The human brain is a complex biological
+organ made of 100 billions of neurons, each connected to 7000 other neurons on
+average. Unfortunately, direct observations of the connectome, the wiring
+diagram of the brain, is not yet technically feasible. Without being perfect,
+calcium imaging currently allows the real-time and simultaneous observation of
+neuron activities from thousands of neurons, producing individual time series
+representing their fluorescence intensity. From these data, the connectome
+inference problem consists in retrieving the synaptic connections between
+neurons on the basis of the fluorescence time series. In particular, this
+problem is often made difficult because of experimental issues, including
+masking effects (making some of the neurons not to be observed or confounded
+with others), the low sampling rate of the optical device with respect to the
+neural activity speed or the slow decay of fluorescence.
+%%%%%%%%%%% !!!!!!!!!!!!!! %%%%%%%%%%%%%%%%
 
 Formally, the connectome can be represented as a directed graph $G=(V,E)$,
 where $V$ is a set of $p$ nodes, representing neurons, and $E \subseteq
@@ -110,12 +111,26 @@ effects, account for fluorescence  low decay and reduce the importance of
 global high activity in the network. The overall process is illustrated on
 Figure~\ref{fig:filtered-signal}.
 
+
 \begin{figure}
 \centering
-\includegraphics[width=0.4\linewidth]{images/fig_filtering}
+\subfigure[Original]{\includegraphics[width=0.3\textwidth]{images/original_curve.pdf} \label{fig:original_curve}}
+\subfigure[Low-pass $f_1(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/filter_curve.pdf} \label{fig:lp_curve}}\\
+\subfigure[High-pass $g(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}
+\subfigure[Thresholding $h(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}\\
+
+\subfigure[Weights $w(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:original_curve}}
 \caption{Signal processing process for extracting peaks from the raw fluorescence data.}
 \label{fig:filtered-signal}
 \end{figure}
+
+
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.4\linewidth]{images/fig_filtering}
+% \caption{Signal processing process for extracting peaks from the raw fluorescence data.}
+% \label{fig:filtered-signal}
+% \end{figure}
 
 As the first plot in Figure~\ref{fig:filtered-signal} illustrates, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
@@ -149,8 +164,9 @@ h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
 
 At this step, the processed signal only contains clean spikes. However, when a
 large part of the network is firing, detecting pairwise neuron interactions is a
-difficult task. \textcolor{red}{G: say that neurons may fire because of global
-high activity, without any actual cause -- see generator.}
+difficult task. Futhermore, it is even possible that neurons fire because of global high activity, without actual cause (see \cite{stetter2012model}).
+% \textcolor{red}{G: say that neurons may fire because of global
+% high activity, without any actual cause -- see generator.}
 Accordingly, in order to reduce false interaction detection,
 peak intensities at time $t$ are regularized by the global activity of all
 neurons, thereby reducing the importance of peaks identified during global high activity periods:
@@ -231,13 +247,12 @@ networks have approximately 15000 edges.
 
 % Metrics : ROC AUC and AUPRC
 In supervised learning terms, the network inference task can be viewed as a
-binary classification task where one has to correctly classify the presence
-or the absence of edges of the graph. We assess the accuracy of the
-network inference method using the area under the ROC curve (AUROC)
-and the area under the precision-recall curve (AUPRC)
-\citep{schrynemackers2013protocols}. Since neurons are not self-connected
-($(i, i) \not \in E, \forall i \in V$) and some inference methods could
-give maximal scores to those edges, e.g. Pearson
+binary classification task where one has to correctly classify the presence or
+the absence of edges of the graph. We assess the accuracy of the network
+inference method using the area under the ROC curve (AUROC) and the area under
+the precision-recall curve (AUPRC) \citep{schrynemackers2013protocols}. Since
+neurons are not self-connected ($(i, i) \not \in E, \forall i \in V$) and some
+inference methods could give maximal scores to those edges, e.g. Pearson
 correlation, those elements are set to have minimal connectivity score prior
 assessment.
 
@@ -253,16 +268,15 @@ whenever the average fluorescence is over a conditioning level.
 Pre-processing and conditioning level were set to reproduce baseline of the
 challenge.
 
-\item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference of the
-network of $p$ neurons into $p$ supervised learning tasks. For each task,
-the fluorescence of a neuron is predicted from the fluorescence
-of all other neurons using a tree based ensemble such as
-random forest \citep{breiman2001random}. The tree ensemble associates a
-variable importance score \citep{louppe2013understanding}
-to each neuron used in the predictions, which is used as a degree of associate. The following parameters are used
-$10000$ trees, $\log_2{p}$ variables are randomly selected to split tree
-nodes and the maximal tree depth is constrained to 1, 2 or 3.
-\end{itemize}
+\item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference
+of the network of $p$ neurons into $p$ supervised learning tasks. For each
+task, the fluorescence of a neuron is predicted from the fluorescence of all
+other neurons using a tree based ensemble such as random forest
+\citep{breiman2001random}. The tree ensemble associates a variable importance
+score \citep{louppe2013understanding} to each neuron used in the predictions,
+which is used as a degree of associate. The following parameters are used
+$10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
+and the maximal tree depth is constrained to 1, 2 or 3. \end{itemize}
 
 
 \subsection*{Partial correlation improves over state-of-the-art methods}
@@ -286,7 +300,7 @@ generalized over the other datasets see Appendix \textcolor{red}{REF}.
          of the challenge, yields better than AUROC and AUPRC than all
          other state-of-the-art methods. (parameters: $\tau=0.11$ except for
          averaged partial correlation method, partial correlation used
-         filter $f_1$).}
+         filter $f_1$). }
 \label{fig:curves}
 \end{figure}
 
@@ -333,27 +347,32 @@ may give the best of both worlds.
 
 \subsection*{Area under the ROC curve a poor metric for network inference}
 
-The best method only infers the \textbf{undirected} network by giving the
-same connectivity score to both edges $(i,j)$ and $(j,i)$. This is quite
-surprising considering the problem statement.
+The best method only infers the \textbf{undirected} network by giving the same
+degree of association to both edges $(i,j)$ and $(j,i)$. This is quite
+surprising considering the problem statement. Trying to direct links could be
+more penalizing than rewarding. For example, symmetrizing the degree of
+association matrix does not necessarily degrade AUPRC and AUROC.
 
-If the undirected network is perfectly inferred, it would already yield
-high AUROC score for instance $\approx{}0.996$ on \textit{normal-1}. Trying
-to infer edge directivity is likely to be counter-productive or yield
-small gain.
-By contrast, the same experiment with AUPRC would yield
-to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
+
+If the inferred network corresponds to the undirected network, it would
+already yield high AUROC score for instance $\approx 0.996$ on
+\textit{normal-1}. Infering edge directivity is likely to be counter-
+productive or yield small gain. By contrast, the same experiment with AUPRC
+would yield to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
-Interestingly, methods that takes into account directivity, namely GTE and
-GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
-(in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
-\textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
-especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
-Trying to detect the link direction is more penalizing than rewarding.
+
+
+
+% Interestingly, methods that takes into account directivity, namely GTE and
+% GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
+% (in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
+% \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
+% especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
+% Trying to detect the link direction is more penalizing than rewarding.
 
 The area under the ROC curve is not consistent metric
 with respect to the problem statement. A clear hierarchy is also difficult to
-derive based on ROC curve of Figure \ref{fig:curves}. We advice to avoid the AUROC
+derive based on ROC curve of Figure \ref{fig:roc_curve}. We advice to avoid the AUROC
 for the assessment of network inference method. An alternative metric would
 be the area under the precision-recall curve (AUPRC). Those
 conclusions are in line with \cite{schrynemackers2013protocols}.
