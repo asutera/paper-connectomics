@@ -288,7 +288,7 @@ by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
 AUROC. Two reasons might explain such differences: (i) among
 those methods only the partial correlation makes the distinction between
 direct and indirect connections, (ii) the simulated network from the
-\citep{stetter2012model} generator or the neural network in general could be
+\citep{stetter2012model} generator or neural networks in general could be
 reduced to a linear model after pre-processing. Those results is obviously
 generalized over the other datasets see Appendix \textcolor{red}{REF}.
 
@@ -304,17 +304,22 @@ generalized over the other datasets see Appendix \textcolor{red}{REF}.
 \label{fig:curves}
 \end{figure}
 
-As it can also be seen on Figure \ref{fig:curves}, the GENIE3 performance
-increases with deeper trees in addition to be computationally feasible. The
+As observed on Figure \ref{fig:curves}, the GENIE3 performance
+increases with deeper trees while being still computationally feasible. The
 reason is twofold. First, the deeper the tree, the larger is the conditioning.
+\textcolor{red}{AJ: conditioning?}
 As it was observed in the comparison between correlation and partial
-correlation, it screens indirect links in the inferred network. Second, the
+correlation, it screens indirect links in the inferred network.
+\textcolor{red}{AJ: I don't understand the link with GENIE3}
+Second, the
 number of small trees need to be much higher than deep trees in order to
 observe - and evaluate - all pairs.  However, as suggested by
 \cite{louppe2014understanding}, limiting the maximal depth of trees may help
 to improve the variable importance computing, i.e.
-inferring the degree of association. Therefore a trade-off of the maximal depth
-may give the best of both worlds.
+inferring the degree of association. \textcolor{red}{AJ: there is no explanation
+of why it would be better apart for computational reason.} Therefore a trade-off
+ of the maximal depth may give the best of both worlds. \textcolor{red}{AJ:
+ Which tradeoff? Which worlds?}
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
