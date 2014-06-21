@@ -114,11 +114,11 @@ Figure~\ref{fig:filtered-signal}.
 
 \begin{figure}
 \centering
-\subfigure[Original]{\includegraphics[width=0.3\textwidth]{images/original_curve.pdf} \label{fig:original_curve}}
-\subfigure[Low-pass $f_1(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/filter_curve.pdf} \label{fig:lp_curve}}
-\subfigure[High-pass $g(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}\\
-\subfigure[Thresholding $h(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}
-\subfigure[Weights $w(x_i^t)$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:original_curve}}
+\subfigure[Raw signal]{\includegraphics[width=0.3\textwidth]{images/original_curve.pdf} \label{fig:original_curve}}
+\subfigure[Low-pass filter $f_1$]{\includegraphics[width=0.3\textwidth]{images/filter_curve.pdf} \label{fig:lp_curve}}
+\subfigure[High-pass filter $g$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}\\
+\subfigure[Hard-threshold filter $h$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}
+\subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:original_curve}}
 \caption{Signal processing process for extracting peaks from the raw fluorescence data.
          \textcolor{red}{AJ: The bottom axe is hidden on some figures.}}
 \label{fig:filtered-signal}
@@ -164,12 +164,14 @@ h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
 
 At this step, the processed signal only contains clean spikes. However, when a
 large part of the network is firing, detecting pairwise neuron interactions is a
-difficult task. Futhermore, it is even possible that neurons fire because of global high activity, without actual cause (see \cite{stetter2012model}).
+difficult task. Furthermore, it is even possible that neurons spike because of
+a global high activity, without any actual cause (see \cite{stetter2012model}).
 % \textcolor{red}{G: say that neurons may fire because of global
 % high activity, without any actual cause -- see generator.}
 Accordingly, in order to reduce false interaction detection,
 peak intensities at time $t$ are regularized by the global activity of all
-neurons, thereby reducing the importance of peaks identified during global high activity periods:
+neurons, thereby reducing the importance of peaks identified during global
+high activity periods:
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
