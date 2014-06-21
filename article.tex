@@ -277,7 +277,8 @@ other neurons using a tree based ensemble such as random forest
 score \citep{louppe2013understanding} to each neuron used in the predictions,
 which is used as a degree of associate. The following parameters are used
 $10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
-and the maximal tree depth is constrained to 1, 2 or 3.
+and the maximal tree depth is constrained to 1, 2 or 3. \textcolor{red}{AJ Which
+depth is represented on the graph?}
 \end{itemize}
 
 \subsection*{Partial correlation improves over state-of-the-art methods}
@@ -285,13 +286,15 @@ and the maximal tree depth is constrained to 1, 2 or 3.
 Figure \ref{fig:curves} shows the ROC curve  and precision-recall curve
 for correlation, GTE and partial correlation on the \textit{normal-2}
 dataset. The partial correlation outperforms other state-of-the-art methods
-by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.05$ in
-AUROC. Two reasons might explain such differences: (i) among
-those methods only the partial correlation makes the distinction between
-direct and indirect connections, (ii) the simulated network from the
+by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
+AUROC. Averaging Partial correlation matrix over a wide of parameters
+further improves AUPRC to $0.389$ and improve AUROC by $0.009$.
+Two reasons might explain such differences: (i) only the partial
+correlation-based methods and GENI3 at lesser extent distinguish
+direct links from indirect one, (ii) simulated networks from the
 \citep{stetter2012model} generator or neural networks in general could be
-reduced to a linear model after pre-processing. Those results is obviously
-generalized over the other datasets see Appendix \textcolor{red}{REF}.
+reduced to a linear model after pre-processing. Those results
+generalizes over the other datasets see Appendix \textcolor{red}{REF}.
 
 \begin{figure}[bth]
 \centering
@@ -305,6 +308,7 @@ generalized over the other datasets see Appendix \textcolor{red}{REF}.
 \label{fig:curves}
 \end{figure}
 
+\textcolor{red}{Only one GENI3, thus it can't be observed.}
 As observed on Figure \ref{fig:curves}, the GENIE3 performance increases with
 deeper trees while being still computationally feasible. The reason is twofold.
 First, the deeper the tree, the larger is the conditioning. \textcolor{red}{AJ:
@@ -318,30 +322,6 @@ computing, i.e. inferring the degree of association. \textcolor{red}{AJ: there
 is no explanation of why it would be better apart for computational reason.}
 Therefore a trade-off  of the maximal depth may give the best of both worlds.
 \textcolor{red}{AJ:  Which tradeoff? Which worlds?}
-
-% Opt: obviously when parameters are tuned/optimized, it's slightly better -->
-% see appendix for a full description of the method
-
-
-% \begin{table}
-% \small
-% \centering
-% \begin{tabular}{@{}l *{8}{c}@{}}
-%   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-% \cmidrule(r){2-5}\cmidrule(r){6-9}
-% Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-% \hline \hline
-% % Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
-% GENIE3 (depth = 1)     &  & & & & & & & \\
-% GENIE3 (depth = 2)     &  & & & & & & & \\
-% GENIE3 (depth = 3)     &  & & & & & & & \\
-% GTE                    &  & & & & & & & \\
-% % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
-% \end{tabular}
-% \caption{TODO (network are undirected)}
-% \label{tab:tab2}
-% \end{table}
-
 
 
 
@@ -358,7 +338,7 @@ If the inferred network corresponds to the undirected network, it would
 already yield high AUROC score for instance $\approx 0.996$ on
 \textit{normal-1}. Infering edge directivity is likely to be counter-
 productive or yield small gain. By contrast, the same experiment with AUPRC
-would yield to a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
+would yield a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
 correctly directivity would be more rewarding in AUPRC term.
 
 
@@ -370,12 +350,12 @@ correctly directivity would be more rewarding in AUPRC term.
 % especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
 % Trying to detect the link direction is more penalizing than rewarding.
 
-The area under the ROC curve is not consistent metric
-with respect to the problem statement. A clear hierarchy is also difficult to
-derive based on ROC curve of Figure \ref{fig:roc_curve}. We advice to avoid the AUROC
-for the assessment of network inference method. An alternative metric would
-be the area under the precision-recall curve (AUPRC). Those
-conclusions are in line with \cite{schrynemackers2013protocols}.
+The area under the ROC curve is not a consistent metric with respect to the
+problem statement. A clear hierarchy is also difficult to derive from ROC
+curves as shown on Figure \ref{fig:roc_curve}. We advice to avoid the AUROC for
+the assessment of network inference method. An alternative would be to assess
+network inference using the area under the precision-recall curve (AUPRC).
+Those conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 \section{Conclusions} \label{sec:conclusion}
@@ -388,12 +368,15 @@ conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 
-In this paper, we present the winning method of the Connectomics challenge.
-Our approach is simple and theoretically sounded and made of two main stages: the signal is first preprocessed with several filters and then we derive the degree of association matrix by computing the partial correlation statistics matrix. We also evaluate the method
-in a more detailed way and perform a comparison with other inference methods.
-We finally discuss the relevance of the metric used in the challenge and we point out that it was not necessary to
-discover causal relationships to maximize the ROC AUC. Thus, it may be  promising to focus
-on that particular topic in future works.
+In this paper, we present the winning method of the Connectomics challenge. Our
+approach is simple and theoretically sounded and made of two main stages: the
+signal is first preprocessed with several filters and then we derive the degree
+of association matrix by computing the partial correlation statistics matrix.
+We also evaluate the method in a more detailed way and perform a comparison
+with other inference methods. We finally discuss the relevance of the metric
+used in the challenge and we point out that it was not necessary to discover
+causal relationships to maximize the ROC AUC. Thus, it may be  promising to
+focus on that particular topic in future works.
 
 % In the discussion, we give hints about limiting the depth of trees in the
 % GENIE3 method to infer the network. It should be interesting to see if there
