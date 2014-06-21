@@ -227,12 +227,14 @@ independent if their Pearson correlation statistic is zero, that is if
 \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
 \end{equation}
 
-Finally, let us remark that performance shows to be quite sensitive to the choice
-of hyper-parameters in the signal processing pipeline (e.g., $f_1$ or $f_2$ or
-the value of the threshold $\tau$). To further improve robustness, the last
-step of our method therefore consists in averaging correlation statistics over
-various values of the parameters, thereby reducing the variance of our
-predictions. In this case, the method is referred to as \textit{Averaged Partial correlation} statistics. Further details are provided in Appendix~\ref{app:optimized}.
+Finally, let us remark that performance shows to be quite sensitive to the
+choice of hyper-parameters in the signal processing pipeline (e.g., $f_1$ or
+$f_2$ or the value of the threshold $\tau$). To further improve robustness, the
+last step of our method therefore consists in averaging correlation statistics
+over various values of the parameters, thereby reducing the variance of our
+predictions. In this case, the method is referred to as \textit{Averaged
+Partial correlation} statistics. Further details are provided in
+Appendix~\ref{app:optimized}.
 
 \section{Experiments} \label{sec:results}
 
@@ -260,13 +262,12 @@ The proposed approach is compared to Pearson correlation statistics (as
 described in Section~\ref{sec:inference}), generalized transfer entropy (GTE)
 and the GENIE3 algorithm.
 \begin{itemize}
-\item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge, measures for all pairs of
-neurons $i$ and $j$ the reduction of uncertainty in predicting future values of
-$i$ given the observation of the time series of the neuron $j$
-conditionally to the observation of past time series of neuron $i$,
-whenever the average fluorescence is over a conditioning level.
-Pre-processing and conditioning level were set to reproduce baseline of the
-challenge.
+\item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge,
+measures for all pairs of neurons $i$ and $j$ the reduction of uncertainty in
+predicting future values of $i$ given the observation of the time series of the
+neuron $j$ conditionally to the observation of past time series of neuron $i$,
+whenever the average fluorescence is over a conditioning level. Pre-processing
+and conditioning level were set to reproduce baseline of the challenge.
 
 \item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference
 of the network of $p$ neurons into $p$ supervised learning tasks. For each
@@ -276,8 +277,8 @@ other neurons using a tree based ensemble such as random forest
 score \citep{louppe2013understanding} to each neuron used in the predictions,
 which is used as a degree of associate. The following parameters are used
 $10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
-and the maximal tree depth is constrained to 1, 2 or 3. \end{itemize}
-
+and the maximal tree depth is constrained to 1, 2 or 3.
+\end{itemize}
 
 \subsection*{Partial correlation improves over state-of-the-art methods}
 
@@ -304,22 +305,19 @@ generalized over the other datasets see Appendix \textcolor{red}{REF}.
 \label{fig:curves}
 \end{figure}
 
-As observed on Figure \ref{fig:curves}, the GENIE3 performance
-increases with deeper trees while being still computationally feasible. The
-reason is twofold. First, the deeper the tree, the larger is the conditioning.
-\textcolor{red}{AJ: conditioning?}
-As it was observed in the comparison between correlation and partial
-correlation, it screens indirect links in the inferred network.
-\textcolor{red}{AJ: I don't understand the link with GENIE3}
-Second, the
-number of small trees need to be much higher than deep trees in order to
-observe - and evaluate - all pairs.  However, as suggested by
-\cite{louppe2014understanding}, limiting the maximal depth of trees may help
-to improve the variable importance computing, i.e.
-inferring the degree of association. \textcolor{red}{AJ: there is no explanation
-of why it would be better apart for computational reason.} Therefore a trade-off
- of the maximal depth may give the best of both worlds. \textcolor{red}{AJ:
- Which tradeoff? Which worlds?}
+As observed on Figure \ref{fig:curves}, the GENIE3 performance increases with
+deeper trees while being still computationally feasible. The reason is twofold.
+First, the deeper the tree, the larger is the conditioning. \textcolor{red}{AJ:
+conditioning?} As it was observed in the comparison between correlation and
+partial correlation, it screens indirect links in the inferred network.
+\textcolor{red}{AJ: I don't understand the link with GENIE3} Second, the number
+of small trees need to be much higher than deep trees in order to observe - and
+evaluate - all pairs.  However, as suggested by \cite{louppe2014understanding},
+limiting the maximal depth of trees may help to improve the variable importance
+computing, i.e. inferring the degree of association. \textcolor{red}{AJ: there
+is no explanation of why it would be better apart for computational reason.}
+Therefore a trade-off  of the maximal depth may give the best of both worlds.
+\textcolor{red}{AJ:  Which tradeoff? Which worlds?}
 
 % Opt: obviously when parameters are tuned/optimized, it's slightly better -->
 % see appendix for a full description of the method
