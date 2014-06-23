@@ -185,9 +185,10 @@ approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-Let us model the fluorescence indicators of all $p$ neurons as a set of random
+Let us model the fluorescence concentration of all $p$ neurons as a set of random
 variables $X = \{X_1, \dots, X_p\}$ following a joint probability distribution
-$P_X$. In the statistical framework, two random variables $X_i$ and $X_j$ are
+$P_X$, a stationary stochastic process.
+In the statistical framework, two random variables $X_i$ and $X_j$ are
 said to be conditionally independent to a (possibly empty) set of controlling
 random variables $Z$, denoted $X_i \perp X_j | Z$, if the joint conditional
 probability distribution $P_{X_i, X_j | Z}$ factorizes into $P_{X_i|Z}
