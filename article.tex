@@ -166,15 +166,13 @@ h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
 
 At this step, the processed signal only contains clean spikes. However, when a
-large part of the network is firing, detecting pairwise neuron interactions is a
-difficult task. Furthermore, it is even possible that neurons spike because of
-a global high activity, without any actual cause (see \cite{stetter2012model}).
-% \textcolor{red}{G: say that neurons may fire because of global
-% high activity, without any actual cause -- see generator.}
-Accordingly, in order to reduce false interaction detection,
-peak intensities at time $t$ are regularized by the global activity of all
-neurons, thereby reducing the importance of peaks identified during global
-high activity periods:
+large part of the network is firing, detecting pairwise neuron interactions is
+a difficult task. Furthermore, it is even possible that neurons spike because
+of a global high activity, without any actual cause (see
+\cite{stetter2012model}). Accordingly, in order to reduce false interaction
+detection, peak intensities at time $t$ are regularized by the global activity
+of all neurons, thereby reducing the importance of peaks identified during
+global high activity periods:
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
