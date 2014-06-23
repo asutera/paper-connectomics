@@ -118,7 +118,7 @@ Figure~\ref{fig:filtered-signal}.
 \subfigure[Low-pass filter $f_1$]{\includegraphics[width=0.3\textwidth]{images/filter_curve.pdf} \label{fig:lp_curve}}
 \subfigure[High-pass filter $g$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}\\
 \subfigure[Hard-threshold filter $h$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}
-\subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:original_curve}}
+\subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:weight_curve}}
 \caption{Signal processing process for extracting peaks from the raw fluorescence data.
          \textcolor{red}{AJ: The bottom axe is hidden on some figures.}}
 \label{fig:filtered-signal}
@@ -132,32 +132,34 @@ Figure~\ref{fig:filtered-signal}.
 % \label{fig:filtered-signal}
 % \end{figure}
 
-As the first plot in Figure~\ref{fig:filtered-signal} illustrates, the raw
+As the Figure~\ref{fig:original_curve} illustrates, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
 ordinarily affects the quality of the recording~\citep{lichtman2011big}.
 Accordingly, the first step of our pipeline is to smoothen the signal, using
 one the following low-pass filter for filtering out high frequency noise :
 \begin{align}
 % symmetrical median filter
-f_1(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i \label{eq:symetric-median}, \\
+f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i \label{eq:symetric-median}, \\
 % asymmetrical weighted median
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_{t}^i,
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t,
 \label{eq:weighted-asymetric-median}
 \end{align}
-where $f_1$x effect is shown in the second plot in the figure.
+where $f_1$ effect is shown in Figure \ref{fig:lp_curve}.
 
 Considering the short delay of communication between neurons and the slow
 decay of fluorescence, the second step of our pipeline consists in identifying
 neuron spikes -- characterized by high frequencies -- by filtering out low
-frequencies through a high-pass filter, resulting in the third plot of the figure:
-\begin{align} % an asymmetrical discrete derivative filter
+frequencies through a high-pass filter, resulting in the plot of
+Figure \ref{fig:hp_curve}:
+\begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
 \end{align}
 
 Once the low- and and high-pass filters have been applied, the remaining signal
-corresponds to the discrete derivative of the fluorescence time series. To
-further filter out small signal variations, mostly due to noise, the third step
-consists in a  hard-threshold filter, yielding the fourth plot in the figure:
+corresponds to the finite backward difference of the fluorescence time series.
+To further filter out small signal variations, mostly due to noise, the third
+step consists in a  hard-threshold filter, yielding the Figure
+\ref{fig:threshold_curve}:
 \begin{align}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
 \end{align}
@@ -178,7 +180,7 @@ high activity periods:
 
 In those terms, the full signal processing pipeline of our (simplified)
 approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
-(resp. $f_2$ for the winning method).
+(resp. $f_2$) and results in the plot of Figure \ref{fig:weight_curve}.
 
 
 \section{Connectome inference from partial correlation statistics}
