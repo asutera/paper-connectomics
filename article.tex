@@ -193,6 +193,7 @@ we assume that there exists a probability distribution $P_X$ such that the
 fluorescence concentrations at a particular time $t$ can be seen as an
 independent realization of $P_X$.
 
+% check dependency map => minimal d-map with distribution?
 To a joint probability distribution $P_X$ corresponds a minimal dependency
 graph. Each node of this graph is a random variable. Two random variables are
 only connected if they are dependent. We consider that two neurons are
@@ -210,11 +211,11 @@ variables, denoted  $X_i \perp  X_j  | X^{-i,j}$,  then  the  observation  of
 $X_i$  given  the knowledge  of  $X^{-i,j}$ provides  no  information  about
 $X_j$,  and vice-versa.
 
-In the  particular case   where $P_X$ is  a joint  Gaussian distribution
+In the  particular case where $P_X$ is  a joint  Gaussian distribution
 $\mathcal{N}(\mu; \Sigma)$ of mean  vector $\mu$ and covariance matrix
-$\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to   the
-other   variables   $X^{-i,j}$   if  their   \textit{partial   correlation}
-statistic is null~\citep{baba2004partial}, i.e., if
+$\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to the
+other variables $X^{-i,j}$ if their \textit{partial correlation} statistic is
+null~\citep{baba2004partial}, i.e., if
 \begin{equation}
 \rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.
 \end{equation}
@@ -223,15 +224,17 @@ X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
 larger the value of this term, the stronger the dependence between variables
 $X_i$ and $X_j$.
 
-Our approach implicitly makes the additional assumption  that $P_x$ is  a joint
+Our approach implicitly makes the additional assumption  that $P_X$ is  a joint
 Gaussian distribution since it  outputs as  degree of association between two
 neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$. Note also that
 the partial correlation statistic is symmetric  (i.e., $\rho_{X_i, X_j |
 X^{-i,j}} = \rho_{X_j, X_i | X^{-j,i}}$) and therefore does not account for the
 direction of the interaction.
 
+
 We detail now our procedure for estimating $\rho_{X_i, X_j | X^{-i,j}}$ from
-the data. The partial correlation statistics is computed through the inverse
+the data. \textcolor{red}{DE finds that this sections is too complicated}
+The partial correlation statistics is computed through the inverse
 $\Sigma^{-1}$ of the covariance matrix $\Sigma$, also known as the
 concentration or precision matrix. Computationally, they can be estimated
 efficiently in $O(M^3)$ (instead of $O(p^3)$) from the $M$ first principal
