@@ -146,11 +146,12 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t,
 \end{align}
 where $f_1$ effect is shown in Figure \ref{fig:lp_curve}.
 
-Low frequencies of the signal correspond to the the slow
-decay of fluorescence, while communication between neurons are
-characterized by short delay. The second step of our pipeline consists in
-identifying neuron spikes -- of high frequencies -- by filtering out low
-frequencies through a high-pass filter, resulting in the plot of
+
+Neurons communicates through short peaks, characterized by a high
+frequency, while low frequencies of the signal corresponds to the slow
+decay of fluorescence. The second step of our pipeline consists in
+identifying neuron spikes by filtering out
+low frequencies through a high-pass filter, resulting in the plot of
 Figure \ref{fig:hp_curve}:
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
