@@ -80,7 +80,7 @@ synaptic connections between neurons. Causal interactions are expressed by the
 direction of edges: $(i, j) \in E$ indicates that the state of neuron $j$ might
 be caused by the activity of neuron $i$. In those terms,  the connectome
 inference problem is formally stated as follows:  \textit{Given the sampled
-observations $\{ x^t_i \in \mathbb{R}^{p} | i \in V, t = 1, \dots T \}$ of $p$
+observations $\{ x^t_i \in \mathbb{R} | i \in V, t = 1, \dots, T \}$ of $p$
 neurons for $T$ time intervals, the goal is to infer the set $E$ of connections in $G$.}
 
 In this paper, we present a simplified -- yet nearly as good -- version of the
@@ -96,8 +96,8 @@ empirical analysis and comparison with other network inference methods, while
 Section \ref{sec:conclusion} finally discusses our work and provides further
 research directions. Additionally, Appendix \ref{app:optimized} further
 describes, in all details, our actual winning method, giving slightly better
-results than the method presented in the paper but highly tuned for the
-challenge.
+results than the method presented in the paper at a price of significant
+tuning.
 
 
 \section{Signal processing} \label{sec:filter}
