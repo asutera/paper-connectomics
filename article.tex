@@ -185,57 +185,67 @@ approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-Let us assume that the fluorescence concentrations of all $p$ neurons modeled
-as a set of random variables $X = \{X_1, \dots, X_p\}$ are drawn from a time
-invariant joint probability distribution $P_X$.
-In the probability framework, two random variables $X_i$ and $X_j$ are
-said to be conditionally independent to a (possibly empty) set of controlling
-random variables $Z$, denoted $X_i \perp X_j | Z$, if the joint conditional
-probability distribution $P_{X_i, X_j | Z}$ factorizes into $P_{X_i|Z}
-P_{X_j|Z}$. In particular, when $X_i$ and $X_j$ are conditionally independent
-with respect to all the other variables, denoted $X_i \perp X_j | X^{-i,j}$,
-then the observation of $X_i$ given the knowledge of $X^{-i,j}$ provides no
-information about $X_j$, and vice-versa. From a graphical point of view and
-assuming no hidden variable, this indicates that $X_i$ and $X_j$ do not
-directly interact (i.e., $(i,j) \notin E$). By opposition, if $X_i$ and $X_j$
-are conditionally dependent with respect to all other variables, denoted $X_i
-\not\perp X_j | X^{-i,j}$, then the observation of one of the two variables
-provides some information about the other, therefore highlighting a direct
-interaction between the two random variables (i.e., $(i, j) \in E$).
+Our  connection inference  procedure  relies  on several  assumptions. First,
+we will assume that  the fluorescence concentrations of all $p$ neurons can be
+modeled as a set of random variables $X = \{X_1, \dots, X_p\}$  that are drawn
+from a time invariant joint  probability distribution $P_X$. Or, say otherwise,
+we assume that there exists a probability distribution $P_X$ such that the
+fluorescence concentrations at a particular time $t$ can be seen as an
+independent realization of $P_X$.
 
-Under the assumption that random variables follow a joint Gaussian
-distribution $\mathcal{N}(\mu; \Sigma)$ of mean vector $\mu$ and covariance
-matrix $\Sigma$, $X_i$ and $X_j$ are conditionally independent with respect to
-the other variables $X^{-i,j}$ if their \textit{partial correlation} statistic
-is null~\citep{baba2004partial}, i.e., if
+To a joint probability distribution $P_X$ corresponds a minimal dependency
+graph. Each node of this graph is a random variable. Two random variables are
+only connected if they are dependent. We consider that two neurons are
+connected if  and only if,  there exists  in this dependency  graph an edge
+that connects  directly the  two random  variables to  which they correspond.
+This is equivalent to writing that two neurons $i$ and $j$ are  not  directly
+connected  if and only if  $X_i$  and $X_j$  are  conditionally independent
+with  respect to all  other variables. We remind  that two random  variables
+$X_i$  and  $X_j$  are  said  to  be  conditionally independent to a (possibly
+empty)  set of controlling random variables $Z$, denoted $X_i \perp X_j | Z$,
+if the joint conditional probability distribution   $P_{X_i,  X_j   |   Z}$
+factorizes  into   $P_{X_i|Z} P_{X_j|Z}$.  In particular,  when  $X_i$ and
+$X_j$ are  conditionally independent  with respect  to all  the other
+variables, denoted  $X_i \perp  X_j  | X^{-i,j}$,  then  the  observation  of
+$X_i$  given  the knowledge  of  $X^{-i,j}$ provides  no  information  about
+$X_j$,  and vice-versa.
+
+In the  particular case   where $P_X$ is  a joint  Gaussian distribution
+$\mathcal{N}(\mu; \Sigma)$ of mean  vector $\mu$ and covariance matrix
+$\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to   the
+other   variables   $X^{-i,j}$   if  their   \textit{partial   correlation}
+statistic is null~\citep{baba2004partial}, i.e., if
 \begin{equation}
 \rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0.
 \end{equation}
 Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
-X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$ can now be
-interpreted as the degree of association between the two variables (i.e., the larger the
-value, the stronger the interaction). In practice due to the finite size of
-time series, noise and modeling assumptions, the partial correlation
-$\rho_{X_i, X_j | X^{-i,j}}$ will never be zero. If instead of a degree
-of association, one would want to infer the underlying graph a statistical
-test would be required to assert conditional independences. Note also that
-the partial correlation
-statistic is symmetric (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i |
-X^{-j,i}}$) and therefore does not account for the direction of the
-interaction. Together, the partial correlation statistics correspond to the
-inverse $\Sigma^{-1}$ of the covariance matrix, also known as the concentration
-or precision matrix. Computationally, they can be estimated efficiently in
-$O(M^3)$ (instead of $O(p^3)$) from the $M$ first principal components
-extracted through PCA~\citep{bishop2006pattern} on the processed data. In our
-experiments, $M$ is set to $0.8 p$, thereby allowing us to further filter the
-the data by removing the contribution of principal components
-likely due to noise.
+X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
+larger the value of this term, the stronger the dependence between variables
+$X_i$ and $X_j$.
+
+Our approach implicitly makes the additional assumption  that $P_x$ is  a joint
+Gaussian distribution since it  outputs as  degree of association between two
+neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$. Note also that
+the partial correlation statistic is symmetric  (i.e., $\rho_{X_i, X_j |
+X^{-i,j}} = \rho_{X_j, X_i | X^{-j,i}}$) and therefore does not account for the
+direction of the interaction.
+
+We detail now our procedure for estimating $\rho_{X_i, X_j | X^{-i,j}}$ from
+the data. The partial correlation statistics is computed through the inverse
+$\Sigma^{-1}$ of the covariance matrix $\Sigma$, also known as the
+concentration or precision matrix. Computationally, they can be estimated
+efficiently in $O(M^3)$ (instead of $O(p^3)$) from the $M$ first principal
+components extracted through PCA~\citep{bishop2006pattern} on the processed
+data. In our experiments, $M$ is set to $0.8 p$, thereby allowing us to further
+filter the the data by removing the contribution of principal components likely
+due to noise.
 
 To highlight the benefits of measuring the partial dependence conditional to
 all other variables, we compare in Section~\ref{sec:results} with the
-\textit{Pearson correlation} statistics, which measure instead the linear dependence
-between variables, independently of the others. Accordingly, $X_i$ and $X_j$ are
-independent if their Pearson correlation statistic is zero, that is if
+\textit{Pearson correlation} statistics, which measure instead the linear
+dependence between variables, independently of the others. Accordingly, $X_i$
+and $X_j$ are independent if their Pearson correlation statistic is zero, that
+is if
 \begin{equation}
 \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
 \end{equation}
