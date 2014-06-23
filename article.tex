@@ -146,7 +146,6 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t,
 \end{align}
 where $f_1$ effect is shown in Figure \ref{fig:lp_curve}.
 
-
 Neurons communicates through short peaks, characterized by a high
 frequency, while low frequencies of the signal corresponds to the slow
 decay of fluorescence. The second step of our pipeline consists in
@@ -186,10 +185,10 @@ approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-Let us model the fluorescence concentration of all $p$ neurons as a set of random
-variables $X = \{X_1, \dots, X_p\}$ following a joint probability distribution
-$P_X$, a stationary stochastic process.
-In the statistical framework, two random variables $X_i$ and $X_j$ are
+Let us assume that the fluorescence concentrations of all $p$ neurons modeled
+as a set of random variables $X = \{X_1, \dots, X_p\}$ are drawn from a time
+invariant joint probability distribution $P_X$.
+In the probability framework, two random variables $X_i$ and $X_j$ are
 said to be conditionally independent to a (possibly empty) set of controlling
 random variables $Z$, denoted $X_i \perp X_j | Z$, if the joint conditional
 probability distribution $P_{X_i, X_j | Z}$ factorizes into $P_{X_i|Z}
