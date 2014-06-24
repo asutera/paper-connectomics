@@ -132,11 +132,11 @@ Figure~\ref{fig:filtered-signal}.
 % \label{fig:filtered-signal}
 % \end{figure}
 
-As the Figure~\ref{fig:original_curve} shows, the raw
+As Figure~\ref{fig:original_curve} shows, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
-ordinarily affects the quality of the recording~\citep{lichtman2011big}.
+ordinarily affect the quality of the recording~\citep{lichtman2011big}.
 Accordingly, the first step of our pipeline is to smoothen the signal, using
-one the following low-pass filter for filtering out high frequency noise :
+one the following low-pass filter for filtering out high frequency noise:
 \begin{align}
 % symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i \label{eq:symetric-median}, \\
@@ -148,18 +148,16 @@ For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
 
-Neurons communicate through short spikes, characterized by a high
+\textcolor{red}{connection}Neurons communicate through short spikes, characterized by a high
 frequency, while low frequencies of the signal correspond to the slow
-decay of fluorescence. The second step of our pipeline consists in
-a high-pass filter that transforms the time series into its backward
+decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i \label{eq:high-pass-filter},
 \end{align}
 shown in the plot of Figure \ref{fig:hp_curve}:
 
-To further filter out small signal variations, mostly due to noise, the third
-step consists in a  hard-threshold filter
+To filter out small signal variations in the signal obtained after applying the function $g$ as well as to eliminate negative values, we use the following hard-threshold filter
 \begin{align}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
