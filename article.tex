@@ -162,22 +162,18 @@ To filter out small signal variations in the signal obtained after applying the 
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
 yielding the Figure \ref{fig:threshold_curve}.
+As we can see, the processed signal only contains clean spikes. 
 
-At this step, the processed signal only contains clean spikes. However, when a
-large part of the network is firing, detecting pairwise neuron interactions is
-a difficult task. Furthermore, it is even possible that neurons spike because
-of a global high activity, without any actual cause (see
-\cite{stetter2012model}). Accordingly, in order to reduce false interaction
-detection, peak intensities at time $t$ are regularized by the global activity
-of all neurons, thereby reducing the importance of peaks identified during
-global high activity periods:
+The last step of our filtering procedure has for objective to decrease the importance of spikes that occur when there is a high global activity in the network with respect to  spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough for being able to detect interactions and, that it would therefore be preferrable to lower their importance by changing appropriatly their magnitude. Additionnally, it is well-known that neurons may also spike because of a global high activity (see \cite{stetter2012model}). In such  context, detecting pairwise neuron interactions from the firing activity is meaningless. 
+Accordingly, we have chosen to apply to the signal outputted by $h$ the following function  
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
+that has for effect to magnify the importance of spikes that occur in case of low global activity.
 
-In those terms, the full signal processing pipeline of our (simplified)
+To summarize, the full signal processing pipeline of our (simplified)
 approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
-(resp. $f_2$) and results in the plot of Figure \ref{fig:weight_curve}.
+(resp. $f_2$). When applied to the raw signal (shown on Figure \ref{fig:original_curve}), it outputs the signal shown on Figure \ref{fig:weight_curve}.
 
 
 \section{Connectome inference from partial correlation statistics}
