@@ -132,7 +132,7 @@ Figure~\ref{fig:filtered-signal}.
 % \label{fig:filtered-signal}
 % \end{figure}
 
-As the Figure~\ref{fig:original_curve} illustrates, the raw
+As the Figure~\ref{fig:original_curve} shows, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
 ordinarily affects the quality of the recording~\citep{lichtman2011big}.
 Accordingly, the first step of our pipeline is to smoothen the signal, using
@@ -141,29 +141,29 @@ one the following low-pass filter for filtering out high frequency noise :
 % symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i \label{eq:symetric-median}, \\
 % asymmetrical weighted median
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t,
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
-where $f_1$ effect is shown in Figure \ref{fig:lp_curve}.
+For the sake of illustration, the effect of the filter $f_1$ on the signal
+is shown in Figure \ref{fig:lp_curve}.
 
-Neurons communicates through short peaks, characterized by a high
-frequency, while low frequencies of the signal corresponds to the slow
+
+Neurons communicate through short spikes, characterized by a high
+frequency, while low frequencies of the signal correspond to the slow
 decay of fluorescence. The second step of our pipeline consists in
-identifying neuron spikes by filtering out
-low frequencies through a high-pass filter, resulting in the plot of
-Figure \ref{fig:hp_curve}:
+a high-pass filter that transforms the time series into its backward
+difference
 \begin{align}
-g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter},
 \end{align}
+resulting in the plot of Figure \ref{fig:hp_curve}:
 
-Once the low- and and high-pass filters have been applied, the remaining signal
-corresponds to the finite backward difference of the fluorescence time series.
 To further filter out small signal variations, mostly due to noise, the third
-step consists in a  hard-threshold filter, yielding the Figure
-\ref{fig:threshold_curve}:
+step consists in a  hard-threshold filter
 \begin{align}
-h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0.
+h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
+yielding the Figure \ref{fig:threshold_curve}.
 
 At this step, the processed signal only contains clean spikes. However, when a
 large part of the network is firing, detecting pairwise neuron interactions is
@@ -194,6 +194,8 @@ fluorescence concentrations at a particular time $t$ can be seen as an
 independent realization of $P_X$.
 
 % check dependency map => minimal d-map with distribution?
+\textcolor{red}{This part is better, however there is still something
+wrong with the theory.}
 To a joint probability distribution $P_X$ corresponds a minimal dependency
 graph. Each node of this graph is a random variable. Two random variables are
 only connected if they are dependent. We consider that two neurons are
