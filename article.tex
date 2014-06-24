@@ -189,8 +189,8 @@ independent realization of $P_X$.
 
 To a joint probability distribution $P_X$ corresponds a
 graph where (i) each node is a random variable and (ii) two nodes are
-only connected if they correspond to two dependent variables. We consider that two neurons are
-connected if  and only if,  there exists  in this dependency  graph an edge
+only connected if they correspond to two dependent variables. We assume that two neurons are
+connected if  and only if,  there exists  in this  graph an edge
 that connects  directly the  two random  variables to  which they correspond.
 In this context, it is equivalent to writing that two neurons $i$ and $j$ are  not  directly
 connected  if and only if  $X_i$  and $X_j$  are  conditionally independent
@@ -210,9 +210,9 @@ $\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to the
 other variables $X^{-i,j}$ if their \textit{partial correlation} statistic is
 null~\citep{baba2004partial}, i.e., if
 \begin{equation}
-\rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0 \label{eq:inverse}
+\rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0, \label{eq:inverse}
 \end{equation}
-where $\Sigma^{-1}$ is also known as the precision matrix or concentration. 
+where $\Sigma^{-1}$ is known as the precision or concentration matrix. 
 Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
 X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
 larger the value of this term, the stronger the dependence between variables
@@ -223,12 +223,12 @@ joint Gaussian distribution since it  outputs as degree of association
 between two neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$.
 Note also that the partial correlation
 statistic is symmetric  (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i |
-X^{-j,i}}$). Therefore, our approach cannot identify the direction of the interaction. We will see why this only affects slightly its performances, with respect to the metric used in the Connectomics challenge, in Section~\ref{sec:results}.
+X^{-j,i}}$). Therefore, our approach cannot identify the direction of the interaction. We will see in Section~\ref{sec:results} why this only affects slightly its performances, with respect to the metric used in the Connectomics challenge.
 
-We detail now our procedure for estimating partial correlation statistics ($\rho_{X_i, X_j | X^{-i,j}}$) from
-the data. Besides the straightforward computation, a natural procedure for estimating this precision matrix is first computing an empirical estimation of the covariance matrix and then taking the inverse, applying equation \ref{eq:inverse}. 
-Yet, an approximation can be obtained by only considering the first $M$principal components. Notice that we could have expected that a approximation of the inverse would have degraded the performance. However, the opposite was observed. We conjecture that by only taking into account the $M$ principal components filter out noise. In our experiments, $M$ is set to $0.8p$ (see discussion in Appendix~\ref{app:REF} \textcolor{red}{REF}).
-
+We now detail  our procedure for estimating partial correlation statistics
+($\rho_{X_i, X_j | X^{-i,j}}$) from the data. It first estimates the covariance matrix from the data. Afterwards, it computes the exact inverse of this matrix, from which it infers the value of $\rho_{X_i, X_j | X^{-i,j}}$ using  equation (\ref{eq:inverse}). Note that we have also experimented procedures where the exact inverse was replaced by an approximation of it using only the $M$ principal components of $\Sigma$~\citep{bishop2006pattern} whose associated eigen values were significantly higher than zero. Such an approximation is equivalent to assume that the firing activity of all neurons can be explained by only a subset of them whose size is equal to $M$. We observed that those procedures were often leading to better results. Note that we found out by running expriments that the number $M$ of principal components is around $0.8p$
+(see discussion in Appendix~\ref{app:REF}
+\textcolor{red}{REF}).
 
 % Computationally, they can be estimated
 % % efficiently in $O(M^3)$ (instead of $O(p^3)$) 
@@ -242,6 +242,18 @@ Yet, an approximation can be obtained by only considering the first $M$principal
 
 
 
+
+
+Finally, let us remark that performance of our simple method shows to be quite sensitive to the values of parameters (e.g., $f_1$ or
+$f_2$ or the value of the threshold $\tau$) in the combined function of the filering and infering processes. One approach, that we will refered to as \textit{Averaged
+Partial correlation} statistics, for improving its robustness is to average correlation statistics
+over various values of the parameters, thereby reducing the variance of its
+predictions. Further details are provided in
+Appendix~\ref{app:optimized}.
+
+\section{Experiments} \label{sec:results}
+
+\textcolor{red}{to incorporate: 
 To highlight the benefits of measuring the partial dependence conditional to
 all other variables, we compare in Section~\ref{sec:results} with the
 \textit{Pearson correlation} statistics, which measure instead the linear
@@ -250,18 +262,8 @@ and $X_j$ are independent, without any conditioning, if their Pearson correlatio
 is if
 \begin{equation}
 \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
-\end{equation}
+\end{equation}}
 
-Finally, let us remark that performance shows to be quite sensitive to the
-choice of hyper-parameters in the signal processing pipeline (e.g., $f_1$ or
-$f_2$ or the value of the threshold $\tau$). To further improve robustness, the
-last step of our method therefore consists in averaging correlation statistics
-over various values of the parameters, thereby reducing the variance of our
-predictions. In this case, the method is referred to as \textit{Averaged
-Partial correlation} statistics. Further details are provided in
-Appendix~\ref{app:optimized}.
-
-\section{Experiments} \label{sec:results}
 
 % Datasets
 To assess our method, we focus on the \textit{normal-2} dataset
