@@ -41,8 +41,7 @@
 
 \maketitle
 
-\begin{abstract} In this work, we propose a simple, but yet efficient,
-methodologically motivated method for the problem of connectome inference in
+\begin{abstract} In this work, we propose a simple, but yet efficient, method for the problem of connectome inference in
 calcium imaging data. The proposed algorithm is made of two steps. First,
 processing the raw signals to detect neural peak activities. Second, inferring
 the degree of association between neurons from partial correlation statistics.
@@ -148,8 +147,8 @@ For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
 
-\textcolor{red}{connection}Neurons communicate through short spikes, characterized by a high
-frequency, while low frequencies of the signal correspond to the slow
+Furthermore, it can be observed that neurons communicate through short spikes, characterized by a high
+frequency, while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
@@ -169,7 +168,7 @@ Accordingly, we have chosen to apply to the signal outputted by $h$ the followin
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
 \end{align}
-that has for effect to magnify the importance of spikes that occur in case of low global activity.
+that has for effect to magnify the importance of spikes that occur in case of low global activity. Note that the particular case where $\sum_{j} x^{t}_j$ equals $0$ is solved by setting $w(x^{t}_i) = 1$.
 
 To summarize, the full signal processing pipeline of our (simplified)
 approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
@@ -448,6 +447,65 @@ Office.
 
 \section{An optimized version of the algorithm to win the challenge}
 \label{app:optimized}
+
+Sections~\ref{sec:filter}~to~\ref{sec:results} describe a simplified version
+of the actual winning method. However, one could be interesting in the full
+description. This appendix will therefore follow the progress of the main
+paper highlighting optimizations.
+
+Let us remark that parameter value choices were made to maximize ROC AUC score
+on \textit{normal-1} and, to a lesser extent, \textit{normal-4}.
+
+\subsection*{Signal processing}
+
+As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process. 
+
+
+Besides filters
+$f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two other low-pass
+filters:
+
+\begin{align}
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i \label{eq:asymetric-median-forward}, \\
+f_4(x^t_i) &= x^{t+3}_i + x^{t+2}_i + x^{t+1}_i + x_i^t.
+\label{eq:asymetric-median}
+\end{align}
+
+Theses filters, even if individually they lead to less good performances of the inference algorithm than filters $f_1$ and
+$f_2$, the averaging approach over these four low-pass
+filters gets better.
+
+As a computation trick, it appears that using a parametrized hard-threshold filter slighlty improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter denoted as $h^*$
+\begin{align}
+h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
+\end{align}
+where $c$ is set to $0.9$ after experiments.
+
+The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function 
+\begin{align}
+ w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
+\end{align}
+where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$. 
+
+\subsection*{Averaging the connectome inference from partial correlation statistics}
+
+\subsection*{Connectome inference from pairwise interaction statistics}
+
+
+
+% NEXT APPENDIX SECTION 
+% SUPPLEMENTARY RESULTS
+% EXPLAIN EACH TAB AND VERIFY THE EXACTITUDE - RUN OPTIMIZED VERSION ON low-noise, ... ?
+% 
+
+% EXPLAIN PCA - FIG
+
+\vspace{5cm}
+
+
+
+
+
 
 
 The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results.
