@@ -144,7 +144,7 @@ importance of spikes that occur when there is a high global activity in the
 network with respect to  spikes that occur during normal activity. Indeed, we
 have conjectured that when a large part of the network is firing, the rate at
 which observations are made is not high enough for being able to detect
-interactions and, that it would therefore be preferrable to lower their
+interactions, and that it would therefore be preferrable to lower their
 importance by changing appropriatly their magnitude. Additionnally, it is
 well-known that neurons may also spike because of a global high activity
 \citep{stetter2012model}. In such  context, detecting pairwise neuron
@@ -187,7 +187,7 @@ the filters).
 
 Given this assumption, we then propose to use as a measure of the
 strength of the connection between two neurons $i$ and $j$, the
-partial correlation coefficient $p_{i,j}$ between their corresponding
+\textit{Partial correlation} coefficient $p_{i,j}$ between their corresponding
 random variables $X_i$ and $X_j$, defined by:
 \begin{equation}
 p_{i,j} =
@@ -201,9 +201,9 @@ where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inve
 Assuming that the distribution $P_X$ is a multivariate Gaussian
 distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
-variables in $X$, ie. $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
+variables in $X$, i.e., $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
 \setminus\{X_i,X_j\}$. Partial correlation thus measures conditional
-dependencies between variables. As an association measures between
+dependencies between variables. As an association measure between
 neurons, it should thus naturally only detect direct associations
 between neurons and filter out spurious indirect effects. The interest
 of partial correlation as an association measure has already been
@@ -223,10 +223,10 @@ Note that the partial correlation statistic is symmetric
 (i.e. $p_{i,j}=p_{j,i}$). Therefore, our approach cannot identify the
 direction of the interactions between neurons. We will see in
 Section~\ref{sec:results} why this only affects slightly its
-performances, with respect to the metric used in the Connectomics
+performance, with respect to the metric used in the Connectomics
 challenge.
 
-Practically, the computation of coefficient $p_{i,j}$ using Equation
+Practically, the computation of all $p_{i,j}$ coefficients using Equation
 \ref{eq:inverse} requires the estimation of the covariance matrix $\Sigma$
 and then computing its inverse. Given that we have typically more
 samples than neurons, the covariance matrix can be inverted in a
@@ -342,7 +342,7 @@ We report here experiments on the \textit{normal}-1,2,3, and 4
 datasets provided by the organizers of the Connectomics
 challenge. Each of these datasets is obtained from the simulation
 \citep{stetter2012model} of different neural networks of 1000 neurons
-and about 15000 edges each (ie., a network density of about
+and about 15000 edges each (i.e., a network density of about
 1.5\%). Each neuron is described by a calcium fluorescence time series
 of length $T=179500$. All inference methods compared here provide a
 ranking of all pairs of neurons according to some association
@@ -354,7 +354,7 @@ participants but the precision-recall curve has been shown to be a
 more sensible metric for network inference, especially when network
 density is small (see e.g. \cite{schrynemackers2013protocols}).
 Since neurons are not self-connected in the ground truth networks
-(ie., $(i, i) \not \in E, \forall i \in V$), we have manually set the
+(i.e., $(i, i) \not \in E, \forall i \in V$), we have manually set the
 score of such edges to the minimal possible association score before
 computing ROC and PR curves.
 
