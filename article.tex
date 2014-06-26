@@ -205,7 +205,7 @@ partial correlation coefficient $p_{i,j}$ between their corresponding
 random variables $X_i$ and $X_j$, defined by \cite{}:
 \begin{equation}
 p_{i,j} =
--\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse},
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
 where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.%%  Partial
 %% correlation can be interpreted in several ways. The partial
@@ -240,7 +240,7 @@ performances, with respect to the metric used in the Connectomics
 challenge.
 
 Practically, the computation of coefficient $p_{i,j}$ using Equation
-\ref{ref} requires the estimation of the covariance matrix $\Sigma$
+\ref{eq:inverse} requires the estimation of the covariance matrix $\Sigma$
 and then computing its inverse. Given that we have typically more
 samples than neurons, the covariance matrix can be inverted in a
 straightforward way. We nevertheless obtained some improvement by
