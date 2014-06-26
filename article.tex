@@ -24,13 +24,15 @@
 
 \maketitle
 
-\begin{abstract} In this work, we propose a simple, but yet efficient, method for the problem of connectome inference in
-calcium imaging data. The proposed algorithm is made of two steps. First,
-processing the raw signals to detect neural peak activities. Second, inferring
-the degree of association between neurons from partial correlation statistics.
-This paper summarizes the methodology that led us to win the Connectomics
-Challenge, proposes a simplified version of our method and finally discusses
-our results with respect to other inference methods.\end{abstract}
+\begin{abstract}
+In this work, we propose a simple, but yet efficient, method for the problem of
+connectome inference in calcium imaging data. The proposed algorithm is made of
+two steps. First, processing the raw signals to detect neural peak activities.
+Second, inferring the degree of association between neurons from partial
+correlation statistics. This paper summarizes the methodology that led us to
+win the Connectomics Challenge, proposes a simplified version of our method and
+finally discusses our results with respect to other inference methods.
+\end{abstract}
 
 \begin{keywords}
 Connectomics - Network inference - Partial correlation
@@ -39,7 +41,6 @@ Connectomics - Network inference - Partial correlation
 
 \section{Introduction}\label{sec:intro}
 
-%%%%%%% !!!!!!!! \textcolor{red}{To improve (style):} !!!! %%%%%%%%
 The human brain is a complex biological
 organ made of 100 billions of neurons, each connected to 7000 other neurons on
 average. Unfortunately, direct observations of the connectome, the wiring
@@ -53,7 +54,6 @@ problem is often made difficult because of experimental issues, including
 masking effects (making some of the neurons not to be observed or confounded
 with others), the low sampling rate of the optical device with respect to the
 neural activity speed or the slow decay of fluorescence.
-%%%%%%%%%%% !!!!!!!!!!!!!! %%%%%%%%%%%%%%%%
 
 Formally, the connectome can be represented as a directed graph $G=(V,E)$,
 where $V$ is a set of $p$ nodes, representing neurons, and $E \subseteq
@@ -63,7 +63,8 @@ direction of edges: $(i, j) \in E$ indicates that the state of neuron $j$ might
 be caused by the activity of neuron $i$. In those terms,  the connectome
 inference problem is formally stated as follows:  \textit{Given the sampled
 observations $\{ x^t_i \in \mathbb{R} | i \in V, t = 1, \dots, T \}$ of $p$
-neurons for $T$ time intervals, the goal is to infer the set $E$ of connections in $G$.}
+neurons for $T$ time intervals, the goal is to infer the set $E$ of connections
+in $G$.}
 
 In this paper, we present a simplified -- yet nearly as good -- version of the
 winning method\footnote{Code available at \url{https://github.com/asutera
@@ -152,9 +153,11 @@ the signal output by $h$ is finally applied to the following function
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
-which effect is to magnify the importance of spikes that occur in case of low global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance around $t=4\text{s}$ in the figure.
-Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$.
-
+which effect is to magnify the importance of spikes that occur in case of low
+global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance
+around $t=4\text{s}$ in the figure. Note that the particular case where there
+is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i)
+= 1$.
 
 To summarize, the full signal processing pipeline of our simplified (resp.
 tuned) approach is defined by the composed function $w \circ h \circ g \circ
@@ -228,8 +231,8 @@ and then computing its inverse. Given that we have typically more
 samples than neurons, the covariance matrix can be inverted in a
 straightforward way. We nevertheless obtained some improvement by
 replacing the exact inverse with an approximation using only the $M$
-first principal components of $\Sigma$~\citep{bishop2006pattern} (with
-$M$ set to $0.8 p$ in our experiments).
+first principal components \citep{bishop2006pattern} (with
+$M=0.8 p$ in our experiments).
 
 Finally, let us remark that performance of our simple method shows to
 be quite sensitive to the values of parameters (e.g., $f_1$ or $f_2$
@@ -372,15 +375,16 @@ was mainly done on the \textit{normal-1} and \textit{normal-4}
 datasets, which explains why these two networks are slightly better
 retrieved than the others.
 
-\begin{table}[t]
-\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\begin{table}[t]\label{tab:comparison}
+%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
 \small
-\begin{tabular}{@{}l *{8}{c}@{}}
+\begin{tabular}{| l | c c c c | c c c c |}
 \hline
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+\textit{Method} $\backslash$ \textit{normal-} & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
 \hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+\hline
 No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
 $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
 $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
@@ -390,11 +394,11 @@ Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.3
 \hline
 Correlation & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
 GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
-GENIE3 &\\
+GENIE3 & & & & & & & & \\
+\hline
 \end{tabular}
-\caption{Top: ROC (left) and PR (right) AUC on \text{normal-1,2,3,4} with partial correlation and different filtering functions except the last two rows with an average over various parameter settings.
+\caption{Top: ROC (left) and PR (right) AUC on \text{normal-1,2,3,4} with partial correlation and different filtering functions.
 Bottom: ROC (left) and PR (right) AUC on \text{normal-1,2,3,4} with different methods.}
-\label{tab:tab3}
 \end{table}
 
 \paragraph{Comparison with other methods}
@@ -490,8 +494,7 @@ approach is certainly part of our future works.
 \centering
 \subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
 \subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
-\caption{ROC (left) and PR (right) curves on \text{normal-2} with different methods. Area under the curves are reported in the legend for each method.}
-
+\caption{ROC (left) and PR (right) curves on \text{normal-2} with different methods. Areas under the curves are reported in the legend.}
 %% The weighted average of partial correlation matrix, winning approach
          %% of the challenge, yields better than AUROC and AUPRC than all
          %% other state-of-the-art methods. (parameters: $\tau=0.11$ except for
