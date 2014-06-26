@@ -95,7 +95,7 @@ empirical analysis and comparison with other network inference methods, while
 Section \ref{sec:conclusion} finally discusses our work and provides further
 research directions. Additionally, Appendix \ref{app:optimized} further
 describes, in all details, our actual winning method, giving slightly better
-results than the method presented in the paper at a price of significant
+results than the method presented in the paper, at the price of parameter
 tuning.
 
 
@@ -105,11 +105,10 @@ Under the simplifying assumption that neurons are on-off units, characterized
 by short periods of intense activities, or peaks, and longer periods of
 inactivity, the first part of our algorithm consists in cleaning the raw
 fluorescence data. More specifically, time series are processed using standard
-signal processing filters in order to remove noise due light scattering
+signal processing filters in order to remove noise due to light scattering
 effects, account for fluorescence  low decay and reduce the importance of
-global high activity in the network. The overall process is illustrated on
+global high activity in the network. The overall process is illustrated in
 Figure~\ref{fig:filtered-signal}.
-
 
 \begin{figure}
 \centering
@@ -123,19 +122,11 @@ Figure~\ref{fig:filtered-signal}.
 \label{fig:filtered-signal}
 \end{figure}
 
-
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.4\linewidth]{images/fig_filtering}
-% \caption{Signal processing process for extracting peaks from the raw fluorescence data.}
-% \label{fig:filtered-signal}
-% \end{figure}
-
 As Figure~\ref{fig:original_curve} shows, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
 ordinarily affect the quality of the recording~\citep{lichtman2011big}.
 Accordingly, the first step of our pipeline is to smoothen the signal, using
-one the following low-pass filter for filtering out high frequency noise:
+one of the following low-pass filters for filtering out high frequency noise:
 \begin{align}
 % symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i \label{eq:symetric-median}, \\
@@ -146,7 +137,6 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
-
 Furthermore, it can be observed that neurons communicate through short spikes, characterized by a high
 frequency, while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
@@ -154,139 +144,291 @@ difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i \label{eq:high-pass-filter},
 \end{align}
-shown in the plot of Figure \ref{fig:hp_curve}:
+as shown in Figure \ref{fig:hp_curve}.
 
-To filter out small signal variations in the signal obtained after applying the function $g$ as well as to eliminate negative values, we use the following hard-threshold filter
+To filter out small variations in the signal obtained after applying the
+function $g$ as well as to eliminate negative values, we use the following
+hard-threshold filter
 \begin{align}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
-yielding the Figure \ref{fig:threshold_curve}.
-As we can see, the processed signal only contains clean spikes. 
+yielding Figure \ref{fig:threshold_curve}.
+As we can see, the processed signal only contains clean spikes.
 
-The last step of our filtering procedure has for objective to decrease the importance of spikes that occur when there is a high global activity in the network with respect to  spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough for being able to detect interactions and, that it would therefore be preferrable to lower their importance by changing appropriatly their magnitude. Additionnally, it is well-known that neurons may also spike because of a global high activity (see \cite{stetter2012model}). In such  context, detecting pairwise neuron interactions from the firing activity is meaningless. 
-Accordingly, we have chosen to apply to the signal outputted by $h$ the following function  
+The objective of the last step of our filtering procedure is to decrease the
+importance of spikes that occur when there is a high global activity in the
+network with respect to  spikes that occur during normal activity. Indeed, we
+have conjectured that when a large part of the network is firing, the rate at
+which observations are made is not high enough for being able to detect
+interactions and, that it would therefore be preferrable to lower their
+importance by changing appropriatly their magnitude. Additionnally, it is
+well-known that neurons may also spike because of a global high activity (see
+\cite{stetter2012model}). In such  context, detecting pairwise neuron
+interactions from the firing activity is meaningless. As such,
+the signal output by $h$ is finally applied to the following function
 \begin{align}
- w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
+ w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
 that has for effect to magnify the importance of spikes that occur in case of low global activity. Note that the particular case $\sum_{j} x^{t}_j$ equals $0$ is solved by setting $w(x^{t}_i) = 1$.
 
-To summarize, the full signal processing pipeline of our (simplified)
-approach is defined by the composed function $w \cdot h \cdot g \cdot f_1$
-(resp. $f_2$). When applied to the raw signal (shown on Figure \ref{fig:original_curve}), it outputs the signal shown on Figure \ref{fig:weight_curve}.
+To summarize, the full signal processing pipeline of our simplified (resp.
+tuned) approach is defined by the composed function $w \circ h \circ g \circ
+f_1$ (resp. $f_2$). When applied to the raw signal of Figure
+\ref{fig:original_curve}, it outputs the signal shown in Figure
+\ref{fig:weight_curve}.
 
 
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-Our  connection inference  procedure  relies  on several  assumptions. First,
-we will assume that  the fluorescence concentrations of all $p$ neurons can be
-modeled as a set of random variables $X = \{X_1, \dots, X_p\}$  that are drawn
-from a time invariant joint  probability distribution $P_X$. Or, say otherwise,
-we assume that there exists a probability distribution $P_X$ such that the
-fluorescence concentrations at a particular time $t$ can be seen as an
-independent realization of $P_X$.
+% No time assumption
 
-To a joint probability distribution $P_X$ corresponds a
-graph where (i) each node is a random variable and (ii) two nodes are
-only connected if they correspond to two dependent variables. We assume that two neurons are
-connected if  and only if,  there exists  in this  graph an edge
-that connects  directly the  two random  variables to  which they correspond.
-In this context, it is equivalent to writing that two neurons $i$ and $j$ are  not  directly
-connected  if and only if  $X_i$  and $X_j$  are  conditionally independent
-with  respect to all  other variables. We remind  that two random  variables
-$X_i$  and  $X_j$  are  said  to  be  conditionally independent to a (possibly
-empty)  set of controlling random variables $Z$, denoted $X_i \perp X_j | Z$,
-if the joint conditional probability distribution   $P_{X_i,  X_j   |   Z}$
-factorizes  into   $P_{X_i|Z} P_{X_j|Z}$.  In particular,  when  $X_i$ and
-$X_j$ are  conditionally independent  with respect  to all  the other
-variables, denoted  $X_i \perp  X_j  | X^{-i,j}$,  then  the  observation  of
-$X_i$  given  the knowledge  of  $X^{-i,j}$ provides  no information  about
-$X_j$,  and vice-versa.
+Our procedure to infer connections between neurons first assumes that
+the (filtered) fluorescence concentrations of all $p$ neurons at each
+time point can be modeled as a set of random variables $X = \{X_1,
+\dots, X_p\}$ that are idependently drawn from the same time invariant
+joint probability distribution $P_X$. %% Or, say otherwise, we assume
+%% that there exists a probability distribution $P_X$ such that the
+%% fluorescence concentrations at a particular time $t$ can be seen as an
+%% independent realization of $P_X$.
+As a consequence, our inference method does not exploit the time
+ordering of the observations (although time ordering is exploited by
+the filters).
 
-In the  particular case where $P_X$ is  a joint  Gaussian distribution
-$\mathcal{N}(\mu; \Sigma)$ of mean  vector $\mu$ and covariance matrix
-$\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to the
-other variables $X^{-i,j}$ if their \textit{partial correlation} statistic is
-null~\citep{baba2004partial}, i.e., if
+% partial correlation: definition + motivation
+
+Given this assumption, we then propose to use as a measure of the
+strength of the connection between two neurons $i$ and $j$, the
+partial correlation coefficient $p_{i,j}$ between their corresponding
+random variables $X_i$ and $X_j$, defined by \cite{}:
 \begin{equation}
-\rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0, \label{eq:inverse}
+p_{i,j} =
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse},
 \end{equation}
-where $\Sigma^{-1}$ is known as the precision or concentration matrix. 
-Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
-X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
-larger the value of this term, the stronger the dependence between variables
-$X_i$ and $X_j$.
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.%%  Partial
+%% correlation can be interpreted in several ways. The partial
+%% correlation coefficient $p_{i,j}$ can be shown to measure the
+%% correlation between $X_i$ and $X_j$ when they are corrected for the
+%% (linear) effect of all other variables in $X$ \cite{}.
+Assuming that the distribution $P_X$ is a multivariate Gaussian
+distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
+zero if and only if $X_i$ and $X_j$ are independent given all other
+variables in $X$, ie. $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
+\setminus\{X_i,X_j\}$. Partial correlation thus measures conditional
+dependencies between variables. As an association measures between
+neurons, it should thus naturally only detect direct associations
+between neurons and filter out spurious indirect effects. The interest
+of partial correlation as an association measure has already been
+shown for the inference of gene regulatory networks \cite{xxx}.
+%% Given a set of multivariate Gaussian
+%% random variables $X$, the (undirected) graph that connects all pairs
+%% of variables $X_i$ and $X_j$ such that $p_{i,j}\neq 0$ is called a
+%% Gaussian graphical models (GGMs). Because it measures conditional
+%% dependencies, partial correlation should naturally only detect direct
+%% associations between neurons. The superiority of partial correlation
+%% over standard correlation as an association measure have already been
+%% shown in the context of the inference of gene regulatory networks from
+%% gene expression data \cite{}. We will compare both measures in Section
+%% \ref{sec:results}.
+Note that the partial correlation statistic is symmetric
+(i.e. $p_{i,j}=p_{j,i}$). Therefore, our approach cannot identify the
+direction of the interactions between neurons. We will see in
+Section~\ref{sec:results} why this only affects slightly its
+performances, with respect to the metric used in the Connectomics
+challenge.
 
-Our approach implicitly makes the additional assumption  that $P_X$ is  a
-joint Gaussian distribution since it  outputs as degree of association
-between two neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$.
-Note also that the partial correlation
-statistic is symmetric  (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i |
-X^{-j,i}}$). Therefore, our approach cannot identify the direction of the interaction. We will see in Section~\ref{sec:results} why this only affects slightly its performances, with respect to the metric used in the Connectomics challenge.
+Practically, the computation of coefficient $p_{i,j}$ using Equation
+\ref{ref} requires the estimation of the covariance matrix $\Sigma$
+and then computing its inverse. Given that we have typically more
+samples than neurons, the covariance matrix can be inverted in a
+straightforward way. We nevertheless obtained some improvement by
+replacing the exact inverse with an approximation using only the $M$
+first principal components of $\Sigma$~\citep{bishop2006pattern} (with
+$M$ set to $0.8 p$ in our experiments).
 
-We now detail  our procedure for estimating partial correlation statistics
-($\rho_{X_i, X_j | X^{-i,j}}$) from the data. It first estimates the covariance matrix from the data. Afterwards, it computes the exact inverse of this matrix, from which it infers the value of $\rho_{X_i, X_j | X^{-i,j}}$ using  equation (\ref{eq:inverse}). Note that we have also experimented procedures where the exact inverse was replaced by an approximation of it using only the $M$ principal components of $\Sigma$~\citep{bishop2006pattern} whose associated eigen values were significantly higher than zero. Such an approximation is equivalent to assume that the firing activity of all neurons can be explained by only a subset of them whose size is equal to $M$. We observed that those procedures were often leading to better results. Note that we found out by running expriments that the number $M$ of principal components is around $0.8p$
-(see discussion in Appendix~\ref{app:REF}
-\textcolor{red}{REF}).
-
-% Computationally, they can be estimated
-% % efficiently in $O(M^3)$ (instead of $O(p^3)$) 
-% from the $M$ first principal
-% components extracted through PCA~\citep{bishop2006pattern} on the processed
-% data. While speeding up computation, it allows to further 
-% filter the the data by removing the contribution of components that are respectively
-% due to redundancy or noise, i.e., with an eigen value respectively is equal to zero or close to zero. 
-
-
-
-
-
-
-
-Finally, let us remark that performance of our simple method shows to be quite sensitive to the values of parameters (e.g., $f_1$ or
-$f_2$ or the value of the threshold $\tau$) in the combined function of the filering and infering processes. One approach, that we will refered to as \textit{Averaged
-Partial correlation} statistics, for improving its robustness is to average correlation statistics
-over various values of the parameters, thereby reducing the variance of its
-predictions. Further details are provided in
+Finally, let us remark that performance of our simple method shows to
+be quite sensitive to the values of parameters (e.g., $f_1$ or $f_2$
+or the value of the threshold $\tau$) in the combined function of the
+filtering and infering processes. One approach, that we will refered
+to as \textit{Averaged Partial correlation} statistics, for improving
+its robustness is to average correlation statistics over various
+values of the parameters, thereby reducing the variance of its
+predictions. Further details about parameter selection are provided in
 Appendix~\ref{app:optimized}.
+
+% Note on directionality
+
+
+%% Our  connection inference  procedure  relies  on several  assumptions. First,
+%% we will assume that  the fluorescence concentrations of all $p$ neurons can be
+%% modeled as a set of random variables $X = \{X_1, \dots, X_p\}$  that are drawn
+%% from a time invariant joint  probability distribution $P_X$. Or, say otherwise,
+%% we assume that there exists a probability distribution $P_X$ such that the
+%% fluorescence concentrations at a particular time $t$ can be seen as an
+%% independent realization of $P_X$.
+
+%% To assess the presence of a connection between two neurons, we will
+%% use partial correlation statistics, which has been used extensively
+%% for the inference of gene regulatory networks \cite{}.
+
+
+%% To a joint probability distribution $P_X$ corresponds a
+%% graph where (i) each node is a random variable and (ii) two nodes are
+%% only connected if they correspond to two dependent variables. We assume that two neurons are
+%% connected if  and only if,  there exists  in this  graph an edge
+%% that connects  directly the  two random  variables to  which they correspond.
+%% In this context, it is equivalent to writing that two neurons $i$ and $j$ are  not  directly
+%% connected  if and only if  $X_i$  and $X_j$  are  conditionally independent
+%% with  respect to all  other variables. We remind  that two random  variables
+%% $X_i$  and  $X_j$  are  said  to  be  conditionally independent to a (possibly
+%% empty)  set of controlling random variables $Z$, denoted $X_i \perp X_j | Z$,
+%% if the joint conditional probability distribution   $P_{X_i,  X_j   |   Z}$
+%% factorizes  into   $P_{X_i|Z} P_{X_j|Z}$.  In particular,  when  $X_i$ and
+%% $X_j$ are  conditionally independent  with respect  to all  the other
+%% variables, denoted  $X_i \perp  X_j  | X^{-i,j}$,  then  the  observation  of
+%% $X_i$  given  the knowledge  of  $X^{-i,j}$ provides  no information  about
+%% $X_j$,  and vice-versa.
+
+%% In the  particular case where $P_X$ is  a joint  Gaussian distribution
+%% $\mathcal{N}(\mu; \Sigma)$ of mean  vector $\mu$ and covariance matrix
+%% $\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to the
+%% other variables $X^{-i,j}$ if their \textit{partial correlation} statistic is
+%% null~\citep{baba2004partial}, i.e., if
+%% \begin{equation}
+%% \rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0, \label{eq:inverse}
+%% \end{equation}
+%% where $\Sigma^{-1}$ is known as the precision or concentration matrix.
+%% Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
+%% X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
+%% larger the value of this term, the stronger the dependence between variables
+%% $X_i$ and $X_j$.
+
+%% Our approach implicitly makes the additional assumption  that $P_X$ is  a
+%% joint Gaussian distribution since it  outputs as degree of association
+%% between two neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$.
+%% Note also that the partial correlation
+%% statistic is symmetric  (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i |
+%% X^{-j,i}}$). Therefore, our approach cannot identify the direction of the interaction. We will see in Section~\ref{sec:results} why this only affects slightly its performances, with respect to the metric used in the Connectomics challenge.
+
+%% We now detail our procedure for estimating partial correlation
+%% statistics ($\rho_{X_i, X_j | X^{-i,j}}$) from the data. It first
+%% estimates the covariance matrix from the data. Afterwards, it computes
+%% the exact inverse of this matrix, from which it infers the value of
+%% $\rho_{X_i, X_j | X^{-i,j}}$ using equation (\ref{eq:inverse}). Note
+%% that we have also experimented procedures where the exact inverse was
+%% replaced by an approximation of it using only the $M$ principal
+%% components of $\Sigma$~\citep{bishop2006pattern} whose associated
+%% eigen values were significantly higher than zero. Such an
+%% approximation is equivalent to assume that the firing activity of all
+%% neurons can be explained by only a subset of them whose size is equal
+%% to $M$. We observed that those procedures were often leading to better
+%% results. Note that we found out by running expriments that the number
+%% $M$ of principal components is around $0.8p$ (see discussion in
+%% Appendix~\ref{app:REF} \textcolor{red}{REF}).
+
+%% % Computationally, they can be estimated
+%% % % efficiently in $O(M^3)$ (instead of $O(p^3)$)
+%% % from the $M$ first principal
+%% % components extracted through PCA~\citep{bishop2006pattern} on the processed
+%% % data. While speeding up computation, it allows to further
+%% % filter the the data by removing the contribution of components that are respectively
+%% % due to redundancy or noise, i.e., with an eigen value respectively is equal to zero or close to zero.
 
 \section{Experiments} \label{sec:results}
 
-\textcolor{red}{to incorporate: 
-To highlight the benefits of measuring the partial dependence conditional to
-all other variables, we compare in Section~\ref{sec:results} with the
-\textit{Pearson correlation} statistics, which measure instead the linear
-dependence between variables, independently of the others. Accordingly, $X_i$
-and $X_j$ are independent, without any conditioning, if their Pearson correlation statistic is zero, that
-is if
-\begin{equation}
-\rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
-\end{equation}}
-
+%% \textcolor{red}{to incorporate:
+%% To highlight the benefits of measuring the partial dependence conditional to
+%% all other variables, we compare in Section~\ref{sec:results} with the
+%% \textit{Pearson correlation} statistics, which measure instead the linear
+%% dependence between variables, independently of the others. Accordingly, $X_i$
+%% and $X_j$ are independent, without any conditioning, if their Pearson correlation statistic is zero, that
+%% is if
+%% \begin{equation}
+%% \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
+%% \end{equation}}
 
 % Datasets
-To assess our method, we focus on the \textit{normal-2} dataset
-provided by the organizers of the Connectomics challenge. Experiments
-on \textit{normal-1, normal-3, normal-4} show similar trends to
-\textit{normal-2} and are presented in the Appendix \textcolor{red}{REF}.
-Those datasets have $p=1000$ time series of length $T=179500$ of image
-calcium from simulated neuronal networks \citep{stetter2012model}. Those
-networks have approximately 15000 edges.
+We have carried out experiments with our method on the
+\textit{normal}-1,2,3, and 4 datasets provided by the organizers of
+the Connectomics challenge. Each of these datasets contains $p=1000$
+time series of length $T=179500$ of image calcium from simulated
+neuronal networks \citep{stetter2012model}. The network to infer
+contains approximately 15000 edges, ie an edge density of about
+1.5\%. All inference methods compared here provides a ranking of
+neuron pairs according to some association score. To assess the
+quality of this ranking, we use both ROC and precision-recall curves,
+and we summarize them using the area under these curves, denoted
+respectively AUROC and AUPRC. Only the AUROC was used in the context of the connectomics to rThe AUROC was
+used to rank submissions to the challenge but the precision-recall
+curve has some\citep{schrynemackers2013protocols}
 
-% Metrics : ROC AUC and AUPRC
-In supervised learning terms, the network inference task can be viewed as a
-binary classification task where one has to correctly classify the presence or
-the absence of edges of the graph. We assess the accuracy of the network
-inference method using the area under the ROC curve (AUROC) and the area under
-the precision-recall curve (AUPRC) \citep{schrynemackers2013protocols}. Since
-neurons are not self-connected ($(i, i) \not \in E, \forall i \in V$) and some
-inference methods could give maximal scores to those edges, e.g. Pearson
-correlation, those elements are set to have minimal connectivity score prior
-assessment.
+Since neurons are
+not self-connected ($(i, i) \not \in E, \forall i \in V$) and some
+inference methods could give maximal scores to those edges,
+e.g. Pearson correlation, those elements are set to have minimal
+connectivity score prior assessment.
 
-The proposed approach is compared to Pearson correlation statistics (as
-described in Section~\ref{sec:inference}), generalized transfer entropy (GTE)
-and the GENIE3 algorithm.
+\paragraph{Effect of pre-processing}
+
+The top of Table \ref{} reports AUPR and AUROC for all four networks
+progressively introducing all filtering steps and for the last step,
+the PCA based matrix inversion. All steps improves performances, with
+the bigger improvement brought by the introduction of the
+... Interestingly, while PCA does not really have an impact of AUROC,
+it significantly increases the AUPR score.
+
+\paragraph{Comparison with other methods}
+
+Then, we compare our method with several other methods:
+\begin{itemize}
+\item Standard correlation coefficient...In this case, the
+  prefiltering the same as for partial correlation.
+\item \textbf{GTE} \citep{stetter2012model}, the baseline of the
+  challenge, which is based on transfer entrey measures for all pairs
+  of neurons $i$ and $j$ the reduction of uncertainty in predicting
+  future values of $i$ given the observation of the time series of the
+  neuron $j$ conditionally to the observation of past time series of
+  neuron $i$, whenever the average fluorescence is over a conditioning
+  level. Pre-processing and conditioning level were set to reproduce
+  baseline of the challenge.
+\item \textbf{GENIE3}\citep{huynhthu2010inferring}: This method is a
+  state-of-the-art gene network inference method \cite{dream5}. It
+  translates the the inference of the network of $p$ neurons into $p$
+  supervised learning tasks. For each task, the fluorescence of a
+  neuron is predicted from the fluorescence of all other neurons using
+  a tree based ensemble such as random forest
+  \citep{breiman2001random}. The tree ensemble associates a variable
+  importance score \citep{louppe2013understanding} to each neuron used
+  in the predictions, which is used as a degree of associate. To reduce the computational cost of the method, we nevertheless restrained all trees to a maximum tree depth of 3.  This is likely to be detrimental The
+  following parameters are used $10000$ trees, $\log_2{p}$ variables
+  are randomly selected to split tree nodes and the maximal tree depth
+  is constrained to 1, 2 or 3. Note that unlike the other methods, this method provides asymetric scores, meaning it can potentially predict edge directions.
+\end{itemize}
+
+Bottom of table \ref{} shows the score of these methods. ROC and PR
+curves on normal-2 are shown in Figure ... Pearson correlation is the worst method
+
+\paragraph{ROC versus PR curves.} While only ROC was , we argue here that PR scores are more appropriate in this context.
+
+%% To assess our method, we focus on the \textit{normal-2} dataset
+%% provided by the organizers of the Connectomics challenge. Experiments
+%% on \textit{normal-1, normal-3, normal-4} show similar trends to
+%% \textit{normal-2} and are presented in the Appendix \textcolor{red}{REF}.
+%% Those datasets have $p=1000$ time series of length $T=179500$ of image
+%% calcium from simulated neuronal networks \citep{stetter2012model}. Each of these
+%% networks contains approximately 15000 edges.
+
+%% % Metrics : ROC AUC and AUPRC
+%% In supervised learning terms, the network inference task can be viewed as a
+%% binary classification task where one has to correctly classify the presence or
+%% the absence of edges of the graph. We assess the accuracy of the network
+%% inference method using the area under the ROC curve (AUROC) and the area under
+%% the precision-recall curve (AUPRC) \citep{schrynemackers2013protocols}.
+
+
+The proposed approach is compared to Pearson correlation statistics
+(as described in Section~\ref{sec:inference}), generalized transfer
+entropy (GTE) and the GENIE3 algorithm.
 \begin{itemize}
 \item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge,
 measures for all pairs of neurons $i$ and $j$ the reduction of uncertainty in
@@ -458,7 +600,7 @@ on \textit{normal-1} and, to a lesser extent, \textit{normal-4}.
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process. 
+As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process.
 
 
 Besides filters
@@ -481,11 +623,11 @@ h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 
 \end{align}
 where $c$ is set to $0.9$ after experiments.
 
-The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function 
+The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function
 \begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
-where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$. 
+where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
@@ -499,10 +641,10 @@ The weights were adjusted to take into account that some filters outperform othe
 
 
 
-% NEXT APPENDIX SECTION 
+% NEXT APPENDIX SECTION
 % SUPPLEMENTARY RESULTS
 % EXPLAIN EACH TAB AND VERIFY THE EXACTITUDE - RUN OPTIMIZED VERSION ON low-noise, ... ?
-% 
+%
 
 % EXPLAIN PCA - FIG
 
