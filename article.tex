@@ -169,9 +169,7 @@ the signal output by $h$ is finally applied to the following function
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
-which effect is to magnify the importance of spikes that occur in case of low
-global activity. Note that the particular case where $\sum_{j} x^{t}_j = 0$ is
-solved by setting $w(x^{t}_i) = 1$.
+that has for effect to magnify the importance of spikes that occur in case of low global activity. Note that the particular case $\sum_{j} x^{t}_j$ equals $0$ is solved by setting $w(x^{t}_i) = 1$.
 
 To summarize, the full signal processing pipeline of our simplified (resp.
 tuned) approach is defined by the composed function $w \circ h \circ g \circ
@@ -632,6 +630,12 @@ The magnification can also be optimized by adjusting the effect differently with
 where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
+
+In our experiments, we observed that the inference process is quite sensitive about the choice of the parameter value $\tau$ and the low-pass filter. Therefore, in order to reduce the variance of the results and thus the robustness of our approach, we perform an average over a range of parameter value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over the four low-pass filters with weights 
+$weight_{f_1} = 1$, $weight_{f_2} = 0.9$, $weight_{f_3} = 0.7$ and $weight_{f_4} = 0.01$, tuned to maximize the ROC AUC on \textit{normal-1}.
+The weights were adjusted to take into account that some filters outperform other but there is information hold in every filter.
+
+
 
 \subsection*{Connectome inference from pairwise interaction statistics}
 
