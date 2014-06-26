@@ -628,7 +628,7 @@ The magnification can also be optimized by adjusting the effect differently with
 \begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
-where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$.
+where $m$ is a piecewise linear function depending on the low-pass filter and on the range of the global activity. We refer to our implementation\footnote{available on \url{https://github.com/asutera/kaggle-connectomics}.} for the values of the parameters and especially the parameter $m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
@@ -639,6 +639,10 @@ The weights were adjusted to take into account that some filters outperform othe
 
 
 \subsection*{Connectome inference from pairwise interaction statistics}
+
+Since partial correlation statistics is a symmetric measure and the connectome is a directed graph, it should be rewarding to detect the edge orientation. In this section, we will present a heuristic trying to retrieve directivity. However, considering the argument in Section \ref{sec:results}, the additional gain margin of this approach compared to the undirected method is extremely limited.
+
+The heuristic is based on the following observation. The rise of fluorescence of a neuron indicates its activation. 
 
 
 
@@ -866,7 +870,27 @@ P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.
 Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
 %Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
-\caption{TODO \textcolor{red}{version simple!!}}
+\caption{Optimized method (TODO)}
+\label{tab:tab3}
+\end{table}
+
+
+\begin{table}[tbh]
+\centering
+\small
+\begin{tabular}{@{}l *{8}{c}@{}}
+\hline
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+P                   & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+P + W               & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+P + W + PCA         & 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+Averaging           & 0.938 & 0.936 & 0.936 & 0.932 & 0.391 & 0.389 & 0.385 & 0.374\\
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+\end{tabular}
+\caption{Simplified method (TODO)}
 \label{tab:tab3}
 \end{table}
 
