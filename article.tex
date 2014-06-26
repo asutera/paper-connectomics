@@ -6,15 +6,9 @@
 \usepackage{natbib}
 \usepackage[utf8]{inputenc}
 
- % The following command is just for this sample document:
-\newcommand{\cs}[1]{\texttt{\char`\\#1}}
-
-
- % change the arguments, as appropriate, in the following:
-%\jmlrvolume{1}
-%\jmlryear{2014}
-%\jmlrworkshop{\textcolor{red}{Neural Connectomics Workshop}}
-\jmlrproceedings{}{}
+\jmlryear{2014}
+\jmlrworkshop{Neural Connectomics Workshop: From Imaging to Connectivity}
+\jmlrauthors{A. Sutera et al}
 
 \title{Simple connectome inference from partial correlation statistics in calcium imaging}
 
@@ -25,17 +19,6 @@
         Gilles Louppe,
         Damien Ernst,
         Pierre Geurts}
-
- % Authors with different addresses:
- % \author{\Name{Author Name1} \Email{abc@sample.com}\\
- % \addr Address 1
- % \AND
- % \Name{Author Name2} \Email{xyz@sample.com}\\
- % \addr Address 2
- %}
-
-\editor{Editor's name}
- % \editors{List of editors' names}
 
 \begin{document}
 
@@ -170,7 +153,7 @@ the signal output by $h$ is finally applied to the following function
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
 which effect is to magnify the importance of spikes that occur in case of low global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance around $t=4\text{s}$ in the figure.
-Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$. 
+Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$.
 
 
 To summarize, the full signal processing pipeline of our simplified (resp.
@@ -677,7 +660,7 @@ the four low-pass filters with the following parameters
 \begin{align*}
 weight_{f_1} &= 1,\\
 weight_{f_2} &= 0.9, \\
-weight_{f_3} &= 0.7, \\ 
+weight_{f_3} &= 0.7, \\
 weight_{f_4} &= 0.01
 \end{align*}
 
