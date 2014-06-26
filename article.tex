@@ -343,68 +343,102 @@ Appendix~\ref{app:optimized}.
 %% \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
 %% \end{equation}}
 
-% Datasets
-We have carried out experiments with our method on the
-\textit{normal}-1,2,3, and 4 datasets provided by the organizers of
-the Connectomics challenge. Each of these datasets contains $p=1000$
-time series of length $T=179500$ of image calcium from simulated
-neuronal networks \citep{stetter2012model}. The network to infer
-contains approximately 15000 edges, ie an edge density of about
-1.5\%. All inference methods compared here provides a ranking of
-neuron pairs according to some association score. To assess the
-quality of this ranking, we use both ROC and precision-recall curves,
-and we summarize them using the area under these curves, denoted
-respectively AUROC and AUPRC. Only the AUROC was used in the context of the connectomics to rThe AUROC was
-used to rank submissions to the challenge but the precision-recall
-curve has some\citep{schrynemackers2013protocols}
+\paragraph{Data and evaluation metrics.}
 
-Since neurons are
-not self-connected ($(i, i) \not \in E, \forall i \in V$) and some
-inference methods could give maximal scores to those edges,
-e.g. Pearson correlation, those elements are set to have minimal
-connectivity score prior assessment.
+We report here experiments on the \textit{normal}-1,2,3, and 4
+datasets provided by the organizers of the Connectomics
+challenge. Each of these datasets is obtained from the simulation
+\citep{stetter2012model} of different neural networks of 1000 neurons
+and about 15000 edges each (ie., a network density of about
+1.5\%). Each neuron is described by a calcium fluorescence time series
+of length $T=179500$. All inference methods compared here provide a
+ranking of all pairs of neurons according to some association
+score. To assess the quality of this ranking, we compute both ROC and
+precision-recall curves against the ground truth network, which are
+summarized using the area under the curve, denoted respectively AUROC
+and AUPRC. Only the AUROC score was used to rank the challenge
+participants but the precision-recall curve has been shown to be a
+more sensible metric for network inference, especially when network
+density is small (see e.g. \cite{schrynemackers2013protocols}).
+Since neurons are not self-connected in the ground truth networks
+(ie., $(i, i) \not \in E, \forall i \in V$), we have manually set the
+score of such edges to the minimal possible association score before
+computing ROC and PR curves.
 
-\paragraph{Effect of pre-processing}
+\paragraph{Evaluation of the method}
 
-The top of Table \ref{} reports AUPR and AUROC for all four networks
-progressively introducing all filtering steps and for the last step,
-the PCA based matrix inversion. All steps improves performances, with
-the bigger improvement brought by the introduction of the
-... Interestingly, while PCA does not really have an impact of AUROC,
-it significantly increases the AUPR score.
+The top of Table \ref{tab:comparison} reports AUROC and AUPRC for all four networks
+using in each case partial correlation with different filtering
+functions. Except for the last two rows that uses PCA, the exact
+inverse of the covariance matrix was used in each case. These results
+clearly show the importance of the filters. AUROC increases in average from
+0.77 to 0.93. PCA does not really affect AUROC scores but it improves
+significantly AUPRC scores. Taking the average over various parameter
+setting gives an improvement of 10\% in both AUROC and AUPRC. The last
+row shows the final performance of the method specifically tuned for
+the challenge (see the Appendix for all details). Although this tuning
+was decisive to obtain the best performance at the challenge, it does
+not significantly improve neither AUROC nor AUPRC. Note that tuning
+was mainly done on the \textit{normal-1} and \textit{normal-4}
+datasets, which explains why these two networks are slightly better
+retrieved than the others.
+
+\begin{table}[t]
+\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\centering
+\small
+\begin{tabular}{@{}l *{8}{c}@{}}
+\hline
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+$ h \circ g \circ f_1$                 & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
+$ w \circ h \circ g \circ f_1$               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
++ PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
+Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+Full method &\\
+\hline
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+Correlation &\\
+GTE & \\
+GENIE3 &\\
+\end{tabular}
+\caption{TODO \textcolor{red}{version simple!!}}
+\label{tab:tab3}
+\end{table}
 
 \paragraph{Comparison with other methods}
 
-Then, we compare our method with several other methods:
-\begin{itemize}
-\item Standard correlation coefficient...In this case, the
-  prefiltering the same as for partial correlation.
-\item \textbf{GTE} \citep{stetter2012model}, the baseline of the
-  challenge, which is based on transfer entrey measures for all pairs
-  of neurons $i$ and $j$ the reduction of uncertainty in predicting
-  future values of $i$ given the observation of the time series of the
-  neuron $j$ conditionally to the observation of past time series of
-  neuron $i$, whenever the average fluorescence is over a conditioning
-  level. Pre-processing and conditioning level were set to reproduce
-  baseline of the challenge.
-\item \textbf{GENIE3}\citep{huynhthu2010inferring}: This method is a
-  state-of-the-art gene network inference method \cite{dream5}. It
-  translates the the inference of the network of $p$ neurons into $p$
-  supervised learning tasks. For each task, the fluorescence of a
-  neuron is predicted from the fluorescence of all other neurons using
-  a tree based ensemble such as random forest
-  \citep{breiman2001random}. The tree ensemble associates a variable
-  importance score \citep{louppe2013understanding} to each neuron used
-  in the predictions, which is used as a degree of associate. To reduce the computational cost of the method, we nevertheless restrained all trees to a maximum tree depth of 3.  This is likely to be detrimental The
-  following parameters are used $10000$ trees, $\log_2{p}$ variables
-  are randomly selected to split tree nodes and the maximal tree depth
-  is constrained to 1, 2 or 3. Note that unlike the other methods, this method provides asymetric scores, meaning it can potentially predict edge directions.
-\end{itemize}
+In the bottom part of Table \ref{tab:comparison}, the proposed
+approach is compared with three other methods: standard (Pearson)
+correlation (PC), generalized transfer entropy (GTE), and GENIE3. ROC
+and PR curves on the \textit{normal-2} network are shown for all
+methods in Figure \ref{fig:}. Pearson correlation measures the
+unconditional linear (in)dependence between variables and it should
+thus not be able to filter out indirect interactions between
+neurons. GTE \citep{stetter2012model} was proposed as a baseline for
+the challenge. This method builds on Transfer Entropy to measure the
+association between two neurons. Unlike our approach, it can predict
+the direction of the edges. GENIE3 \citep{huynhthu2010inferring} is a
+gene regulatory network inference method that was the best performer
+of the DREAM5 challenge \cite{dream5paper}. When transposed to neural
+networks, this method uses as a confidence score for the edge going
+from neuron $i$ to neuron $j$ the importance score of variable $X_i$
+in a Random Forests model trying to predict $X_j$ from all variables
+in $X\setminus X_j$. To reduce computing times of this method, we had
+to reduce each tree in the Random Forests model to a maximum depth of
+3. This constraint potentially severly affects the performance of this
+method with respect to the use of fully grown trees. We nevertheless
+provide these results for comparison purpose. PC and GENIE3 were both
+applied on the same pre-filtered time series as partial
+correlation. For GENIE3, we built 10000 trees per neuron and we used
+default settings for all other parameters (except for the maximal tree
+depth). For GTE, we reproduced the exact same setting (conditioning
+level and pre-processing) that was used for the challenge.
 
-Bottom of table \ref{} shows the score of these methods. ROC and PR
-curves on normal-2 are shown in Figure ... Pearson correlation is the worst method
 
-\paragraph{ROC versus PR curves.} While only ROC was , we argue here that PR scores are more appropriate in this context. 
+%\paragraph{ROC versus PR curves.} While only ROC was , we argue here that PR scores are more appropriate in this context. 
 
 %% To assess our method, we focus on the \textit{normal-2} dataset
 %% provided by the organizers of the Connectomics challenge. Experiments
@@ -422,105 +456,103 @@ curves on normal-2 are shown in Figure ... Pearson correlation is the worst meth
 %% the precision-recall curve (AUPRC) \citep{schrynemackers2013protocols}.
 
 
-The proposed approach is compared to Pearson correlation statistics
-(as described in Section~\ref{sec:inference}), generalized transfer
-entropy (GTE) and the GENIE3 algorithm.
-\begin{itemize}
-\item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge,
-measures for all pairs of neurons $i$ and $j$ the reduction of uncertainty in
-predicting future values of $i$ given the observation of the time series of the
-neuron $j$ conditionally to the observation of past time series of neuron $i$,
-whenever the average fluorescence is over a conditioning level. Pre-processing
-and conditioning level were set to reproduce baseline of the challenge.
+%% The proposed approach is compared to Pearson correlation statistics
+%% (as described in Section~\ref{sec:inference}), generalized transfer
+%% entropy (GTE) and the GENIE3 algorithm.
+%% \begin{itemize}
+%% \item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge,
+%% measures for all pairs of neurons $i$ and $j$ the reduction of uncertainty in
+%% predicting future values of $i$ given the observation of the time series of the
+%% neuron $j$ conditionally to the observation of past time series of neuron $i$,
+%% whenever the average fluorescence is over a conditioning level. Pre-processing
+%% and conditioning level were set to reproduce baseline of the challenge.
 
-\item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference
-of the network of $p$ neurons into $p$ supervised learning tasks. For each
-task, the fluorescence of a neuron is predicted from the fluorescence of all
-other neurons using a tree based ensemble such as random forest
-\citep{breiman2001random}. The tree ensemble associates a variable importance
-score \citep{louppe2013understanding} to each neuron used in the predictions,
-which is used as a degree of associate. The following parameters are used
-$10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
-and the maximal tree depth is constrained to 1, 2 or 3. \textcolor{red}{AJ Which
-depth is represented on the graph?}
-\end{itemize}
+%% \item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference
+%% of the network of $p$ neurons into $p$ supervised learning tasks. For each
+%% task, the fluorescence of a neuron is predicted from the fluorescence of all
+%% other neurons using a tree based ensemble such as random forest
+%% \citep{breiman2001random}. The tree ensemble associates a variable importance
+%% score \citep{louppe2013understanding} to each neuron used in the predictions,
+%% which is used as a degree of associate. The following parameters are used
+%% $10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
+%% and the maximal tree depth is constrained to 1, 2 or 3. \textcolor{red}{AJ Which
+%% depth is represented on the graph?}
+%% \end{itemize}
 
-\subsection*{Partial correlation improves over state-of-the-art methods}
+%% \subsection*{Partial correlation improves over state-of-the-art methods}
 
-Figure \ref{fig:curves} shows the ROC curve  and precision-recall curve
-for correlation, GTE and partial correlation on the \textit{normal-2}
-dataset. The partial correlation outperforms other state-of-the-art methods
-by at least factor of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
+Partial correlation clearly outperforms all other methods. The improvement is more important in terms of AUPRC bu by about a factor
+of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
 AUROC. Averaging Partial correlation matrix over a wide of parameters
-further improves AUPRC to $0.389$ and improve AUROC by $0.009$.
-Two reasons might explain such differences: (i) only the partial
+further improves AUPRC to $0.389$ and improve AUROC by $0.009$.  Two
+reasons might explain such differences: (i) only the partial
 correlation-based methods and GENI3 at lesser extent distinguish
 direct links from indirect one, (ii) simulated networks from the
-\citep{stetter2012model} generator or neural networks in general could be
-reduced to a linear model after pre-processing. Those results
+\citep{stetter2012model} generator or neural networks in general could
+be reduced to a linear model after pre-processing. Those results
 generalizes over the other datasets see Appendix \textcolor{red}{REF}.
 
-\begin{figure}[bth]
+\begin{figure}[t]
 \centering
 \subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
 \subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
-\caption{The weighted average of partial correlation matrix, winning approach
-         of the challenge, yields better than AUROC and AUPRC than all
-         other state-of-the-art methods. (parameters: $\tau=0.11$ except for
-         averaged partial correlation method, partial correlation used
-         filter $f_1$). Area under the curves are given between $()$
-         for the corresponding methods.}
+\caption{ROC (left) and PR (right) curves on \text{normal-2} with different methods. Area under the curves are reported in the legend for each method.}
+
+%% The weighted average of partial correlation matrix, winning approach
+         %% of the challenge, yields better than AUROC and AUPRC than all
+         %% other state-of-the-art methods. (parameters: $\tau=0.11$ except for
+         %% averaged partial correlation method, partial correlation used
+         %% filter $f_1$). Area under the curves are given between $()$
+         %% for the corresponding methods.
+%}
 \label{fig:curves}
 \end{figure}
 
-\textcolor{red}{Only one GENI3, thus it can't be observed.}
-As observed on Figure \ref{fig:curves}, the GENIE3 performance increases with
-deeper trees while being still computationally feasible. The reason is twofold.
-First, the deeper the tree, the larger is the conditioning. \textcolor{red}{AJ:
-conditioning?} As it was observed in the comparison between correlation and
-partial correlation, it screens indirect links in the inferred network.
-\textcolor{red}{AJ: I don't understand the link with GENIE3} Second, the number
-of small trees need to be much higher than deep trees in order to observe - and
-evaluate - all pairs.  However, as suggested by \cite{louppe2014understanding},
-limiting the maximal depth of trees may help to improve the variable importance
-computing, i.e. inferring the degree of association. \textcolor{red}{AJ: there
-is no explanation of why it would be better apart for computational reason.}
-Therefore a trade-off  of the maximal depth may give the best of both worlds.
-\textcolor{red}{AJ:  Which tradeoff? Which worlds?}
+%% \textcolor{red}{Only one GENI3, thus it can't be observed.}
+%% As observed on Figure \ref{fig:curves}, the GENIE3 performance increases with
+%% deeper trees while being still computationally feasible. The reason is twofold.
+%% First, the deeper the tree, the larger is the conditioning. \textcolor{red}{AJ:
+%% conditioning?} As it was observed in the comparison between correlation and
+%% partial correlation, it screens indirect links in the inferred network.
+%% \textcolor{red}{AJ: I don't understand the link with GENIE3} Second, the number
+%% of small trees need to be much higher than deep trees in order to observe - and
+%% evaluate - all pairs.  However, as suggested by \cite{louppe2014understanding},
+%% limiting the maximal depth of trees may help to improve the variable importance
+%% computing, i.e. inferring the degree of association. \textcolor{red}{AJ: there
+%% is no explanation of why it would be better apart for computational reason.}
+%% Therefore a trade-off  of the maximal depth may give the best of both worlds.
+%% \textcolor{red}{AJ:  Which tradeoff? Which worlds?}
 
 
+\subsection*{ROC versus PR curves}
 
-\subsection*{Area under the ROC curve a poor metric for network inference}
-
-The best method only infers the \textbf{undirected} network by giving the same
-degree of association to both edges $(i,j)$ and $(j,i)$. This is quite
-surprising considering the problem statement. Trying to direct links could be
-more penalizing than rewarding. For example, symmetrizing the degree of
-association matrix does not necessarily degrade AUPRC and AUROC.
-
-
-If the inferred network corresponds to the undirected network, it would
-already yield high AUROC score for instance $\approx 0.996$ on
-\textit{normal-1}. Infering edge directivity is likely to be counter-
-productive or yield small gain. By contrast, the same experiment with AUPRC
-would yield a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
-correctly directivity would be more rewarding in AUPRC term.
+%% The best method only infers the \textbf{undirected} network by giving the same
+%% degree of association to both edges $(i,j)$ and $(j,i)$. This is quite
+%% surprising considering the problem statement. Trying to direct links could be
+%% more penalizing than rewarding. For example, symmetrizing the degree of
+%% association matrix does not necessarily degrade AUPRC and AUROC.
 
 
+%% If the inferred network corresponds to the undirected network, it would
+%% already yield high AUROC score for instance $\approx 0.996$ on
+%% \textit{normal-1}. Infering edge directivity is likely to be counter-
+%% productive or yield small gain. By contrast, the same experiment with AUPRC
+%% would yield a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
+%% correctly directivity would be more rewarding in AUPRC term.
 
-% Interestingly, methods that takes into account directivity, namely GTE and
-% GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
-% (in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
-% \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
-% especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
-% Trying to detect the link direction is more penalizing than rewarding.
+%% % Interestingly, methods that takes into account directivity, namely GTE and
+%% % GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
+%% % (in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
+%% % \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
+%% % especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
+%% % Trying to detect the link direction is more penalizing than rewarding.
 
-The area under the ROC curve is not a consistent metric with respect to the
-problem statement. A clear hierarchy is also difficult to derive from ROC
-curves as shown on Figure \ref{fig:roc_curve}. We advice to avoid the AUROC for
-the assessment of network inference method. An alternative would be to assess
-network inference using the area under the precision-recall curve (AUPRC).
-Those conclusions are in line with \cite{schrynemackers2013protocols}.
+%% The area under the ROC curve is not a consistent metric with respect to the
+%% problem statement. A clear hierarchy is also difficult to derive from ROC
+%% curves as shown on Figure \ref{fig:roc_curve}. We advice to avoid the AUROC for
+%% the assessment of network inference method. An alternative would be to assess
+%% network inference using the area under the precision-recall curve (AUPRC).
+%% Those conclusions are in line with \cite{schrynemackers2013protocols}.
 
 
 \section{Conclusions} \label{sec:conclusion}
@@ -531,9 +563,7 @@ Those conclusions are in line with \cite{schrynemackers2013protocols}.
 % conditional independence test
 % Speak about the complexity and parallelization of the methods
 
-
-
-In this paper, we present the winning method of the Connectomics challenge. Our
+In this paper, we present the best performing method of the Connectomics challenge. Our
 approach is simple and theoretically sounded and made of two main stages: the
 signal is first preprocessed with several filters and then we derive the degree
 of association matrix by computing the partial correlation statistics matrix.
@@ -575,6 +605,7 @@ Office.
 % We allow the bibliography to be added on top of the 6 pages.
 % Supplementary material may be added in the form or a URL pointed to from
 % the paper.
+
 \bibliography{references}
 
 \newpage
