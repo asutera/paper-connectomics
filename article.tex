@@ -416,32 +416,30 @@ GENIE3 &\\
 
 \paragraph{Comparison with other methods}
 
-In the bottom part of Table \ref{tab:comparison}, the proposed
-approach is compared with three other methods: standard (Pearson)
-correlation (PC), generalized transfer entropy (GTE), and GENIE3. ROC
-and PR curves on the \textit{normal-2} network are shown for all
-methods in Figure \ref{fig:}. Pearson correlation measures the
-unconditional linear (in)dependence between variables and it should
-thus not be able to filter out indirect interactions between
-neurons. GTE \citep{stetter2012model} was proposed as a baseline for
-the challenge. This method builds on Transfer Entropy to measure the
-association between two neurons. Unlike our approach, it can predict
-the direction of the edges. GENIE3 \citep{huynhthu2010inferring} is a
-gene regulatory network inference method that was the best performer
-of the DREAM5 challenge \cite{dream5paper}. When transposed to neural
-networks, this method uses as a confidence score for the edge going
-from neuron $i$ to neuron $j$ the importance score of variable $X_i$
-in a Random Forests model trying to predict $X_j$ from all variables
-in $X\setminus X_j$. To reduce computing times of this method, we had
-to reduce each tree in the Random Forests model to a maximum depth of
-3. This constraint potentially severly affects the performance of this
-method with respect to the use of fully grown trees. We nevertheless
-provide these results for comparison purpose. PC and GENIE3 were both
-applied on the same pre-filtered time series as partial
-correlation. For GENIE3, we built 10000 trees per neuron and we used
-default settings for all other parameters (except for the maximal tree
-depth). For GTE, we reproduced the exact same setting (conditioning
-level and pre-processing) that was used for the challenge.
+In the bottom of Table \ref{tab:comparison}, we provide as a comparison the
+performance of three other methods: standard (Pearson) correlation (PC),
+generalized transfer entropy (GTE), and GENIE3. ROC and PR curves on the
+\textit{normal-2} network are shown for all methods in Figure
+\ref{fig:}. Pearson correlation measures the unconditional linear
+(in)dependence between variables and it should thus not be able to filter out
+indirect interactions between neurons. GTE \citep{stetter2012model} was
+proposed as a baseline for the challenge. This method builds on Transfer
+Entropy to measure the association between two neurons. Unlike our approach, it
+can predict the direction of the edges. GENIE3 \citep{huynhthu2010inferring} is
+a gene regulatory network inference method that was the best performer of the
+DREAM5 challenge \cite{dream5paper}. When transposed to neural networks, this
+method uses as a confidence score for the edge going from neuron $i$ to neuron
+$j$ the importance score of variable $X_i$ in a Random Forests model trying to
+predict $X_j$ from all variables in $X\setminus X_j$. To reduce computing times
+of this method, we had to reduce each tree in the Random Forests model to a
+maximum depth of 3. This constraint potentially severly affects the performance
+of this method with respect to the use of fully grown trees. We nevertheless
+provide these results for comparison purpose. PC and GENIE3 were both applied
+on the same pre-filtered time series as partial correlation. For GENIE3, we
+built 10000 trees per neuron and we used default settings for all other
+parameters (except for the maximal tree depth). For GTE, we reproduced the
+exact same setting (conditioning level and pre-processing) that was used for
+the challenge.
 
 %% To assess our method, we focus on the \textit{normal-2} dataset
 %% provided by the organizers of the Connectomics challenge. Experiments
@@ -484,16 +482,26 @@ level and pre-processing) that was used for the challenge.
 
 %% \subsection*{Partial correlation improves over state-of-the-art methods}
 
-Partial correlation clearly outperforms all other methods. The improvement is more important in terms of AUPRC bu by about a factor
-of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
-AUROC. Averaging Partial correlation matrix over a wide of parameters
-further improves AUPRC to $0.389$ and improve AUROC by $0.009$.  Two
-reasons might explain such differences: (i) only the partial
-correlation-based methods and GENI3 at lesser extent distinguish
-direct links from indirect one, (ii) simulated networks from the
-\citep{stetter2012model} generator or neural networks in general could
-be reduced to a linear model after pre-processing. Those results
-generalizes over the other datasets see Appendix \textcolor{red}{REF}.
+Partial correlation and average partial correlation clearly outperforms all
+other methods. The improvement is more important in terms of AUPRC than in
+terms of AUROC. As expected, Pearson correlation performs very poorly in terms
+of AUPRC. GTE and GENIE3 works much better but these two methods are
+nevertheless clearly below partial correlation. Among these two methods, GTE is
+slightly better in terms of AUROC, while GENIE3 is significantly better in
+terms of AUPRC. Given that we had to limit this latter method for computational
+reasons, these results are very promising and a comparison with the full GENIE3
+approach is certainly part of our future works.
+
+%% bu by about a factor
+%% of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
+%% AUROC. Averaging Partial correlation matrix over a wide of parameters
+%% further improves AUPRC to $0.389$ and improve AUROC by $0.009$.  Two
+%% reasons might explain such differences: (i) only the partial
+%% correlation-based methods and GENI3 at lesser extent distinguish
+%% direct links from indirect one, (ii) simulated networks from the
+%% \citep{stetter2012model} generator or neural networks in general could
+%% be reduced to a linear model after pre-processing. Those results
+%% generalizes over the other datasets see Appendix \textcolor{red}{REF}.
 
 \begin{figure}[t]
 \centering
