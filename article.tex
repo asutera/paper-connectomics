@@ -95,7 +95,7 @@ empirical analysis and comparison with other network inference methods, while
 Section \ref{sec:conclusion} finally discusses our work and provides further
 research directions. Additionally, Appendix \ref{app:optimized} further
 describes, in all details, our actual winning method, giving slightly better
-results than the method presented in the paper at a price of significant
+results than the method presented in the paper, at the price of parameter
 tuning.
 
 
@@ -110,7 +110,6 @@ effects, account for fluorescence  low decay and reduce the importance of
 global high activity in the network. The overall process is illustrated in
 Figure~\ref{fig:filtered-signal}.
 
-
 \begin{figure}
 \centering
 \subfigure[Raw signal]{\includegraphics[width=0.3\textwidth]{images/original_curve.pdf} \label{fig:original_curve}}
@@ -122,14 +121,6 @@ Figure~\ref{fig:filtered-signal}.
          \textcolor{red}{AJ: The bottom axe is hidden on some figures.}}
 \label{fig:filtered-signal}
 \end{figure}
-
-
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.4\linewidth]{images/fig_filtering}
-% \caption{Signal processing process for extracting peaks from the raw fluorescence data.}
-% \label{fig:filtered-signal}
-% \end{figure}
 
 As Figure~\ref{fig:original_curve} shows, the raw
 fluorescence signal is very noisy due to light scattering artifacts that
@@ -153,25 +144,40 @@ difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i \label{eq:high-pass-filter},
 \end{align}
-shown in the plot of Figure \ref{fig:hp_curve}:
+as shown in Figure \ref{fig:hp_curve}.
 
-To filter out small variations in the signal obtained after applying the function $g$ as well as to eliminate negative values, we use the following hard-threshold filter
+To filter out small variations in the signal obtained after applying the
+function $g$ as well as to eliminate negative values, we use the following
+hard-threshold filter
 \begin{align}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
-yielding the Figure \ref{fig:threshold_curve}.
-As we can see, the processed signal only contains clean spikes. 
+yielding Figure \ref{fig:threshold_curve}.
+As we can see, the processed signal only contains clean spikes.
 
-The objective of the last step of our filtering procedure is to decrease the importance of spikes that occur when there is a high global activity in the network with respect to  spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough for being able to detect interactions and, that it would therefore be preferrable to lower their importance by changing appropriatly their magnitude. Additionnally, it is well-known that neurons may also spike because of a global high activity (see \cite{stetter2012model}). In such  context, detecting pairwise neuron interactions from the firing activity is meaningless. 
-Accordingly, we have chosen to apply to the signal outputted by $h$ the following function  
+The objective of the last step of our filtering procedure is to decrease the
+importance of spikes that occur when there is a high global activity in the
+network with respect to  spikes that occur during normal activity. Indeed, we
+have conjectured that when a large part of the network is firing, the rate at
+which observations are made is not high enough for being able to detect
+interactions and, that it would therefore be preferrable to lower their
+importance by changing appropriatly their magnitude. Additionnally, it is
+well-known that neurons may also spike because of a global high activity
+\citep{stetter2012model}. In such  context, detecting pairwise neuron
+interactions from the firing activity is meaningless. As such,
+the signal output by $h$ is finally applied to the following function
 \begin{align}
- w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}.
+ w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
-which effect is to magnify the importance of spikes that occur in case of low global activity. Note that the particular case where $\sum_{j} x^{t}_j$ equals $0$ is solved by setting $w(x^{t}_i) = 1$.
+which effect is to magnify the importance of spikes that occur in case of low global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance around $t=4\text{s}$ in the figure.
+Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$. 
 
-To summarize, the full signal processing pipeline of our simplified (resp. tuned)
-approach is defined by the composed function $w \circ h \circ g \circ f_1$
-(resp. $f_2$). When applied to the raw signal of Figure \ref{fig:original_curve}, it outputs the signal shown in Figure \ref{fig:weight_curve}.
+
+To summarize, the full signal processing pipeline of our simplified (resp.
+tuned) approach is defined by the composed function $w \circ h \circ g \circ
+f_1$ (resp. $f_2$). When applied to the raw signal of Figure
+\ref{fig:original_curve}, it outputs the signal shown in Figure
+\ref{fig:weight_curve}.
 
 
 \section{Connectome inference from partial correlation statistics}
@@ -199,7 +205,7 @@ partial correlation coefficient $p_{i,j}$ between their corresponding
 random variables $X_i$ and $X_j$, defined by \cite{}:
 \begin{equation}
 p_{i,j} =
--\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse},
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
 where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.%%  Partial
 %% correlation can be interpreted in several ways. The partial
@@ -234,7 +240,7 @@ performances, with respect to the metric used in the Connectomics
 challenge.
 
 Practically, the computation of coefficient $p_{i,j}$ using Equation
-\ref{ref} requires the estimation of the covariance matrix $\Sigma$
+\ref{eq:inverse} requires the estimation of the covariance matrix $\Sigma$
 and then computing its inverse. Given that we have typically more
 samples than neurons, the covariance matrix can be inverted in a
 straightforward way. We nevertheless obtained some improvement by
@@ -265,7 +271,7 @@ Appendix~\ref{app:optimized}.
 
 %% To assess the presence of a connection between two neurons, we will
 %% use partial correlation statistics, which has been used extensively
-%% for the inference of gene regulatory networks \cite{}. 
+%% for the inference of gene regulatory networks \cite{}.
 
 
 %% To a joint probability distribution $P_X$ corresponds a
@@ -293,7 +299,7 @@ Appendix~\ref{app:optimized}.
 %% \begin{equation}
 %% \rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0, \label{eq:inverse}
 %% \end{equation}
-%% where $\Sigma^{-1}$ is known as the precision or concentration matrix. 
+%% where $\Sigma^{-1}$ is known as the precision or concentration matrix.
 %% Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
 %% X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
 %% larger the value of this term, the stronger the dependence between variables
@@ -323,16 +329,16 @@ Appendix~\ref{app:optimized}.
 %% Appendix~\ref{app:REF} \textcolor{red}{REF}).
 
 %% % Computationally, they can be estimated
-%% % % efficiently in $O(M^3)$ (instead of $O(p^3)$) 
+%% % % efficiently in $O(M^3)$ (instead of $O(p^3)$)
 %% % from the $M$ first principal
 %% % components extracted through PCA~\citep{bishop2006pattern} on the processed
-%% % data. While speeding up computation, it allows to further 
+%% % data. While speeding up computation, it allows to further
 %% % filter the the data by removing the contribution of components that are respectively
-%% % due to redundancy or noise, i.e., with an eigen value respectively is equal to zero or close to zero. 
+%% % due to redundancy or noise, i.e., with an eigen value respectively is equal to zero or close to zero.
 
 \section{Experiments} \label{sec:results}
 
-%% \textcolor{red}{to incorporate: 
+%% \textcolor{red}{to incorporate:
 %% To highlight the benefits of measuring the partial dependence conditional to
 %% all other variables, we compare in Section~\ref{sec:results} with the
 %% \textit{Pearson correlation} statistics, which measure instead the linear
@@ -436,9 +442,6 @@ correlation. For GENIE3, we built 10000 trees per neuron and we used
 default settings for all other parameters (except for the maximal tree
 depth). For GTE, we reproduced the exact same setting (conditioning
 level and pre-processing) that was used for the challenge.
-
-
-%\paragraph{ROC versus PR curves.} While only ROC was , we argue here that PR scores are more appropriate in this context. 
 
 %% To assess our method, we focus on the \textit{normal-2} dataset
 %% provided by the organizers of the Connectomics challenge. Experiments
@@ -627,7 +630,7 @@ on \textit{normal-1} and, to a lesser extent, \textit{normal-4}.
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process. 
+As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process.
 
 
 Besides filters
@@ -650,22 +653,32 @@ h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 
 \end{align}
 where $c$ is set to $0.9$ after experiments.
 
-The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function 
+The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function
 \begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
-where $m$ depends on the low-pass filter and on the range of the global activity. We refer to our implemetation, available on ... , for the values of the parameters and especially the parameter $m$. 
+where $m$ is a piecewise linear function depending on the low-pass filter and on the range of the global activity. We refer to our implementation\footnote{available on \url{https://github.com/asutera/kaggle-connectomics}.} for the values of the parameters and especially the parameter $m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
+In our experiments, we observed that the inference process is quite sensitive about the choice of the parameter value $\tau$ and the low-pass filter. Therefore, in order to reduce the variance of the results and thus the robustness of our approach, we perform an average over a range of parameter value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over the four low-pass filters with weights 
+$weight_{f_1} = 1$, $weight_{f_2} = 0.9$, $weight_{f_3} = 0.7$ and $weight_{f_4} = 0.01$, tuned to maximize the ROC AUC on \textit{normal-1}.
+The weights were adjusted to take into account that some filters outperform other but there is information hold in every filter.
+
+
+
 \subsection*{Connectome inference from pairwise interaction statistics}
 
+Since partial correlation statistics is a symmetric measure and the connectome is a directed graph, it should be rewarding to detect the edge orientation. In this section, we will present a heuristic trying to retrieve directivity. However, considering the argument in Section \ref{sec:results}, the additional gain margin of this approach compared to the undirected method is extremely limited.
+
+The heuristic is based on the following observation. The rise of fluorescence of a neuron indicates its activation. 
 
 
-% NEXT APPENDIX SECTION 
+
+% NEXT APPENDIX SECTION
 % SUPPLEMENTARY RESULTS
 % EXPLAIN EACH TAB AND VERIFY THE EXACTITUDE - RUN OPTIMIZED VERSION ON low-noise, ... ?
-% 
+%
 
 % EXPLAIN PCA - FIG
 
@@ -886,7 +899,27 @@ P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.
 Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
 %Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
 \end{tabular}
-\caption{TODO \textcolor{red}{version simple!!}}
+\caption{Optimized method (TODO)}
+\label{tab:tab3}
+\end{table}
+
+
+\begin{table}[tbh]
+\centering
+\small
+\begin{tabular}{@{}l *{8}{c}@{}}
+\hline
+  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+\hline
+Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+P                   & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+P + W               & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+P + W + PCA         & 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+Averaging           & 0.938 & 0.936 & 0.936 & 0.932 & 0.391 & 0.389 & 0.385 & 0.374\\
+%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+\end{tabular}
+\caption{Simplified method (TODO)}
 \label{tab:tab3}
 \end{table}
 
