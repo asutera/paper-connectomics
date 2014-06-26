@@ -169,7 +169,8 @@ the signal output by $h$ is finally applied to the following function
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 \end{align}
-that has for effect to magnify the importance of spikes that occur in case of low global activity, for example the small peak around 4 second. Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$. 
+which effect is to magnify the importance of spikes that occur in case of low global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance around $t=4\text{s}$ in the figure.
+Note that the particular case where there is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i) = 1$. 
 
 
 To summarize, the full signal processing pipeline of our simplified (resp.
