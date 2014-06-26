@@ -655,31 +655,84 @@ Theses filters, even if individually they lead to less good performances of the 
 $f_2$, the averaging approach over these four low-pass
 filters gets better.
 
-As a computation trick, it appears that using a parametrized hard-threshold filter slighlty improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter denoted as $h^*$
-\begin{align}
+As a computation trick, it appears that using a parametrized hard-threshold filter slighlty improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter denoted as $h^*$ \begin{align}
 h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
 \end{align}
 where $c$ is set to $0.9$ after experiments.
 
-The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function
-\begin{align}
+The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function \begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
 where $m$ is a piecewise linear function depending on the low-pass filter and on the range of the global activity. We refer to our implementation\footnote{available on \url{https://github.com/asutera/kaggle-connectomics}.} for the values of the parameters and especially the parameter $m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
-In our experiments, we observed that the inference process is quite sensitive about the choice of the parameter value $\tau$ and the low-pass filter. Therefore, in order to reduce the variance of the results and thus the robustness of our approach, we perform an average over a range of parameter value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over the four low-pass filters with weights 
-$weight_{f_1} = 1$, $weight_{f_2} = 0.9$, $weight_{f_3} = 0.7$ and $weight_{f_4} = 0.01$, tuned to maximize the ROC AUC on \textit{normal-1}.
-The weights were adjusted to take into account that some filters outperform other but there is information hold in every filter.
+In our experiments, we observed that the inference process is quite sensitive
+about the choice of the parameter value $\tau$ and the low-pass filter.
+Therefore, in order to reduce the variance of the results and thus the
+robustness of our approach, we perform an average over a range of parameter
+value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
+the four low-pass filters with weights  $weight_{f_1} = 1$, $weight_{f_2} =
+0.9$, $weight_{f_3} = 0.7$ and $weight_{f_4} = 0.01$, tuned to maximize the
+ROC AUC on \textit{normal-1}. The weights were adjusted to take into account
+that some filters outperform other but there is information hold in every
+filter.
 
 
 
 \subsection*{Connectome inference from pairwise interaction statistics}
 
-Since partial correlation statistics is a symmetric measure and the connectome is a directed graph, it should be rewarding to detect the edge orientation. In this section, we will present a heuristic trying to retrieve directivity. However, considering the argument in Section \ref{sec:results}, the additional gain margin of this approach compared to the undirected method is extremely limited.
+Since partial correlation statistics is a symmetric measure and the connectome
+is a directed graph, it should be rewarding to detect the edge orientation. In
+this section, we will present a heuristic trying to retrieve directivity.
+However, considering the argument in Section \ref{sec:results}, the additional
+gain margin of this approach compared to the undirected method is extremely
+limited.
 
-The heuristic is based on the following observation. The rise of fluorescence of a neuron indicates its activation. 
+The heuristic is based on the following observation. The rise of fluorescence
+of a neuron indicates its activation. If another neuron is activated after a
+slight delay, this could have been caused by the activation of the first
+neuron and therefore highlight a (direct) directed relationship between the
+two neurons. With that in mind, the heuristic principle is to count the number
+of such events occurred between neurons $i$ and $j$ for consecutive time
+steps. It can be done by counting the number of times that a transition from
+neuron $i$ to neuron $j$ for two consecutive time steps, or mathematically we
+compute for each pair $(i,j)$
+
+\begin{align}
+s_{ij} = \sum_{t=1}^{T - 1} \mathbb{1}(x_j^{t+1} - x_i^t \in \left[\phi_1, \phi_2\right])
+\end{align}
+where $\phi_1$ and $\phi_2$ are parameters of the heuristic.
+
+Two issues may be spotted. First, this heuristic is not able to distinguish a
+directed relationships if both neurons are activated in the same time step and
+may wrongly characterize indirect relationships because of the time
+resolution. Second, it may be necessary to take into account $s_{ji}$ to
+estimate the quality of the pairwise coefficient $s_{i,j}$. Indeed, if both
+coefficients are similar ($s_{ij} \sim s_{ji}$) the directivity can not be
+inferred since the order of fluorescent rising is not well defined. On the
+contrary, different coefficients $s_{ij}$ and $s_{ji}$ mean that an order of
+fluorescent rising is well established and observable. There we choose to
+compute a differential pairwise coefficient $z_{ij}$ defined by the following
+equation
+
+
+\begin{align}
+z_{ij} = \sum_{t=1}^{T - 1}
+    \mathbb{1}(x_j^{t+1} - x_i^t \in \left[\phi_1, \phi_2 \right]) -
+    \mathbb{1}(x_i^{t+1} - x_j^t \in \left[\phi_1, \phi_2 \right]),
+\end{align}
+where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
+
+At the light of the poor results of this heuristic taken on its own summarized
+on Table \ref{tab:} as \textit{directivity}, we use it to make asymmetric the
+degree of association matrix using partial correlation statistics. We expect
+that when the heuristic is highly confident (i.e., $z_{i,j} \gg 0 \gg
+z_{j,i}$) the degree of association   of edge $(i,j)$ is increased while the
+degree of association corresponding to the edge $(j,i)$ is reduced. Even if
+this adjustment is subtle, it might have a slight positive effect on the ROC
+AUC.
+
 
 
 
