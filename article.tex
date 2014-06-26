@@ -380,9 +380,9 @@ inverse of the covariance matrix was used in each case. These results
 clearly show the importance of the filters. AUROC increases in average from
 0.77 to 0.93. PCA does not really affect AUROC scores but it improves
 significantly AUPRC scores. Taking the average over various parameter
-setting gives an improvement of 10\% in both AUROC and AUPRC. The last
+setting gives an improvement of 10\% \textcolor{red}{AS:AUPRC ok but AUROC?} in both AUROC and AUPRC. The last
 row shows the final performance of the method specifically tuned for
-the challenge (see the Appendix for all details). Although this tuning
+the challenge (see the Appendix \ref{app:optimized} for all details). Although this tuning
 was decisive to obtain the best performance at the challenge, it does
 not significantly improve neither AUROC nor AUPRC. Note that tuning
 was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -409,12 +409,10 @@ Correlation & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
 GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
 GENIE3 &\\
 \end{tabular}
-\caption{TODO \textcolor{red}{version simple!!}}
+\caption{Top: ROC (left) and PR (right) AUC on \text{normal-1,2,3,4} with partial correlation and different filtering functions except the last two rows with an average over various parameter settings.
+Bottom: ROC (left) and PR (right) AUC on \text{normal-1,2,3,4} with different methods.}
 \label{tab:tab3}
 \end{table}
-
-
-
 
 \paragraph{Comparison with other methods}
 
@@ -630,13 +628,12 @@ Office.
 \section{An optimized version of the algorithm to win the challenge}
 \label{app:optimized}
 
-Sections~\ref{sec:filter}~to~\ref{sec:results} describe a simplified version
-of the actual winning method. However, one could be interesting in the full
-description. This appendix will therefore follow the progress of the main
-paper highlighting optimizations.
+This section is a complete description of the method specifically tuned for the challenge. Basically, it is an optimized version of the method presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, therefore only differences between both version of our method will be highlighted.
 
-Let us remark that parameter value choices were made to maximize ROC AUC score
-on \textit{normal-1} and, to a lesser extent, \textit{normal-4}.
+Let us remark that tuning
+was mainly done on the \textit{normal-1} and \textit{normal-4}
+datasets, which explains why these two networks are slightly better
+retrieved than the others.
 
 \subsection*{Signal processing}
 
@@ -653,16 +650,17 @@ f_4(x^t_i) &= x^{t+3}_i + x^{t+2}_i + x^{t+1}_i + x_i^t.
 \label{eq:asymetric-median}
 \end{align}
 
-Theses filters, even if individually they lead to less good performances of the inference algorithm than filters $f_1$ and
-$f_2$, the averaging approach over these four low-pass
-filters gets better.
+Theses filters lead, taken individually, to worse performances
+ than filters $f_1$ and
+$f_2$ but the averaging approach over all low-pass
+filters gets better \textcolor{red}{AS:Does it necessary to show it numerically?}.
 
-As a computation trick, it appears that using a parametrized hard-threshold filter slighlty improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter denoted as $h^*$ \begin{align}
+As a computation trick, it appears that using a parametrized hard-threshold filter slightly improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter \begin{align}
 h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
 \end{align}
 where $c$ is set to $0.9$ after experiments.
 
-The magnification can also be optimized by adjusting the effect differently with respect to the global activity. In that sense, we introduce the following function \begin{align}
+The magnification can also be optimized by adjusting differently the effect depending on the global activity and the low-pass filter used. In that sense, we introduce the following function \begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
 where $m$ is a piecewise linear function depending on the low-pass filter and on the range of the global activity. We refer to our implementation\footnote{available on \url{https://github.com/asutera/kaggle-connectomics}.} for the values of the parameters and especially the parameter $m$.
@@ -674,13 +672,17 @@ about the choice of the parameter value $\tau$ and the low-pass filter.
 Therefore, in order to reduce the variance of the results and thus the
 robustness of our approach, we perform an average over a range of parameter
 value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
-the four low-pass filters with weights  $weight_{f_1} = 1$, $weight_{f_2} =
-0.9$, $weight_{f_3} = 0.7$ and $weight_{f_4} = 0.01$, tuned to maximize the
-ROC AUC on \textit{normal-1}. The weights were adjusted to take into account
-that some filters outperform other but there is information hold in every
-filter.
+the four low-pass filters with the following parameters
 
+\begin{align*}
+weight_{f_1} &= 1,\\
+weight_{f_2} &= 0.9, \\
+weight_{f_3} &= 0.7, \\ 
+weight_{f_4} &= 0.01
+\end{align*}
 
+tuned to maximize the
+ROC AUC on \textit{normal-1}.
 
 \subsection*{Connectome inference from pairwise interaction statistics}
 
@@ -753,41 +755,41 @@ AUC.
 
 
 
-The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results.
+% The algorithm propose in sections \ref{sec:filter} and \ref{sec:inference} has been optimized at its extreme limit to win the challenge. In this section, we will describe the full tuned algorithm and present some results.
 
-Note that our parameter tuning was mainly
-done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
-therefore it may justify why these networks are better retrieved despite the
-fact that some might be simpler to infer.
+% Note that our parameter tuning was mainly
+% done on the \textit{normal-1} dataset and partly on \textit{normal-4} dataset,
+% therefore it may justify why these networks are better retrieved despite the
+% fact that some might be simpler to infer.
 
-% Introduce a custom solution to make the Y matrix asymmetric
-% Introduce directivity
-\textcolor{red}{Est-ce qu'on ne le ferait pas passer dans l'appendice B? Ou du moins l'équation?}
-Since partial correlation is a symmetric measure, the causal mechanism behind the
-interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
-be directly inferred\footnote{Also note that two other causal mechanisms might be
-implied while having a non-zero partial coefficient: (i) a pair of variables
-is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
-conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
-\citep{de2004discovery}.}.
-In order to retrieve causal information, we developed an
-heuristics based on the following observation. The rise of fluorescence
-indicates the activation of a neuron $i$. If a neuron $j$ have also
-an increased of fluorescence after a slight delay, this could have been
-caused by the neuron $i$. Thus, we count whenever
-such events occurred between consecutive time steps
-\[
-\hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
-    \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[f_1, f_2 \right]) -
-    \mathbb{1}((x_i^{t+1} - x_j^t) \in \left[f_1, f_2 \right]), \forall i, j \in V
-\]
-where $f_1$ and $f_2$ are parameters of the method.
-Finally, the weighted average of correlation matrices is combined with $Z$ such
-that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
+% % Introduce a custom solution to make the Y matrix asymmetric
+% % Introduce directivity
+% \textcolor{red}{Est-ce qu'on ne le ferait pas passer dans l'appendice B? Ou du moins l'équation?}
+% Since partial correlation is a symmetric measure, the causal mechanism behind the
+% interaction ($A$ directly causes $B$, $B$ directly causes $A$ or both) can not
+% be directly inferred\footnote{Also note that two other causal mechanisms might be
+% implied while having a non-zero partial coefficient: (i) a pair of variables
+% is induced by a common (hidden) variable; (ii) $A$ (respectively $B$) is
+% conditionally correlated to a hidden variable affecting $B$ (resp. $A$)
+% \citep{de2004discovery}.}.
+% In order to retrieve causal information, we developed an
+% heuristics based on the following observation. The rise of fluorescence
+% indicates the activation of a neuron $i$. If a neuron $j$ have also
+% an increased of fluorescence after a slight delay, this could have been
+% caused by the neuron $i$. Thus, we count whenever
+% such events occurred between consecutive time steps
+% \[
+% \hat{Z}: z_{ij} = \sum_{t=1}^{T - 1}
+%     \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[f_1, f_2 \right]) -
+%     \mathbb{1}((x_i^{t+1} - x_j^t) \in \left[f_1, f_2 \right]), \forall i, j \in V
+% \]
+% where $f_1$ and $f_2$ are parameters of the method.
+% Finally, the weighted average of correlation matrices is combined with $Z$ such
+% that $Z$ has a contribution of $0.3\%$ to the prediction of an edge.
 
-% For the directory method, only filters defined by Equations
-% \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
-% used.
+% % For the directory method, only filters defined by Equations
+% % \ref{eq:low-pass}, \ref{eq:high-pass} and \ref{eq:hard-treshold-filter} were
+% % used.
 
 
 \section{Extended results}
