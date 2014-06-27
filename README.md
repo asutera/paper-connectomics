@@ -1,13 +1,14 @@
-Connectomics paper
-==================
+Simple connectome inference from partial correlation statistics in calcium imaging
+==================================================================================
 
+* Antonio Sutera, Arnaud Joly, Vincent François-Valet, Aaron Qiu, Gilles Louppe, Damien Ernst and Pierre Geurts
+* _Contact:_ a.sutera@ulg.ac.be
+* _Code:_ https://github.com/asutera/kaggle-connectomics
 
-
-Related links:
-
-    - http://www.kaggle.com/c/connectomics
-    - http://connectomics.chalearn.org/help/setting
-    - http://connectomics.chalearn.org/workshop
-    - http://en.wikipedia.org/wiki/Human_Connectome_Project
-    - Imaging Calcium in Neurons
-      http://www.cell.com/neuron/abstract/S0896-6273(12)00172-9'
+In this work, we propose a simple, but yet efficient, method for the problem of
+connectome inference in calcium imaging data. The proposed algorithm is made of
+two steps. First, processing the raw signals to detect neural peak activities.
+Second, inferring the degree of association between neurons from partial
+correlation statistics. This paper summarizes the methodology that led us to
+win the Connectomics Challenge, proposes a simplified version of our method and
+finally discusses our results with respect to other inference methods.
