@@ -770,7 +770,7 @@ time step, ie., when the delay between the two activations is below the time
 resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
 edge orientation. Indeed, edge orientation can only be predicted with some
 confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
-$s_{i,j}$ is lower than $s_{j,i}$ ($i\rightarrow j$). To address these issues,
+$s_{i,j}$ is lower than $s_{j,i}$ ($j\rightarrow i$). To address these issues,
 we computed a differential pairwise coefficient $z_{ij}$ defined as follows:
 \begin{align}
 z_{ij} = \sum_{t=1}^{T - 1}
@@ -876,7 +876,6 @@ performs better than GTE most of the times.
 \begin{table}[h]
 \caption{Performance (top: AUROC, bottom: AUPRC) on specific datasets with different methods.}
 \label{tab:results_appendix}
-
 \centering
 \small
 \begin{tabular}{| l | c c c c c c |}
