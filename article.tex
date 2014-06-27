@@ -669,11 +669,11 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 
 After the hard thresholded filter $h$, they were significant differences in
 peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
-we smoothened the difference in peak magnitudes through
+we smoothened these differences in peak magnitudes through
 \begin{align}
 g(x^t_i) = (x_i^t)^c
 \end{align}
-yielding slightly AUROC with $c=0.9 \in (0, 1)$.
+yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
 
 After filter $c$, we applied a filter $w^*$ similar to $w$, whose goal is also
 to magnify the importance of spikes that occur in case of low global activity.
@@ -709,7 +709,7 @@ Since partial correlation statistics is a symmetric measure and the connectome
 is a directed graph, it should be rewarding to detect the edge orientation. In
 this section, we will present a heuristic trying to retrieve directivity.
 However, considering results in Section \ref{sec:results}, we expect that the
-additionnal gain margin should be extremely limited.
+additional gain margin should be extremely limited.
 
 The heuristic is based on the following observation. The rise of fluorescence
 of a neuron indicates its activation. If another neuron is activated after a
