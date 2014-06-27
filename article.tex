@@ -682,8 +682,9 @@ Instead of equation \ref{eq:magnify-filter}, we had
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
 \end{align}
 where the function $k$ is a piecewise linear function optimized for each filter
-$f_1$, $f_2$, $f_3$ and $f_4$. For more details on this aspect, we refer the
-reader to the implementation \footnote{available on
+$f_1$, $f_2$, $f_3$ and $f_4$. By comparison, the filter $w$ used the following
+function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
+the reader to the implementation \footnote{available on
 \url{https://github.com/asutera/kaggle- connectomics}.}.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
