@@ -86,16 +86,16 @@ winning method\footnote{Code available at \url{https://github.com/asutera
 /kaggle-connectomics}} of the Connectomics
 Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
-partial correlation statistics. The paper is structured as follows: Section
-\ref{sec:filter} describes the signal processing methods applied on fluorescent
-calcium time series; Section \ref{sec:inference} then presents the proposed
-approach and its theoretical properties; Section \ref{sec:results} provides an
-empirical analysis and comparison with other network inference methods, while
-Section \ref{sec:conclusion} finally discusses our work and provides further
-research directions. Additionally, Appendix \ref{app:optimized} further
-describes, in all details, our actual winning method, giving slightly better
-results than the method presented in the paper, at the price of parameter
-tuning.
+partial correlation statistics. The paper is structured as follows:
+Section~\ref{sec:filter} describes the signal processing methods applied on
+fluorescent calcium time series; Section\ref{sec:inference} then presents the
+proposed approach and its theoretical properties; Section~\ref{sec:results}
+provides an empirical analysis and comparison with other network inference
+methods, while Section~\ref{sec:conclusion} finally discusses our work and
+provides further research directions. Additionally,
+Appendix~\ref{app:optimized} further describes, in all details, our actual
+winning method, giving slightly better results than the method presented in
+the paper, at the price of parameter tuning. Appendix~\ref{app:supp} provides supplementary results on other datasets.
 
 
 \section{Signal processing} \label{sec:filter}
@@ -173,8 +173,7 @@ around $t=4\text{s}$ in the figure. Note that the particular case where there
 is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i)
 = 1$.
 
-To summarize, the full signal processing pipeline of our simplified (resp.
-tuned) approach is defined by the composed function $w \circ h \circ g \circ
+To summarize, the full signal processing pipeline of our simplified approach is defined by the composed function $w \circ h \circ g \circ
 f_1$ (resp. $f_2$). When applied to the raw signal of Figure
 \ref{fig:original_curve}, it outputs the signal shown in Figure
 \ref{fig:weight_curve}.
@@ -622,7 +621,13 @@ presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, the description
 will be limited to explaining the differences that exist between this method
 and its optimized version.
 
-This appendix is structured as follows: Section \ref{app:signal} describes the differences about the signal processing methods applied on fluorescent calcium time series; Section \ref{app:averaging} then provides a detailed explanation of the averaging approach; Section \ref{app:connectome} presents a heuristic trying to retrieve directivity from fluorescent calcium time series while Section \ref{app:results} finally present results validating some choices that have been made.
+This appendix is structured as follows: Section~\ref{sapp:signal} describes
+the differences about the signal processing methods applied on fluorescent
+calcium time series; Section~\ref{sapp:averaging} then provides a detailed
+explanation of the averaging approach; Section~\ref{sapp:connectome} presents
+a heuristic trying to retrieve directivity from fluorescent calcium time
+series while Section~\ref{sapp:results} finally present results validating
+some choices that have been made.
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -630,16 +635,16 @@ This appendix is structured as follows: Section \ref{app:signal} describes the d
 % retrieved than the others.
 
 \subsection{Signal processing}
-\ref{sapp:signal}
+\label{sapp:signal}
 
 In Section~\ref{sec:filter}, we introduce two composed filtering functions in
 order (i) to remove noise induced by light scattering artifact, (ii) to take
 into account the slow decay of fluorescence signal and (iii) to reduce the
 importance of global high activity in the network. However, in order to win the
 challenge, we have heavily optimized several different, but yet similar,
-filtering composed function. Taken alone, those composed functions in
+filtering composed function. Taken individually, those composed functions in
 conjunction with partial correlation might lead to worse AUROC, but improved
-whenever they are averaged.
+whenever they are averaged (see \ref{tab:} ).
 
 Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
 and \ref{eq:weighted-asymetric-median}, we also consider two
@@ -649,25 +654,7 @@ f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-m
 f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
 \end{align}
 
-\textcolor{red}{AJ: This paragraph and table should go in a separate section}
-Theses filters lead, taken individually, to worse performances  than filters
-$f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
-\begin{table}[ht]\label{tab:comparison}
-%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
-\centering
-\small
-\begin{tabular}{| l | c c c c | c c c c |}
-\hline
-& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
-\textit{Averaging} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
-\hline
-\hline
- with $f_1$, $f_2$ & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  \textbf{0.390} &  0.385 & \textbf{0.375}  \\
- with $f_1$, $f_2$, $f_3$, $f_4$ & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
-\hline
-\end{tabular}
-\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
-\end{table}
+
 
 After the hard thresholded filter $h$, they were significant differences in
 peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
@@ -690,6 +677,8 @@ the reader to the implementation \footnote{available on
 \url{https://github.com/asutera/kaggle- connectomics}.}.
 
 \subsection{Weighted average of partial correlation statistics}
+\label{sapp:averaging}
+
 
 The AUROC performance of the conjunction of the composed function $w^* \circ p
 \circ g \circ h \circ f_1$ (respectively $f_2$, $f_3$ and $f_4$) and the
@@ -706,7 +695,7 @@ $f_1$ and $f_2$ were given equal weight.
 
 
 \subsection{Connectome inference from pairwise interaction statistics}
-\ref{sapp:connectome}
+\label{sapp:connectome}
 
 Since partial correlation statistics is a symmetric measure and the connectome
 is a directed graph, it should be rewarding to detect the edge orientation. In
@@ -746,14 +735,38 @@ z_{ij} = \sum_{t=1}^{T - 1}
 \end{align}
 where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
-At the light of the poor results of this heuristic taken on its own summarized
-on Table \ref{tab:directivity} as \textit{directivity}, we use it to make
+At the light of the poor results of this heuristic taken on its own
+(on Table \ref{tab:directivity} in Section~\ref{sapp:results}) as \textit{directivity}, we use it to make
 asymmetric the degree of association matrix using partial correlation
 statistics. We expect that when the heuristic is highly confident (i.e.,
 $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of association   of edge $(i,j)$ is
 increased while the degree of association corresponding to the edge $(j,i)$ is
 reduced. Even if this adjustment is subtle, it might have a slight positive
 effect on the ROC AUC.
+
+
+
+\subsection{Experiments}
+\label{sapp:results}
+
+Theses filters lead, taken individually, to worse performances  than filters
+$f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
+\begin{table}[ht]\label{tab:comparison}
+%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\centering
+\small
+\begin{tabular}{| l | c c c c | c c c c |}
+\hline
+& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+\textit{Averaging} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+\hline
+\hline
+ with $f_1$, $f_2$ & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  \textbf{0.390} &  0.385 & \textbf{0.375}  \\
+ with $f_1$, $f_2$, $f_3$, $f_4$ & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
+\hline
+\end{tabular}
+\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
+\end{table}
 
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -772,10 +785,6 @@ effect on the ROC AUC.
 \caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and without the directivity heuristic.}
 \label{tab:directivity}
 \end{table}
-
-
-\subsection{Experiments}
-\ref{sapp:results}
 
 
 \section{Supplementary results} \label{app:supp}
