@@ -642,9 +642,11 @@ order (i) to remove noise induced by light scattering artifact, (ii) to take
 into account the slow decay of fluorescence signal and (iii) to reduce the
 importance of global high activity in the network. However, in order to win the
 challenge, we have heavily optimized several different, but yet similar,
-filtering composed function. Taken individually, those composed functions in
-conjunction with partial correlation might lead to worse AUROC, but improved
-whenever they are averaged (see \ref{tab:} ).
+filtering composed function. On the one hand, each part of the composed functions is optimized to maximize the ROC AUC (e.g., $w^*$). On the other hand, we introduce new functions (e.g., $f_3$ and $f_4$) leading to alternative composed functions. They might lead to worse ROC AUC when taken individually but they improve the overall ROC AUC when taking as a part of the averaging approach.
+
+% Taken individually, those composed functions in
+% conjunction with partial correlation might lead to worse AUROC, but improved
+% whenever they are averaged.
 
 Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
 and \ref{eq:weighted-asymetric-median}, we also consider two
@@ -657,7 +659,7 @@ f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-m
 
 
 After the hard thresholded filter $h$, they were significant differences in
-peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
+peak magnitudes. Since time series $x_i^t$  were mainly between 0 and 1,
 we smoothened these differences in peak magnitudes through
 \begin{align}
 p(x^t_i) = (x_i^t)^c
@@ -749,8 +751,16 @@ effect on the ROC AUC.
 \subsection{Experiments}
 \label{sapp:results}
 
-Theses filters lead, taken individually, to worse performances  than filters
-$f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
+\paragraph{On the interest of low-pass filters $f_3$ and $f_4$.}
+
+%%% SHOW DIFFERENTS COMPOSED FUNCTION
+
+
+% Theses filters lead, taken individually, to worse performances  than filters
+% $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
+
+As reported on Table~\ref{tab:f3f4}, averaging over all low-pass filters leads to better ROC AUC than averaging over only two low-pass filters, i.e., $f_1$ and $f_2$.
+
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
@@ -766,8 +776,10 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 \hline
 \end{tabular}
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
+\label{tab:f3f4}
 \end{table}
 
+\paragraph{On the contribution of the directivity heuristic.}
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
@@ -803,6 +815,8 @@ each dataset:
 \item[normal-3-highrate]: Same topology as \textit{normal-3} but with a higher firing frequency, i.e., with highly active neurons.
 \item[normal-4-lownoise]: Same topology as \textit{normal-4} but with a better signal to noise ratio.
 \end{description}
+
+Average partial correlation and its tuned variant, i.e.,``Full method'', clearly outperform other network inference methods on all datasets (with 1000 neurons) provided by the organizers. It confirm that the presented methodology in this work would constitute a very solid baseline. 
 
 \begin{table}[h]
 \centering
