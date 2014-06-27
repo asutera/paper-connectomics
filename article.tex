@@ -11,18 +11,29 @@
 
 \title{Simple connectome inference from partial correlation statistics in calcium imaging}
 
-\author{\Name{Antonio Sutera,
-    Arnaud Joly,
-        Vincent François-Lavet,\\
-        Aaron Qiu,
-        Gilles Louppe,
-        Damien Ernst,
-        Pierre Geurts}
-  \Email{a.sutera@ulg.ac.be}\\
-  \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
+  \author{\Name{Antonio Sutera} ,
+   \Name{Arnaud Joly},
+   \Name{Vincent François-Lavet}, \Email{a.sutera@ulg.ac.be}\\
+   \Name{Aaron Qiu},
+   \Name{Gilles Louppe},
+   \Name{Damien Ernst}\and\Name{Pierre Geurts}
+    \\
+   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
 
-%\jmlrauthors{A. Sutera et al}
-%\shortauthor{A. Sutera et al.}
+
+
+% \author{\Name{Antonio Sutera,
+%     Arnaud Joly,
+%         Vincent François-Lavet,\\
+%         Aaron Qiu,
+%         Gilles Louppe,
+%         Damien Ernst,
+%         Pierre Geurts}
+%   \Email{a.sutera@ulg.ac.be}\\
+%   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
+
+\jmlrauthors{A. Sutera et al}
+% \shortauthor{A. Sutera et al.}
 
 \begin{document}
 
@@ -105,8 +116,7 @@ Figure~\ref{fig:filtered-signal}.
 \subfigure[High-pass filter $g$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}\\
 \subfigure[Hard-threshold filter $h$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}
 \subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:weight_curve}}
-\caption{Signal processing process for extracting peaks from the raw fluorescence data.
-         \textcolor{red}{AJ: The bottom axe is hidden on some figures.}}
+\caption{Signal processing process for extracting peaks from the raw fluorescence data.}
 \label{fig:filtered-signal}
 \end{figure}
 
@@ -392,7 +402,7 @@ No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068
 $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
 $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
 + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
-Averaging           					& 0.938 & 0.936 & 0.936 & 0.932 & 0.391 & 0.389 & 0.385 & 0.374\\
+Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
 Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
 \hline
 PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
@@ -727,6 +737,34 @@ this adjustment is subtle, it might have a slight positive effect on the ROC
 AUC.
 
 
+\section{Extended results}
+
+
+\begin{table}[t]\label{tab:comparison}
+%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\centering
+\small
+\begin{tabular}{| l | c c c c c c | c c c c c c|}
+\hline
+& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+\textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{normal-3-highrate} & \textit{normal-4-lownoise} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{normal-3-highrate} & \textit{normal-4-lownoise}\\
+\hline
+\hline
+% No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+% $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+% $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+% + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+% Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
+% Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+% \hline
+% PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
+% GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
+% GENIE3 & & & & & & & & \\
+% \hline
+\end{tabular}
+\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
+Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
+\end{table}
 
 
 % NEXT APPENDIX SECTION
@@ -736,7 +774,7 @@ AUC.
 
 % EXPLAIN PCA - FIG
 
-\vspace{5cm}
+%\vspace{5cm}
 
 
 
@@ -798,10 +836,11 @@ GENIE3 (depth = 2)     & 0.889 & 0.888 & 0.883 & 0.884* & 0.217 & 0.210 & 0.220 
 GENIE3 (depth = 3)     & 0.892 & 0.891* & 0.887 & 0.887 & 0.232 & 0.226* & 0.237 & 0.215\\
 GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
 Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
-Partial correlation (avg.) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
+Partial correlation (avg. 2) & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375  \\
+Partial correlation (avg. 4) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
 % Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
 Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach (opt. \& avg.)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
+Our approach (opt. \& avg. 4)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
 % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
 \end{tabular}
 \caption{TODO (* means not 10000 trees but more than 9500, to be solved.) }
