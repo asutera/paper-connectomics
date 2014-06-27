@@ -147,7 +147,7 @@ as shown in Figure \ref{fig:hp_curve}.
 To filter out small variations in the signal obtained after applying the
 function $g$ as well as to eliminate negative values, we use the following
 hard-threshold filter
-\begin{align}
+\begin{align}\label{eqn:hfilter}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
 yielding Figure \ref{fig:threshold_curve}.
@@ -612,22 +612,29 @@ Office.
 \appendix
 
 
-\section{Particularities of ``Full method''}
+\section{Description  of the ``Full method''}
 \label{app:optimized}
 
-This section provides a full description of the method specifically tuned for
-the challenge. Since it is no more than an optimized version of the method
-presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, the description
-will be limited to explaining the differences that exist between this method
-and its optimized version.
+This section provides a detailed description of the method specifically tuned
+for the Connectomics challenge. We will restrict our description to the
+differences with respect to the simplified method presented in the main
+paper. Most parameters were tuned so as to maximize AUROC on the
+\textit{normal-1} dataset and our design choices were validated by monitoring
+the AUROC obtained by the 145 entries we submitted during the
+challenge. Although the tuned method performs better than the simplified one on
+the challenge dataset and this tuning was probably decisive to get the best
+performance, we believe that the tuned method clearly overfits the
+simulator used to generate the challenge data and that the simplified method
+should work equally well on new independent datasets. We nevertheless provide
+the tuned method here for reference purpose. Our implementation of the tuned
+method is available at \url{https://github.com/asutera/kaggle-connectomics}.
 
-This appendix is structured as follows: Section~\ref{sapp:signal} describes
-the differences about the signal processing methods applied on fluorescent
-calcium time series; Section~\ref{sapp:averaging} then provides a detailed
-explanation of the averaging approach; Section~\ref{sapp:connectome} presents
-a heuristic trying to retrieve directivity from fluorescent calcium time
-series while Section~\ref{sapp:results} finally present results validating
-some choices that have been made.
+This appendix is structured as follows: Section~\ref{sapp:signal} describes the
+differences in terms of signal processing. Section~\ref{sapp:averaging} then
+provides a detailed presentation of the averaging
+approach. Section~\ref{sapp:connectome} presents a heuristic to retrieve edge
+directionality. Finally, Section~\ref{sapp:results} presents some experimental
+results to validate the different steps of our proposal.
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -637,99 +644,134 @@ some choices that have been made.
 \subsection{Signal processing}
 \label{sapp:signal}
 
-In Section~\ref{sec:filter}, we introduce two composed filtering functions in
-order (i) to remove noise induced by light scattering artifact, (ii) to take
-into account the slow decay of fluorescence signal and (iii) to reduce the
-importance of global high activity in the network. However, in order to win the
-challenge, we have heavily optimized several different, but yet similar,
-filtering composed function. On the one hand, each part of the composed functions is optimized to maximize the ROC AUC (e.g., $w^*$). On the other hand, we introduce new functions (e.g., $f_3$ and $f_4$) leading to alternative composed functions. They might lead to worse ROC AUC when taken individually but they improve the overall ROC AUC when taking as a part of the averaging approach.
+In Section~\ref{sec:filter}, we introduce four filtering functions ($f$, $g$,
+$h$, and $w$) that are composed in sequence (i.e., $w \circ h \circ g \circ
+f$) to provide the signals from which to compute partial correlation
+statistics.
+
+Filtering is modified as follows in the tuned method:
+\begin{itemize}
+\item In addition to $f_1$ and $f_2$ (Equations \ref{eq:symetric-median} and
+  \ref{eq:weighted-asymetric-median}), two alternative low-pass filters $f_3$
+  and $f_4$ are considered:
+\begin{align}
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}.
+\end{align}
+\item An additional filter $p$ is applied to smoothen differences in peak magnitudes
+  that might remain after the application of the hard-threshold filter $h$:
+\begin{align}
+p(x^t_i) = (x_i^t)^c,
+\end{align}
+with $c=0.9$.
+\item Filter $w$ is replaced by a more complex filter $w^*$ defined as:
+\begin{align}
+ w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
+\end{align}
+where the function $k$ is a piecewise linear function optimized separately for
+each filter $f_1$, $f_2$, $f_3$ and $f_4$ (see the implementation for full
+details). Filter $w$ in the simplified method is a special case of $w^*$ with
+$k(\sum_j x_j^t)=1$.
+\end{itemize}
+The pre-processed time-series are then obtained by the application of the
+following function: $w^*\circ p \circ h \circ g \circ f_i$ (with $i=1$,2,3, or 4)
+
+%% two composed filtering functions in
+%% order (i) to remove noise induced by light scattering artifact, (ii) to take
+%% into account the slow decay of fluorescence signal and (iii) to reduce the
+%% importance of global high activity in the network. However, in order to win the
+%% challenge, we have heavily optimized several different, but yet similar,
+%% filtering composed function. On the one hand, each part of the composed
+%% functions is optimized to maximize the ROC AUC (e.g., $w^*$). On the other
+%% hand, we introduce new functions (e.g., $f_3$ and $f_4$) leading to alternative
+%% composed functions. They might lead to worse ROC AUC when taken individually
+%% but they improve the overall ROC AUC when taking as a part of the averaging
+%% approach.
 
 % Taken individually, those composed functions in
 % conjunction with partial correlation might lead to worse AUROC, but improved
 % whenever they are averaged.
 
-Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
-and \ref{eq:weighted-asymetric-median}, we also consider two
-other low-pass filters
-\begin{align}
-f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
-f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
-\end{align}
+%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
+%% and \ref{eq:weighted-asymetric-median}, we also consider two
+%% other low-pass filters
+%% \begin{align}
+%% f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+%% f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
+%% \end{align}
 
+%% After the hard thresholded filter $h$, they were significant differences in
+%% peak magnitudes. Since time series $x_i^t$  were mainly between 0 and 1,
+%% we smoothened these differences in peak magnitudes through
+%% \begin{align}
+%% p(x^t_i) = (x_i^t)^c
+%% \end{align}
+%% yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
 
-
-After the hard thresholded filter $h$, they were significant differences in
-peak magnitudes. Since time series $x_i^t$  were mainly between 0 and 1,
-we smoothened these differences in peak magnitudes through
-\begin{align}
-p(x^t_i) = (x_i^t)^c
-\end{align}
-yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
-
-After filter $p$, we applied a filter $w^*$ similar to $w$, whose goal is also
-to magnify the importance of spikes that occur in case of low global activity.
-Instead of equation \ref{eq:magnify-filter}, we had
-\begin{align}
- w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
-\end{align}
-where the function $k$ is a piecewise linear function optimized for each filter
-$f_1$, $f_2$, $f_3$ and $f_4$. By comparison, the filter $w$ used the following
-function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
-the reader to the implementation \footnote{available on
-\url{https://github.com/asutera/kaggle- connectomics}.}.
+%% After filter $p$, we applied a filter $w^*$ similar to $w$, whose goal is also
+%% to magnify the importance of spikes that occur in case of low global activity.
+%% Instead of equation \ref{eq:magnify-filter}, we had
+%% \begin{align}
+%%  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
+%% \end{align}
+%% where the function $k$ is a piecewise linear function optimized for each filter
+%% $f_1$, $f_2$, $f_3$ and $f_4$. By comparison, the filter $w$ used the following
+%% function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
+%% the reader to the implementation \footnote{available on
+%% \url{https://github.com/asutera/kaggle- connectomics}.}.
 
 \subsection{Weighted average of partial correlation statistics}
 \label{sapp:averaging}
 
+As discussed in Section \ref{sec:inference}, the performance of the method (in
+terms of AUROC) is sensitive to the value of the parameter $\tau$ of the
+hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
+of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$). Like in the simplified
+method, we therefore averaged the partial correlation statistics obtained by
+varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
+varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. Unlike in the
+simplified method where each filter $f_1$ and $f_2$ were given equal weight in
+the averaging, in the tuned method, we weighted each of the four filters
+according to its individual performance on the \textit{normal-1}
+dataset. \textcolor{red}{PG: je ne suis pas s\^ur de comprendre comment ces
+  poids sont d\'etermin\'es}
 
-The AUROC performance of the conjunction of the composed function $w^* \circ p
-\circ g \circ h \circ f_1$ (respectively $f_2$, $f_3$ and $f_4$) and the
-partial correlation statistics was quite sensitive to the choice of $\tau$, the
-hard threshold value and the design of the low pass filter. Similarly to the
-simplified method, we average the partial correlation statistics obtained by
-varying $\tau$ linearly from $0.100$ to $0.209$ and the low-pass filter.
-
-Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
-contribution of each filter in the degree of association between two neurons
-was chosen as to maximize the AUROC on \textit{normal-1} and is function of
-their individual performance. By comparison in the simple method, each filter
-$f_1$ and $f_2$ were given equal weight.
+%% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
+%% contribution of each filter in the degree of association between two neurons
+%% was chosen as to maximize the AUROC on \textit{normal-1} and is function of
+%% their individual performance. By comparison in the simple method, each filter
+%% $f_1$ and $f_2$ were given equal weight.
 
 
-\subsection{Connectome inference from pairwise interaction statistics}
+\subsection{Prediction of edge orientation}
 \label{sapp:connectome}
 
-Since partial correlation statistics is a symmetric measure and the connectome
-is a directed graph, it should be rewarding to detect the edge orientation. In
-this section, we will present a heuristic trying to retrieve directivity.
-However, considering results in Section \ref{sec:results}, we expect that the
-additional gain margin should be extremely limited.
+Partial correlation statistics is a symmetric measure, while the connectome is
+a directed graph. It could thus be beneficial to try to predict edge orientation. In
+this section, we present a heuristic to retrieve directionality. %% Note however that
+%% given the discussion at the end of Section~\ref{sec:results}, we cannot expect
+%% a very large improvement in AUROC by predicting edge orientation.
 
-The heuristic is based on the following observation. The rise of fluorescence
+This heuristic is based on the following observation. The rise of fluorescence
 of a neuron indicates its activation. If another neuron is activated after a
-slight delay, this could have been caused by the activation of the first
-neuron and therefore highlight a (direct) directed relationship between the
-two neurons. With that in mind, the heuristic principle is to count the number
-of such events occurred between neurons $i$ and $j$ for consecutive time
-steps. It can be done by counting the number of times that a transition from
-neuron $i$ to neuron $j$ for two consecutive time steps, or mathematically we
-compute for each pair $(i,j)$
+slight delay, this could be a consequence of the activation of the first neuron
+and therefore indicate a directed link in the connectome from the first to the
+second neuron. Given this analysis, the idea of our heuristic is to count the
+number of such events occurring between neurons $i$ and $j$ for consecutive
+time steps. Mathematically, we compute for each pair $(i,j)$:
 \begin{align}
-s_{ij} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
+s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
 where $\phi_1$ and $\phi_2$ are parameters of the heuristic.
 
-Two issues may be spotted. First, this heuristic is not able to distinguish a
-directed relationships if both neurons are activated in the same time step and
-may wrongly characterize indirect relationships because of the time
-resolution. Second, it may be necessary to take into account $s_{ji}$ to
-estimate the quality of the pairwise coefficient $s_{i,j}$. Indeed, if both
-coefficients are similar ($s_{ij} \sim s_{ji}$) the directivity can not be
-inferred since the order of fluorescent rising is not well defined. On the
-contrary, different coefficients $s_{ij}$ and $s_{ji}$ mean that an order of
-fluorescent rising is well established and observable. There we choose to
-compute a differential pairwise coefficient $z_{ij}$ defined by the following
-equation
+Two issues remain with this heuristic. First, it does not allow to detect a
+directed relationship if both neurons are activated simultaneously at the same
+time step, ie., when the delay between the two activations is below the time
+resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
+edge orientation. Indeed, edge orientation can only be predicted with some
+confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
+$s_{i,j}$ is lower than $s_{j,i}$ ($i\rightarrow j$). To address these issues,
+we computed a differential pairwise coefficient $z_{ij}$ defined as follows:
 \begin{align}
 z_{ij} = \sum_{t=1}^{T - 1}
     \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2 \right]) -
@@ -737,14 +779,15 @@ z_{ij} = \sum_{t=1}^{T - 1}
 \end{align}
 where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
-At the light of the poor results of this heuristic taken on its own
-(on Table \ref{tab:directivity} in Section~\ref{sapp:results}) as \textit{directivity}, we use it to make
-asymmetric the degree of association matrix using partial correlation
-statistics. We expect that when the heuristic is highly confident (i.e.,
-$z_{i,j} \gg 0 \gg z_{j,i}$) the degree of association   of edge $(i,j)$ is
-increased while the degree of association corresponding to the edge $(j,i)$ is
-reduced. Even if this adjustment is subtle, it might have a slight positive
-effect on the ROC AUC.
+\textcolor{red}{PG: je ne comprends pas ce qui est fait exactement. Mettre les
+  maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own
+(on Table \ref{tab:directivity} in Section~\ref{sapp:results}) as
+\textit{directivity}, we use it to make asymmetric the degree of association
+matrix using partial correlation statistics. We expect that when the heuristic
+is highly confident (i.e., $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of
+association of edge $(i,j)$ is increased while the degree of association
+corresponding to the edge $(j,i)$ is reduced. Even if this adjustment is
+subtle, it might have a slight positive effect on the ROC AUC.
 
 
 
@@ -759,10 +802,14 @@ effect on the ROC AUC.
 % Theses filters lead, taken individually, to worse performances  than filters
 % $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
 
-As reported on Table~\ref{tab:f3f4}, averaging over all low-pass filters leads to better ROC AUC than averaging over only two low-pass filters, i.e., $f_1$ and $f_2$.
+As reported in Table~\ref{tab:f3f4}, averaging over all low-pass filters leads
+to better AUROC scores than averaging over only two low-pass filters, i.e., $f_1$ and
+$f_2$. It however slightly deteriorates AUPRC.
 
-\begin{table}[ht]\label{tab:comparison}
+\begin{table}[ht]
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
+\label{tab:f3f4}
 \centering
 \small
 \begin{tabular}{| l | c c c c | c c c c |}
@@ -775,12 +822,19 @@ As reported on Table~\ref{tab:f3f4}, averaging over all low-pass filters leads t
  with $f_1$, $f_2$, $f_3$, $f_4$ & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
 \hline
 \end{tabular}
-\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
-\label{tab:f3f4}
 \end{table}
 
-\paragraph{On the contribution of the directivity heuristic.}
-\begin{table}[ht]\label{tab:comparison}
+\paragraph{On the contribution of the directionality heuristic.}
+
+Table~\ref{tab:dir} compares AUROC and AUPRC with and without prediction
+of edge orientation. Both AUROC and AUPRC are (very slightly) improved by
+directing the edges.
+
+\begin{table}[ht]\label{tab:dir}
+\caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and
+  without prediction of edge orientation}
+\label{tab:directivity}
+
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
 \small
@@ -790,23 +844,19 @@ As reported on Table~\ref{tab:f3f4}, averaging over all low-pass filters leads t
 \textit{Full method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
 \hline
 \hline
- without directivity & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388  \\
-  with directivity  & \textbf{0.944} & \textbf{0.943} & 0.942 & \textbf{0.940} & \textbf{0.404} & \textbf{0.405} & \textbf{0.399} & \textbf{0.389}\\
+ Undirected & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388  \\
+  Directed & \textbf{0.944} & \textbf{0.943} & 0.942 & \textbf{0.940} & \textbf{0.404} & \textbf{0.405} & \textbf{0.399} & \textbf{0.389}\\
 \hline
 \end{tabular}
-\caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and without the directivity heuristic.}
-\label{tab:directivity}
 \end{table}
 
 
 \section{Supplementary results} \label{app:supp}
 
-We report here experiments on particular datasets provided by the organizers
-which are similar to \textit{normal} datasets, i.e., made of 1000 neurons,
-except for one parameter. We compute, as done in Section~\ref{sec:results},
-both AUROC and AUPRC and results are reported in
-Table~\ref{tab:results_appendix}. We will briefly recall what characterizes
-each dataset:
+We report in this apprendix the performance of the different methods compared
+in the paper on 6 additional datasets provided by the challenge
+organizers. These datasets, corresponding each to networks of 1000 neurons, are similar to
+the \textit{normal} datasets except for one feature:
 \begin{description}
 \item[lowcon]: Similar network but with a lower number of connections per neuron on average.
 \item[highcon]: Similar network but with a higher number of connections per neuron on average.
@@ -816,7 +866,12 @@ each dataset:
 \item[normal-4-lownoise]: Same topology as \textit{normal-4} but with a better signal to noise ratio.
 \end{description}
 
-Average partial correlation and its tuned variant, i.e.,``Full method'', clearly outperform other network inference methods on all datasets (with 1000 neurons) provided by the organizers. It confirm that the presented methodology in this work would constitute a very solid baseline. 
+Results of several methods on these 6 datasets are provided in
+Table~\ref{tab:results_appendix}. They confirm what we observed on the
+\textit{normal} datasets. Average partial correlation and its tuned variant,
+i.e.,``Full method'', clearly outperform other network inference methods on all
+datasets. PC is close to GENIE3 and GTE but still slightly worse. GENIE3
+performs better than GTE most of the times.
 
 \begin{table}[h]
 \centering
