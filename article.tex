@@ -32,7 +32,7 @@
 %   \Email{a.sutera@ulg.ac.be}\\
 %   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
 
-\jmlrauthors{A. Sutera et al}
+% \jmlrauthors{A. Sutera et al}
 % \shortauthor{A. Sutera et al.}
 
 \begin{document}
@@ -407,7 +407,7 @@ Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.3
 \hline
 PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
 GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
-GENIE3 & & & & & & & & \\
+GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
 \hline
 \end{tabular}
 \caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
@@ -665,7 +665,25 @@ f_4(x^t_i) &= x^{t+3}_i + x^{t+2}_i + x^{t+1}_i + x_i^t.
 Theses filters lead, taken individually, to worse performances
  than filters $f_1$ and
 $f_2$ but the averaging approach over all low-pass
-filters gets better \textcolor{red}{AS:Does it necessary to show it numerically?}.
+filters gets better.
+
+
+\begin{table}[ht]\label{tab:comparison}
+%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\centering
+\small
+\begin{tabular}{| l | c c c c | c c c c |}
+\hline
+& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+\textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+\hline
+\hline
+Partial correlation ($f_1$ + $f_2$) & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375  \\
+Partial correlation ($f_1$ + $f_2$ + $f_3$ + $f_4$) & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
+\hline
+\end{tabular}
+\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
+\end{table}
 
 As a computation trick, it appears that using a parametrized hard-threshold filter slightly improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter \begin{align}
 h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
@@ -750,8 +768,26 @@ this adjustment is subtle, it might have a slight positive effect on the ROC
 AUC.
 
 
-\section{Extended results}
+\section{Supplementary results}
 
+
+
+\begin{table}[h]\label{tab:comparison_extended}
+\centering
+\small
+\begin{tabular}{| l | c c c c c c |}
+\hline
+& \multicolumn{6}{c|}{AUROC}\\
+\textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} \\
+\hline
+\hline
+& \\ \hline
+& \multicolumn{6}{c|}{AUROC}\\ \hline
+& \\
+\end{tabular}
+\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
+Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
+\end{table}
 
 \begin{table}[t]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -759,8 +795,8 @@ AUC.
 \small
 \begin{tabular}{| l | c c c c c c | c c c c c c|}
 \hline
-& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
-\textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{normal-3-highrate} & \textit{normal-4-lownoise} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{normal-3-highrate} & \textit{normal-4-lownoise}\\
+& \multicolumn{6}{c|}{AUROC} & \multicolumn{6}{c|}{AUPRC} \\
+\textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise}\\
 \hline
 \hline
 % No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
