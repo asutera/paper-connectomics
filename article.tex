@@ -667,13 +667,13 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
 \end{table}
 
-As computation trick, it appears that using a parametrized hard-threshold
-filter slightly improves performances. Introducing the parameter $c$ in
-function $h$ yields an optimized filter
+After the hard thresholded filter $h$, they were significant differences in
+peak magnitudes. Since most timeseries $x_i^t$  were mainly between 0 and 1,
+we smoothened the difference in peak magnitude through
 \begin{align}
-h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
+g(x^t_i) = (x_i^t)^c
 \end{align}
-where $c$ is set to $0.9$ after experiments.
+yield slightly AUROC with $c=0.9 \in (0, 1)$.
 
 The magnification can also be optimized by adjusting differently the effect
 depending on the global activity and the low-pass filter used. In that sense,
