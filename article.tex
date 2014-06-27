@@ -622,13 +622,19 @@ presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, the description
 will be limited to explaining the differences that exist between this method
 and its optimized version.
 
+This appendix is structured as follows: Section \ref{app:signal} describes the differences about the signal processing methods applied on fluorescent calcium time series; Section \ref{app:averaging} then provides a detailed explanation of the averaging approach; Section \ref{app:connectome} presents a heuristic trying to retrieve directivity from fluorescent calcium time series while Section \ref{app:results} finally present results validating some choices that have been made.
+
+%% plan
+
+
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
 % datasets, which explains why these two networks are slightly better
 % retrieved than the others.
 
-\subsection*{Signal processing}
+\subsection{Signal processing}
+\ref{sapp:signal}
 
 In Section~\ref{sec:filter}, we introduce two composed filtering functions in
 order (i) to remove noise induced by light scattering artifact, (ii) to take
@@ -639,8 +645,8 @@ filtering composed function. Taken alone, those composed functions in
 conjunction with partial correlation might lead to worse AUROC, but improved
 whenever they are averaged.
 
-Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq
-:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two
+Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
+and \ref{eq:weighted-asymetric-median}, we also consider two
 other low-pass filters
 \begin{align}
 f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
@@ -687,7 +693,10 @@ function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
 the reader to the implementation \footnote{available on
 \url{https://github.com/asutera/kaggle- connectomics}.}.
 
-\subsection*{Averaging the connectome inference from partial correlation statistics}
+\subsection{Averaging the connectome inference from partial correlation statistics}
+\ref{sapp:averaging}
+
+%% plus en évidence le weighted - tenant compte des performances 
 
 In our experiments, we observed that the inference process is quite sensitive
 about the choice of the parameter value $\tau$ and the low-pass filter.
@@ -703,7 +712,8 @@ weight_{f_4} &= 0.01
 \end{align*}
 tuned to maximize the ROC AUC on \textit{normal-1}.
 
-\subsection*{Connectome inference from pairwise interaction statistics}
+\subsection{Connectome inference from pairwise interaction statistics}
+\ref{sapp:connectome}
 
 Since partial correlation statistics is a symmetric measure and the connectome
 is a directed graph, it should be rewarding to detect the edge orientation. In
@@ -769,6 +779,11 @@ effect on the ROC AUC.
 \caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and without the directivity heuristic.}
 \label{tab:directivity}
 \end{table}
+
+
+\subsection{Experiments}
+\ref{sapp:results}
+
 
 \section{Supplementary results} \label{app:supp}
 
