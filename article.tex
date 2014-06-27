@@ -158,8 +158,8 @@ importance of spikes that occur when there is a high global activity in the
 network with respect to  spikes that occur during normal activity. Indeed, we
 have conjectured that when a large part of the network is firing, the rate at
 which observations are made is not high enough for being able to detect
-interactions, and that it would therefore be preferrable to lower their
-importance by changing appropriatly their magnitude. Additionnally, it is
+interactions, and that it would therefore be preferable to lower their
+importance by changing appropriately their magnitude. Additionally, it is
 well-known that neurons may also spike because of a global high activity
 \citep{stetter2012model}. In such  context, detecting pairwise neuron
 interactions from the firing activity is meaningless. As such,
@@ -188,7 +188,7 @@ f_1$ (resp. $f_2$). When applied to the raw signal of Figure
 Our procedure to infer connections between neurons first assumes that
 the (filtered) fluorescence concentrations of all $p$ neurons at each
 time point can be modeled as a set of random variables $X = \{X_1,
-\dots, X_p\}$ that are idependently drawn from the same time invariant
+\dots, X_p\}$ that are independently drawn from the same time invariant
 joint probability distribution $P_X$. %% Or, say otherwise, we assume
 %% that there exists a probability distribution $P_X$ such that the
 %% fluorescence concentrations at a particular time $t$ can be seen as an
@@ -252,7 +252,7 @@ $M=0.8 p$ in our experiments).
 Finally, let us remark that performance of our simple method shows to
 be quite sensitive to the values of parameters (e.g., $f_1$ or $f_2$
 or the value of the threshold $\tau$) in the combined function of the
-filtering and infering processes. One approach, further referred
+filtering and inferring processes. One approach, further referred
 to as \textit{Averaged Partial correlation} statistics, for improving
 its robustness is to average correlation statistics over various
 values of the parameters, thereby reducing the variance of its
@@ -433,7 +433,7 @@ $j$ the importance score of variable $X_i$ in a Random Forest model trying to
 predict $X_j$ from all variables in $X\setminus X_j$. To reduce the
 computational cost of this method, we had however to limit each tree in the
 Random Forest model to a maximum depth of 3. This constraint potentially
-severly affects the performance of this method with respect to the use of fully
+severely affects the performance of this method with respect to the use of fully
 grown trees. We nevertheless provide these results for comparison purpose. PC
 and GENIE3 were both applied on the same pre-filtered time series as partial
 correlation ($h\circ g \circ f_1$). For GENIE3, we built 10000 trees per neuron
