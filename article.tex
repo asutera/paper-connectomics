@@ -630,25 +630,25 @@ and its optimized version.
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in Section~\ref{sec:filter}, let us
-describe a new composed function with optimized filters to improve the quality
-of the inference process.
+In Section~\ref{sec:filter}, we introduce two composed filtering functions in
+order (i) to remove noise induced by light scattering artifact, (ii) to take
+into account the slow decay of fluorescence signal and (iii) to reduce the
+importance of global high activity in the network. However, in order to win the
+challenge, we have heavily optimized several different, but yet similar,
+filtering composed function. Taken alone, those composed functions in
+conjunction with partial correlation might lead to worse AUROC, but improved
+whenever they are averaged.
 
-
-Besides filters $f_1$ and $f_2$ defined by equations \ref{eq
-:symetric-median} and \ref{eq:weighted-asymetric-median}, respectively we also consider two
-other low-pass filters:
-
+Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq
+:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two
+other low-pass filters
 \begin{align}
-f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i \label{eq:asymetric-median-forward}, \\
-f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i  .
-\label{eq:asymetric-median}
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
 \end{align}
 
 Theses filters lead, taken individually, to worse performances  than filters
 $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
-
-
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
