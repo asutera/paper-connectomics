@@ -353,24 +353,23 @@ Appendix~\ref{app:optimized}.
 \paragraph{Data and evaluation metrics.}
 
 We report here experiments on the \textit{normal-1,2,3}, and \textit{4}
-datasets provided by the organizers of the Connectomics
-challenge. Each of these datasets is obtained from the simulation
-\citep{stetter2012model} of different neural networks of 1000 neurons
-and about 15000 edges each (i.e., a network density of about
-1.5\%). Each neuron is described by a calcium fluorescence time series
-of length $T=179500$. All inference methods compared here provide a
-ranking of all pairs of neurons according to some association
+datasets provided by the organizers of the Connectomics challenge (see
+Appendix~\ref{app:supp} for experiments on other datasets). Each of
+these datasets is obtained from the simulation \citep{stetter2012model} of
+different neural networks of 1000 neurons and about 15000 edges each (i.e., a
+network density of about 1.5\%). Each neuron is described by a calcium
+fluorescence time series of length $T=179500$. All inference methods compared
+here provide a ranking of all pairs of neurons according to some association
 score. To assess the quality of this ranking, we compute both ROC and
-precision-recall curves against the ground truth network, which are
-summarized using the area under the curve and respectively  denoted AUROC
-and AUPRC. Only the AUROC score was used to rank the challenge
-participants but the precision-recall curve has been shown to be a
-more sensible metric for network inference, especially when network
-density is small (see e.g., \cite{schrynemackers2013protocols}).
-Since neurons are not self-connected in the ground truth networks
-(i.e., $(i, i) \not \in E, \forall i \in V$), we have manually set the
-score of such edges to the minimal possible association score before
-computing ROC and PR curves.
+precision-recall curves against the ground truth network, which are summarized
+using the area under the curve and respectively  denoted AUROC and AUPRC. Only
+the AUROC score was used to rank the challenge participants but the precision-
+recall curve has been shown to be a more sensible metric for network
+inference, especially when network density is small (see e.g.,
+\cite{schrynemackers2013protocols}). Since neurons are not self-connected in
+the ground truth networks (i.e., $(i, i) \not \in E, \forall i \in V$), we
+have manually set the score of such edges to the minimal possible association
+score before computing ROC and PR curves.
 
 \paragraph{Evaluation of the method.}
 
@@ -403,7 +402,7 @@ $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 
 $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
 + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
 Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
-Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & \textbf{0.939} & \textbf{0.403} & \textbf{0.404} & \textbf{0.398} & \textbf{0.388}\\
 \hline
 PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
 GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
@@ -613,15 +612,15 @@ Office.
 \appendix
 
 
-\section{An optimized version of the algorithm to win the challenge}
+\section{Particularities of the ``Full method''}
 \label{app:optimized}
 
 This section is a complete description of the method specifically tuned for the challenge. Basically, it is an optimized version of the method presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, therefore only differences between both version of our method will be highlighted.
 
-Let us remark that tuning
-was mainly done on the \textit{normal-1} and \textit{normal-4}
-datasets, which explains why these two networks are slightly better
-retrieved than the others.
+% Let us remark that tuning
+% was mainly done on the \textit{normal-1} and \textit{normal-4}
+% datasets, which explains why these two networks are slightly better
+% retrieved than the others.
 
 \subsection*{Signal processing}
 
@@ -634,15 +633,14 @@ filters:
 
 \begin{align}
 f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i \label{eq:asymetric-median-forward}, \\
-f_4(x^t_i) &= x^{t+3}_i + x^{t+2}_i + x^{t+1}_i + x_i^t.
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i  .
 \label{eq:asymetric-median}
 \end{align}
 
 Theses filters lead, taken individually, to worse performances
  than filters $f_1$ and
 $f_2$ but the averaging approach over all low-pass
-filters gets better.
-
+filters gets better for the ROC AUC.
 
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -651,11 +649,11 @@ filters gets better.
 \begin{tabular}{| l | c c c c | c c c c |}
 \hline
 & \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
-\textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+\textit{Averaging} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
 \hline
 \hline
-Partial correlation ($f_1$ + $f_2$) & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375  \\
-Partial correlation ($f_1$ + $f_2$ + $f_3$ + $f_4$) & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
+ with $f_1$, $f_2$ & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  \textbf{0.390} &  0.385 & \textbf{0.375}  \\
+ with $f_1$, $f_2$, $f_3$, $f_4$ & \textbf{0.938} & \textbf{0.936} & \textbf{0.936} & \textbf{0.932} & 0.391 & 0.389 & 0.385 & 0.374\\
 \hline
 \end{tabular}
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
@@ -679,14 +677,12 @@ Therefore, in order to reduce the variance of the results and thus the
 robustness of our approach, we perform an average over a range of parameter
 value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
 the four low-pass filters with the following parameters
-
 \begin{align*}
 weight_{f_1} &= 1,\\
 weight_{f_2} &= 0.9, \\
 weight_{f_3} &= 0.7, \\
 weight_{f_4} &= 0.01
 \end{align*}
-
 tuned to maximize the
 ROC AUC on \textit{normal-1}.
 
@@ -735,7 +731,7 @@ z_{ij} = \sum_{t=1}^{T - 1}
 where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
 At the light of the poor results of this heuristic taken on its own summarized
-on Table \ref{tab:} as \textit{directivity}, we use it to make asymmetric the
+on Table \ref{tab:directivity} as \textit{directivity}, we use it to make asymmetric the
 degree of association matrix using partial correlation statistics. We expect
 that when the heuristic is highly confident (i.e., $z_{i,j} \gg 0 \gg
 z_{j,i}$) the degree of association   of edge $(i,j)$ is increased while the
@@ -743,12 +739,44 @@ degree of association corresponding to the edge $(j,i)$ is reduced. Even if
 this adjustment is subtle, it might have a slight positive effect on the ROC
 AUC.
 
+\begin{table}[ht]\label{tab:comparison}
+%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\centering
+\small
+\begin{tabular}{| l | c c c c | c c c c |}
+\hline
+& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+\textit{Full method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+\hline
+\hline
+ without directivity & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388  \\
+  with directivity  & \textbf{0.944} & \textbf{0.943} & 0.942 & \textbf{0.940} & \textbf{0.404} & \textbf{0.405} & \textbf{0.399} & \textbf{0.389}\\
+\hline
+\end{tabular}
+\caption{Performance on \textit{normal-1,2,3,4} of the ``Full Method'' with and without the directivity heuristic.}
+\label{tab:directivity}
+\end{table}
 
 \section{Supplementary results}
+\label{app:supp}
 
 
+We report here experiments on particular datasets provided by the organizers
+which are similar to \textit{normal} datasets, i.e., made of 1000 neurons,
+except for one parameter. We compute, as done in
+Section~\ref{sec:results}, both AUROC and AUPRC and results are reported in
+Table~\ref{tab:results_appendix}. We will briefly recall what characterizes
+each datasets:
+\begin{description}
+\item[lowcon]: Similar network but with a lower number of connections per neuron on average.
+\item[highcon]: Similar network but with a higher number of connections per neuron on average.
+\item[lowcc]: Similar network but with a lower clustering coefficient on average.
+\item[highcc]: Similar network but with a higher clustering coefficient on average.
+\item[normal-3-highrate]: Same topology as \textit{normal-3} but with an higher firing frequency, i.e., with highly active neurons.
+\item[normal-4-lownoise]: Same topology as \textit{normal-4} but with a better signal to noise ratio.
+\end{description}
 
-\begin{table}[h]\label{tab:comparison_extended}
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}{| l | c c c c c c |}
@@ -757,39 +785,47 @@ AUC.
 \textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} \\
 \hline
 \hline
-& \\ \hline
-& \multicolumn{6}{c|}{AUROC}\\ \hline
-& \\
+Averaging     & 0.947 & 0.943 & 0.920 & 0.942 & 0.959 & 0.934 \\
+Full method   &  &  &  & & &\\
+PC & 0.782 & 0.920 &  0.846 & 0.897  & 0.898  & 0.873 \\
+GTE & 0.846 & 0.905 & 0.848 & 0.899 & 0.905 & 0.879\\
+GENIE3* & 0.781 &  0.922 & 0.875 & 0.899 & 0.886 &  0.890 \\ \hline
+& \multicolumn{6}{c|}{AUPRC}\\ \hline
+Averaging     & 0.320 & 0.429 & 0.262 & 0.478 & 0.443 & 0.412 \\
+Full method   &  &  &  & & &\\
+PC & 0.074 & 0.218 & 0.082 & 0.165  & 0.193 & 0.135 \\
+GTE & 0.094 & 0.211 & 0.081 & 0.165 & 0.210 & 0.144\\
+GENIE3* & 0.128 & 0.261 & 0.108 & 0.293 & 0.256 & 0.224\\ \hline
 \end{tabular}
-\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
-Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
+\caption{Performance (top: AUROC, bottom: AUPRC) on specific datasets with different methods.}
+\label{tab:results_appendix}
 \end{table}
 
-\begin{table}[t]\label{tab:comparison}
-%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
-\centering
-\small
-\begin{tabular}{| l | c c c c c c | c c c c c c|}
-\hline
-& \multicolumn{6}{c|}{AUROC} & \multicolumn{6}{c|}{AUPRC} \\
-\textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise}\\
-\hline
-\hline
-% No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-% $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
-% $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
-% + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
-% Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
-% Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+% \begin{table}[t]\label{tab:comparison}
+% %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+% \centering
+% \small
+% \begin{tabular}{| l | c c c c c c | c c c c c c|}
 % \hline
-% PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
-% GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
-% GENIE3 & & & & & & & & \\
+% & \multicolumn{6}{c|}{AUROC} & \multicolumn{6}{c|}{AUPRC} \\
+% \textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise}\\
 % \hline
-\end{tabular}
-\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
-Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
-\end{table}
+% \hline
+% % No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+% % $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+% % $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+% % + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+% % Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
+% % Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+% % \hline
+% % PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
+% % GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
+% % GENIE3 & & & & & & & & \\
+% % \hline
+% \end{tabular}
+% \caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
+% Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
+% \end{table}
 
 
 % NEXT APPENDIX SECTION
@@ -844,204 +880,204 @@ Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
 % % used.
 
 
-\section{Extended results}
+% \section{Extended results}
 
-\begin{table}
-\small
-\centering
-\begin{tabular}{@{}l *{8}{c}@{}}
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline \hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-\hline \hline
-% Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
-Pearson correlation    & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
-GENIE3 (depth = 1)     & 0.878 & 0.877 & 0.873 & 0.873 & 0.184 & 0.173 & 0.182& 0.172\\
-GENIE3 (depth = 2)     & 0.889 & 0.888 & 0.883 & 0.884* & 0.217 & 0.210 & 0.220 & 0.199* \\
-GENIE3 (depth = 3)     & 0.892 & 0.891* & 0.887 & 0.887 & 0.232 & 0.226* & 0.237 & 0.215\\
-GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
-Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
-Partial correlation (avg. 2) & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375  \\
-Partial correlation (avg. 4) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
-% Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
-Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach (opt. \& avg. 4)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
-% Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
-\end{tabular}
-\caption{TODO (* means not 10000 trees but more than 9500, to be solved.) }
-\label{tab:tab1}
-\end{table}
-
-
-\section{Supplementary results}
-
-\begin{table}[htbp]
-\centering
-\caption{Correlation (ROC). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.681 & 0.699 & 0.683 & 0.681\\
-Weights             & 0.695 & 0.713 & 0.697 & 0.694\\
-H-T                 & 0.876 & 0.873 & 0.877 & 0.869\\
-H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
-P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
-P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\caption{Correlation (P-R). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.028 & 0.028 & 0.025 & 0.026\\
-Weights             & 0.031 & 0.030 & 0.027 & 0.028\\
-H-T                 & 0.143 & 0.128 & 0.150 & 0.129\\
-H-T + Weights       & 0.153 & 0.145 & 0.170 & 0.132\\
-P-P                 & 0.100 & 0.087 & 0.079 & 0.083\\
-P-P + Weights       & 0.079 & 0.071 & 0.067 & 0.064\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[htb]
-\centering
-\caption{Comparison (P-R) with other methods (for now, $t = 0.11$)}
-\begin{tabular}{*{5}{l}}
-\toprule
-Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Correlation (best)         & 0.153 & 0.145 & 0.170 & 0.132 \\
-Partial correlation (best) & 0.364 & 0.366 & 0.359 & 0.344 \\
-Our approach (best)        & 0.403 & 0.404 & 0.398 & 0.388 \\
-GENIE3                     & & & & \\
-GTE                        & 0.171 & 0.174 & 0.197 & 0.142 \\
-Directivity                & 0.012 & 0.012 & 0.012 & 0.012 \\
-Our approach + dir         & 0.404 & 0.405 & 0.399 & 0.389 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[htb]
-\centering
-\caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.777 & 0.767 & 0.772 & 0.774 \\
-PCA                 & 0.780 & 0.770 & 0.776 & 0.777 \\
-Weights             & 0.780 & 0.769 & 0.776 & 0.777 \\
-Weights + PCA       & 0.783 & 0.772 & 0.779 & 0.780 \\
-H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
-H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
-H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
-H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
-P-P                 & 0.925 & 0.925 & 0.924 & 0.923 \\
-P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
-P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
-P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
-Averaging (PCA)     & 0.943 & 0.942 & 0.942 & 0.939 \\
-Stacking            & 0.944 & 0.943 & 0.942 & 0.940 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[htb]
-\centering
-\caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
-         \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
-\begin{tabular}{*{5}{l}}
-\toprule
-Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
-\midrule
-Nothing             & 0.070 & 0.064 & 0.068 & 0.072\\
-PCA                 & 0.076 & 0.070 & 0.075 & 0.079\\
-Weights             & 0.074 & 0.067 & 0.072 & 0.076\\
-Weights + PCA       & 0.080 & 0.073 & 0.079 & 0.083\\
-H-T                 & 0.264 & 0.260 & 0.269 & 0.241\\
-H-T + PCA           & 0.266 & 0.263 & 0.273 & 0.244\\
-H-T + Weights       & 0.280 & 0.273 & 0.281 & 0.251\\
-H-T + Weights + PCA & 0.284 & 0.278 & 0.285 & 0.255\\
-P-P                 & 0.322 & 0.324 & 0.323 & 0.312\\
-P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
-P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
-P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
-Averaging           & 0.403 & 0.404 & 0.398 & 0.388\\
-Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
-\bottomrule
-\end{tabular}
-\end{table}
+% \begin{table}
+% \small
+% \centering
+% \begin{tabular}{@{}l *{8}{c}@{}}
+%   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+% \hline \hline
+% Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+% \hline \hline
+% % Directivity \textcolor{red}{appendix?} & 0.535 & 0.526 & 0.533 & 0.535 & 0.012 & 0.012 & 0.012 & 0.012 \\
+% Pearson correlation    & 0.886 & 0.884 & 0.891 & 0.877 & 0.153 & 0.145 & 0.170 & 0.132 \\
+% GENIE3 (depth = 1)     & 0.878 & 0.877 & 0.873 & 0.873 & 0.184 & 0.173 & 0.182& 0.172\\
+% GENIE3 (depth = 2)     & 0.889 & 0.888 & 0.883 & 0.884* & 0.217 & 0.210 & 0.220 & 0.199* \\
+% GENIE3 (depth = 3)     & 0.892 & 0.891* & 0.887 & 0.887 & 0.232 & 0.226* & 0.237 & 0.215\\
+% GTE                    & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142 \\
+% Partial correlation    & 0.930 &  0.927 &  0.926 &  0.923& 0.363  & 0.347 &  0.346 & 0.328 \\
+% Partial correlation (avg. 2) & 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375  \\
+% Partial correlation (avg. 4) & 0.938 & 0.936 & 0.936 & 0.932& 0.391 & 0.389 & 0.385 & 0.374\\
+% % Our approach simple + dir & 0.939 & 0.936 & 0.937 & 0.933& 0.392 & 0.390 & 0.386 & 0.375\\
+% Partial correlation (opt.) & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344 \\
+% Our approach (opt. \& avg. 4)    & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388 \\
+% % Our approach + dir  \textcolor{red}{appendix?}   & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389 \\
+% \end{tabular}
+% \caption{TODO (* means not 10000 trees but more than 9500, to be solved.) }
+% \label{tab:tab1}
+% \end{table}
 
 
-\section{Signal processing highly improves performance}
+% \section{Supplementary results}
+
+% \begin{table}[htbp]
+% \centering
+% \caption{Correlation (ROC). Improvement of each stage of our approach. Note that we choose the
+%          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+% \begin{tabular}{*{5}{l}}
+% \toprule
+% Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+% \midrule
+% Nothing             & 0.681 & 0.699 & 0.683 & 0.681\\
+% Weights             & 0.695 & 0.713 & 0.697 & 0.694\\
+% H-T                 & 0.876 & 0.873 & 0.877 & 0.869\\
+% H-T + Weights       & 0.886 & 0.884 & 0.891 & 0.877\\
+% P-P                 & 0.857 & 0.850 & 0.843 & 0.832\\
+% P-P + Weights       & 0.826 & 0.823 & 0.817 & 0.799\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% \begin{table}[htbp]
+% \centering
+% \caption{Correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+%          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+% \begin{tabular}{*{5}{l}}
+% \toprule
+% Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+% \midrule
+% Nothing             & 0.028 & 0.028 & 0.025 & 0.026\\
+% Weights             & 0.031 & 0.030 & 0.027 & 0.028\\
+% H-T                 & 0.143 & 0.128 & 0.150 & 0.129\\
+% H-T + Weights       & 0.153 & 0.145 & 0.170 & 0.132\\
+% P-P                 & 0.100 & 0.087 & 0.079 & 0.083\\
+% P-P + Weights       & 0.079 & 0.071 & 0.067 & 0.064\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% \begin{table}[htb]
+% \centering
+% \caption{Comparison (P-R) with other methods (for now, $t = 0.11$)}
+% \begin{tabular}{*{5}{l}}
+% \toprule
+% Methods             & normal-1 & normal-2 & normal-3 & normal-4 \\
+% \midrule
+% Correlation (best)         & 0.153 & 0.145 & 0.170 & 0.132 \\
+% Partial correlation (best) & 0.364 & 0.366 & 0.359 & 0.344 \\
+% Our approach (best)        & 0.403 & 0.404 & 0.398 & 0.388 \\
+% GENIE3                     & & & & \\
+% GTE                        & 0.171 & 0.174 & 0.197 & 0.142 \\
+% Directivity                & 0.012 & 0.012 & 0.012 & 0.012 \\
+% Our approach + dir         & 0.404 & 0.405 & 0.399 & 0.389 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% \begin{table}[htb]
+% \centering
+% \caption{Inverse correlation (ROC). Improvement of each stage of our approach. Note that we choose the
+%          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+% \begin{tabular}{*{5}{l}}
+% \toprule
+% Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+% \midrule
+% Nothing             & 0.777 & 0.767 & 0.772 & 0.774 \\
+% PCA                 & 0.780 & 0.770 & 0.776 & 0.777 \\
+% Weights             & 0.780 & 0.769 & 0.776 & 0.777 \\
+% Weights + PCA       & 0.783 & 0.772 & 0.779 & 0.780 \\
+% H-T                 & 0.893 & 0.891 & 0.891 & 0.886 \\
+% H-T + PCA           & 0.894 & 0.892 & 0.891 & 0.886 \\
+% H-T + Weights       & 0.899 & 0.897 & 0.896 & 0.891 \\
+% H-T + Weights + PCA & 0.900 & 0.898 & 0.896 & 0.892 \\
+% P-P                 & 0.925 & 0.925 & 0.924 & 0.923 \\
+% P-P + PCA           & 0.926 & 0.926 & 0.925 & 0.923 \\
+% P-P + Weights       & 0.931 & 0.930 & 0.928 & 0.927 \\
+% P-P + Weights + PCA & 0.932 & 0.931 & 0.930 & 0.928 \\
+% Averaging (PCA)     & 0.943 & 0.942 & 0.942 & 0.939 \\
+% Stacking            & 0.944 & 0.943 & 0.942 & 0.940 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% \begin{table}[htb]
+% \centering
+% \caption{Inverse correlation (P-R). Improvement of each stage of our approach. Note that we choose the
+%          \textit{best} threshold (\textcolor{red}{for now 0.11}) for stages 1 to 4.}
+% \begin{tabular}{*{5}{l}}
+% \toprule
+% Stage               & normal-1 & normal-2 & normal-3 & normal-4 \\
+% \midrule
+% Nothing             & 0.070 & 0.064 & 0.068 & 0.072\\
+% PCA                 & 0.076 & 0.070 & 0.075 & 0.079\\
+% Weights             & 0.074 & 0.067 & 0.072 & 0.076\\
+% Weights + PCA       & 0.080 & 0.073 & 0.079 & 0.083\\
+% H-T                 & 0.264 & 0.260 & 0.269 & 0.241\\
+% H-T + PCA           & 0.266 & 0.263 & 0.273 & 0.244\\
+% H-T + Weights       & 0.280 & 0.273 & 0.281 & 0.251\\
+% H-T + Weights + PCA & 0.284 & 0.278 & 0.285 & 0.255\\
+% P-P                 & 0.322 & 0.324 & 0.323 & 0.312\\
+% P-P + PCA           & 0.347 & 0.352 & 0.355 & 0.341\\
+% P-P + Weights       & 0.333 & 0.334 & 0.327 & 0.313\\
+% P-P + Weights + PCA & 0.364 & 0.366 & 0.359 & 0.344\\
+% Averaging           & 0.403 & 0.404 & 0.398 & 0.388\\
+% Stacking            & 0.404 & 0.405 & 0.399 & 0.389\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
 
 
-On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
-improves the score on both metrics. However, processing, weights and averaging
-(respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
-described in Section \ref{sec:filter} are the key steps of our algorithm.
-
-It also appears that the averaging over the low-pass filter designs and the
-threshold values increases significantly the quality of the inferred network
-according to both metrics.
-
-% Explaining the method (thèse de Gilles)
-% Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
-% Averaging
-
-%% Depth -- Gilles chapitre 7
-% Genie3 : better in auprc while worse in auroc than GTE. Why?
-% Genie3 : "Conditioning" better and better but need a lot of trees
-
-\begin{table}[tbh]
-\centering
-\small
-\begin{tabular}{@{}l *{8}{c}@{}}
-\hline
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
-P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
-P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
-Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
-%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
-\end{tabular}
-\caption{Optimized method (TODO)}
-\label{tab:tab3}
-\end{table}
+% \section{Signal processing highly improves performance}
 
 
-\begin{table}[tbh]
-\centering
-\small
-\begin{tabular}{@{}l *{8}{c}@{}}
-\hline
-  & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
-\hline
-Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
-No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-P                   & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
-P + W               & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
-P + W + PCA         & 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
-Averaging           & 0.938 & 0.936 & 0.936 & 0.932 & 0.391 & 0.389 & 0.385 & 0.374\\
-%Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
-\end{tabular}
-\caption{Simplified method (TODO)}
-\label{tab:tab3}
-\end{table}
+% On Table \ref{tab:tab3}, it can be seen that each step of our approach globally
+% improves the score on both metrics. However, processing, weights and averaging
+% (respectively denoted as $P$,$W$ and $Averaging$ in Tab.\ref{tab:tab3}) as
+% described in Section \ref{sec:filter} are the key steps of our algorithm.
 
-%% Talk about filters future and past
+% It also appears that the averaging over the low-pass filter designs and the
+% threshold values increases significantly the quality of the inferred network
+% according to both metrics.
+
+% % Explaining the method (thèse de Gilles)
+% % Avg.: Averaging over the threholds and L-P filters improves a lot both metrics.
+% % Averaging
+
+% %% Depth -- Gilles chapitre 7
+% % Genie3 : better in auprc while worse in auroc than GTE. Why?
+% % Genie3 : "Conditioning" better and better but need a lot of trees
+
+% \begin{table}[tbh]
+% \centering
+% \small
+% \begin{tabular}{@{}l *{8}{c}@{}}
+% \hline
+%   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+% \hline
+% Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+% No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+% P                   & 0.925 & 0.925 & 0.924 & 0.923 & 0.322 & 0.324 & 0.323 & 0.312\\
+% P + W               & 0.931 & 0.930 & 0.928 & 0.927 & 0.333 & 0.334 & 0.327 & 0.313\\
+% P + W + PCA         & 0.932 & 0.931 & 0.930 & 0.928 & 0.364 & 0.366 & 0.359 & 0.344\\
+% Averaging           & 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.398 & 0.388\\
+% %Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+% \end{tabular}
+% \caption{Optimized method (TODO)}
+% \label{tab:tab3}
+% \end{table}
+
+
+% \begin{table}[tbh]
+% \centering
+% \small
+% \begin{tabular}{@{}l *{8}{c}@{}}
+% \hline
+%   & \multicolumn{4}{c}{AUROC} & \multicolumn{4}{c}{AUPRC} \\
+% \hline
+% Methods $\backslash$ normal- & 1 & 2 & 3 & 4 & 1 & 2 & 3 & 4 \\
+% No  filtering       & 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+% P                   & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+% P + W               & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+% P + W + PCA         & 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+% Averaging           & 0.938 & 0.936 & 0.936 & 0.932 & 0.391 & 0.389 & 0.385 & 0.374\\
+% %Averaging + Directivity & 0.944 & 0.943 & 0.942 & 0.940 & 0.404 & 0.405 & 0.399 & 0.389\\
+% \end{tabular}
+% \caption{Simplified method (TODO)}
+% \label{tab:tab3}
+% \end{table}
+
+% %% Talk about filters future and past
 
 \end{document}
 
