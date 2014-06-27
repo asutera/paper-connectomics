@@ -616,10 +616,12 @@ Office.
 \section{Particularities of ``Full method''}
 \label{app:optimized}
 
-This section is a complete description of the method specifically tuned for the
-challenge. Basically, it is an optimized version of the method presented in
-Sections~\ref{sec:filter}~to~\ref{sec:results}, therefore only differences
-between both version of our method will be highlighted.
+This section provides a full description of the method specifically tuned for
+the challenge. Since it is no more than an optimized version of the method
+presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, the description
+will be limited to explaining the differences that exist between this method
+and its optimized version.
+
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -628,13 +630,13 @@ between both version of our method will be highlighted.
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in section~\ref{sec:filter}, let us
+As we introduce a composed function in Section~\ref{sec:filter}, let us
 describe a new composed function with optimized filters to improve the quality
 of the inference process.
 
 
-Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq
-:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two
+Besides filters $f_1$ and $f_2$ defined by equations \ref{eq
+:symetric-median} and \ref{eq:weighted-asymetric-median}, respectively we also consider two
 other low-pass filters:
 
 \begin{align}
@@ -644,8 +646,8 @@ f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i  .
 \end{align}
 
 Theses filters lead, taken individually, to worse performances  than filters
-$f_1$ and $f_2$ but the averaging approach over all low-pass filters gets
-better for the ROC AUC.
+$f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
+
 
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -664,9 +666,9 @@ better for the ROC AUC.
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
 \end{table}
 
-As a computation trick, it appears that using a parametrized hard-threshold
+As computation trick, it appears that using a parametrized hard-threshold
 filter slightly improves performances. Introducing the parameter $c$ in
-function $h$ yields to an optimized filter
+function $h$ yields an optimized filter
 \begin{align}
 h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
 \end{align}
@@ -774,13 +776,13 @@ which are similar to \textit{normal} datasets, i.e., made of 1000 neurons,
 except for one parameter. We compute, as done in Section~\ref{sec:results},
 both AUROC and AUPRC and results are reported in
 Table~\ref{tab:results_appendix}. We will briefly recall what characterizes
-each datasets:
+each dataset:
 \begin{description}
 \item[lowcon]: Similar network but with a lower number of connections per neuron on average.
 \item[highcon]: Similar network but with a higher number of connections per neuron on average.
 \item[lowcc]: Similar network but with a lower clustering coefficient on average.
 \item[highcc]: Similar network but with a higher clustering coefficient on average.
-\item[normal-3-highrate]: Same topology as \textit{normal-3} but with an higher firing frequency, i.e., with highly active neurons.
+\item[normal-3-highrate]: Same topology as \textit{normal-3} but with a higher firing frequency, i.e., with highly active neurons.
 \item[normal-4-lownoise]: Same topology as \textit{normal-4} but with a better signal to noise ratio.
 \end{description}
 
