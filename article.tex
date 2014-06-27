@@ -407,7 +407,7 @@ Full method           					& 0.943 & 0.942 & 0.942 & 0.939 & 0.403 & 0.404 & 0.3
 \hline
 PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
 GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
-GENIE3 & & & & & & & & \\
+GENIE3 & \textcolor{red}{?} & & & & & & & \\
 \hline
 \end{tabular}
 \caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
@@ -490,20 +490,18 @@ nevertheless clearly below partial correlation. Among these two methods, GTE is
 slightly better in terms of AUROC, while GENIE3 is significantly better in
 terms of AUPRC. Given that we had to limit this latter method for computational
 reasons, these results are very promising and a comparison with the full GENIE3
-approach is certainly part of our future works. 
+approach is certainly part of our future works.
 
 The fact that our method is unable to predict edge directions does not seem to
 be a disadvantage with respect to GTE and GENIE3. Although partial correlation
 scores each edge and its opposite similarly, it can reach precision values
-higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it ranks high
-mainly pairs of neurons that interact in both directions (there are about XX\%
-of such pairs in the \textit{normal-2} network). %% It is interesting also to note
-%% that, on \textit{normal-2}, a method that perfectly predicts the undirected
-%% network (i.e. that gives a score of 1 to each pair $(i,j)$ such that $(i,j)\in
-%% V$ or $(j,i)\in V$, 0 otherwise) can reach an AUROC of $0.995$, which does not
-%% leave much room for improvement by predicting edge directionality. The AUPRC on
-%% the other hand would be 0.789 and thus be more sensitive to the prediction of
-%% edge directions.
+higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it mainly ranks high
+pairs of neurons that interact in both directions.  It is interesting also to
+note that, on \textit{normal-2}, a method that perfectly predicts the
+undirected network (i.e., that gives a score of $1$ to each pair $(i,j)$ such that
+$(i,j)\in E$ or $(j,i)\in E$, and $0$ otherwise) already reaches an AUROC as high
+as $0.995$ and an AUPRC of $0.789$.
+
 
 %% bu by about a factor
 %% of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
