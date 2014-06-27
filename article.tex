@@ -616,7 +616,10 @@ Office.
 \section{Particularities of ``Full method''}
 \label{app:optimized}
 
-This section is a complete description of the method specifically tuned for the challenge. Basically, it is an optimized version of the method presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, therefore only differences between both version of our method will be highlighted.
+This section is a complete description of the method specifically tuned for the
+challenge. Basically, it is an optimized version of the method presented in
+Sections~\ref{sec:filter}~to~\ref{sec:results}, therefore only differences
+between both version of our method will be highlighted.
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -625,12 +628,14 @@ This section is a complete description of the method specifically tuned for the 
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in section~\ref{sec:filter}, let us describe a new composed function with optimized filters to improve the quality of the inference process.
+As we introduce a composed function in section~\ref{sec:filter}, let us
+describe a new composed function with optimized filters to improve the quality
+of the inference process.
 
 
-Besides filters
-$f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two other low-pass
-filters:
+Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq
+:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two
+other low-pass filters:
 
 \begin{align}
 f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i \label{eq:asymetric-median-forward}, \\
@@ -638,10 +643,9 @@ f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i  .
 \label{eq:asymetric-median}
 \end{align}
 
-Theses filters lead, taken individually, to worse performances
- than filters $f_1$ and
-$f_2$ but the averaging approach over all low-pass
-filters gets better for the ROC AUC.
+Theses filters lead, taken individually, to worse performances  than filters
+$f_1$ and $f_2$ but the averaging approach over all low-pass filters gets
+better for the ROC AUC.
 
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -660,15 +664,25 @@ filters gets better for the ROC AUC.
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
 \end{table}
 
-As a computation trick, it appears that using a parametrized hard-threshold filter slightly improves performances. Introducing the parameter $c$ in function $h$ yields to an optimized filter \begin{align}
+As a computation trick, it appears that using a parametrized hard-threshold
+filter slightly improves performances. Introducing the parameter $c$ in
+function $h$ yields to an optimized filter
+\begin{align}
 h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
 \end{align}
 where $c$ is set to $0.9$ after experiments.
 
-The magnification can also be optimized by adjusting differently the effect depending on the global activity and the low-pass filter used. In that sense, we introduce the following function \begin{align}
+The magnification can also be optimized by adjusting differently the effect
+depending on the global activity and the low-pass filter used. In that sense,
+we introduce the following function
+\begin{align}
  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
 \end{align}
-where $m$ is a piecewise linear function depending on the low-pass filter and on the range of the global activity. We refer to our implementation\footnote{available on \url{https://github.com/asutera/kaggle-connectomics}.} for the values of the parameters and especially the parameter $m$.
+where $m$ is a piecewise linear function depending on the low-pass filter and
+on the range of the global activity. We refer to our
+implementation\footnote{available on \url{https://github.com/asutera/kaggle-
+connectomics}.} for the values of the parameters and especially the parameter
+$m$.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
@@ -684,8 +698,7 @@ weight_{f_2} &= 0.9, \\
 weight_{f_3} &= 0.7, \\
 weight_{f_4} &= 0.01
 \end{align*}
-tuned to maximize the
-ROC AUC on \textit{normal-1}.
+tuned to maximize the ROC AUC on \textit{normal-1}.
 
 \subsection*{Connectome inference from pairwise interaction statistics}
 
@@ -704,7 +717,6 @@ of such events occurred between neurons $i$ and $j$ for consecutive time
 steps. It can be done by counting the number of times that a transition from
 neuron $i$ to neuron $j$ for two consecutive time steps, or mathematically we
 compute for each pair $(i,j)$
-
 \begin{align}
 s_{ij} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
@@ -721,8 +733,6 @@ contrary, different coefficients $s_{ij}$ and $s_{ji}$ mean that an order of
 fluorescent rising is well established and observable. There we choose to
 compute a differential pairwise coefficient $z_{ij}$ defined by the following
 equation
-
-
 \begin{align}
 z_{ij} = \sum_{t=1}^{T - 1}
     \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2 \right]) -
@@ -731,13 +741,13 @@ z_{ij} = \sum_{t=1}^{T - 1}
 where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
 At the light of the poor results of this heuristic taken on its own summarized
-on Table \ref{tab:directivity} as \textit{directivity}, we use it to make asymmetric the
-degree of association matrix using partial correlation statistics. We expect
-that when the heuristic is highly confident (i.e., $z_{i,j} \gg 0 \gg
-z_{j,i}$) the degree of association   of edge $(i,j)$ is increased while the
-degree of association corresponding to the edge $(j,i)$ is reduced. Even if
-this adjustment is subtle, it might have a slight positive effect on the ROC
-AUC.
+on Table \ref{tab:directivity} as \textit{directivity}, we use it to make
+asymmetric the degree of association matrix using partial correlation
+statistics. We expect that when the heuristic is highly confident (i.e.,
+$z_{i,j} \gg 0 \gg z_{j,i}$) the degree of association   of edge $(i,j)$ is
+increased while the degree of association corresponding to the edge $(j,i)$ is
+reduced. Even if this adjustment is subtle, it might have a slight positive
+effect on the ROC AUC.
 
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -757,14 +767,12 @@ AUC.
 \label{tab:directivity}
 \end{table}
 
-\section{Supplementary results}
-\label{app:supp}
-
+\section{Supplementary results} \label{app:supp}
 
 We report here experiments on particular datasets provided by the organizers
 which are similar to \textit{normal} datasets, i.e., made of 1000 neurons,
-except for one parameter. We compute, as done in
-Section~\ref{sec:results}, both AUROC and AUPRC and results are reported in
+except for one parameter. We compute, as done in Section~\ref{sec:results},
+both AUROC and AUPRC and results are reported in
 Table~\ref{tab:results_appendix}. We will briefly recall what characterizes
 each datasets:
 \begin{description}
