@@ -669,11 +669,13 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 
 After the hard thresholded filter $h$, they were significant differences in
 peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
-we smoothened the difference in peak magnitude through
+we smoothened the difference in peak magnitudes through
 \begin{align}
 g(x^t_i) = (x_i^t)^c
 \end{align}
 yield slightly AUROC with $c=0.9 \in (0, 1)$.
+
+
 
 The magnification can also be optimized by adjusting differently the effect
 depending on the global activity and the low-pass filter used. In that sense,
