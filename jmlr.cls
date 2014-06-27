@@ -252,12 +252,12 @@ Keywords:} \ignorespaces}%
 \ifx\@sauthor\@empty
   \settowidth{\jmlrlength}{\@evenhead}%
   \ifdim\jmlrlength>\textwidth
-    \def\@shortauthor{\@firstsurname\space et al.}%
+    \def\@shortauthor{A. Sutera\space et al.}%
   \fi
 \fi
 \settowidth{\jmlrlength}{\@titlefoot}%
 \ifdim\jmlrlength>\textwidth
-  \def\@jmlrauthors{\@firstauthor\space \emph{et al}}%
+  \def\@jmlrauthors{A. Sutera \emph{et al}}%
 \fi
 \jmlrmaketitlehook
 \thispagestyle{jmlrtps}%
@@ -421,7 +421,7 @@ Keywords:} \ignorespaces}%
   \global\let\@reprint\@empty
 }
 \newcommand*{\@titlefoot}{\scriptsize\copyright\space\@jmlryear
-    \space\@jmlrauthors.\hfill
+    \space A Sutera et al.\hfill
     \@reprint
 }
 \let\@reprint\@empty
