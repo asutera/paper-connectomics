@@ -624,10 +624,6 @@ and its optimized version.
 
 This appendix is structured as follows: Section \ref{app:signal} describes the differences about the signal processing methods applied on fluorescent calcium time series; Section \ref{app:averaging} then provides a detailed explanation of the averaging approach; Section \ref{app:connectome} presents a heuristic trying to retrieve directivity from fluorescent calcium time series while Section \ref{app:results} finally present results validating some choices that have been made.
 
-%% plan
-
-
-
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
 % datasets, which explains why these two networks are slightly better
@@ -675,13 +671,13 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 
 After the hard thresholded filter $h$, they were significant differences in
 peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
-we smoothened the difference in peak magnitudes through
+we smoothened these differences in peak magnitudes through
 \begin{align}
-g(x^t_i) = (x_i^t)^c
+p(x^t_i) = (x_i^t)^c
 \end{align}
-yield slightly AUROC with $c=0.9 \in (0, 1)$.
+yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
 
-After filter $c$, we applied a filter $w^*$ similar to $w$, whose goal is also
+After filter $p$, we applied a filter $w^*$ similar to $w$, whose goal is also
 to magnify the importance of spikes that occur in case of low global activity.
 Instead of equation \ref{eq:magnify-filter}, we had
 \begin{align}
@@ -693,24 +689,21 @@ function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
 the reader to the implementation \footnote{available on
 \url{https://github.com/asutera/kaggle- connectomics}.}.
 
-\subsection{Averaging the connectome inference from partial correlation statistics}
-\ref{sapp:averaging}
+\subsection{Weighted average of partial correlation statistics}
 
-%% plus en évidence le weighted - tenant compte des performances 
+The AUROC performance of the conjunction of the composed function $w^* \circ p
+\circ g \circ h \circ f_1$ (respectively $f_2$, $f_3$ and $f_4$) and the
+partial correlation statistics was quite sensitive to the choice of $\tau$, the
+hard threshold value and the design of the low pass filter. Similarly to the
+simplified method, we average the partial correlation statistics obtained by
+varying $\tau$ linearly from $0.100$ to $0.209$ and the low-pass filter.
 
-In our experiments, we observed that the inference process is quite sensitive
-about the choice of the parameter value $\tau$ and the low-pass filter.
-Therefore, in order to reduce the variance of the results and thus the
-robustness of our approach, we perform an average over a range of parameter
-value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
-the four low-pass filters with the following parameters
-\begin{align*}
-weight_{f_1} &= 1,\\
-weight_{f_2} &= 0.9, \\
-weight_{f_3} &= 0.7, \\
-weight_{f_4} &= 0.01
-\end{align*}
-tuned to maximize the ROC AUC on \textit{normal-1}.
+Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
+contribution of each filter in the degree of association between two neurons
+was chosen as to maximize the AUROC on \textit{normal-1} and is function of
+their individual performance. By comparison in the simple method, each filter
+$f_1$ and $f_2$ were given equal weight.
+
 
 \subsection{Connectome inference from pairwise interaction statistics}
 \ref{sapp:connectome}
@@ -719,7 +712,7 @@ Since partial correlation statistics is a symmetric measure and the connectome
 is a directed graph, it should be rewarding to detect the edge orientation. In
 this section, we will present a heuristic trying to retrieve directivity.
 However, considering results in Section \ref{sec:results}, we expect that the
-additionnal gain margin should be extremely limited.
+additional gain margin should be extremely limited.
 
 The heuristic is based on the following observation. The rise of fluorescence
 of a neuron indicates its activation. If another neuron is activated after a
