@@ -158,8 +158,8 @@ importance of spikes that occur when there is a high global activity in the
 network with respect to  spikes that occur during normal activity. Indeed, we
 have conjectured that when a large part of the network is firing, the rate at
 which observations are made is not high enough for being able to detect
-interactions, and that it would therefore be preferrable to lower their
-importance by changing appropriatly their magnitude. Additionnally, it is
+interactions, and that it would therefore be preferable to lower their
+importance by changing appropriately their magnitude. Additionally, it is
 well-known that neurons may also spike because of a global high activity
 \citep{stetter2012model}. In such  context, detecting pairwise neuron
 interactions from the firing activity is meaningless. As such,
@@ -188,7 +188,7 @@ f_1$ (resp. $f_2$). When applied to the raw signal of Figure
 Our procedure to infer connections between neurons first assumes that
 the (filtered) fluorescence concentrations of all $p$ neurons at each
 time point can be modeled as a set of random variables $X = \{X_1,
-\dots, X_p\}$ that are idependently drawn from the same time invariant
+\dots, X_p\}$ that are independently drawn from the same time invariant
 joint probability distribution $P_X$. %% Or, say otherwise, we assume
 %% that there exists a probability distribution $P_X$ such that the
 %% fluorescence concentrations at a particular time $t$ can be seen as an
@@ -252,7 +252,7 @@ $M=0.8 p$ in our experiments).
 Finally, let us remark that performance of our simple method shows to
 be quite sensitive to the values of parameters (e.g., $f_1$ or $f_2$
 or the value of the threshold $\tau$) in the combined function of the
-filtering and infering processes. One approach, further referred
+filtering and inferring processes. One approach, further referred
 to as \textit{Averaged Partial correlation} statistics, for improving
 its robustness is to average correlation statistics over various
 values of the parameters, thereby reducing the variance of its
@@ -433,7 +433,7 @@ $j$ the importance score of variable $X_i$ in a Random Forest model trying to
 predict $X_j$ from all variables in $X\setminus X_j$. To reduce the
 computational cost of this method, we had however to limit each tree in the
 Random Forest model to a maximum depth of 3. This constraint potentially
-severly affects the performance of this method with respect to the use of fully
+severely affects the performance of this method with respect to the use of fully
 grown trees. We nevertheless provide these results for comparison purpose. PC
 and GENIE3 were both applied on the same pre-filtered time series as partial
 correlation ($h\circ g \circ f_1$). For GENIE3, we built 10000 trees per neuron
@@ -490,20 +490,18 @@ nevertheless clearly below partial correlation. Among these two methods, GTE is
 slightly better in terms of AUROC, while GENIE3 is significantly better in
 terms of AUPRC. Given that we had to limit this latter method for computational
 reasons, these results are very promising and a comparison with the full GENIE3
-approach is certainly part of our future works. 
+approach is certainly part of our future works.
 
 The fact that our method is unable to predict edge directions does not seem to
 be a disadvantage with respect to GTE and GENIE3. Although partial correlation
 scores each edge and its opposite similarly, it can reach precision values
-higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it ranks high
-mainly pairs of neurons that interact in both directions (there are about XX\%
-of such pairs in the \textit{normal-2} network). %% It is interesting also to note
-%% that, on \textit{normal-2}, a method that perfectly predicts the undirected
-%% network (i.e. that gives a score of 1 to each pair $(i,j)$ such that $(i,j)\in
-%% V$ or $(j,i)\in V$, 0 otherwise) can reach an AUROC of $0.995$, which does not
-%% leave much room for improvement by predicting edge directionality. The AUPRC on
-%% the other hand would be 0.789 and thus be more sensitive to the prediction of
-%% edge directions.
+higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it mainly ranks high
+pairs of neurons that interact in both directions.  It is interesting also to
+note that, on \textit{normal-2}, a method that perfectly predicts the
+undirected network (i.e., that gives a score of $1$ to each pair $(i,j)$ such that
+$(i,j)\in E$ or $(j,i)\in E$, and $0$ otherwise) already reaches an AUROC as high
+as $0.995$ and an AUPRC of $0.789$.
+
 
 %% bu by about a factor
 %% of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
@@ -580,42 +578,20 @@ of such pairs in the \textit{normal-2} network). %% It is interesting also to no
 
 \section{Conclusions} \label{sec:conclusion}
 
-
-% Possible extensions
-% partial autocorrelation function (sometimes "partial correlation function")
-% conditional independence test
-% Speak about the complexity and parallelization of the methods
-
-In this paper, we present the best performing method of the Connectomics challenge. Our
-approach is simple and theoretically sounded and made of two main stages: the
-signal is first preprocessed with several filters and then we derive the degree
-of association matrix by computing the partial correlation statistics matrix.
-We also evaluate the method in a more detailed way and perform a comparison
-with other inference methods. We finally discuss the relevance of the metric
-used in the challenge and we point out that it was not necessary to discover
-causal relationships to maximize the ROC AUC. Thus, it may be  promising to
-focus on that particular topic in future works.
-
-% In the discussion, we give hints about limiting the depth of trees in the
-% GENIE3 method to infer the network. It should be interesting to see if there
-% is a optimum value for the maximal depth. And of course, it may also rewarding
-% to increase considerably the number of trees to get more stable predictions.
-
-% In previous study \citep{shipley2002cause}, it has been suggested to
-% consider correlation coefficients of all possible orders,
-% i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-% would take into account multiple indirect paths between a given pair of
-% variables. Instead of considering only the highest order, it may be useful to
-% study with accuracy the inferred network at all orders. In this case, it may not
-% be very relevant but interesting in case of dynamical networks.
-
-% As we mentioned, in order to maximize the ROC AUC, it was not necessary to
-% discover causal relationships. It may be, in future works, promising to focus
-% on that particular topic.
+In this paper, we outlined a simple but efficient methodology for the problem
+of connectome inference from calcium imaging data. Our approach is made of two
+steps: (i) processing fluorescence data to detect neural peak activities and
+(ii) inferring the degree of association between neurons from partial
+correlation statistics. Its simplified variant shows to outperform other
+network inference methods while its optimized version proved to be best method
+on the Connectomics challenge. Given its simplicity and good performance, we
+therefore believe that the (simplified) methodology presented in this work
+would constitute a solid and easily reproducible baseline for further work in
+the field of connectome inference.
 
 
 \section*{Acknowledgments}
-A Joly and G Louppe are research fellows of the FNRS, Belgium.  A Sutera is
+A. Joly and G. Louppe are research fellows of the FNRS, Belgium.  A. Sutera is
 recipient of a FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
 PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
 Office.
