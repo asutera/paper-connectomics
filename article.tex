@@ -578,42 +578,20 @@ as $0.995$ and an AUPRC of $0.789$.
 
 \section{Conclusions} \label{sec:conclusion}
 
-
-% Possible extensions
-% partial autocorrelation function (sometimes "partial correlation function")
-% conditional independence test
-% Speak about the complexity and parallelization of the methods
-
-In this paper, we present the best performing method of the Connectomics challenge. Our
-approach is simple and theoretically sounded and made of two main stages: the
-signal is first preprocessed with several filters and then we derive the degree
-of association matrix by computing the partial correlation statistics matrix.
-We also evaluate the method in a more detailed way and perform a comparison
-with other inference methods. We finally discuss the relevance of the metric
-used in the challenge and we point out that it was not necessary to discover
-causal relationships to maximize the ROC AUC. Thus, it may be  promising to
-focus on that particular topic in future works.
-
-% In the discussion, we give hints about limiting the depth of trees in the
-% GENIE3 method to infer the network. It should be interesting to see if there
-% is a optimum value for the maximal depth. And of course, it may also rewarding
-% to increase considerably the number of trees to get more stable predictions.
-
-% In previous study \citep{shipley2002cause}, it has been suggested to
-% consider correlation coefficients of all possible orders,
-% i.e. conditioned on every subsets of the set of $p-2$ other variables. This
-% would take into account multiple indirect paths between a given pair of
-% variables. Instead of considering only the highest order, it may be useful to
-% study with accuracy the inferred network at all orders. In this case, it may not
-% be very relevant but interesting in case of dynamical networks.
-
-% As we mentioned, in order to maximize the ROC AUC, it was not necessary to
-% discover causal relationships. It may be, in future works, promising to focus
-% on that particular topic.
+In this paper, we outlined a simple but efficient methodology for the problem
+of connectome inference from calcium imaging data. Our approach is made of two
+steps: (i) processing fluorescence data to detect neural peak activities and
+(ii) inferring the degree of association between neurons from partial
+correlation statistics. Its simplified variant shows to outperform other
+network inference methods while its optimized version proved to be best method
+on the Connectomics challenge. Given its simplicity and good performance, we
+therefore believe that the (simplified) methodology presented in this work
+would constitute a solid and easily reproducible baseline for further work in
+the field of connectome inference.
 
 
 \section*{Acknowledgments}
-A Joly and G Louppe are research fellows of the FNRS, Belgium.  A Sutera is
+A. Joly and G. Louppe are research fellows of the FNRS, Belgium.  A. Sutera is
 recipient of a FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
 PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
 Office.
