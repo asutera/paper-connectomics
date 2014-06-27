@@ -165,7 +165,7 @@ well-known that neurons may also spike because of a global high activity
 interactions from the firing activity is meaningless. As such,
 the signal output by $h$ is finally applied to the following function
 \begin{align}
- w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
+ w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}, \label{eq:magnify-filter}
 \end{align}
 which effect is to magnify the importance of spikes that occur in case of low
 global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance
@@ -630,25 +630,26 @@ and its optimized version.
 
 \subsection*{Signal processing}
 
-As we introduce a composed function in Section~\ref{sec:filter}, let us
-describe a new composed function with optimized filters to improve the quality
-of the inference process.
+In Section~\ref{sec:filter}, we introduce two composed filtering functions in
+order (i) to remove noise induced by light scattering artifact, (ii) to take
+into account the slow decay of fluorescence signal and (iii) to reduce the
+importance of global high activity in the network. However, in order to win the
+challenge, we have heavily optimized several different, but yet similar,
+filtering composed function. Taken alone, those composed functions in
+conjunction with partial correlation might lead to worse AUROC, but improved
+whenever they are averaged.
 
-
-Besides filters $f_1$ and $f_2$ defined by equations \ref{eq
-:symetric-median} and \ref{eq:weighted-asymetric-median}, respectively we also consider two
-other low-pass filters:
-
+Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq
+:symetric-median} and \ref{eq:weighted-asymetric-median}, we also consider two
+other low-pass filters
 \begin{align}
-f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i \label{eq:asymetric-median-forward}, \\
-f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i  .
-\label{eq:asymetric-median}
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
 \end{align}
 
+\textcolor{red}{AJ: This paragraph and table should go in a separate section}
 Theses filters lead, taken individually, to worse performances  than filters
 $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
-
-
 \begin{table}[ht]\label{tab:comparison}
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
@@ -666,25 +667,25 @@ $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to bette
 \caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
 \end{table}
 
-As computation trick, it appears that using a parametrized hard-threshold
-filter slightly improves performances. Introducing the parameter $c$ in
-function $h$ yields an optimized filter
+After the hard thresholded filter $h$, they were significant differences in
+peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
+we smoothened the difference in peak magnitudes through
 \begin{align}
-h^*(x^t_i) = (x_i^t)^c \text{ } \mathbb{1}(x_i^t \ge \tau) \text{ with } \tau > 0,
+g(x^t_i) = (x_i^t)^c
 \end{align}
-where $c$ is set to $0.9$ after experiments.
+yield slightly AUROC with $c=0.9 \in (0, 1)$.
 
-The magnification can also be optimized by adjusting differently the effect
-depending on the global activity and the low-pass filter used. In that sense,
-we introduce the following function
+After filter $c$, we applied a filter $w^*$ similar to $w$, whose goal is also
+to magnify the importance of spikes that occur in case of low global activity.
+Instead of equation \ref{eq:magnify-filter}, we had
 \begin{align}
- w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{m}
+ w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
 \end{align}
-where $m$ is a piecewise linear function depending on the low-pass filter and
-on the range of the global activity. We refer to our
-implementation\footnote{available on \url{https://github.com/asutera/kaggle-
-connectomics}.} for the values of the parameters and especially the parameter
-$m$.
+where the function $k$ is a piecewise linear function optimized for each filter
+$f_1$, $f_2$, $f_3$ and $f_4$. By comparison, the filter $w$ used the following
+function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
+the reader to the implementation \footnote{available on
+\url{https://github.com/asutera/kaggle- connectomics}.}.
 
 \subsection*{Averaging the connectome inference from partial correlation statistics}
 
