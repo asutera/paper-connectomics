@@ -622,6 +622,7 @@ presented in Sections~\ref{sec:filter}~to~\ref{sec:results}, the description
 will be limited to explaining the differences that exist between this method
 and its optimized version.
 
+\textcolor{red}{Introduce each section as in the introduction of the article }
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -671,11 +672,11 @@ After the hard thresholded filter $h$, they were significant differences in
 peak magnitudes. Since timeseries $x_i^t$  were mainly between 0 and 1,
 we smoothened these differences in peak magnitudes through
 \begin{align}
-g(x^t_i) = (x_i^t)^c
+p(x^t_i) = (x_i^t)^c
 \end{align}
 yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
 
-After filter $c$, we applied a filter $w^*$ similar to $w$, whose goal is also
+After filter $p$, we applied a filter $w^*$ similar to $w$, whose goal is also
 to magnify the importance of spikes that occur in case of low global activity.
 Instead of equation \ref{eq:magnify-filter}, we had
 \begin{align}
@@ -687,21 +688,34 @@ function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
 the reader to the implementation \footnote{available on
 \url{https://github.com/asutera/kaggle- connectomics}.}.
 
-\subsection*{Averaging the connectome inference from partial correlation statistics}
+\subsection*{Weighted average of partial correlation statistics}
 
-In our experiments, we observed that the inference process is quite sensitive
-about the choice of the parameter value $\tau$ and the low-pass filter.
-Therefore, in order to reduce the variance of the results and thus the
-robustness of our approach, we perform an average over a range of parameter
-value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
-the four low-pass filters with the following parameters
-\begin{align*}
-weight_{f_1} &= 1,\\
-weight_{f_2} &= 0.9, \\
-weight_{f_3} &= 0.7, \\
-weight_{f_4} &= 0.01
-\end{align*}
-tuned to maximize the ROC AUC on \textit{normal-1}.
+The AUROC performance of the conjunction of the composed function $w^* \circ p
+\circ g \circ h \circ f_1$ (respectively $f_2$, $f_3$ and $f_4$) and the
+partial correlation statistics was quite sensitive to the choice of $\tau$, the
+hard threshold value and the design of the low pass filter. Similarly to the
+simplified method, we average the partial correlation statistics obtained by
+varying $\tau$ linearly from $0.100$ to $0.209$ and the low-pass filter.
+
+Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
+contribution of each filter in the degree of association between two neurons
+was chosen as to maximize the AUROC on \textit{normal-1} and is function of
+their individual performance. By comparison in the simple method, each filter
+$f_1$ and $f_2$ were given equal weight.
+
+% In our experiments, we observed that the inference process is quite sensitive
+% about the choice of the parameter value $\tau$ and the low-pass filter.
+% Therefore, in order to reduce the variance of the results and thus the
+% robustness of our approach, we perform an average over a range of parameter
+% value $\tau$ from $0.100$ to $0.209$. We also perform a weighted average over
+% the four low-pass filters with the following parameters
+% \begin{align*}
+% weight_{f_1} &= 1,\\
+% weight_{f_2} &= 0.9, \\
+% weight_{f_3} &= 0.7, \\
+% weight_{f_4} &= 0.01
+% \end{align*}
+% tuned to maximize the ROC AUC on \textit{normal-1}.
 
 \subsection*{Connectome inference from pairwise interaction statistics}
 
