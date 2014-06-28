@@ -11,7 +11,7 @@
 
 \title{Simple connectome inference from partial correlation statistics in calcium imaging}
 
-  \author{\Name{Antonio Sutera} ,
+  \author{\Name{Antonio Sutera},
    \Name{Arnaud Joly},
    \Name{Vincent François-Lavet}, \Email{a.sutera@ulg.ac.be}\\
    \Name{Zixiao Aaron Qiu},
@@ -384,6 +384,9 @@ it does not significantly improve neither AUROC nor AUPRC.
 
 \begin{table}[t]
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
+\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
+Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
+\label{tab:comparison}
 \centering
 \small
 \begin{tabular}{| l | c c c c | c c c c |}
@@ -404,9 +407,7 @@ GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
 GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
 \hline
 \end{tabular}
-\caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
-Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
-\label{tab:comparison}
+
 \end{table}
 
 \paragraph{Comparison with other methods.}
@@ -723,12 +724,19 @@ hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
 of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$). Like in the simplified
 method, we therefore averaged the partial correlation statistics obtained by
 varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
-varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. Unlike in the
+varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. 
+
+
+\textit{Unlike in the
 simplified method where each filter $f_1$ and $f_2$ were given equal weight in
 the averaging, in the tuned method, we weighted each of the four filters
 according to its individual performance on the \textit{normal-1}
-dataset. \textcolor{red}{PG: je ne suis pas s\^ur de comprendre comment ces
+dataset.} 
+\textcolor{red}{PG: je ne suis pas s\^ur de comprendre comment ces
   poids sont d\'etermin\'es}
+$\Rightarrow$
+
+
 
 %% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
 %% contribution of each filter in the degree of association between two neurons
