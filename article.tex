@@ -641,7 +641,7 @@ results to validate the different steps of our proposal.
 \subsection{Signal processing}
 \label{sapp:signal}
 
-In Section~\ref{sec:filter}, we introduce four filtering functions ($f$, $g$,
+In Section~\ref{sec:filter}, we introduced four filtering functions ($f$, $g$,
 $h$, and $w$) that are composed in sequence (i.e., $w \circ h \circ g \circ
 f$) to provide the signals from which to compute partial correlation
 statistics.
@@ -658,7 +658,7 @@ f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-m
 \item An additional filter $p$ is applied to smoothen differences in peak magnitudes
   that might remain after the application of the hard-threshold filter $h$:
 \begin{align}
-p(x^t_i) = (x_i^t)^c,
+r(x^t_i) = (x_i^t)^c,
 \end{align}
 with $c=0.9$.
 \item Filter $w$ is replaced by a more complex filter $w^*$ defined as:
@@ -671,7 +671,7 @@ details). Filter $w$ in the simplified method is a special case of $w^*$ with
 $k(\sum_j x_j^t)=1$.
 \end{itemize}
 The pre-processed time-series are then obtained by the application of the
-following function: $w^*\circ p \circ h \circ g \circ f_i$ (with $i=1$,2,3, or 4).
+following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$,2,3, or 4).
 
 %% two composed filtering functions in
 %% order (i) to remove noise induced by light scattering artifact, (ii) to take
@@ -768,18 +768,18 @@ resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
 edge orientation. Indeed, edge orientation can only be predicted with some
 confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
 $s_{i,j}$ is lower than $s_{j,i}$ ($j\rightarrow i$). To address these issues,
-we computed a differential pairwise coefficient $z_{ij}$ defined as follows:
+we computed a differential pairwise coefficient $z_{i,j}$ defined as follows:
 \begin{align}
-z_{ij} = \sum_{t=1}^{T - 1}
+z_{i,j} = \sum_{t=1}^{T - 1}
     \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2 \right]) -
     \mathbb{1}((x_i^{t+1} - x_j^t) \in \left[\phi_1, \phi_2 \right]),
 \end{align}
 where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
 \textcolor{red}{PG: je ne comprends pas ce qui est fait exactement. Mettre les
-  maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own
-(on Table \ref{tab:directivity} in Section~\ref{sapp:results}) as
-\textit{directivity}, we use it to make asymmetric the degree of association
+  maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own as
+\textit{directivity} 
+(on Table \ref{tab:directivity} in Section~\ref{sapp:results}), we use it to asymmetrize the degree of association
 matrix using partial correlation statistics. We expect that when the heuristic
 is highly confident (i.e., $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of
 association of edge $(i,j)$ is increased while the degree of association
