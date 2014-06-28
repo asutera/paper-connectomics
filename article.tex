@@ -58,13 +58,13 @@ Connectomics - Network inference - Partial correlation
 
 The human brain is a complex biological
 organ made of 100 billions of neurons, each connected to 7000 other neurons on
-average. Unfortunately, direct observations of the connectome, the wiring
+average. Unfortunately, direct observation of the connectome, the wiring
 diagram of the brain, is not yet technically feasible. Without being perfect,
 calcium imaging currently allows the real-time and simultaneous observation of
 neuron activities from thousands of neurons, producing individual time series
 representing their fluorescence intensity. From these data, the connectome
-inference problem consists in retrieving the synaptic connections between
-neurons on the basis of the fluorescence time series. However, this
+inference problem amounts in retrieving the synaptic connections between
+neurons on the basis of the fluorescence time series. This
 problem is often difficult because of experimental issues, including
 masking effects (i.e., some of the neurons are not observed or confounded with others), the low sampling rate of the optical device with respect to the
 neural activity speed or the slow decay of fluorescence.
@@ -126,9 +126,9 @@ Accordingly, the first step of our pipeline is to smoothen the signal, using
 one of the following low-pass filters for filtering out high frequency noise:
 \begin{align}
 % symmetrical median filter
-f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i \label{eq:symetric-median}, \\
+f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i\quad, \label{eq:symetric-median} \\
 % asymmetrical weighted median
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t\quad.
 \label{eq:weighted-asymetric-median}
 \end{align}
 For the sake of illustration, the effect of the filter $f_1$ on the signal
@@ -139,7 +139,7 @@ frequency, while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitudes around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
-g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i \label{eq:high-pass-filter},
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i\quad, \label{eq:high-pass-filter}
 \end{align}
 as shown in Figure \ref{fig:hp_curve}.
 
@@ -147,7 +147,7 @@ To filter out small variations in the signal obtained after applying the
 function $g$ as well as to eliminate negative values, we use the following
 hard-threshold filter
 \begin{align}\label{eqn:hfilter}
-h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
+h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0\quad,
 \end{align}
 yielding Figure \ref{fig:threshold_curve}.
 As we can see, the processed signal only contains clean spikes.
@@ -166,7 +166,7 @@ the signal output by $h$ is finally applied to the following function
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}, \label{eq:magnify-filter}
 \end{align}
-which effect is to magnify the importance of spikes that occur in case of low
+whose effect is to magnify the importance of spikes that occur in case of low
 global activity (measured by $\sum_{j} x^{t}_j$), as observed for instance
 around $t=4\text{s}$ in Figure~\ref{fig:weight_curve}. Note that the particular case where there
 is no activity, i.e., $\sum_{j} x^{t}_j = 0$, is solved by setting $w(x^{t}_i)
@@ -203,7 +203,7 @@ strength of the connection between two neurons $i$ and $j$, the
 random variables $X_i$ and $X_j$, defined by:
 \begin{equation}
 p_{i,j} =
--\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}\quad, \label{eq:inverse}
 \end{equation}
 where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. %%  Partial
 %% correlation can be interpreted in several ways. The partial
@@ -215,8 +215,7 @@ distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
 variables in $X$, i.e., $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
 \setminus\{X_i,X_j\}$. Partial correlation thus measures conditional
-dependencies between variables. As an association measure between
-neurons, it should thus naturally only detect direct associations
+dependencies between variables. It should thus naturally only detect direct associations
 between neurons and filter out spurious indirect effects. The interest
 of partial correlation as an association measure has already been
 shown for the inference of gene regulatory networks
@@ -248,7 +247,7 @@ first principal components \citep{bishop2006pattern} (with
 $M=0.8 p$ in our experiments).
 
 Finally, let us note that the performance of our simple method appears to
-be quite sensitive to the values of parameters (e.g., $f_1$ or $f_2$
+be quite sensitive to the values of parameters (e.g., choice of $f_1$ or $f_2$
 or the value of the threshold $\tau$) in the combined function of the
 filtering and inferring processes. One approach, further referred
 to as \textit{Averaged Partial correlation} statistics, for improving
@@ -375,8 +374,8 @@ filtering functions. Except for the last two rows that use PCA, the
 exact inverse of the covariance matrix was used in each case. These
 results clearly show the importance of the filters. AUROC increases in
 average from 0.77 to 0.93. PCA does not really affect AUROC scores but
-it improves significantly AUPRC scores. Taking the average over
-various parameter setting gives an improvement of 10\% in AUPRC but
+it significantly improves AUPRC scores. Taking the average over
+various parameter settings gives an improvement of 10\% in AUPRC but
 only a minor change in AUROC. The last row (``Full method'') shows the
 final performance of the method specifically tuned for the challenge
 (see the Appendix \ref{app:optimized} for all details). Although this
@@ -430,12 +429,11 @@ predict $X_j$ from all variables in $X\setminus X_j$. To reduce the
 computational cost of this method, we had however to limit each tree in the
 Random Forest model to a maximum depth of 3. This constraint potentially
 severely affects the performance of this method with respect to the use of
-fully grown trees. PC and GENIE3 were applied on the time series filtered using
-respectively the functions $w\circ h\circ g$ and $h\circ g\circ f_1$ (which
-gave the best performance). For GENIE3, we built 10000 trees per neuron and we
+fully grown trees. PC and GENIE3 were applied on the time series filtered using the functions $w\circ h\circ g$ and $h\circ g\circ f_1$ (which
+gave the best performance), respectively. For GENIE3, we built 10000 trees per neuron and we
 used default settings for all other parameters (except for the maximal tree
 depth). For GTE, we reproduced the exact same setting (conditioning level and
-pre-processing) that was used by the challenge organizers.
+pre-processing) that was used by the organizers of the challenge.
 
 %% To assess our method, we focus on the \textit{normal-2} dataset
 %% provided by the organizers of the Connectomics challenge. Experiments
@@ -619,8 +617,7 @@ paper. Most parameters were tuned so as to maximize AUROC on the
 \textit{normal-1} dataset and our design choices were validated by monitoring
 the AUROC obtained by the 145 entries we submitted during the
 challenge. Although the tuned method performs better than the simplified one on
-the challenge dataset and this tuning was probably decisive to get the best
-performance, we believe that the tuned method clearly overfits the
+the challenge dataset, we believe that the tuned method clearly overfits the
 simulator used to generate the challenge data and that the simplified method
 should work equally well on new independent datasets. We nevertheless provide
 the tuned method here for reference purpose. Our implementation of the tuned
@@ -652,13 +649,13 @@ Filtering is modified as follows in the tuned method:
   \ref{eq:weighted-asymetric-median}), two alternative low-pass filters $f_3$
   and $f_4$ are considered:
 \begin{align}
-f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
-f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}.
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i\quad, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i\quad. \label{eq:asymetric-median}
 \end{align}
 \item An additional filter $p$ is applied to smoothen differences in peak magnitudes
   that might remain after the application of the hard-threshold filter $h$:
 \begin{align}
-r(x^t_i) = (x_i^t)^c,
+r(x^t_i) = (x_i^t)^c\quad,
 \end{align}
 with $c=0.9$.
 \item Filter $w$ is replaced by a more complex filter $w^*$ defined as:
@@ -671,7 +668,7 @@ details). Filter $w$ in the simplified method is a special case of $w^*$ with
 $k(\sum_j x_j^t)=1$.
 \end{itemize}
 The pre-processed time-series are then obtained by the application of the
-following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$,2,3, or 4).
+following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$, 2, 3, or 4).
 
 %% two composed filtering functions in
 %% order (i) to remove noise induced by light scattering artifact, (ii) to take
@@ -805,7 +802,7 @@ $f_2$. It however slightly deteriorates AUPRC.
 
 \begin{table}[ht]
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
-\caption{Performance on \textit{normal-1,2,3,4} with partial correlation with different averaging approaches.}
+\caption{Performance on \textit{normal-1, 2, 3, or 4} with partial correlation with different averaging approaches.}
 \label{tab:f3f4}
 \centering
 \small
@@ -855,12 +852,12 @@ in the paper on 6 additional datasets provided by the challenge
 organizers. These datasets, corresponding each to networks of 1000 neurons, are similar to
 the \textit{normal} datasets except for one feature:
 \begin{description}
-\item[lowcon]: Similar network but with a lower number of connections per neuron on average.
-\item[highcon]: Similar network but with a higher number of connections per neuron on average.
-\item[lowcc]: Similar network but with a lower clustering coefficient on average.
-\item[highcc]: Similar network but with a higher clustering coefficient on average.
-\item[normal-3-highrate]: Same topology as \textit{normal-3} but with a higher firing frequency, i.e., with highly active neurons.
-\item[normal-4-lownoise]: Same topology as \textit{normal-4} but with a better signal to noise ratio.
+\item[lowcon:] Similar network but with a lower number of connections per neuron on average.
+\item[highcon:] Similar network but with a higher number of connections per neuron on average.
+\item[lowcc:] Similar network but with a lower clustering coefficient on average.
+\item[highcc:] Similar network but with a higher clustering coefficient on average.
+\item[normal-3-highrate:] Same topology as \textit{normal-3} but with a higher firing frequency, i.e., with highly active neurons.
+\item[normal-4-lownoise:] Same topology as \textit{normal-4} but with a better signal to noise ratio.
 \end{description}
 
 Results of several methods on these 6 datasets are provided in
