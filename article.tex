@@ -63,7 +63,7 @@ diagram of the brain, is not yet technically feasible. Without being perfect,
 calcium imaging currently allows the real-time and simultaneous observation of
 neuron activities from thousands of neurons, producing individual time series
 representing their fluorescence intensity. From these data, the connectome
-inference problem amounts in retrieving the synaptic connections between
+inference problem amounts to retrieving the synaptic connections between
 neurons on the basis of the fluorescence time series. This
 problem is often difficult because of experimental issues, including
 masking effects (i.e., some of the neurons are not observed or confounded with others), the low sampling rate of the optical device with respect to the
@@ -687,7 +687,7 @@ following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$, 2, 3, or
 % conjunction with partial correlation might lead to worse AUROC, but improved
 % whenever they are averaged.
 
-%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
+%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median}
 %% and \ref{eq:weighted-asymetric-median}, we also consider two
 %% other low-pass filters
 %% \begin{align}
@@ -724,14 +724,14 @@ hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
 of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$). Like in the simplified
 method, we therefore averaged the partial correlation statistics obtained by
 varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
-varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. 
+varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$.
 
 
 \textit{Unlike in the
 simplified method where each filter $f_1$ and $f_2$ were given equal weight in
 the averaging, in the tuned method, we weighted each of the four filters
 according to its individual performance on the \textit{normal-1}
-dataset.} 
+dataset.}
 \textcolor{red}{PG: je ne suis pas s\^ur de comprendre comment ces
   poids sont d\'etermin\'es}
 $\Rightarrow$
@@ -783,7 +783,7 @@ where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
 \textcolor{red}{PG: je ne comprends pas ce qui est fait exactement. Mettre les
   maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own as
-\textit{directivity} 
+\textit{directivity}
 (on Table \ref{tab:directivity} in Section~\ref{sapp:results}), we use it to asymmetrize the degree of association
 matrix using partial correlation statistics. We expect that when the heuristic
 is highly confident (i.e., $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of
@@ -855,7 +855,7 @@ directing the edges.
 
 \section{Supplementary results} \label{app:supp}
 
-We report in this apprendix the performance of the different methods compared
+We report in this appendix the performance of the different methods compared
 in the paper on 6 additional datasets provided by the challenge
 organizers. These datasets, corresponding each to networks of 1000 neurons, are similar to
 the \textit{normal} datasets except for one feature:
