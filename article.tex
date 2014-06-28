@@ -136,7 +136,7 @@ is shown in Figure \ref{fig:lp_curve}.
 
 Furthermore, it can be observed that neurons communicate through short spikes, characterized by a high
 frequency, while low frequencies of the signal mainly correspond to the slow
-decay of fluorescence. To have a signal that only has high magnitudes around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
+decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i\quad, \label{eq:high-pass-filter}
@@ -768,7 +768,7 @@ where $\phi_1$ and $\phi_2$ are parameters of the heuristic.
 
 Two issues remain with this heuristic. First, it does not allow to detect a
 directed relationship if both neurons are activated simultaneously at the same
-time step, ie., when the delay between the two activations is below the time
+time step, i.e., when the delay between the two activations is below the time
 resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
 edge orientation. Indeed, edge orientation can only be predicted with some
 confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
