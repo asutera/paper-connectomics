@@ -63,7 +63,7 @@ diagram of the brain, is not yet technically feasible. Without being perfect,
 calcium imaging currently allows the real-time and simultaneous observation of
 neuron activities from thousands of neurons, producing individual time series
 representing their fluorescence intensity. From these data, the connectome
-inference problem amounts in retrieving the synaptic connections between
+inference problem amounts to retrieving the synaptic connections between
 neurons on the basis of the fluorescence time series. This
 problem is often difficult because of experimental issues, including
 masking effects (i.e., some of the neurons are not observed or confounded with others), the low sampling rate of the optical device with respect to the
@@ -136,7 +136,7 @@ is shown in Figure \ref{fig:lp_curve}.
 
 Furthermore, it can be observed that neurons communicate through short spikes, characterized by a high
 frequency, while low frequencies of the signal mainly correspond to the slow
-decay of fluorescence. To have a signal that only has high magnitudes around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
+decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i\quad, \label{eq:high-pass-filter}
@@ -687,7 +687,7 @@ following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$, 2, 3, or
 % conjunction with partial correlation might lead to worse AUROC, but improved
 % whenever they are averaged.
 
-%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median} 
+%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median}
 %% and \ref{eq:weighted-asymetric-median}, we also consider two
 %% other low-pass filters
 %% \begin{align}
@@ -724,11 +724,12 @@ hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
 of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$). Like in the simplified
 method, we therefore averaged the partial correlation statistics obtained by
 varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
-varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. 
+varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$.
 
 Filters $f_1$ and $f_2$ display similar performances and thus were given equal weight in the averaging of the simplified method.
 Otherwise, filters $f_3$ and $f_4$ turn out to be, individually, less competitive to provide the signal to compute partial correlation statistics and thus were given smaller weights in the tuned averaging.
 In this way, composed functions with $f_3$ or $f_4$ (resp. $f_1$ or $f_2$) contribute less (resp. more) in the tuned averaging. 
+
 
 
 %% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
@@ -761,7 +762,7 @@ where $\phi_1$ and $\phi_2$ are parameters of the heuristic.
 
 Two issues remain with this heuristic. First, it does not allow to detect a
 directed relationship if both neurons are activated simultaneously at the same
-time step, ie., when the delay between the two activations is below the time
+time step, i.e., when the delay between the two activations is below the time
 resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
 edge orientation. Indeed, edge orientation can only be predicted with some
 confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
@@ -776,7 +777,7 @@ where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
 
 \textcolor{red}{PG: je ne comprends pas ce qui est fait exactement. Mettre les
   maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own as
-\textit{directivity} 
+\textit{directivity}
 (on Table \ref{tab:directivity} in Section~\ref{sapp:results}), we use it to asymmetrize the degree of association
 matrix using partial correlation statistics. We expect that when the heuristic
 is highly confident (i.e., $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of
@@ -848,7 +849,7 @@ directing the edges.
 
 \section{Supplementary results} \label{app:supp}
 
-We report in this apprendix the performance of the different methods compared
+We report in this appendix the performance of the different methods compared
 in the paper on 6 additional datasets provided by the challenge
 organizers. These datasets, corresponding each to networks of 1000 neurons, are similar to
 the \textit{normal} datasets except for one feature:
