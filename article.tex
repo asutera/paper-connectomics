@@ -627,7 +627,7 @@ method is available at \url{https://github.com/asutera/kaggle-connectomics}.
 This appendix is structured as follows: Section~\ref{sapp:signal} describes the
 differences in terms of signal processing. Section~\ref{sapp:averaging} then
 provides a detailed presentation of the averaging
-approach. Section~\ref{sapp:connectome} presents a heuristic to retrieve edge
+approach. Section~\ref{sapp:connectome} presents an approach to retrieve edge
 directionality. Finally, Section~\ref{sapp:results} presents some experimental
 results to validate the different steps of our proposal.
 
@@ -759,7 +759,7 @@ s_{i,j} = \sum_x \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\ph
 that could be interpreted as an image of the  number of times
 that neuron $i$ activates neuron $j$. $\phi_1$ and $\phi_2$ are
 parameters whose values have been chosen in our experiments equal to   
-$0.2$ and $0.5$, respectively. Their role is
+$0.2$ and $0.5$, respectively. Their role is to 
 define when the difference between $x_j^{t+1}$  and $x_i^t$ can
 indeed be assimilated to an event where neuron $i$ activates neuron
 $j$.
