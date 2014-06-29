@@ -11,3 +11,7 @@ partial:
 
 clean:
 	rm -f *.log *.out *.aux *.bbl *.blg article.pdf
+
+
+zip: article
+	zip -r article.zip *.tex *.cls *.bib images article.pdf Makefile
