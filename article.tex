@@ -720,13 +720,11 @@ following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$, 2, 3, or
 As discussed in Section \ref{sec:inference}, the performance of the method (in
 terms of AUROC) is sensitive to the value of the parameter $\tau$ of the
 hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
-of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$). Like in the simplified
-method, we therefore averaged the partial correlation statistics obtained by
-varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
-varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$.
+of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$).
+Like in the simplified method, we have averaged the partial correlation statistics obtained for all the pairs $(\tau,\mbox{low-pass filter}) \in \{0.100,0.101,\ldots,0.209\}\times \{f_1, f_2, f_3, f_4\}$.
 
 Filters $f_1$ and $f_2$ display similar performances and thus were given equal
-weight in the averaging of the simplified method. In contrast, filters $f_3$
+weight. Additionally, this weight were chosen equal as the weight selected for the simplified method. In contrast, filters $f_3$
 and $f_4$ turn out to be individually less competitive and were therefore given
 smaller weights in the tuned averaging. Yet, as further shown in
 Section~\ref{sapp:results}, combining all $4$ filters proves to slightly
@@ -742,45 +740,61 @@ improve performance with respect to using $f_1$ and $f_2$ only.
 \subsection{Prediction of edge orientation}
 \label{sapp:connectome}
 
-Partial correlation statistics is a symmetric measure, while the connectome is
-a directed graph. It could thus be beneficial to try to predict edge orientation. In
-this section, we present a heuristic to retrieve directionality. %% Note however that
-%% given the discussion at the end of Section~\ref{sec:results}, we cannot expect
-%% a very large improvement in AUROC by predicting edge orientation.
+Partial  correlation  statistics is  a  symmetric  measure, while  the
+connectome is a directed graph. It  could thus be beneficial to try to
+predict edge orientation. In this section, we present a heuristic that
+modifies the  $p_{ij}$ computed  by the  approach described  before to
+take into account directionality.
 
-This heuristic is based on the following observation. The rise of fluorescence
-of a neuron indicates its activation. If another neuron is activated after a
-slight delay, this could be a consequence of the activation of the first neuron
-and therefore indicate a directed link in the connectome from the first to the
-second neuron. Given this analysis, the idea of our heuristic is to count the
-number of such events occurring between neurons $i$ and $j$ for consecutive
-time steps. Mathematically, we compute for each pair $(i,j)$:
+This approach is based on the following
+observation. The rise of fluorescence of a neuron indicates its
+activation. If another neuron is activated after a slight delay, this
+could be a consequence of the activation of the first neuron and
+therefore indicates a directed link in the connectome from the first to
+the second neuron.  Given this observation, we have computed for every
+pair $(i,j)$ an empirical estimation of the  term:
 \begin{align}
-s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
+s_{i,j} = \sum_x \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
-where $\phi_1$ and $\phi_2$ are parameters of the heuristic (with $\phi_1 = 0.2$ and $\phi_2 = 0.5$ in our experiments).
+that could be interpreted as an image of the  number of times
+that neuron $i$ activates neuron $j$. $\phi_1$ and $\phi_2$ are
+parameters whose values have been chosen in our experiments equal to   
+$0.2$ and $0.5$, respectively. Their role is
+define when the difference between $x_j^{t+1}$  and $x_i^t$ can
+indeed be assimilated to an event where neuron $i$ activates neuron
+$j$.
 
-Two issues remain with this heuristic. First, it does not allow to detect a
-directed relationship if both neurons are activated simultaneously at the same
-time step, i.e., when the delay between the two activations is below the time
-resolution. Second, one needs to compare $s_{j,i}$ and $s_{i,j}$ to decide on
-edge orientation. Indeed, edge orientation can only be predicted with some
-confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
-$s_{i,j}$ is lower than $s_{j,i}$ ($j\rightarrow i$). To address these issues,
-we computed a differential pairwise coefficient $z_{i,j}$ defined as follows:
+Afterwards, we have computed the difference between $s_{i,j}$ and
+$s_{j,i}$, that we call $z_{i,j}$, and used this difference to modify  $p_{i,j}$ and
+$p_{i,j}$ so as to take into account directionality. Naturally, îf
+$z_{i,j}$ is greater  (smaller) than $0$, we may conclude that should there  be an
+edge between $i$ and $j$, then this edge would have to be oriented
+from $i$ to $j$ ($j$ to $i$). 
+
+This suggests the the new association matrix $r$:
 \begin{align}
-z_{i,j} = s_{i,j} - s_{j,i}.
+r_{i,j} =  \mathbb{1}(z_{i,j} > \phi_3)    p_{i,j}
 \end{align}
-The coefficient $z_{i,j}$ estimates the confidence in an edge $i\rightarrow j$. Note that if $z_{i,j}$ is positive, then $z_{j,i}$ will be negative.
+where $\phi_3 >0$ is another parameter. We found out that this new
+matrix $r$ was not giving good results, probably due to the fact that
+directivity was not well enough rewarded in the challenge. 
 
-This heuristic does not give good results on its own (see Table \ref{tab:directivity} in Section~\ref{sapp:results}). However, it can be used to asymmetrize the degree of association (symmetric) matrix given by partial correlation statistics. Concretely, a new matrix is computed as the linear combination of the partial correlation matrix and the heuristic matrix.
-Mathematically, we have
+This has lead us to investigate other ways for exploiting the
+information about directionality contained in the matrix $z$. One of
+those ways that gave good performance was to use as association
+matrix: 
 \begin{align}
-q_{i,j} = weight_p * p_{i,j} + weight_z * z_{i,j}
+q_{i,j} = weight * p_{i,j} + (1-weight) * z_{i,j}
 \end{align}
-where $weight_p$ and $weight_z$ are parameters of the method (with $weight_p = 0.997$ and $weight_z = 0.003$ in our experiments).
+with  $weight$ chosen close to 1 ($weight=0.997$). Note that with
+values for $weight$ close to 1,   matrix $q$ only slightly uses the
+information about directivity contained in $z$ to modify the  partial
+correlation matrix $p$. We tried smaller values for $weight$ but those
+were leading to worse results. 
 
-Considering the small weight associated to this heuristic, the effect is subtle. It slightly increases the confidence in one edge direction and decreases the confidence in the opposite edge direction while not affecting strongly the undirected topology of the network. This process slightly improves the performance of our method (see Table \ref{tab:directivity} in Section~\ref{sapp:results}).
+It was  this association matrix $q_{i,j}$ that actually led to the
+best results of the challenge, as shown in Table \ref{tab:directivity}
+of Section~\ref{sapp:results}.
 
 \subsection{Experiments}
 \label{sapp:results}
