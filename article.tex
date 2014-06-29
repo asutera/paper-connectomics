@@ -773,19 +773,16 @@ z_{i,j} = \sum_{t=1}^{T - 1}
     \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2 \right]) -
     \mathbb{1}((x_i^{t+1} - x_j^t) \in \left[\phi_1, \phi_2 \right]),
 \end{align}
-where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters.
+where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters. The coefficient $z_{i,j}$ estimates the confidence in an edge $i\rightarrow j$. Note that if $z_{i,j}$ is positive, then $z_{j,i}$ will be negative.
 
-\textcolor{red}{PG: je ne comprends pas ce qui est fait exactement. Mettre les
-  maths? Valeurs de $\phi_1$ et $\phi_2$ ?} At the light of the poor results of this heuristic taken on its own as
-\textit{directivity}
-(on Table \ref{tab:directivity} in Section~\ref{sapp:results}), we use it to asymmetrize the degree of association
-matrix using partial correlation statistics. We expect that when the heuristic
-is highly confident (i.e., $z_{i,j} \gg 0 \gg z_{j,i}$) the degree of
-association of edge $(i,j)$ is increased while the degree of association
-corresponding to the edge $(j,i)$ is reduced. Even if this adjustment is
-subtle, it might have a slight positive effect on the ROC AUC.
+This heuristic does not give good results on its own (see Table \ref{tab:directivity} in Section~\ref{sapp:results}). However, it can be used to asymmetrize the degree of association (symmetric) matrix given by partial correlation statistics. Concretely, a new matrix is computed as the linear combination of the partial correlation matrix and the heuristic matrix. 
+Mathematically, we have
+\begin{align}
+q_{i,j} = weight_p * p_{i,j} + weight_z * z_{i,j}
+\end{align}
+where $weight_p$ and $weight_z$ are parameters of the method (with $weight_p = 0.997$ and $weight_z = 0.003$ in our experiments).
 
-
+Considering the small weight associated to this heuristic, the effect is subtle. It slightly increases the confidence in one edge direction and decreases the confidence in the opposite edge direction while not affecting strongly the undirected topology of the network. This process slightly improves the performance of our method (see Table \ref{tab:directivity} in Section~\ref{sapp:results}).
 
 \subsection{Experiments}
 \label{sapp:results}
