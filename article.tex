@@ -126,9 +126,9 @@ Accordingly, the first step of our pipeline is to smoothen the signal, using
 one of the following low-pass filters for filtering out high frequency noise:
 \begin{align}
 % symmetrical median filter
-f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i\quad, \label{eq:symetric-median} \\
+f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
 % asymmetrical weighted median
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t\quad.
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
 For the sake of illustration, the effect of the filter $f_1$ on the signal
@@ -139,7 +139,7 @@ frequency, while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
-g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i\quad, \label{eq:high-pass-filter}
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i, \label{eq:high-pass-filter}
 \end{align}
 as shown in Figure \ref{fig:hp_curve}.
 
@@ -147,7 +147,7 @@ To filter out small variations in the signal obtained after applying the
 function $g$ as well as to eliminate negative values, we use the following
 hard-threshold filter
 \begin{align}\label{eqn:hfilter}
-h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0\quad,
+h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
 yielding Figure \ref{fig:threshold_curve}.
 As we can see, the processed signal only contains clean spikes.
@@ -203,7 +203,7 @@ strength of the connection between two neurons $i$ and $j$, the
 random variables $X_i$ and $X_j$, defined by:
 \begin{equation}
 p_{i,j} =
--\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}\quad, \label{eq:inverse}
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
 where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. %%  Partial
 %% correlation can be interpreted in several ways. The partial
@@ -612,7 +612,7 @@ Office.
 \label{app:optimized}
 
 This section provides a detailed description of the method specifically tuned
-for the Connectomics challenge. We will restrict our description to the
+for the Connectomics challenge. We restrict our description to the
 differences with respect to the simplified method presented in the main
 paper. Most parameters were tuned so as to maximize AUROC on the
 \textit{normal-1} dataset and our design choices were validated by monitoring
@@ -642,21 +642,20 @@ results to validate the different steps of our proposal.
 In Section~\ref{sec:filter}, we introduced four filtering functions ($f$, $g$,
 $h$, and $w$) that are composed in sequence (i.e., $w \circ h \circ g \circ
 f$) to provide the signals from which to compute partial correlation
-statistics.
+statistics. Filtering is modified as follows in the tuned method:
 
-Filtering is modified as follows in the tuned method:
 \begin{itemize}
 \item In addition to $f_1$ and $f_2$ (Equations \ref{eq:symetric-median} and
   \ref{eq:weighted-asymetric-median}), two alternative low-pass filters $f_3$
   and $f_4$ are considered:
 \begin{align}
-f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i\quad, \label{eq:asymetric-median-forward} \\
-f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i\quad. \label{eq:asymetric-median}
+f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
 \end{align}
-\item An additional filter $p$ is applied to smoothen differences in peak magnitudes
+\item An additional filter $r$ is applied to smoothen differences in peak magnitudes
   that might remain after the application of the hard-threshold filter $h$:
 \begin{align}
-r(x^t_i) = (x_i^t)^c\quad,
+r(x^t_i) = (x_i^t)^c,
 \end{align}
 with $c=0.9$.
 \item Filter $w$ is replaced by a more complex filter $w^*$ defined as:
@@ -726,11 +725,12 @@ method, we therefore averaged the partial correlation statistics obtained by
 varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
 varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$.
 
-Filters $f_1$ and $f_2$ display similar performances and thus were given equal weight in the averaging of the simplified method.
-Otherwise, filters $f_3$ and $f_4$ turn out to be, individually, less competitive to provide the signal to compute partial correlation statistics and thus were given smaller weights in the tuned averaging.
-In this way, composed functions with $f_3$ or $f_4$ (resp. $f_1$ or $f_2$) contribute less (resp. more) in the tuned averaging. 
-
-
+Filters $f_1$ and $f_2$ display similar performances and thus were given equal
+weight in the averaging of the simplified method. In contrast, filters $f_3$
+and $f_4$ turn out to be individually less competitive and were therefore given
+smaller weights in the tuned averaging. Yet, as further shown in
+Section~\ref{sapp:results}, combining all $4$ filters proves to slightly
+improve performance with respect to using $f_1$ and $f_2$ only.
 
 %% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
 %% contribution of each filter in the degree of association between two neurons
@@ -769,13 +769,11 @@ confidence if either $s_{i,j}$ is greater than $s_{j,i}$ ($i\rightarrow j$) or
 $s_{i,j}$ is lower than $s_{j,i}$ ($j\rightarrow i$). To address these issues,
 we computed a differential pairwise coefficient $z_{i,j}$ defined as follows:
 \begin{align}
-z_{i,j} = \sum_{t=1}^{T - 1}
-    \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2 \right]) -
-    \mathbb{1}((x_i^{t+1} - x_j^t) \in \left[\phi_1, \phi_2 \right]),
+z_{i,j} = s_{i,j} - s_{j,i}.
 \end{align}
-where $T$ is the number of time steps, $\phi_1$ and $\phi_2$ are parameters. The coefficient $z_{i,j}$ estimates the confidence in an edge $i\rightarrow j$. Note that if $z_{i,j}$ is positive, then $z_{j,i}$ will be negative.
+The coefficient $z_{i,j}$ estimates the confidence in an edge $i\rightarrow j$. Note that if $z_{i,j}$ is positive, then $z_{j,i}$ will be negative.
 
-This heuristic does not give good results on its own (see Table \ref{tab:directivity} in Section~\ref{sapp:results}). However, it can be used to asymmetrize the degree of association (symmetric) matrix given by partial correlation statistics. Concretely, a new matrix is computed as the linear combination of the partial correlation matrix and the heuristic matrix. 
+This heuristic does not give good results on its own (see Table \ref{tab:directivity} in Section~\ref{sapp:results}). However, it can be used to asymmetrize the degree of association (symmetric) matrix given by partial correlation statistics. Concretely, a new matrix is computed as the linear combination of the partial correlation matrix and the heuristic matrix.
 Mathematically, we have
 \begin{align}
 q_{i,j} = weight_p * p_{i,j} + weight_z * z_{i,j}
@@ -881,7 +879,7 @@ Averaging     & 0.947 & 0.943 & 0.920 & 0.942 & 0.959 & 0.934 \\
 Full method   &  &  &  & & &\\
 PC & 0.782 & 0.920 &  0.846 & 0.897  & 0.898  & 0.873 \\
 GTE & 0.846 & 0.905 & 0.848 & 0.899 & 0.905 & 0.879\\
-GENIE3 & 0.781 &  0.922 & 0.875 & 0.899 & 0.886 &  0.890 \\ \hline
+GENIE3 & 0.781 &  0.922 & 0.875 & 0.899 & 0.886 &  0.890 \\ \hline \hline
 & \multicolumn{6}{c|}{AUPRC}\\ \hline
 Averaging     & 0.320 & 0.429 & 0.262 & 0.478 & 0.443 & 0.412 \\
 Full method   &  &  &  & & &\\
