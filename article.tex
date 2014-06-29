@@ -752,9 +752,9 @@ activation. If another neuron is activated after a slight delay, this
 could be a consequence of the activation of the first neuron and
 therefore indicates a directed link in the connectome from the first to
 the second neuron.  Given this observation, we have computed for every
-pair $(i,j)$ an empirical estimation of the  term:
+pair $(i,j)$ the  term:
 \begin{align}
-s_{i,j} = \sum_x \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
+s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
 that could be interpreted as an image of the  number of times
 that neuron $i$ activates neuron $j$. $\phi_1$ and $\phi_2$ are
