@@ -726,16 +726,9 @@ method, we therefore averaged the partial correlation statistics obtained by
 varying $\tau$ linearly from $0.100$ to $0.209$ (in step of $0.001)$ and by
 varying the low-pass filter in $\{f_1, f_2, f_3, f_4\}$. 
 
-
-\textit{Unlike in the
-simplified method where each filter $f_1$ and $f_2$ were given equal weight in
-the averaging, in the tuned method, we weighted each of the four filters
-according to its individual performance on the \textit{normal-1}
-dataset.} 
-\textcolor{red}{PG: je ne suis pas s\^ur de comprendre comment ces
-  poids sont d\'etermin\'es}
-$\Rightarrow$
-
+Filters $f_1$ and $f_2$ display similar performances and thus were given equal weight in the averaging of the simplified method.
+Otherwise, filters $f_3$ and $f_4$ turn out to be, individually, less competitive to provide the signal to compute partial correlation statistics and thus were given smaller weights in the tuned averaging.
+In this way, composed functions with $f_3$ or $f_4$ (resp. $f_1$ or $f_2$) contribute less (resp. more) in the tuned averaging. 
 
 
 %% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
