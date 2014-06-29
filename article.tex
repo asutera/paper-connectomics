@@ -758,7 +758,7 @@ time steps. Mathematically, we compute for each pair $(i,j)$:
 \begin{align}
 s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
-where $\phi_1$ and $\phi_2$ are parameters of the heuristic.
+where $\phi_1$ and $\phi_2$ are parameters of the heuristic (with $\phi_1 = 0.2$ and $\phi_2 = 0.5$ in our experiments).
 
 Two issues remain with this heuristic. First, it does not allow to detect a
 directed relationship if both neurons are activated simultaneously at the same
