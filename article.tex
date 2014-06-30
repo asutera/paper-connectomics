@@ -624,12 +624,13 @@ should work equally well on new independent datasets. We nevertheless provide
 the tuned method here for reference purpose. Our implementation of the tuned
 method is available at \url{https://github.com/asutera/kaggle-connectomics}.
 
-This appendix is structured as follows: Section~\ref{sapp:signal} describes the
-differences in terms of signal processing. Section~\ref{sapp:averaging} then
-provides a detailed presentation of the averaging
-approach. Section~\ref{sapp:connectome} presents an approach to retrieve edge
-directionality. Finally, Section~\ref{sapp:results} presents some experimental
-results to validate the different steps of our proposal.
+This appendix is structured as follows: Section~\ref{sapp:signal} describes
+the differences in terms of signal processing. Section~\ref{sapp:averaging}
+then provides a detailed presentation of the averaging approach.
+Section~\ref{sapp:connectome} presents an approach to correct the $p_{i,j}$
+values so as to take into account the edge directionality. Finally,
+Section~\ref{sapp:results} presents some experimental results to validate the
+different steps of our proposal.
 
 % Let us remark that tuning
 % was mainly done on the \textit{normal-1} and \textit{normal-4}
@@ -723,10 +724,10 @@ hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
 of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$).
 Like in the simplified method, we have averaged the partial correlation statistics obtained for all the pairs $(\tau,\mbox{low-pass filter}) \in \{0.100,0.101,\ldots,0.209\}\times \{f_1, f_2, f_3, f_4\}$.
 
-Filters $f_1$ and $f_2$ display similar performances and thus were given equal
-weight. Additionally, this weight were chosen equal as the weight selected for the simplified method. In contrast, filters $f_3$
+Filters $f_1$ and $f_2$ display similar performances and thus were given similar
+weights (i.e., resp. $1$ and $0.9$). Additionally, these weights were chosen equal as the weights selected for the simplified method. In contrast, filters $f_3$
 and $f_4$ turn out to be individually less competitive and were therefore given
-smaller weights in the tuned averaging. Yet, as further shown in
+smaller weights in the tuned averaging (i.e., resp. $0.01$ and $0.7$). Yet, as further shown in
 Section~\ref{sapp:results}, combining all $4$ filters proves to slightly
 improve performance with respect to using $f_1$ and $f_2$ only.
 
@@ -761,7 +762,7 @@ that neuron $i$ activates neuron $j$. $\phi_1$ and $\phi_2$ are
 parameters whose values have been chosen in our experiments equal to   
 $0.2$ and $0.5$, respectively. Their role is to 
 define when the difference between $x_j^{t+1}$  and $x_i^t$ can
-indeed be assimilated to an event where neuron $i$ activates neuron
+indeed be assimilated to an event for which neuron $i$ activates neuron
 $j$.
 
 Afterwards, we have computed the difference between $s_{i,j}$ and
@@ -785,6 +786,7 @@ those ways that gave good performance was to use as association
 matrix: 
 \begin{align}
 q_{i,j} = weight * p_{i,j} + (1-weight) * z_{i,j}
+\label{eqn:qij}
 \end{align}
 with  $weight$ chosen close to 1 ($weight=0.997$). Note that with
 values for $weight$ close to 1,   matrix $q$ only slightly uses the
@@ -829,15 +831,13 @@ $f_2$. It however slightly deteriorates AUPRC.
 \end{tabular}
 \end{table}
 
-\paragraph{On the contribution of the directionality heuristic.}
+\paragraph{On the interest of using matrix $q$ rather than $p$ to take into account directivity.}
 
-Table~\ref{tab:dir} compares AUROC and AUPRC with and without prediction
-of edge orientation. Both AUROC and AUPRC are (very slightly) improved by
-directing the edges.
+Table~\ref{tab:dir} compares AUROC and AUPRC with or without correcting the $p_{i,j}$ values according to Equation \ref{eqn:qij}. Both AUROC and AUPRC are (very slightly) improved by using information about directivity.
 
 \begin{table}[ht]\label{tab:dir}
 \caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and
-  without prediction of edge orientation}
+  without using information about directivity.}
 \label{tab:directivity}
 
 %\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
@@ -876,7 +876,7 @@ Table~\ref{tab:results_appendix}. They confirm what we observed on the
 \textit{normal} datasets. Average partial correlation and its tuned variant,
 i.e.,``Full method'', clearly outperform other network inference methods on all
 datasets. PC is close to GENIE3 and GTE but still slightly worse. GENIE3
-performs better than GTE most of the times.
+performs better than GTE most of the times. Note that the "Full method" reported in this table does not use Equation \ref{eqn:qij} to slightly correct the values of $p_{i,j}$  to take into account directivity.
 
 \begin{table}[h]
 \caption{Performance (top: AUROC, bottom: AUPRC) on specific datasets with different methods.}
