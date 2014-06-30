@@ -477,8 +477,8 @@ pre-processing) that was used by the organizers of the challenge.
 
 %% \subsection*{Partial correlation improves over state-of-the-art methods}
 
-Partial correlation and average partial correlation clearly outperform all
-other methods. The improvement is more important in terms of AUPRC than in
+Partial correlation and averaged partial correlation clearly outperform all
+other methods (see Table \ref{tab:comparison} and Appendix \ref{app:supp}). The improvement is more important in terms of AUPRC than in
 terms of AUROC. As expected, Pearson correlation performs very poorly in terms
 of AUPRC. GTE and GENIE3 work much better but these two methods are
 nevertheless clearly below partial correlation. Among these two methods, GTE is
@@ -759,8 +759,8 @@ s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \p
 \end{align}
 that could be interpreted as an image of the  number of times
 that neuron $i$ activates neuron $j$. $\phi_1$ and $\phi_2$ are
-parameters whose values have been chosen in our experiments equal to   
-$0.2$ and $0.5$, respectively. Their role is to 
+parameters whose values have been chosen in our experiments equal to
+$0.2$ and $0.5$, respectively. Their role is to
 define when the difference between $x_j^{t+1}$  and $x_i^t$ can
 indeed be assimilated to an event for which neuron $i$ activates neuron
 $j$.
@@ -770,7 +770,7 @@ $s_{j,i}$, that we call $z_{i,j}$, and used this difference to modify  $p_{i,j}$
 $p_{j,i}$ so as to take into account directionality. Naturally, if
 $z_{i,j}$ is greater  (smaller) than $0$, we may conclude that should there  be an
 edge between $i$ and $j$, then this edge would have to be oriented
-from $i$ to $j$ ($j$ to $i$). 
+from $i$ to $j$ ($j$ to $i$).
 
 This suggests the new association matrix $r$:
 \begin{align}
@@ -778,12 +778,12 @@ r_{i,j} =  \mathbb{1}(z_{i,j} > \phi_3)  *  p_{i,j}
 \end{align}
 where $\phi_3 >0$ is another parameter. We found out that this new
 matrix $r$ was not giving good results, probably due to the fact that
-directivity was not well enough rewarded in the challenge. 
+directivity was not well enough rewarded in the challenge.
 
 This has lead us to investigate other ways for exploiting the
 information about directionality contained in the matrix $z$. One of
 those ways that gave good performance was to use as association
-matrix: 
+matrix:
 \begin{align}
 q_{i,j} = weight * p_{i,j} + (1-weight) * z_{i,j}
 \label{eqn:qij}
@@ -792,7 +792,7 @@ with  $weight$ chosen close to 1 ($weight=0.997$). Note that with
 values for $weight$ close to 1,   matrix $q$ only slightly uses the
 information about directivity contained in $z$ to modify the  partial
 correlation matrix $p$. We tried smaller values for $weight$ but those
-were leading to worse results. 
+were leading to worse results.
 
 It was  this association matrix $q_{i,j}$ that actually led to the
 best results of the challenge, as shown in Table \ref{tab:directivity}
