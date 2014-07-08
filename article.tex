@@ -110,11 +110,11 @@ Figure~\ref{fig:filtered-signal}.
 
 \begin{figure}
 \centering
-\subfigure[Raw signal]{\includegraphics[width=0.3\textwidth]{images/original_curve.pdf} \label{fig:original_curve}}
-\subfigure[Low-pass filter $f_1$]{\includegraphics[width=0.3\textwidth]{images/filter_curve.pdf} \label{fig:lp_curve}}
-\subfigure[High-pass filter $g$]{\includegraphics[width=0.3\textwidth]{images/diff_curve.pdf} \label{fig:hp_curve}}\\
-\subfigure[Hard-threshold filter $h$]{\includegraphics[width=0.3\textwidth]{images/threshold_curve.pdf} \label{fig:threshold_curve}}
-\subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{images/weights_curve.pdf} \label{fig:weight_curve}}
+\subfigure[Raw signal]{\includegraphics[width=0.3\textwidth]{original_curve.pdf} \label{fig:original_curve}}
+\subfigure[Low-pass filter $f_1$]{\includegraphics[width=0.3\textwidth]{filter_curve.pdf} \label{fig:lp_curve}}
+\subfigure[High-pass filter $g$]{\includegraphics[width=0.3\textwidth]{diff_curve.pdf} \label{fig:hp_curve}}\\
+\subfigure[Hard-threshold filter $h$]{\includegraphics[width=0.3\textwidth]{threshold_curve.pdf} \label{fig:threshold_curve}}
+\subfigure[Global regularization $w$]{\includegraphics[width=0.3\textwidth]{weights_curve.pdf} \label{fig:weight_curve}}
 \caption{Signal processing pipeline for extracting peaks from the raw fluorescence data.}
 \label{fig:filtered-signal}
 \end{figure}
@@ -512,8 +512,8 @@ as $0.995$ and an AUPRC of $0.789$.
 
 \begin{figure}[t]
 \centering
-\subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{images/curve_roc} \label{fig:roc_curve}}
-\subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{images/curve_pr} \label{fig:pr_curve}}
+\subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{curve_roc} \label{fig:roc_curve}}
+\subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{curve_pr} \label{fig:pr_curve}}
 \caption{ROC (left) and PR (right) curves on \textit{normal-2} for the compared methods. Areas under the curves are reported in the legend.}
 %% The weighted average of partial correlation matrix, winning approach
          %% of the challenge, yields better than AUROC and AUPRC than all
@@ -726,7 +726,7 @@ of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$).
 Like in the simplified method, we have averaged the partial correlation statistics obtained for all the pairs $(\tau,\mbox{low-pass filter}) \in \{0.100,0.101,\ldots,0.209\}\times \{f_1, f_2, f_3, f_4\}$.
 
 Filters $f_1$ and $f_2$ display similar performances and thus were given similar
-weights (i.e., resp. $0.383$ and $0.345$). These weights were chosen equal as the weights selected for the simplified method. In contrast, filters $f_3$
+weights (i.e., resp. $0.383$ and $0.345$). These weights were chosen equal to the weights selected for the simplified method. In contrast, filters $f_3$
 and $f_4$ turn out to be individually less competitive and were therefore given
 smaller importance in the weighted average (i.e., resp. $0.004$ and $0.268$). Yet, as further shown in
 Section~\ref{sapp:results}, combining all $4$ filters proves to slightly
