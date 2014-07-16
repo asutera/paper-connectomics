@@ -1,4 +1,7 @@
 \documentclass[wcp]{jmlr}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL article_old.tex   Wed Jul 16 16:34:16 2014
+%DIF ADD article.tex       Wed Jul 16 16:59:19 2014
 
 \usepackage{enumerate}
 \usepackage{bbold}
@@ -34,13 +37,32 @@
 
 % \jmlrauthors{A. Sutera et al}
 % \shortauthor{A. Sutera et al.}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
 
 \begin{document}
 
 \maketitle
 
-\vspace{-0.8cm}
-\begin{abstract}
+\DIFaddbegin \vspace{-0.8cm}
+\DIFaddend \begin{abstract}
 In this work, we propose a simple, but yet efficient method for the problem of
 connectome inference in calcium imaging data. The proposed algorithm consists of
 two steps. First, processing the raw signals to detect neural peak activities.
@@ -58,8 +80,11 @@ Connectomics - Network inference - Partial correlation
 \section{Introduction}\label{sec:intro}
 
 The human brain is a complex biological
-organ made of about 100 billions of neurons, each connected to 7000 other neurons on
-average \citep{pakkenberg2003aging}. Unfortunately, direct observation of the connectome, the wiring
+organ made of \DIFaddbegin \DIFadd{about }\DIFaddend 100 billions of neurons, each connected to 7000 other neurons on
+average \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citep{pakkenberg2003aging}
+}%DIFAUXCMD
+}\DIFaddend . Unfortunately, direct observation of the connectome, the wiring
 diagram of the brain, is not yet technically feasible. Without being perfect,
 calcium imaging currently allows the real-time and simultaneous observation of
 neuron activities from thousands of neurons, producing individual time series
@@ -82,7 +107,9 @@ neurons for $T$ time intervals, the goal is to infer the set $E$ of connections
 in $G$.}
 
 In this paper, we present a simplified -- yet nearly as good -- version of the
-winning method\footnote{Code available at \url{https://github.com/asutera/kaggle-connectomics}} of the Connectomics
+winning method\footnote{Code available at \DIFdelbegin %DIFDELCMD < \url{https://github.com/asutera
+%DIFDELCMD < /kaggle-connectomics}%%%
+\DIFdelend \DIFaddbegin \url{https://github.com/asutera/kaggle-connectomics}\DIFaddend } of the Connectomics
 Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
 partial correlation statistics. The paper is structured as follows:
@@ -104,7 +131,8 @@ by short periods of intense activities, or peaks, and longer periods of
 inactivity, the first part of our algorithm consists in cleaning the raw
 fluorescence data.
 More specifically, time series are processed using standard
-signal processing filters in order to (i) remove noise mainly due to fluctuations independent of calcium, calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues that have been mistakenly captured, or simply by the imaging process (ii) to account for fluorescence low decay and (iii) to reduce the importance of
+signal processing filters in order to \DIFdelbegin \DIFdel{remove noise due }\DIFdelend \DIFaddbegin \DIFadd{(i) remove noise mainly due to fluctuations independent of calcium, calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues that have been mistakenly captured, or simply by the imaging process (ii) }\DIFaddend to \DIFdelbegin \DIFdel{light scattering
+effects, to }\DIFdelend account for fluorescence low decay and \DIFaddbegin \DIFadd{(iii) }\DIFaddend to reduce the importance of
 global high activity in the network. The overall process is illustrated in
 Figure~\ref{fig:filtered-signal}.
 
@@ -131,11 +159,14 @@ f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
-These filters are standard in the signal processing field \citep{kaiser1977data, oppenheim1983signals}. The idea of the second one is to not consider future values and to introduce decreasing weights. For the sake of illustration, the effect of the filter $f_1$ on the signal
+\DIFaddbegin \DIFadd{These filters are standard in the signal processing field \mbox{%DIFAUXCMD
+\citep{kaiser1977data, oppenheim1983signals}
+}%DIFAUXCMD
+. The idea of the second one is to not consider future values and to introduce decreasing weights. }\DIFaddend For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
-Furthermore, short spikes, characterized by a high
-frequency, can be seen as an indirect indicator of neuron communications while low frequencies of the signal mainly correspond to the slow
+Furthermore, \DIFdelbegin \DIFdel{it can be observed that neurons communicate through }\DIFdelend short spikes, characterized by a high
+frequency, \DIFaddbegin \DIFadd{can be seen as an indirect indicator of neuron communications }\DIFaddend while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
@@ -149,7 +180,7 @@ hard-threshold filter
 \begin{align}\label{eqn:hfilter}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
-yielding Figure \ref{fig:threshold_curve} where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator function.
+yielding Figure \ref{fig:threshold_curve} \DIFaddbegin \DIFadd{where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator function}\DIFaddend .
 As we can see, the processed signal only contains clean spikes.
 
 The objective of the last step of our filtering procedure is to decrease the
@@ -244,7 +275,7 @@ samples than neurons, the covariance matrix can be inverted in a
 straightforward way. We nevertheless obtained some improvement by
 replacing the exact inverse with an approximation using only the $M$
 first principal components \citep{bishop2006pattern} (with
-$M=0.8 p$ in our experiments, see Appendix~\ref{app:pca}).
+$M=0.8 p$ in our experiments\DIFaddbegin \DIFadd{, see Appendix~\ref{app:pca}}\DIFaddend ).
 
 Finally, let us note that the performance of our simple method appears to
 be quite sensitive to the values of parameters (e.g., choice of $f_1$ or $f_2$
@@ -257,10 +288,115 @@ predictions. Further details about parameter selection are provided in
 Appendix~\ref{app:optimized}.
 
 
-\section{Experiments} \label{sec:results}
+%DIF <  Note on directionality
+\DIFdelbegin %DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % Our  connection inference  procedure  relies  on several  assumptions. First,
+%DIF < % we will assume that  the fluorescence concentrations of all $p$ neurons can be
+%DIF < % modeled as a set of random variables $X = \{X_1, \dots, X_p\}$  that are drawn
+%DIF < % from a time invariant joint  probability distribution $P_X$. Or, say otherwise,
+%DIF < % we assume that there exists a probability distribution $P_X$ such that the
+%DIF < % fluorescence concentrations at a particular time $t$ can be seen as an
+%DIF < % independent realization of $P_X$.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % To assess the presence of a connection between two neurons, we will
+%DIF < % use partial correlation statistics, which has been used extensively
+%DIF < % for the inference of gene regulatory networks \cite{}.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % To a joint probability distribution $P_X$ corresponds a
+%DIF < % graph where (i) each node is a random variable and (ii) two nodes are
+%DIF < % only connected if they correspond to two dependent variables. We assume that two neurons are
+%DIF < % connected if  and only if,  there exists  in this  graph an edge
+%DIF < % that connects  directly the  two random  variables to  which they correspond.
+%DIF < % In this context, it is equivalent to writing that two neurons $i$ and $j$ are  not  directly
+%DIF < % connected  if and only if  $X_i$  and $X_j$  are  conditionally independent
+%DIF < % with  respect to all  other variables. We remind  that two random  variables
+%DIF < % $X_i$  and  $X_j$  are  said  to  be  conditionally independent to a (possibly
+%DIF < % empty)  set of controlling random variables $Z$, denoted $X_i \perp X_j | Z$,
+%DIF < % if the joint conditional probability distribution   $P_{X_i,  X_j   |   Z}$
+%DIF < % factorizes  into   $P_{X_i|Z} P_{X_j|Z}$.  In particular,  when  $X_i$ and
+%DIF < % $X_j$ are  conditionally independent  with respect  to all  the other
+%DIF < % variables, denoted  $X_i \perp  X_j  | X^{-i,j}$,  then  the  observation  of
+%DIF < % $X_i$  given  the knowledge  of  $X^{-i,j}$ provides  no information  about
+%DIF < % $X_j$,  and vice-versa.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % In the  particular case where $P_X$ is  a joint  Gaussian distribution
+%DIF < % $\mathcal{N}(\mu; \Sigma)$ of mean  vector $\mu$ and covariance matrix
+%DIF < % $\Sigma$, $X_i$  and $X_j$ are conditionally  independent with respect to the
+%DIF < % other variables $X^{-i,j}$ if their \textit{partial correlation} statistic is
+%DIF < % null~\citep{baba2004partial}, i.e., if
+%DIF < % \begin{equation}
+%DIF < % \rho_{X_i, X_j | X^{-i,j}} = -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}} = 0, \label{eq:inverse}
+%DIF < % \end{equation}
+%DIF < % where $\Sigma^{-1}$ is known as the precision or concentration matrix.
+%DIF < % Conversely, $X_i$ and $X_j$ are conditionally dependent if $\rho_{X_i, X_j |
+%DIF < % X^{-i,j}} \neq 0$, where $\rho_{X_i, X_j | X^{-i,j}} \in [-1;1]$. Note that the
+%DIF < % larger the value of this term, the stronger the dependence between variables
+%DIF < % $X_i$ and $X_j$.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % Our approach implicitly makes the additional assumption  that $P_X$ is  a
+%DIF < % joint Gaussian distribution since it  outputs as degree of association
+%DIF < % between two neurons $i$ and $j$ an estimate of $\rho_{X_i, X_j | X^{-i,j}}$.
+%DIF < % Note also that the partial correlation
+%DIF < % statistic is symmetric  (i.e., $\rho_{X_i, X_j | X^{-i,j}} = \rho_{X_j, X_i |
+%DIF < % X^{-j,i}}$). Therefore, our approach cannot identify the direction of the interaction. We will see in Section~\ref{sec:results} why this only affects slightly its performances, with respect to the metric used in the Connectomics challenge.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % We now detail our procedure for estimating partial correlation
+%DIF < % statistics ($\rho_{X_i, X_j | X^{-i,j}}$) from the data. It first
+%DIF < % estimates the covariance matrix from the data. Afterwards, it computes
+%DIF < % the exact inverse of this matrix, from which it infers the value of
+%DIF < % $\rho_{X_i, X_j | X^{-i,j}}$ using equation (\ref{eq:inverse}). Note
+%DIF < % that we have also experimented procedures where the exact inverse was
+%DIF < % replaced by an approximation of it using only the $M$ principal
+%DIF < % components of $\Sigma$~\citep{bishop2006pattern} whose associated
+%DIF < % eigen values were significantly higher than zero. Such an
+%DIF < % approximation is equivalent to assume that the firing activity of all
+%DIF < % neurons can be explained by only a subset of them whose size is equal
+%DIF < % to $M$. We observed that those procedures were often leading to better
+%DIF < % results. Note that we found out by running expriments that the number
+%DIF < % $M$ of principal components is around $0.8p$ (see discussion in
+%DIF < % Appendix~\ref{app:REF} \textcolor{red}{REF}).
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF < % % Computationally, they can be estimated
+%DIF < % % % efficiently in $O(M^3)$ (instead of $O(p^3)$)
+%DIF < % % from the $M$ first principal
+%DIF < % % components extracted through PCA~\citep{bishop2006pattern} on the processed
+%DIF < % % data. While speeding up computation, it allows to further
+%DIF < % % filter the the data by removing the contribution of components that are respectively
+%DIF < % % due to redundancy or noise, i.e., with an eigen value respectively is equal to zero or close to zero.
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \section{Experiments} \label{sec:results}
 
 
-\paragraph{Data and evaluation metrics.}
+%DIF < % \textcolor{red}{to incorporate:
+%DIF < % To highlight the benefits of measuring the partial dependence conditional to
+%DIF < % all other variables, we compare in Section~\ref{sec:results} with the
+%DIF < % \textit{Pearson correlation} statistics, which measure instead the linear
+%DIF < % dependence between variables, independently of the others. Accordingly, $X_i$
+%DIF < % and $X_j$ are independent, without any conditioning, if their Pearson correlation statistic is zero, that
+%DIF < % is if
+%DIF < % \begin{equation}
+%DIF < % \rho_{X_i,X_j} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \Sigma_{jj}}} = 0.
+%DIF < % \end{equation}}
+\DIFdelbegin %DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \paragraph{Data and evaluation metrics.}
 
 We report here experiments on the \textit{normal-1,2,3}, and \textit{4}
 datasets provided by the organizers of the Connectomics challenge (see
@@ -820,27 +956,30 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 \section{About the number of principal components}
 \label{app:pca}
 
-As it can be seen on Figure~\ref{fig:pca}, only 800 components have a strictly positive value. Therefore, the value of the parameter $M$ is immediat and should be obviously set to $800$, or equivalently to $0.8p$. \\
+\DIFaddbegin \DIFadd{As it can be seen on Figure~\ref{fig:pca}, only 800 components have a strictly positive value. Therefore, the value of the parameter $M$ is immediat and should be obviously set to $800$, or equivalently to $0.8p$. }\\
 
-Maybe an explanation about what does it mean to have a compoment equal to zero (to do). \\
+\DIFadd{Maybe an explanation about what does it mean to have a compoment equal to zero (to do). }\\
 
-Figure (to do).
+\DIFadd{Figure (to do).
+}
 
-\section{Computational information}
+\DIFaddend \section{Computational information}
+\DIFaddbegin 
 
 
 \begin{table}[h]
-\caption{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}
+\caption{\DIFaddFL{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}}
 \label{tab:results_appendix}
 \centering
 \small
 \begin{tabular}{| l|c|c|c|} \hline
-Methods & Execution time & Scalability & Memory requirements \\ \hline
-Partial correlation & & & \\ 
-GTE  & & & \\
-GENIE3 & & & \\ \hline
+\DIFaddFL{Methods }& \DIFaddFL{Execution time }& \DIFaddFL{Scalability }& \DIFaddFL{Memory requirements }\\ \hline
+\DIFaddFL{Partial correlation }& & & \\ 
+\DIFaddFL{GTE  }& & & \\
+\DIFaddFL{GENIE3 }& & & \\ \hline
 \end{tabular}
 \end{table}
+\DIFaddend 
 
 \end{document}
 

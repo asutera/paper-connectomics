@@ -1,0 +1,123 @@
+\documentclass[wcp]{jmlr}
+
+\usepackage{enumerate}
+\usepackage{bbold}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+
+\jmlryear{2014}
+\jmlrworkshop{Neural Connectomics Workshop}
+
+\title{Simple connectome inference from partial correlation statistics in calcium imaging}
+
+  \author{\Name{Antonio Sutera},
+   \Name{Arnaud Joly},
+   \Name{Vincent François-Lavet}, \Email{a.sutera@ulg.ac.be}\\
+   \Name{Zixiao Aaron Qiu},
+   \Name{Gilles Louppe},
+   \Name{Damien Ernst}\and\Name{Pierre Geurts}
+    \\
+   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
+
+% \author{\Name{Antonio Sutera,
+%     Arnaud Joly,
+%         Vincent François-Lavet,\\
+%         Aaron Qiu,
+%         Gilles Louppe,
+%         Damien Ernst,
+%         Pierre Geurts}
+%   \Email{a.sutera@ulg.ac.be}\\
+%   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
+
+% \jmlrauthors{A. Sutera et al}
+% \shortauthor{A. Sutera et al.}
+
+\begin{document}
+
+\maketitle
+\begin{center}
+\vspace{-1.5cm}
+\today
+\end{center}
+
+We are grateful to the reviewers for reviewing our paper and we wish to thank them for providing us with helpful and constructive criticisms.
+We have modified our paper to take into account as best possible the reviewers' advices and we believe that our paper will benefit from that review. 
+
+
+\section*{Reviewer 1:}
+\textcolor{blue}{
+Better justify use of specific low-pass filters. How these filters were designed? Is this standard in the signal processing field? Will these filters apply to other problems or they need fine-tuning?}
+
+\textbf{A}: The first low-pass filter is standard in the signal processing field while the second is designed to take into account the time. This second filter is hovewever quite classical. We add justification and motivation in the paper.\\
+
+\noindent
+\textcolor{blue}{Is there sufficient sample and power to condition on all features excluding Xi and Xj when computing partial correlation coefficient?}
+
+\textbf{A}: It is mentioned in the paper that there are enough samples to invert the covariance matrix. We have not done a statistical analysis in the scope of this work because we only use the partial correlation to rank pairs and therefore a statistical analysis is not really needed to make that ranking. However, it would be interesting to do it in future works.
+
+\section*{Reviewer 2:}
+
+\textcolor{blue}{It would be necessary to have information about the computational complexity, scalability, memory requirements, and execution time for these methods.}
+
+\textbf{A}: We obviously agree with the reviewer that such informations are interesting, especially in the context of a challenge. We add a table with some interesting figures. However, let us note that the simple method presented in the paper already gives good performances despite its light computational needs.
+
+We also would like to mention that our code is available publicly on \url{https://github.com/asutera/kaggle-connectomics} and that some verifications, including memory requirements and execution time, of the full method are displayed on the challenge website \url{http://connectomics.chalearn.org/home/challenge-results-verification}.\\
+
+% \textcolor{blue}{- Soundness (good experiments, good proofs):  4\\}
+\noindent
+\textcolor{blue}{In section 4, PC, GTE, and GENIE3 are compared with other methods. Another worthwhile experiment would be to extract features using the procedure described by the authors, do a Principal Component Analysis(PCA), and then apply PC, etc. other methods.}
+
+\textbf{A}: We are not sure what exactly suggests the reviewer but applying PCA before PC, GTE and GENIE3 is not straighforward. Let us note that for each method we choose the preprocessing which yields the best performance.\\
+
+\noindent
+\textcolor{blue}{The authors have also used an additional relevant metric the AUPR beyond the challenge.}
+
+\textbf{A}: We thank the reviewer to note the interest of this second metric.\\
+
+% - Clarity: 5. 
+\noindent
+\textcolor{blue}{The paper, in general, is well organized. A figure/flowchart describing the workflow would be good visualization.}
+
+\textbf{A}: Because of the constraint on the number of pages (i.e., $6$), it is not really possible to include such a figure. But we agree the reviewer that such a figure would definitely improves the paper.\\
+
+
+% - Novelty/originality/insight: 4. 
+\noindent
+\textcolor{blue}{The paper describes preprocessing and filtering of calcium fluorescence data followed by partial correlation to identify connections.  The authors adequately describe the intuition behind the several steps of filtering they have applied.  The techniques are not new. However, this approach yielded great results.}
+
+\textbf{A}: We wish to thank the reviewer and we are happy that he or she points out that this approach yields great results.\\
+
+\noindent
+\textcolor{blue}{“The human brain is a complex……100 billion of neurons, each connected to 7000 other neurons on average” citation needed.\\
+Section 2, equation 4, symbols in equation need to be described.}
+%Arnaud?\\
+
+\textbf{A}: Introduction (Section~1) and Section~2 have been modified accordingly.\\
+
+\noindent
+\textcolor{blue}{In section 3, M principal components are used. However, the choice of M = 0.8p is not justified.}
+
+\textbf{A}: We agree with the reviewer that this choice is not justified in the paper. We have thus included in the appendix a justication of this specific value for the parameter $M$.
+
+%In Appendix?\\
+
+
+\section*{Reviewer 3:}
+
+
+\textcolor{blue}{The authors have concisely and clearly summarized their algorithm that led them to win the Connectomics Challenge. This paper is critical as a detailed explication of the winning algorithm is very useful to anyone desiring to implement this method, which will no doubt include many workshop attendees.  I have only minor corrections regarding some of the background explanations as I think clarity on the source of the problems faced by this challenge is crucial.}
+
+\textbf{A}: We wish to thank the reviewer for his or her judicious comments about the background explanations.\\
+
+\noindent
+\textcolor{blue}{Page 2, “signal is very noisy due to light scattering”  This is not entirely correct.  The signal is noisy due to many factors including but not limited to calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues which may be erroneously included in the region of interest due to poor region selection or poor imaging resolution, fluorescence fluctuations independent of calcium, and imaging noise in general (shot noise, dark noise,  electrical noise in the acquisition/digitisation system, etc).}
+
+\noindent
+\textcolor{blue}{Page 2, “neurons communicate through short spikes, characterized by a high frequency, while low frequencies of the signal mainly correspond to the slow decay of fluorescence”  Neurons generate electrical ‘spikes’, or action potentials, which are indeed characterized by a high frequency. However, the sharp rise in the signal observed in the fluorescent calcium indicator traces is due to the sudden influx of calcium that enters the cell during the action potential.  The decay is due to the slow decay, as stated.  But neurons communicate via neurotransmitter released by an action potential at synapses between the neurons. The ‘short spikes’ observed in the fluorescent traces therefore only very indirectly indicate whether two ‘neurons communicate’.}
+
+\textbf{A}: We agree and we have modified Section~2 accordingly to take into account these supplementary explanations.\\
+
+
+\end{document}
+
