@@ -820,12 +820,38 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 \section{About the number of principal components}
 \label{app:pca}
 
-As it can be seen on Figure~\ref{fig:pca}, only 800 components have a strictly positive value. Therefore, the value of the parameter $M$ is immediat and should be obviously set to $800$, or equivalently to $0.8p$. \\
+The main idea of principal component analysis (PCA) is to reduce the
+dimensionality of a dataset whose variables are interrelated
+\citep{jolliffe2005principal}. It consists in finding a new ordered set of
+uncorrelated variables, called the principal components, where the most
+principal components, i.e. the first variables, hold most of the data variation, also denoted as
+variance, scattered in all the original variables.
 
-Maybe an explanation about what does it mean to have a compoment equal to zero (to do). \\
+Figure~\ref{fig:pca} shows the explained variance by compoments and gives a hint about the number of uncorrelated variables required to
+explain all the variation in the original data.
 
-Figure (to do).
+The singular value decomposition (SVD) relies on the fact that every matrix -
+not only square matrices - can be decomposed into a diagonal nonnegative
+matrix with the help of two unit matrices \citep{alter2000singular}.
 
+The terms of the diagonal matrix can be used to determine the fraction of the
+overall information hold by the components in the decomposition and therefore
+give the relative significance of the components \citep{alter2000singular}.
+Figure~\ref{fig:SVD} displays the singular value ratio of all networks in the
+challenge.
+
+Obvioulsy, Figure~\ref{fig:pca} shows that for both approaches only 800
+components are required to explain the (majority of) network structures.
+Therefore, the value of the parameter $M$ is immediat and should be obviously
+set to $800$, or equivalently to $0.8p$. \\
+
+\begin{figure}[t]
+\centering
+\subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
+\subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
+\caption{Explained variance ratio by component (left) and singular value ratio by component (right) for all networks.}
+\label{fig:pca}
+\end{figure}
 \section{Computational information}
 
 
