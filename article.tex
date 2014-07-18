@@ -822,13 +822,12 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 
 The main idea of principal component analysis (PCA) is to reduce the
 dimensionality of a dataset whose variables are interrelated
-\citep{jolliffe2005principal}. It consists in finding a new ordered set of
-uncorrelated variables, called the principal components, where the most
-principal components, i.e. the first variables, hold most of the data variation, also denoted as
-variance, scattered in all the original variables.
+\citep{jolliffe2005principal}. It consists in finding a new set of
+uncorrelated variables, denoted as principal components, where the most
+principal components, assuming an order between the components, hold most of the variance of the data scattered in all the original variables.
 
-Figure~\ref{fig:pca} shows the explained variance by compoments and gives a hint about the number of uncorrelated variables required to
-explain all the variation in the original data.
+Figure~\ref{fig:pca} shows the explained variance (ratio) by compoments and gives a hint about the number of uncorrelated variables required to
+explain all - or, at least, the majority of -  the variation in the original data.
 
 The singular value decomposition (SVD) relies on the fact that every matrix -
 not only square matrices - can be decomposed into a diagonal nonnegative
@@ -854,17 +853,20 @@ set to $800$, or equivalently to $0.8p$. \\
 \end{figure}
 \section{Computational information}
 
+To perform experiments, we used a Macbook Pro (2014) with a ram memory 16Go 1600 MHz DDR3 and a processor 2.3GHz Intel Core i7.
+
+In order to compare the execution time with other methods, it takes about xx and xx hours to compute respectively GTE and GENIE3. However, GENIE3 is highly parallelizable (by taking several smaller forests or applying GENIE3 on subsets of variables) and the execution time can be significantly reduced. 
 
 \begin{table}[h]
 \caption{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}
 \label{tab:results_appendix}
 \centering
 \small
-\begin{tabular}{| l|c|c|c|} \hline
-Methods & Execution time & Scalability & Memory requirements \\ \hline
-Partial correlation & & & \\ 
-GTE  & & & \\
-GENIE3 & & & \\ \hline
+\begin{tabular}{| l|c|c|} \hline
+Methods & Execution time  & Memory requirements \\ \hline
+PC & & $\sim$5Go\\
+Averaging & & \\
+Full Method & & \\ \hline
 \end{tabular}
 \end{table}
 
