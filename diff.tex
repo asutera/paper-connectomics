@@ -1,7 +1,7 @@
 \documentclass[wcp]{jmlr}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL article_old.tex   Wed Jul 16 16:34:16 2014
-%DIF ADD article.tex       Wed Jul 16 16:59:19 2014
+%DIF DEL article_old.tex   Sat Jul 19 23:00:53 2014
+%DIF ADD article.tex       Sat Jul 19 22:38:59 2014
 
 \usepackage{enumerate}
 \usepackage{bbold}
@@ -955,30 +955,71 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 
 \section{About the number of principal components}
 \label{app:pca}
-
-\DIFaddbegin \DIFadd{As it can be seen on Figure~\ref{fig:pca}, only 800 components have a strictly positive value. Therefore, the value of the parameter $M$ is immediat and should be obviously set to $800$, or equivalently to $0.8p$. }\\
-
-\DIFadd{Maybe an explanation about what does it mean to have a compoment equal to zero (to do). }\\
-
-\DIFadd{Figure (to do).
-}
-
-\DIFaddend \section{Computational information}
 \DIFaddbegin 
 
+\DIFadd{The main idea of principal component analysis (PCA) is to reduce the
+dimensionality of a dataset whose variables are interrelated
+\mbox{%DIFAUXCMD
+\citep{jolliffe2005principal}
+}%DIFAUXCMD
+. It consists in finding a new set of
+uncorrelated variables, denoted as principal components, where the most
+principal components, assuming an order between the components, hold most of the variance of the data scattered in all the original variables.
+}
 
-\begin{table}[h]
-\caption{\DIFaddFL{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}}
-\label{tab:results_appendix}
+\DIFadd{Figure~\ref{fig:pca} shows the explained variance (ratio) by compoments and gives a hint about the number of uncorrelated variables required to
+explain all - or, at least, the majority of -  the variation in the original data.
+}
+
+\DIFadd{The singular value decomposition (SVD) relies on the fact that every matrix -
+not only square matrices - can be decomposed into a diagonal nonnegative
+matrix with the help of two unit matrices \mbox{%DIFAUXCMD
+\citep{alter2000singular}
+}%DIFAUXCMD
+.
+}
+
+\DIFadd{The terms of the diagonal matrix can be used to determine the fraction of the
+overall information hold by the components in the decomposition and therefore
+give the relative significance of the components \mbox{%DIFAUXCMD
+\citep{alter2000singular}
+}%DIFAUXCMD
+.
+Figure~\ref{fig:SVD} displays the singular value ratio of all networks in the
+challenge.
+}
+
+\DIFadd{Obvioulsy, Figure~\ref{fig:pca} shows that for both approaches only 800
+components are required to explain the (majority of) network structures.
+Therefore, the value of the parameter $M$ is immediat and should be clearly
+set to $800$, or equivalently to $0.8p$. }\\
+
+\begin{figure}[t]
 \centering
-\small
-\begin{tabular}{| l|c|c|c|} \hline
-\DIFaddFL{Methods }& \DIFaddFL{Execution time }& \DIFaddFL{Scalability }& \DIFaddFL{Memory requirements }\\ \hline
-\DIFaddFL{Partial correlation }& & & \\ 
-\DIFaddFL{GTE  }& & & \\
-\DIFaddFL{GENIE3 }& & & \\ \hline
-\end{tabular}
-\end{table}
+\subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
+\subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
+\caption{\DIFaddFL{Explained variance ratio by component (left) and singular value ratio by component (right) for all networks.}}
+\label{fig:pca}
+\end{figure}
+
+%DIF >  \section{Computational information}
+
+%DIF >  To perform experiments, we used a Macbook Pro (2014) with a ram memory 16Go 1600 MHz DDR3 and a processor 2.3GHz Intel Core i7.
+
+%DIF >  In order to compare the execution time with other methods, it takes about xx and xx hours to compute respectively GTE and GENIE3. However, GENIE3 is highly parallelizable (by taking several smaller forests or applying GENIE3 on subsets of variables) and the execution time can be significantly reduced. 
+
+%DIF >  \begin{table}[h]
+%DIF >  \caption{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}
+%DIF >  \label{tab:results_appendix}
+%DIF >  \centering
+%DIF >  \small
+%DIF >  \begin{tabular}{| l|c|c|} \hline
+%DIF >  Methods & Execution time  & Memory requirements \\ \hline
+%DIF >  PC & & $\sim$5Go\\
+%DIF >  Averaging & & \\
+%DIF >  Full Method & & \\ \hline
+%DIF >  \end{tabular}
+%DIF >  \end{table}
 \DIFaddend 
 
 \end{document}
