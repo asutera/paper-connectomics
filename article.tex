@@ -58,7 +58,7 @@ Connectomics - Network inference - Partial correlation
 \section{Introduction}\label{sec:intro}
 
 The human brain is a complex biological
-organ made of about 100 billions of neurons, each connected to 7000 other neurons on
+organ made of about 100 billion of neurons, each connected to 7000 other neurons on
 average \citep{pakkenberg2003aging}. Unfortunately, direct observation of the connectome, the wiring
 diagram of the brain, is not yet technically feasible. Without being perfect,
 calcium imaging currently allows the real-time and simultaneous observation of
@@ -131,11 +131,11 @@ f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
-These filters are standard in the signal processing field \citep{kaiser1977data, oppenheim1983signals}. The idea of the second one is to not consider future values and to introduce decreasing weights. For the sake of illustration, the effect of the filter $f_1$ on the signal
+These filters are standard in the signal processing field \citep{kaiser1977data, oppenheim1983signals}. For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
 Furthermore, short spikes, characterized by a high
-frequency, can be seen as an indirect indicator of neuron communications while low frequencies of the signal mainly correspond to the slow
+frequency, can be seen as an indirect indicator of neuron communication while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
@@ -841,6 +841,9 @@ challenge.
 
 Obvioulsy, Figure~\ref{fig:pca} shows that for both approaches only 800
 components are required to explain the (majority of) network structures.
+There, we can conclude that the value of $M$ should be set to 800, or equivalently, to $0.8 p$.
+
+
 Therefore, the value of the parameter $M$ is immediat and should be clearly
 set to $800$, or equivalently to $0.8p$. \\
 
@@ -848,7 +851,7 @@ set to $800$, or equivalently to $0.8p$. \\
 \centering
 \subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
 \subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
-\caption{Explained variance ratio by component (left) and singular value ratio by component (right) for all networks.}
+\caption{Explained variance ratio by number of principal components (left) and singular value ratio by number of principal components (right) for all networks.}
 \label{fig:pca}
 \end{figure}
 

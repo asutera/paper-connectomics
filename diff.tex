@@ -1,7 +1,7 @@
 \documentclass[wcp]{jmlr}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL article_old.tex   Sat Jul 19 23:00:53 2014
-%DIF ADD article.tex       Sat Jul 19 22:38:59 2014
+%DIF ADD article.tex       Mon Jul 21 16:56:35 2014
 
 \usepackage{enumerate}
 \usepackage{bbold}
@@ -80,7 +80,7 @@ Connectomics - Network inference - Partial correlation
 \section{Introduction}\label{sec:intro}
 
 The human brain is a complex biological
-organ made of \DIFaddbegin \DIFadd{about }\DIFaddend 100 billions of neurons, each connected to 7000 other neurons on
+organ made of \DIFaddbegin \DIFadd{about }\DIFaddend 100 \DIFdelbegin \DIFdel{billions }\DIFdelend \DIFaddbegin \DIFadd{billion }\DIFaddend of neurons, each connected to 7000 other neurons on
 average \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
 \citep{pakkenberg2003aging}
 }%DIFAUXCMD
@@ -162,11 +162,11 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \DIFaddbegin \DIFadd{These filters are standard in the signal processing field \mbox{%DIFAUXCMD
 \citep{kaiser1977data, oppenheim1983signals}
 }%DIFAUXCMD
-. The idea of the second one is to not consider future values and to introduce decreasing weights. }\DIFaddend For the sake of illustration, the effect of the filter $f_1$ on the signal
+. }\DIFaddend For the sake of illustration, the effect of the filter $f_1$ on the signal
 is shown in Figure \ref{fig:lp_curve}.
 
 Furthermore, \DIFdelbegin \DIFdel{it can be observed that neurons communicate through }\DIFdelend short spikes, characterized by a high
-frequency, \DIFaddbegin \DIFadd{can be seen as an indirect indicator of neuron communications }\DIFaddend while low frequencies of the signal mainly correspond to the slow
+frequency, \DIFaddbegin \DIFadd{can be seen as an indirect indicator of neuron communication }\DIFaddend while low frequencies of the signal mainly correspond to the slow
 decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
 difference
 \begin{align}
@@ -991,14 +991,18 @@ challenge.
 
 \DIFadd{Obvioulsy, Figure~\ref{fig:pca} shows that for both approaches only 800
 components are required to explain the (majority of) network structures.
-Therefore, the value of the parameter $M$ is immediat and should be clearly
+There, we can conclude that the value of $M$ should be set to 800, or equivalently, to $0.8 p$.
+}
+
+
+\DIFadd{Therefore, the value of the parameter $M$ is immediat and should be clearly
 set to $800$, or equivalently to $0.8p$. }\\
 
 \begin{figure}[t]
 \centering
 \subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
 \subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
-\caption{\DIFaddFL{Explained variance ratio by component (left) and singular value ratio by component (right) for all networks.}}
+\caption{\DIFaddFL{Explained variance ratio by number of principal components (left) and singular value ratio by number of principal components (right) for all networks.}}
 \label{fig:pca}
 \end{figure}
 
