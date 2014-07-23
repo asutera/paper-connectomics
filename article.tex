@@ -206,7 +206,7 @@ random variables $X_i$ and $X_j$, defined by:
 p_{i,j} =
 -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
-where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. 
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.
 Assuming that the distribution $P_X$ is a multivariate Gaussian
 distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
@@ -627,41 +627,38 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 \end{tabular}
 \end{table}
 
-\section{About the number of principal components}
+\section{On the selection of the number of principal components}
 \label{app:pca}
 
-The main idea of principal component analysis (PCA) is to reduce the
-dimensionality of a dataset whose variables are interrelated
-\citep{jolliffe2005principal}. It consists in finding a new set of
-uncorrelated variables, denoted as principal components, where the most
-principal components, assuming an order between the components, hold most of the variance of the data scattered in all the original variables.
+The connectomes, defined by the graph $G = (V, E)$,  can be represented by an
+adjacency matrix $A: a_{i,j} = \mathbb{1}((i, j) \in E)$. The matrix can be
+decomposed through a singular value decomposition (SVD) or principal components
+analysis (PCA) as to determine a set of independent linear combinations of the
+variable \citep{alter2000singular} or respectively a reduced  set of linear
+combination combine which maximize the explained variance of the data
+\citep{jolliffe2005principal}. Otherwise said, both SVD and PCA aims at finding
+a reduced set of neurons whose activity can explain the rest of the network.
+Note that those two methods while having slightly different objective are
+related.
 
-Figure~\ref{fig:pca} shows the explained variance (ratio) by compoments and gives a hint about the number of uncorrelated variables required to
-explain all - or, at least, the majority of -  the variation in the original data.
+From all the available datasets, one can study the distribution of eigen value
+obtained from PCA and SVD decomposition by sorting them in descending order of
+magnitude as illustrated on Figure \ref{fig:pca}. For both methods, the  200
+lowest eigen values are zero. Thus, the behavior of the network could be
+explained by 800 linear combination of the variables which could be explained
+by the redundancy and relation between the neurons.
 
-The singular value decomposition (SVD) relies on the fact that every matrix -
-not only square matrices - can be decomposed into a diagonal nonnegative
-matrix with the help of two unit matrices \citep{alter2000singular}.
+In the context of the challenge, we exploit this information to keep only  $M =
+0.8p$ components when computing the partial correlation statistics. Without
+those comparative network, one could perform a similar decomposition analysis
+on the data.
 
-The terms of the diagonal matrix can be used to determine the fraction of the
-overall information hold by the components in the decomposition and therefore
-give the relative significance of the components \citep{alter2000singular}.
-Figure~\ref{fig:SVD} displays the singular value ratio of all networks in the
-challenge.
-
-Obvioulsy, Figure~\ref{fig:pca} shows that for both approaches only 800
-components are required to explain the (majority of) network structures.
-There, we can conclude that the value of $M$ should be set to 800, or equivalently, to $0.8 p$.
-
-
-Therefore, the value of the parameter $M$ is immediat and should be clearly
-set to $800$, or equivalently to $0.8p$. \\
 
 \begin{figure}[t]
 \centering
 \subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
 \subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
-\caption{Explained variance ratio by number of principal components (left) and singular value ratio by number of principal components (right) for all networks.}
+\caption{Explained variance ratio by index of principal components (left) and singular value ratio by index of principal components (right) for all networks sorted by descending order of magnitude.}
 \label{fig:pca}
 \end{figure}
 
