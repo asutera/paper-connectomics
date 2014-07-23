@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage{natbib}
 \usepackage[utf8]{inputenc}
+\usepackage[super]{nth}
 
 \jmlryear{2014}
 \jmlrworkshop{Neural Connectomics Workshop}
@@ -205,11 +206,7 @@ random variables $X_i$ and $X_j$, defined by:
 p_{i,j} =
 -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
-where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. %%  Partial
-%% correlation can be interpreted in several ways. The partial
-%% correlation coefficient $p_{i,j}$ can be shown to measure the
-%% correlation between $X_i$ and $X_j$ when they are corrected for the
-%% (linear) effect of all other variables in $X$ \cite{}.
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. 
 Assuming that the distribution $P_X$ is a multivariate Gaussian
 distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
@@ -220,16 +217,7 @@ between neurons and filter out spurious indirect effects. The interest
 of partial correlation as an association measure has already been
 shown for the inference of gene regulatory networks
 \citep{de2004discovery,Schafer:2005}.
-%% Given a set of multivariate Gaussian
-%% random variables $X$, the (undirected) graph that connects all pairs
-%% of variables $X_i$ and $X_j$ such that $p_{i,j}\neq 0$ is called a
-%% Gaussian graphical models (GGMs). Because it measures conditional
-%% dependencies, partial correlation should naturally only detect direct
-%% associations between neurons. The superiority of partial correlation
-%% over standard correlation as an association measure have already been
-%% shown in the context of the inference of gene regulatory networks from
-%% gene expression data \cite{}. We will compare both measures in Section
-%% \ref{sec:results}.
+
 Note that the partial correlation statistic is symmetric
 (i.e. $p_{i,j}=p_{j,i}$). Therefore, our approach cannot identify the
 direction of the interactions between neurons. We will see in
@@ -296,7 +284,6 @@ tuning was decisive to obtain the best performance at the challenge,
 it does not significantly improve neither AUROC nor AUPRC.
 
 \begin{table}[t]
-%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
 Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
 \label{tab:comparison}
@@ -349,46 +336,6 @@ used default settings for all other parameters (except for the maximal tree
 depth). For GTE, we reproduced the exact same setting (conditioning level and
 pre-processing) that was used by the organizers of the challenge.
 
-%% To assess our method, we focus on the \textit{normal-2} dataset
-%% provided by the organizers of the Connectomics challenge. Experiments
-%% on \textit{normal-1, normal-3, normal-4} show similar trends to
-%% \textit{normal-2} and are presented in the Appendix \textcolor{red}{REF}.
-%% Those datasets have $p=1000$ time series of length $T=179500$ of image
-%% calcium from simulated neuronal networks \citep{stetter2012model}. Each of these
-%% networks contains approximately 15000 edges.
-
-%% % Metrics : ROC AUC and AUPRC
-%% In supervised learning terms, the network inference task can be viewed as a
-%% binary classification task where one has to correctly classify the presence or
-%% the absence of edges of the graph. We assess the accuracy of the network
-%% inference method using the area under the ROC curve (AUROC) and the area under
-%% the precision-recall curve (AUPRC) \citep{schrynemackers2013protocols}.
-
-
-%% The proposed approach is compared to Pearson correlation statistics
-%% (as described in Section~\ref{sec:inference}), generalized transfer
-%% entropy (GTE) and the GENIE3 algorithm.
-%% \begin{itemize}
-%% \item \textbf{GTE} \citep{stetter2012model}, the baseline of the challenge,
-%% measures for all pairs of neurons $i$ and $j$ the reduction of uncertainty in
-%% predicting future values of $i$ given the observation of the time series of the
-%% neuron $j$ conditionally to the observation of past time series of neuron $i$,
-%% whenever the average fluorescence is over a conditioning level. Pre-processing
-%% and conditioning level were set to reproduce baseline of the challenge.
-
-%% \item \textbf{GENIE3} \citep{huynhthu2010inferring} translates the inference
-%% of the network of $p$ neurons into $p$ supervised learning tasks. For each
-%% task, the fluorescence of a neuron is predicted from the fluorescence of all
-%% other neurons using a tree based ensemble such as random forest
-%% \citep{breiman2001random}. The tree ensemble associates a variable importance
-%% score \citep{louppe2013understanding} to each neuron used in the predictions,
-%% which is used as a degree of associate. The following parameters are used
-%% $10000$ trees, $\log_2{p}$ variables are randomly selected to split tree nodes
-%% and the maximal tree depth is constrained to 1, 2 or 3. \textcolor{red}{AJ Which
-%% depth is represented on the graph?}
-%% \end{itemize}
-
-%% \subsection*{Partial correlation improves over state-of-the-art methods}
 
 Partial correlation and averaged partial correlation clearly outperform all
 other methods on all datasets (see Table \ref{tab:comparison} and Appendix \ref{app:supp}). The
@@ -411,79 +358,14 @@ undirected network (i.e., that gives a score of $1$ to each pair $(i,j)$ such th
 $(i,j)\in E$ or $(j,i)\in E$, and $0$ otherwise) already reaches an AUROC as high
 as $0.995$ and an AUPRC of $0.789$.
 
-
-%% bu by about a factor
-%% of 2 in AUPRC reaching $0.347$ and an increased of $0.03$ in
-%% AUROC. Averaging Partial correlation matrix over a wide of parameters
-%% further improves AUPRC to $0.389$ and improve AUROC by $0.009$.  Two
-%% reasons might explain such differences: (i) only the partial
-%% correlation-based methods and GENI3 at lesser extent distinguish
-%% direct links from indirect one, (ii) simulated networks from the
-%% \citep{stetter2012model} generator or neural networks in general could
-%% be reduced to a linear model after pre-processing. Those results
-%% generalizes over the other datasets see Appendix \textcolor{red}{REF}.
-
 \begin{figure}[t]
 \centering
 \subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{curve_roc} \label{fig:roc_curve}}
 \subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{curve_pr} \label{fig:pr_curve}}
 \caption{ROC (left) and PR (right) curves on \textit{normal-2} for the compared methods. Areas under the curves are reported in the legend.}
-%% The weighted average of partial correlation matrix, winning approach
-         %% of the challenge, yields better than AUROC and AUPRC than all
-         %% other state-of-the-art methods. (parameters: $\tau=0.11$ except for
-         %% averaged partial correlation method, partial correlation used
-         %% filter $f_1$). Area under the curves are given between $()$
-         %% for the corresponding methods.
-%}
+
 \label{fig:curves}
 \end{figure}
-
-%% \textcolor{red}{Only one GENI3, thus it can't be observed.}
-%% As observed on Figure \ref{fig:curves}, the GENIE3 performance increases with
-%% deeper trees while being still computationally feasible. The reason is twofold.
-%% First, the deeper the tree, the larger is the conditioning. \textcolor{red}{AJ:
-%% conditioning?} As it was observed in the comparison between correlation and
-%% partial correlation, it screens indirect links in the inferred network.
-%% \textcolor{red}{AJ: I don't understand the link with GENIE3} Second, the number
-%% of small trees need to be much higher than deep trees in order to observe - and
-%% evaluate - all pairs.  However, as suggested by \cite{louppe2014understanding},
-%% limiting the maximal depth of trees may help to improve the variable importance
-%% computing, i.e. inferring the degree of association. \textcolor{red}{AJ: there
-%% is no explanation of why it would be better apart for computational reason.}
-%% Therefore a trade-off  of the maximal depth may give the best of both worlds.
-%% \textcolor{red}{AJ:  Which tradeoff? Which worlds?}
-
-
-%\subsection*{ROC versus PR curves.}
-
-%% The best method only infers the \textbf{undirected} network by giving the same
-%% degree of association to both edges $(i,j)$ and $(j,i)$. This is quite
-%% surprising considering the problem statement. Trying to direct links could be
-%% more penalizing than rewarding. For example, symmetrizing the degree of
-%% association matrix does not necessarily degrade AUPRC and AUROC.
-
-
-%% If the inferred network corresponds to the undirected network, it would
-%% already yield high AUROC score for instance $\approx 0.996$ on
-%% \textit{normal-1}. Infering edge directivity is likely to be counter-
-%% productive or yield small gain. By contrast, the same experiment with AUPRC
-%% would yield a score of $\approx 0.789$ on \textit{normal-1}. Thus inferring
-%% correctly directivity would be more rewarding in AUPRC term.
-
-%% % Interestingly, methods that takes into account directivity, namely GTE and
-%% % GENIE3, improve their AUROC and AUPRC by giving the same way to directed edges.
-%% % (in particular see GTE and GTE(undirected) in Figure \ref{fig:pr_curve}
-%% % \textcolor{red}{AJ: Figure \ref{fig:curves}  contradicts this message,
-%% % especially pr-curve. AS:And now?} and Table \ref{tab:tab1} in Appendix \textcolor{red}{REF}).
-%% % Trying to detect the link direction is more penalizing than rewarding.
-
-%% The area under the ROC curve is not a consistent metric with respect to the
-%% problem statement. A clear hierarchy is also difficult to derive from ROC
-%% curves as shown on Figure \ref{fig:roc_curve}. We advice to avoid the AUROC for
-%% the assessment of network inference method. An alternative would be to assess
-%% network inference using the area under the precision-recall curve (AUPRC).
-%% Those conclusions are in line with \cite{schrynemackers2013protocols}.
-
 
 \section{Conclusions} \label{sec:conclusion}
 
@@ -505,14 +387,8 @@ recipient of a FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
 PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
 Office.
 
-
-
 \newpage
 \clearpage
-
-% We allow the bibliography to be added on top of the 6 pages.
-% Supplementary material may be added in the form or a URL pointed to from
-% the paper.
 
 \bibliography{references}
 
@@ -545,11 +421,6 @@ Section~\ref{sapp:connectome} presents an approach to correct the $p_{i,j}$
 values so as to take into account the edge directionality. Finally,
 Section~\ref{sapp:results} presents some experimental results to validate the
 different steps of our proposal.
-
-% Let us remark that tuning
-% was mainly done on the \textit{normal-1} and \textit{normal-4}
-% datasets, which explains why these two networks are slightly better
-% retrieved than the others.
 
 \subsection{Signal processing}
 \label{sapp:signal}
@@ -585,50 +456,6 @@ $k(\sum_j x_j^t)=1$.
 The pre-processed time-series are then obtained by the application of the
 following function: $w^*\circ r \circ h \circ g \circ f_i$ (with $i=1$, 2, 3, or 4).
 
-%% two composed filtering functions in
-%% order (i) to remove noise induced by light scattering artifact, (ii) to take
-%% into account the slow decay of fluorescence signal and (iii) to reduce the
-%% importance of global high activity in the network. However, in order to win the
-%% challenge, we have heavily optimized several different, but yet similar,
-%% filtering composed function. On the one hand, each part of the composed
-%% functions is optimized to maximize the ROC AUC (e.g., $w^*$). On the other
-%% hand, we introduce new functions (e.g., $f_3$ and $f_4$) leading to alternative
-%% composed functions. They might lead to worse ROC AUC when taken individually
-%% but they improve the overall ROC AUC when taking as a part of the averaging
-%% approach.
-
-% Taken individually, those composed functions in
-% conjunction with partial correlation might lead to worse AUROC, but improved
-% whenever they are averaged.
-
-%% Besides filters $f_1$ and $f_2$ respectively defined by equations \ref{eq:symetric-median}
-%% and \ref{eq:weighted-asymetric-median}, we also consider two
-%% other low-pass filters
-%% \begin{align}
-%% f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
-%% f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
-%% \end{align}
-
-%% After the hard thresholded filter $h$, they were significant differences in
-%% peak magnitudes. Since time series $x_i^t$  were mainly between 0 and 1,
-%% we smoothened these differences in peak magnitudes through
-%% \begin{align}
-%% p(x^t_i) = (x_i^t)^c
-%% \end{align}
-%% yielding slightly better AUROC with $c=0.9 \in (0, 1)$.
-
-%% After filter $p$, we applied a filter $w^*$ similar to $w$, whose goal is also
-%% to magnify the importance of spikes that occur in case of low global activity.
-%% Instead of equation \ref{eq:magnify-filter}, we had
-%% \begin{align}
-%%  w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
-%% \end{align}
-%% where the function $k$ is a piecewise linear function optimized for each filter
-%% $f_1$, $f_2$, $f_3$ and $f_4$. By comparison, the filter $w$ used the following
-%% function $k(\sum_{j} x^{t}_j) = 1$. For more details on this aspect, we refer
-%% the reader to the implementation \footnote{available on
-%% \url{https://github.com/asutera/kaggle- connectomics}.}.
-
 \subsection{Weighted average of partial correlation statistics}
 \label{sapp:averaging}
 
@@ -644,13 +471,6 @@ and $f_4$ turn out to be individually less competitive and were therefore given
 smaller importance in the weighted average (i.e., resp. $0.004$ and $0.268$). Yet, as further shown in
 Section~\ref{sapp:results}, combining all $4$ filters proves to slightly
 improve performance with respect to using $f_1$ and $f_2$ only.
-
-%% Given the unequal AUROC performance of $f_1$, $f_2$, $f_3$ and $f_4$, the
-%% contribution of each filter in the degree of association between two neurons
-%% was chosen as to maximize the AUROC on \textit{normal-1} and is function of
-%% their individual performance. By comparison in the simple method, each filter
-%% $f_1$ and $f_2$ were given equal weight.
-
 
 \subsection{Prediction of edge orientation}
 \label{sapp:connectome}
@@ -717,18 +537,11 @@ of Section~\ref{sapp:results}.
 
 \paragraph{On the interest of low-pass filters $f_3$ and $f_4$.}
 
-%%% SHOW DIFFERENTS COMPOSED FUNCTION
-
-
-% Theses filters lead, taken individually, to worse performances  than filters
-% $f_1$ and $f_2$ but averaging the results of all low-pass filters leads to better ROC AUC.
-
 As reported in Table~\ref{tab:f3f4}, averaging over all low-pass filters leads
 to better AUROC scores than averaging over only two low-pass filters, i.e., $f_1$ and
 $f_2$. It however slightly deteriorates AUPRC.
 
 \begin{table}[ht]
-%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \caption{Performance on \textit{normal-1, 2, 3, or 4} with partial correlation with different averaging approaches.}
 \label{tab:f3f4}
 \centering
@@ -753,8 +566,6 @@ Table~\ref{tab:dir} compares AUROC and AUPRC with or without correcting the $p_{
 \caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and
   without using information about directivity.}
 \label{tab:directivity}
-
-%\caption{Evaluation of different methods on the four \textit{normal} datasets\label{tab:comparison}}
 \centering
 \small
 \begin{tabular}{| l | c c c c | c c c c |}
@@ -801,7 +612,6 @@ performs better than GTE most of the times. Note that the "Full method" reported
 \hline
 & \multicolumn{6}{c|}{AUROC}\\
 \textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} \\
-\hline
 \hline
 Averaging     & 0.947 & 0.943 & 0.920 & 0.942 & 0.959 & 0.934 \\
 Full method   & \textbf{0.955} & \textbf{0.944} &  \textbf{0.925} & \textbf{0.946} & \textbf{0.961} & \textbf{0.941} \\
@@ -855,24 +665,20 @@ set to $800$, or equivalently to $0.8p$. \\
 \label{fig:pca}
 \end{figure}
 
-% \section{Computational information}
+\section{Summary Table}
 
-% To perform experiments, we used a Macbook Pro (2014) with a ram memory 16Go 1600 MHz DDR3 and a processor 2.3GHz Intel Core i7.
-
-% In order to compare the execution time with other methods, it takes about xx and xx hours to compute respectively GTE and GENIE3. However, GENIE3 is highly parallelizable (by taking several smaller forests or applying GENIE3 on subsets of variables) and the execution time can be significantly reduced. 
-
-% \begin{table}[h]
-% \caption{Execution time, scalability, memory requirements for methods described in the paper. \textcolor{red}{to do.}}
-% \label{tab:results_appendix}
-% \centering
-% \small
-% \begin{tabular}{| l|c|c|} \hline
-% Methods & Execution time  & Memory requirements \\ \hline
-% PC & & $\sim$5Go\\
-% Averaging & & \\
-% Full Method & & \\ \hline
-% \end{tabular}
-% \end{table}
+\begin{table}[h]
+\caption{Connectomics challenge summary.}
+\label{tab:summary}
+\centering
+\small
+\begin{tabular}{| l|c|} \hline
+Team Name & The AAAGV Team \\ \hline
+Private leaderboard position & \nth{1} \\ \hline
+Private leaderboard performance & 0.94161 \\ \hline
+Private leaderbard performance of the winner & / \\ \hline
+\end{tabular}
+\end{table}
 
 \end{document}
 
