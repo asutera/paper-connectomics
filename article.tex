@@ -21,21 +21,6 @@
     \\
    \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
 
-
-
-% \author{\Name{Antonio Sutera,
-%     Arnaud Joly,
-%         Vincent François-Lavet,\\
-%         Aaron Qiu,
-%         Gilles Louppe,
-%         Damien Ernst,
-%         Pierre Geurts}
-%   \Email{a.sutera@ulg.ac.be}\\
-%   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
-
-% \jmlrauthors{A. Sutera et al}
-% \shortauthor{A. Sutera et al.}
-
 \begin{document}
 
 \maketitle
@@ -88,7 +73,7 @@ Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
 partial correlation statistics. The paper is structured as follows:
 Section~\ref{sec:filter} describes the signal processing methods applied on
-fluorescent calcium time series; Section\ref{sec:inference} then presents the
+fluorescent calcium time series; Section \ref{sec:inference} then presents the
 proposed approach and its theoretical properties; Section~\ref{sec:results}
 provides an empirical analysis and comparison with other network inference
 methods, while Section~\ref{sec:conclusion} finally discusses our work and
@@ -126,9 +111,7 @@ usually affect the quality of the recording~\citep{lichtman2011big}.
 Accordingly, the first step of our pipeline is to smoothen the signal, using
 one of the following low-pass filters for filtering out high frequency noise:
 \begin{align}
-% symmetrical median filter
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
-% asymmetrical weighted median
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
@@ -182,21 +165,15 @@ f_1$ (resp. $f_2$). When applied to the raw signal of Figure
 \section{Connectome inference from partial correlation statistics}
 \label{sec:inference}
 
-% No time assumption
-
 Our procedure to infer connections between neurons first assumes that
 the (filtered) fluorescence concentrations of all $p$ neurons at each
 time point can be modeled as a set of random variables $X = \{X_1,
 \dots, X_p\}$ that are independently drawn from the same time invariant
-joint probability distribution $P_X$. %% Or, say otherwise, we assume
-%% that there exists a probability distribution $P_X$ such that the
-%% fluorescence concentrations at a particular time $t$ can be seen as an
-%% independent realization of $P_X$.
+joint probability distribution $P_X$. 
 As a consequence, our inference method does not exploit the time
 ordering of the observations (although time ordering is exploited by
 the filters).
 
-% partial correlation: definition + motivation
 
 Given this assumption, we then propose to use as a measure of the
 strength of the connection between two neurons $i$ and $j$, the
@@ -206,7 +183,7 @@ random variables $X_i$ and $X_j$, defined by:
 p_{i,j} =
 -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{equation}
-where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$. 
 Assuming that the distribution $P_X$ is a multivariate Gaussian
 distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
@@ -217,7 +194,6 @@ between neurons and filter out spurious indirect effects. The interest
 of partial correlation as an association measure has already been
 shown for the inference of gene regulatory networks
 \citep{de2004discovery,Schafer:2005}.
-
 Note that the partial correlation statistic is symmetric
 (i.e. $p_{i,j}=p_{j,i}$). Therefore, our approach cannot identify the
 direction of the interactions between neurons. We will see in
@@ -284,6 +260,7 @@ tuning was decisive to obtain the best performance at the challenge,
 it does not significantly improve neither AUROC nor AUPRC.
 
 \begin{table}[t]
+
 \caption{Top: Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.
 Bottom: Performance on \textit{normal-1,2,3,4} with different methods.}
 \label{tab:comparison}
@@ -363,9 +340,10 @@ as $0.995$ and an AUPRC of $0.789$.
 \subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{curve_roc} \label{fig:roc_curve}}
 \subfigure[Precision-recall curves]{\includegraphics[width=0.45\textwidth]{curve_pr} \label{fig:pr_curve}}
 \caption{ROC (left) and PR (right) curves on \textit{normal-2} for the compared methods. Areas under the curves are reported in the legend.}
-
 \label{fig:curves}
 \end{figure}
+
+
 
 \section{Conclusions} \label{sec:conclusion}
 
@@ -386,6 +364,7 @@ A. Joly and G. Louppe are research fellows of the FNRS, Belgium.  A. Sutera is
 recipient of a FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
 PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
 Office.
+
 
 \newpage
 \clearpage
@@ -566,6 +545,7 @@ Table~\ref{tab:dir} compares AUROC and AUPRC with or without correcting the $p_{
 \caption{Performance on \textit{normal-1,2,3,4} of ``Full Method'' with and
   without using information about directivity.}
 \label{tab:directivity}
+
 \centering
 \small
 \begin{tabular}{| l | c c c c | c c c c |}
@@ -613,6 +593,7 @@ performs better than GTE most of the times. Note that the "Full method" reported
 & \multicolumn{6}{c|}{AUROC}\\
 \textit{Method} $\backslash$ \textit{normal-} & \textit{lowcon} & \textit{highcon} & \textit{lowcc} & \textit{highcc} & \textit{3-highrate} & \textit{4-lownoise} \\
 \hline
+\hline
 Averaging     & 0.947 & 0.943 & 0.920 & 0.942 & 0.959 & 0.934 \\
 Full method   & \textbf{0.955} & \textbf{0.944} &  \textbf{0.925} & \textbf{0.946} & \textbf{0.961} & \textbf{0.941} \\
 PC & 0.782 & 0.920 &  0.846 & 0.897  & 0.898  & 0.873 \\
@@ -630,52 +611,41 @@ GENIE3 & 0.128 & 0.273 & 0.116 & 0.309 & 0.256 & 0.224\\ \hline
 \section{On the selection of the number of principal components}
 \label{app:pca}
 
-The connectomes, defined by the graph $G = (V, E)$,  can be represented by an
-adjacency matrix $A: a_{i,j} = \mathbb{1}((i, j) \in E)$. The matrix can be
-decomposed through a singular value decomposition (SVD) or principal components
-analysis (PCA) as to determine a set of independent linear combinations of the
-variable \citep{alter2000singular} or respectively a reduced  set of linear
+The (true) network, seen as a matrix, can be decomposed through a singular value decomposition (SVD) or principal component
+analysis (PCA) as to respectively determine a set of independent linear combinations of the
+variable \citep{alter2000singular} or a reduced set of linear
 combination combine which maximize the explained variance of the data
-\citep{jolliffe2005principal}. Otherwise said, both SVD and PCA aims at finding
-a reduced set of neurons whose activity can explain the rest of the network.
-Note that those two methods while having slightly different objective are
-related.
+\citep{jolliffe2005principal}. Since SVD and PCA are related, they can be defined by the same goal: both aim at finding a reduced set of neurons, known as components, whose activity can explain the rest of the network.
 
-From all the available datasets, one can study the distribution of eigen value
-obtained from PCA and SVD decomposition by sorting them in descending order of
-magnitude as illustrated on Figure \ref{fig:pca}. For both methods, the  200
-lowest eigen values are zero. Thus, the behavior of the network could be
-explained by 800 linear combination of the variables which could be explained
-by the redundancy and relation between the neurons.
+The distribution of compoment eigen values obtained from PCA and SVD decompositions can be studied by sorting them in descending order of magnitude as illustrated on Figure~\ref{fig:pca}. It can be seen that some component eigen values are zero implying that the behavior of the network could be explained by a subset of neurons because of the 
+redundancy and relations between the neurons. For all datasets, the eigen value distribution is exactly the same. 
 
-In the context of the challenge, we exploit this information to keep only  $M =
-0.8p$ components when computing the partial correlation statistics. Without
-those comparative network, one could perform a similar decomposition analysis
-on the data.
+In the context of the challenge, we observe that only $800$ components seem to be necessary and we exploit this when computing partial correlation statistics. Therefore, the value of the parameter $M$ is immediat and should be clearly set to $800$, or equivalently to $0.8p$.
+
+Note that if the true network is not available, similar decomposition analysis could be carried on the infered network or on the data directly.\\
 
 
 \begin{figure}[t]
 \centering
 \subfigure[PCA]{\includegraphics[width=0.45\textwidth]{explained_variance_all} \label{fig:PCA}}
 \subfigure[SVD]{\includegraphics[width=0.45\textwidth]{singular_values_all} \label{fig:SVD}}
-\caption{Explained variance ratio by index of principal components (left) and singular value ratio by index of principal components (right) for all networks sorted by descending order of magnitude.}
+\caption{Explained variance ratio by number of principal components (left) and singular value ratio by number of principal components (right) for all networks.}
 \label{fig:pca}
 \end{figure}
 
 \section{Summary Table}
 
 \begin{table}[h]
-\caption{Connectomics challenge summary.}
-\label{tab:summary}
-\centering
-\small
-\begin{tabular}{| l|c|} \hline
-Team Name & The AAAGV Team \\ \hline
-Private leaderboard position & \nth{1} \\ \hline
-Private leaderboard performance & 0.94161 \\ \hline
-Private leaderbard performance of the winner & / \\ \hline
-\end{tabular}
-\end{table}
+ \caption{Connectomics challenge summary.}
+ \label{tab:summary}
+ \centering
+ \small
+ \begin{tabular}{| l|c|} \hline
+ Team Name & The AAAGV Team \\ \hline
+ Private leaderboard position & \nth{1} \\ \hline
+ Private leaderboard performance & 0.94161 \\ \hline
+ Private leaderbard performance of the winner & / \\ \hline
+ \end{tabular}
+ \end{table}
 
 \end{document}
-
