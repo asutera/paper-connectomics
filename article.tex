@@ -6,6 +6,7 @@
 \usepackage{natbib}
 \usepackage[utf8]{inputenc}
 \usepackage[super]{nth}
+\setlength{\textfloatsep}{15pt}
 
 \jmlryear{2014}
 \jmlrworkshop{Neural Connectomics Workshop}
@@ -219,8 +220,6 @@ predictions. Further details about parameter selection are provided in
 Appendix~\ref{app:optimized}.
 
 \section{Experiments} \label{sec:results}
-
-
 \paragraph{Data and evaluation metrics.}
 
 We report here experiments on the \textit{normal-1,2,3}, and \textit{4}
@@ -281,7 +280,6 @@ GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
 GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
 \hline
 \end{tabular}
-
 \end{table}
 
 \paragraph{Comparison with other methods.}
@@ -308,6 +306,7 @@ gave the best performance), respectively. For GENIE3, we built 10,000 trees per 
 used default settings for all other parameters (except for the maximal tree
 depth). For GTE, we reproduced the exact same setting (conditioning level and
 pre-processing) that was used by the organisers of the challenge.
+
 Partial correlation and averaged partial correlation clearly outperform all
 other methods on all datasets (see Table \ref{tab:comparison} and Appendix \ref{app:supp}). The
 improvement is more important in terms of AUPRC than in terms of AUROC. As
@@ -317,7 +316,9 @@ partial correlation. Among these two methods, GTE is slightly better in terms
 of AUROC, while GENIE3 is significantly better in terms of AUPRC. Given that we
 had to limit this latter method for computational reasons, these results are
 very promising and a comparison with the full GENIE3 approach is certainly part
-of our future works. The fact that our method is unable to predict edge directions does not seem to
+of our future works.
+
+The fact that our method is unable to predict edge directions does not seem to
 be a disadvantage with respect to GTE and GENIE3. Although partial correlation
 scores each edge, and its opposite, similarly, it can reach precision values
 higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it mainly ranks high
@@ -326,7 +327,6 @@ note that, on \textit{normal-2}, a method that perfectly predicts the
 undirected network (i.e., that gives a score of $1$ to each pair $(i,j)$ such that
 $(i,j)\in E$ or $(j,i)\in E$, and $0$ otherwise) already reaches an AUROC as high
 as $0.995$ and an AUPRC of $0.789$.
-
 \begin{figure}[t]
 \centering
 \subfigure[ROC curves]{\includegraphics[width=0.45\textwidth]{curve_roc} \label{fig:roc_curve}}
@@ -634,7 +634,7 @@ Note that if the true network is not available, similar decomposition analysis c
  Team Name & The AAAGV Team \\ \hline
  Private leaderboard position & \nth{1} \\ \hline
  Private leaderboard performance & 0.94161 \\ \hline
- Private leaderbard performance of the winner & / \\ \hline
+ Private leaderboard performance of the winner & idem \\ \hline
  \end{tabular}
  \end{table}
 

@@ -49,7 +49,7 @@ We have modified our paper to take into account as best possible the reviewers' 
 \textcolor{blue}{
 Better justify use of specific low-pass filters. How these filters were designed? Is this standard in the signal processing field? Will these filters apply to other problems or they need fine-tuning?}
 
-\textbf{A}: The first low-pass filter is standard in the signal processing field while the second is designed to take into account the time. This second filter is hovewever quite classical. We add justification and motivation in the paper.\\
+\textbf{A}: The first low-pass filter is standard in the signal processing field while the second is designed to take into account the time. This second filter is however quite classical. We add justification and motivation in the paper.\\
 
 \noindent
 \textcolor{blue}{Is there sufficient sample and power to condition on all features excluding Xi and Xj when computing partial correlation coefficient?}
@@ -60,7 +60,7 @@ Better justify use of specific low-pass filters. How these filters were designed
 
 \textcolor{blue}{It would be necessary to have information about the computational complexity, scalability, memory requirements, and execution time for these methods.}
 
-\textbf{A}: We obviously agree with the reviewer that such informations are interesting, especially in the context of a challenge. For the simplified method, it only takes a few hours (about 3 to 6 hours depending on the machine used) and a few gigabytes of memory. The ``Full method'' needs the double of time (about 6 to 12 hours) and it requires a few hours more to take into account the edge directionality. GTE and GENIE3 take more time to compute than PC and they require about xx \textcolor{red}{(AS: Need AJ to know exactly the execution time)} hours and yy hours respectively. However, GENIE3 is highy parallelizable (by taking several smaller forests or applying GENIE3 on subsets of variables) and the execution time can be significantly reduced.
+\textbf{A}: We obviously agree with the reviewer that such informations are interesting, especially in the context of a challenge. For the simplified method, it only takes a few hours (about 3 to 6 hours depending on the machine used) and a few gigabytes of memory. The ``Full method'' needs the double of time (about 6 to 12 hours) and it requires a few hours more to take into account the edge directionality. GTE and GENIE3 take more time to compute than PC. However, GENIE3 is highy parallelizable (by taking several smaller forests or applying GENIE3 on variable subsets) and the execution time can be significantly reduced.
 
 However, let us note that the simple method presented in the paper already gives good performances despite its light computational needs.
 
@@ -70,7 +70,7 @@ We also would like to mention that our code is available publicly on \url{https:
 \noindent
 \textcolor{blue}{In section 4, PC, GTE, and GENIE3 are compared with other methods. Another worthwhile experiment would be to extract features using the procedure described by the authors, do a Principal Component Analysis(PCA), and then apply PC, etc. other methods.}
 
-\textbf{A}: We are not sure what exactly suggests the reviewer but applying PCA before PC, GTE and GENIE3 is not straighforward. Let us note that for each method we choose the preprocessing which yields the best performance.\\
+\textbf{A}: We are not sure what exactly suggests the reviewer but applying PCA before PC, GTE and GENIE3 is not straightforward. Let us note that for each method we choose the preprocessing which yields the best performance.\\
 
 \noindent
 \textcolor{blue}{The authors have also used an additional relevant metric the AUPR beyond the challenge.}
