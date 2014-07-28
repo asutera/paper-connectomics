@@ -25,7 +25,7 @@
 
 \maketitle
 
-\vspace{-0.8cm}
+\vspace{-1cm}
 \begin{abstract}
 In this work, we propose a simple yet effective solution to the problem of
 connectome inference in calcium imaging data. The proposed algorithm consists of
@@ -308,8 +308,6 @@ gave the best performance), respectively. For GENIE3, we built 10,000 trees per 
 used default settings for all other parameters (except for the maximal tree
 depth). For GTE, we reproduced the exact same setting (conditioning level and
 pre-processing) that was used by the organisers of the challenge.
-
-
 Partial correlation and averaged partial correlation clearly outperform all
 other methods on all datasets (see Table \ref{tab:comparison} and Appendix \ref{app:supp}). The
 improvement is more important in terms of AUPRC than in terms of AUROC. As
@@ -319,9 +317,7 @@ partial correlation. Among these two methods, GTE is slightly better in terms
 of AUROC, while GENIE3 is significantly better in terms of AUPRC. Given that we
 had to limit this latter method for computational reasons, these results are
 very promising and a comparison with the full GENIE3 approach is certainly part
-of our future works.
-
-The fact that our method is unable to predict edge directions does not seem to
+of our future works. The fact that our method is unable to predict edge directions does not seem to
 be a disadvantage with respect to GTE and GENIE3. Although partial correlation
 scores each edge, and its opposite, similarly, it can reach precision values
 higher than 0.5 (see Figure \ref{fig:curves}(b)), suggesting that it mainly ranks high
@@ -630,7 +626,7 @@ Note that if the true network is not available, similar decomposition analysis c
 \section{Summary Table}
 
 \begin{table}[h]
- \caption{Connectomics challenge summary.}
+ \caption{Connectomics Challenge summary.}
  \label{tab:summary}
  \centering
  \small
