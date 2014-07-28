@@ -52,8 +52,7 @@ Without being perfect, calcium imaging currently allows for real-time and
 simultaneous observation of neuron activity from thousands of neurons,
 producing individual time-series representing their fluorescence intensity.
 From these data, the connectome inference problem amounts to retrieving the
-synaptic connections between neurons on the basis of the fluorescence time-
-series. This problem is difficult to solve because of experimental issues,
+synaptic connections between neurons on the basis of the fluorescence time-series. This problem is difficult to solve because of experimental issues,
 including masking effects (i.e., some of the neurons are not observed or
 confounded with others), the low sampling rate of the optical device with
 respect to the neural activity speed, or the slow decay of fluorescence.
@@ -75,7 +74,7 @@ Challenge\footnote{\url{http://connectomics.chalearn.org}}, as a simple and
 theoretically grounded approach based on signal processing techniques and
 partial correlation statistics. The paper is structured as follows:
 Section~\ref{sec:filter} describes the signal processing methods applied on
-fluorescent calcium time series; Section\ref{sec:inference} then presents the
+fluorescent calcium time-series; Section \ref{sec:inference} then presents the
 proposed approach and its theoretical properties; Section~\ref{sec:results}
 provides an empirical analysis and comparison with other network inference
 methods, while finally, in Section~\ref{sec:conclusion} we discuss our work and
@@ -121,7 +120,7 @@ is shown in Figure \ref{fig:lp_curve}.
 
 Furthermore, short spikes, characterized by a high
 frequency, can be seen as an indirect indicator of neuron communication, while low frequencies of the signal mainly correspond to the slow
-decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time series into its backward
+decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time-series into its backward
 difference
 \begin{align}
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i, \label{eq:high-pass-filter}
@@ -171,8 +170,7 @@ the (filtered) fluorescence concentrations of all $p$ neurons at each
 time point can be modelled as a set of random variables $X = \{X_1,
 \dots, X_p\}$ that are independently drawn from the same time-invariant
 joint probability distribution $P_X$. 
-As a consequence, our inference method does not exploit the time-
-ordering of the observations (although time-ordering is exploited by
+As a consequence, our inference method does not exploit the time-ordering of the observations (although time-ordering is exploited by
 the filters).
 
 Given this assumption, we then propose to use as a measure of the
@@ -291,8 +289,7 @@ GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
 At the bottom of Table \ref{tab:comparison}, we provide as a comparison the
 performance of three other methods: standard (Pearson) correlation (PC),
 generalised transfer entropy (GTE), and GENIE3. ROC and PR curves on the
-\textit{normal-2} network are shown for all methods in Figure
-\ref{fig:curves}. Pearson correlation measures the unconditional linear
+\textit{normal-2} network are shown for all methods in Figure\ref{fig:curves}. Pearson correlation measures the unconditional linear
 (in)dependence between variables and it should thus not be able to filter out
 indirect interactions between neurons. GTE \citep{stetter2012model} was
 proposed as a baseline for the challenge. This method builds on Transfer
