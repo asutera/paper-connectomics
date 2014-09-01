@@ -1,0 +1,71 @@
+\documentclass[10pt,a4paper]{article}
+
+% General packages
+\usepackage[frenchb]{babel}
+\usepackage{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx} % To include graphics
+\usepackage{float}
+\usepackage{multicol}
+
+% Personnal packages
+\usepackage{enumerate}
+\usepackage{color}
+%\usepackage{ifthen} % provides \ifthenelse test  
+%\usepackage{xifthen} % provides \isempty test
+\usepackage{algorithmicx} % provides algorithm environment 
+\usepackage{algpseudocode} % provides pseudo-code
+% Personnal functions
+
+\newcommand{\todo}{\textcolor{red}{{\sc To Do } \\ }}
+\newcommand{\todoon}[1]{{\textcolor{red}{{\sc To Do: #1}} \\ }}
+
+\renewcommand{\paragraph}[1]{
+\hspace{0.1cm} \\
+ {\sc \textbf{#1}}
+
+}
+\newcommand{\nparagraph}[1]{\underline{#1}
+
+}
+\begin{document}
+
+
+\begin{center}
+{\Large Interview "Réflexions"}
+\end{center}
+\begin{description}
+\item[Qui êtes-vous?]  
+
+
+L'équipe qui a remporté le challenge Connectomics est composée de 5 ingénieurs chercheurs de l'institut Montéfiore de l'Université de Liège. Il s'agit du département d'électricité, d'électronique et d'informatique de la faculté des Sciences appliquées. Notre équipe est en effet pluridisciplinaire car nous travaillons pour deux services différents: l'un est plus orienté sur le développement du réseau électrique du futur (smart grids), l'autre sur la compréhension et le développement d'algorithmes d'apprentissage automatique. Chacun a ses spécialités dans sa catégorie, ce qui a engendré et confronté des méthodologies de réfléxions différentes.
+
+\item[Expliquez un peu la compétition que vous avez gagnée?]
+
+Comme vous le savez sans doute, le cerveau humain fonctionne grâces aux nombreuses connexions qui relient un très grand nombre de neurones. Depuis des années, des chercheurs essayent de comprendre le cerveau et cette compétition a voulu mettre en avant une petite partie de cette recherche: trouver le réseau reliant un groupe de neurones à partir de leurs activités respectives. L'activité d'un neurone est exprimée comme un signal de grande intensité lorsqu'il est actif et de plus faible intensité lorsqu'il est inactif. Le but du jeu est donc de trouver comment associer les neurones par paires, pour ainsi les relier dans le réseau, en regardant simplement si et quand ils sont actifs.
+
+La compétition a vu s'affronter 143 équipes d'horizons très différents et d'universités du monde entier pour trouver la meilleure solution à ce problème. Ce concours fut organisé par des chercheurs qui ont développé un outil qui simule artificiellement l'activité des neurones du cerveau. Leur but est double: d'une part, ils ont essayé de refléter au mieux la réalité et d'autre part, de partir de ses données pour trouver le réseau neuronal du cerveau. Savoir comment les neurones sont reliés les uns aux autres en quelque sorte. Pourquoi simuler des données? Il faut savoir qu'en pratique, il est possible d'observer l'activité des neurones mais il est cependant impossible de connaitre avec exactitude le réseau de neurones qui en est la source. L'intérêt des données artificielles est de connaitre parfaitement la source puisqu'on la définit et d'avoir les données associées. 
+
+Pour en revenir à la compétition, ces chercheurs ont développé un outil pour retrouver le réseau de neurones à partir des données générées et ont voulu voir si cet outil était compétif par rapport aux techniques existantes et donner une motivation à des chercheurs pour à leur tour développer des outils les plus performants possibles. 
+
+Certains de nos sujets de thèse s'approchaient de la problématique abordée par le concours et cela nous a poussé à y participer.  Par exemple, j'étudie de manière approfondie les réseaux de gènes, autrement dit comment les gènes interagissent entre eux, et la plupart des approches que j'utilise peuvent s'appliquer directement à d'autres types de réseaux sans vraiment tenir compte de leur nature. C'est pour cette raison que participer au concours avait un intérêt dans le cadre de ma thèse.
+
+\item[Comment avez-vous gagné la compétition?]
+
+Inévitablement dans ce genre de concours, il y a une grande part d'intuition. Qui aura la meilleure idée? Qui saura mettre le doigt sur la bonne technique à utiliser? Et il s'avère que dans cette compétition, nous avons pu trouver une méthode relativement simple qui marchait très bien. Un aspect important pour nous était de maitriser notre méthode et de pouvoir justifier chaque étape de notre méthodologie. Nous ne sommes pas des experts en connectivité de neurones donc nous avons conçu une solution générique que nous avons, par après, améliorée pour correspondre parfaitement à l'objectif recherché.
+
+Notre méthode, en quelques mots, consiste à estimer l'affinité de deux neurones lorsque l'état de tous les autres neurones est connu. En d'autres mots, deux neurones semblent-ils intrinsèquement liés quelque soit l'état des autres neurones. 
+
+Notre méthode marche bien indéniablement. Cela s'explique surtout par l'énorme travail fourni par notre équipe pour l'améliorer mais aussi par notre expérience dans nos domaines respectifs.
+
+
+\item[Quel est la part de l'Université dans ce succès?]
+Déjà, nous devons remercier nos promoteurs, Pierre Geurts et Damien Ernst, qui nous permettent de participer à ce genre de compétition. Ensuite, il s'agit d'un travail d'équipe composée de membres de services différents et qui, a priori, ne travaillent pas ensemble. Cela met en relief la qualité de l'environnement de recherche à l'Université de Liège et la volonté de collaboration qui y règne. Car nous avons également demandé de l'aide à d'autres chercheurs qui nous ont aidé, ou au moins éclairé, sur certains points. Il faut aussi souligner l'apport des chercheurs plus aguéris de notre équipe qui ont su apporter la maturité nécessaire pour gérer une compétition sans abandonner et se relâcher avant le terme.\\
+
+Pour des chercheurs, ce genre de concours est très intéressant. Tant du point de vue de la recherche car nous trouvons des nouvelles méthodes et des solutions à des problèmes que du point de vue personnel car c'est passionnant d'essayer de se dépasser seul ou en équipe. Cela renforce également les collaborations au sein de l'université et renforce l'esprit d'équipe.
+
+\end{description}
+
+
+\end{document}
