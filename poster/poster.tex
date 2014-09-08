@@ -23,7 +23,10 @@
 \newcommand{\xmark}{\ding{55}}%
 \usepackage[labelformat=empty]{caption}
 \usepackage{framed}
-%\usepackage{wrapfig}
+\usepackage{wrapfig}
+
+\usepackage[pdf]{pstricks}
+
 
 \setlength{\TPHorizModule}{\paperwidth}
 \setlength{\TPVertModule}{\paperheight}
@@ -37,6 +40,8 @@
 \definecolor{lightgray}{rgb}{0.8,0.8,0.8}
 \definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
 
+\hypersetup{colorlinks=true, urlcolor=blue!60}
+
 
 \newenvironment{shaded2}{%
   \def\FrameCommand{\fboxsep=\FrameSep \colorbox{blue!20}}%
@@ -49,7 +54,7 @@
 {\tiny
 \includegraphics[scale=0.16]{images/mail.png}~\url{a.sutera@ulg.ac.be}
 %\includegraphics[scale=0.6]{images/twitter.png}~\href{https://twitter.com/glouppe}{@glouppe}
-\includegraphics[scale=0.18]{images/github.png}~\url{https://github.com/asutera/kaggle-connectomics}
+\includegraphics[scale=0.18]{images/github.png}~Code source available at \url{https://github.com/asutera/kaggle-connectomics}
 }}
 
 \footer{}
@@ -67,7 +72,7 @@
 %% Abstract ------------------------------------------------------------------
 
 
-\begin{textblock}{0.35}(0.01,0.115)
+\begin{textblock}{0.43}(0.01,0.115)
 
 
 \begin{block}{Abstract \phantom{p}}
@@ -75,7 +80,7 @@
 \vspace{-0.4cm}
 \begin{center}
 
-\begin{minipage}{0.95\linewidth}
+\begin{minipage}{0.96\linewidth}
 \begin{shaded}
 In this work, we propose \textbf{a simple yet effective solution} to the problem of
 connectome inference in calcium imaging data. The proposed algorithm consists of
@@ -85,23 +90,21 @@ connectome inference in calcium imaging data. The proposed algorithm consists of
 \item[] {\color{lightblue}ii) inferring the degree of association between neurons from partial
 correlation statistics.}
 \end{itemize}}
-We summarises the methodology that led us to
-win the Connectomics Challenge, proposes a simplified version of our method, and
-finally compares our results with respect to other inference methods.
+We summarise the methodology that led us to
+win the Connectomics Challenge, propose a simplified version of our method, and
+finally compare our results with respect to other inference methods.
 
 \end{shaded}
 \end{minipage}
 \end{center}
 
 \end{block}
-
-
 \end{textblock}
 
 
 %% Context ------------------------------------------------------------
 
-\begin{textblock}{0.62}(0.37,0.115)
+\begin{textblock}{0.54}(0.45,0.115)
 
 \begin{block}{Context \phantom{p}}
 
@@ -127,7 +130,7 @@ respect to the neural activity speed,} or
 
 %% Signal processing -----------------------------------------------------
 
-\begin{textblock}{0.485}(0.01,0.26)
+\begin{textblock}{0.485}(0.01,0.25)
 
 \begin{block}{Signal processing \phantom{p}}
 
@@ -143,9 +146,9 @@ signal processing filters in order to :
 \item[] {\color{lightblue}ii) to account for fluorescence low decay ; and}
 \item[] {\color{lightred}iii) to reduce the importance of high global activity in the network.}
 \end{itemize}}
-\vspace{-2pt}
+\vspace{-4pt}
 
-\begin{textblock}{0.485}(0.01,0.395)
+\begin{textblock}{0.485}(0.01,0.390)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \begin{center}
@@ -155,7 +158,7 @@ signal processing filters in order to :
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.25,0.395)
+\begin{textblock}{0.485}(0.25,0.390)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \vspace{15pt}
@@ -165,19 +168,19 @@ signal processing filters in order to :
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.25,0.43)
+\begin{textblock}{0.485}(0.25,0.425)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded2}
 \begin{center}
 
-\includegraphics[width=0.85\linewidth]{images/filter_curve.pdf}
+\includegraphics[width=0.85\linewidth]{images/filter_curve_2.pdf}
 \end{center}
 \vspace{15pt}
 \end{shaded2}
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.01,0.495)
+\begin{textblock}{0.485}(0.01,0.490)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded2}
 \vspace{1pt}
@@ -192,7 +195,7 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.01,0.54)
+\begin{textblock}{0.485}(0.01,0.535)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \begin{center}
@@ -203,7 +206,7 @@ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.25,0.54)
+\begin{textblock}{0.485}(0.25,0.535)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \vspace{3pt}
@@ -216,7 +219,7 @@ g(x^{t}_{i}) = x^{t}_i - x^{t-1}_i,
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.25,0.58)
+\begin{textblock}{0.485}(0.25,0.575)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded2}
 \begin{center}
@@ -228,7 +231,7 @@ g(x^{t}_{i}) = x^{t}_i - x^{t-1}_i,
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.01,0.64)
+\begin{textblock}{0.485}(0.01,0.635)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded2}
 \vspace{7pt}
@@ -243,25 +246,25 @@ h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{textblock}
 
 
-\begin{textblock}{0.485}(0.01,0.685)
+\begin{textblock}{0.485}(0.01,0.680)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \begin{center}
-\includegraphics[width=0.85\linewidth]{images/original_curve.pdf}
+\includegraphics[width=0.85\linewidth]{images/weights_curve_2.pdf}
 \end{center}
 \vspace{-14pt}
 \end{shaded}
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{0.485}(0.25,0.685)
+\begin{textblock}{0.485}(0.25,0.680)
 \begin{minipage}{0.48\linewidth}
 \begin{shaded}
 \vspace{15pt}
 {\color{lightred} \textbf{Magnify the importance of spikes that occur in cases of low global activity}}
 \begin{align*}
 w(x^{t}_i) = (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
-\end{align*}\vspace{42pt}
+\end{align*}\vspace{54pt}
 \end{shaded}
 \end{minipage}
 \end{textblock}
@@ -325,36 +328,111 @@ w(x^{t}_i) = (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 
 %% Connectome inference --------------------------------------------------
 
-\begin{textblock}{0.485}(0.505,0.26)
+\begin{textblock}{0.485}(0.505,0.25)
 
 \begin{block}{Connectome inference \phantom{p}}
 
-\includegraphics[width=\linewidth]{images/partial2.png}
+% \includegraphics[width=\linewidth]{images/partial2.png}
+\vspace{1cm}
 
-Given the assumption of random variables drawn from the same time-invariant joint probability distribution, we then propose to use as a measure of the
-strength of the connection between two neurons $i$ and $j$, the
-\textit{Partial correlation} coefficient $p_{i,j}$ between their corresponding
+\scalebox{2}{\includegraphics{poster-pics.pdf}}
+{    \begin{pspicture}(20,20)
+
+
+ 	   \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](2,3)(1.8,2.8)
+ 	   \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](8.3,3)(1.5,2.8)
+
+    	% False network left 
+    	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(1.5,5)(2.7,4.3)
+    	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(2.7,4.3)(1,4)
+    	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(2.7,4.3)(4.5,3)
+    	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(1.3,2.3)(1.5,1)
+    	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(1.5,1)(2.8,1.7)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(2.8,1.7)(4.5,3)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(2.7,4.3)(2.8,1.7)
+
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](1.5,5){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](2.7,4.3){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](1,4){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](1.3,2.5){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](2.8,1.7){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](1.5,1){0.5}
+
+		% False network right
+
+
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(8.5,5)(7.5,4)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(7.8,4)(6.2,3)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(7.8,4)(9,4)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(9,2.5)(6.2,3)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(7.7,2)(6.2,3)
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(7.7,2)(8.5,1)
+		%\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(4.5,3)(8.5,5)
+		\psarc[linewidth=2pt,linecolor=lightblue, linestyle=dashed](8,1.3){3.75}{90}{150}
+
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](8.5,5){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](9,4){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](7.7,4){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](9,2.5){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](7.7,2){0.5}
+		\pscircle[fillstyle=solid,fillcolor=lightblue!10,linewidth=2pt,linecolor=lightblue](8.5,1){0.5}
+
+
+		% connection
+		\psline[linewidth=2pt,linecolor=lightblue, linestyle=solid]{--}(4.5,3)(6.2,3)
+		% left node
+		\pscircle[fillstyle=solid,fillcolor=lightblue!20,linewidth=2pt,linecolor=lightblue](4.5,3){0.5}
+		% right node
+		\pscircle[fillstyle=solid,fillcolor=lightblue!20,linewidth=2pt,linecolor=lightblue](6.2,3){0.5}
+
+		% text
+		\rput(5.35,3.3){$p_{i,j}$}
+		\rput(5.35,2.3){{$_{\textit{partial correlation}}$}}
+		\rput(5.35,1.9){{$_=$}}
+		\rput(5.35,1.5){{$_{\textit{degree of association}}$}}
+		\rput(5.3,1.1){{$_{\textit{between neurons i and j}}$}}
+
+		\rput(4.2,5){{\color{lightgreen} \textbf{known}}}
+
+		\rput(6.3,0.6){{\color{lightgreen} \textbf{known}}}
+
+
+        % \psline[linewidth=2pt,linecolor=lightblue]{--}(5,9.5)(8,9.5)
+        % \pscircle[fillstyle=solid,fillcolor=white,linewidth=2pt,linecolor=lightblue](5,9.5){0.5}
+        % \pscircle[fillstyle=solid,fillcolor=white,linewidth=2pt,linecolor=lightblue](8,9.5){0.5}
+
+    \end{pspicture}}
+
+\vspace{1.5cm}
+
+Given the assumption of random variables drawn from the same time-invariant joint probability distribution, we then propose to use as \textbf{a measure of the
+degree of association of the connection between two neurons} $i$ and $j$, the  \textbf{
+\textit{Partial correlation}} coefficient $p_{i,j}$ between their corresponding
 random variables $X_i$ and $X_j$, defined by:
 
 \begin{align*}
 p_{i,j} =
 -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
 \end{align*}
-where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.\\ 
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the inverse of the covariance matrix $\Sigma$ of $X$.\\[2ex]
 
 Assuming that the distribution $P_X$ is a multivariate Gaussian
 distribution ${\cal N}(\mu,\Sigma)$, it can be shown that $p_{i,j}$ is
 zero if and only if $X_i$ and $X_j$ are independent given all other
 variables in $X$, i.e., $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
-\setminus\{X_i,X_j\}$.
+\setminus\{X_i,X_j\}$.\\[3ex]
 
+\textbf{Advantages and drawbacks}:\\[2ex]
+
+\begin{minipage}{0.8\linewidth}
 \begin{itemize}
-\item[{\color{green} \cmark}] Only direct associations
-\item[{\color{green} \cmark}] Filter out spurious indirect effects
-\item[{\color{green} \cmark}] Symmetric (i.e. $p_{i,j}=p_{j,i}$)\\[5ex]
-\item[{\color{red} \xmark}] Edge orientation
-\item[{\color{red} \xmark}] Sensitive to the value of parameters in the filtering process
+\item[\vspace{1cm}{\color{green} \cmark}] Only \textbf{direct} associations
+\item[\vspace{1cm}{\color{green} \cmark}] Filter out spurious \textbf{indirect} effects
+\item[\vspace{1cm}{\color{green} \cmark}] \textbf{Symmetric} (i.e. $p_{i,j}=p_{j,i}$)\\[3ex]
+\item[\vspace{1cm}{\color{red} \xmark}] Edge orientation
+\item[\vspace{1cm}{\color{red} \xmark}] Sensitive to the value of parameters in the filtering process
 \end{itemize}
+\end{minipage}
 
 \end{block}
 
@@ -362,7 +440,7 @@ variables in $X$, i.e., $X_i \perp X_j|X^{-i,j}$ where $X^{-i,j}= X
 
 %% Experiment ------------------------------------------------------------
 
-\begin{textblock}{0.69}(0.01,0.78)
+\begin{textblock}{0.74}(0.01,0.78)
 
 \begin{block}{Experiments \phantom{p}}
 
@@ -391,19 +469,19 @@ GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
 \end{tabular}
 \end{wrapfigure}
 
-These results clearly show the importance of the filters and PCA (especially for AUPRC). Taking the average over
-various parameter settings gives an improvement of 10\% in AUPRC but
+These results \textbf{clearly} show the importance of the \textbf{filters and PCA} (especially for AUPRC). \textbf{Taking the average over
+various parameter settings} gives an improvement of 10\% in AUPRC but
 only a minor change in AUROC. The last row (``Full method'') shows the
-final performance of the method specifically tuned for the challenge
+final performance of the \textbf{method specifically tuned for the challenge}
 (see paper for all details). Although this
 tuning was decisive to obtain the best performance in the challenge,
-it does not significantly improve either AUROC or AUPRC.
+it does not significantly improve either AUROC or AUPRC.\\[1ex]
 
-Partial correlation and averaged partial correlation clearly outperform all other methods on all datasets. The
+\textbf{Partial correlation and averaged partial correlation clearly outperform all other methods on all datasets.} The
 improvement is more important in terms of AUPRC than in terms of AUROC. As
 expected, Pearson correlation performs very poorly in terms of AUPRC. GTE and
-GENIE3 work much better, but these two methods are nevertheless clearly below
-partial correlation.
+GENIE3 work much better, but \textbf{these two methods are nevertheless clearly below
+partial correlation}.
 
 \end{block}
 
@@ -413,7 +491,7 @@ partial correlation.
 
 %% Conclusion ------------------------------------------------------------
 
-\begin{textblock}{0.28}(0.71,0.78)
+\begin{textblock}{0.22}(0.76,0.78)
 
 \begin{block}{Conclusion \phantom{p}}
 \vspace{-0.4cm}
@@ -422,38 +500,40 @@ partial correlation.
 \begin{minipage}{0.95\linewidth}
 \begin{shaded}
 
-In this paper, we outlined a simple but efficient methodology for the problem
-of connectome inference from calcium imaging data. Our approach consists of \textbf{two
-steps: 
-\begin{itemize}
-\item[] {\color{lightgreen}i) processing fluorescence data to detect neural peak activities; and}
-\item[] {\color{lightblue}ii) inferring the degree of association between neurons from partial 
-correlation statistics.}
-\end{itemize}}
-
-Its simplified variant outperforms other
-network inference methods while its optimized version proved to be the best method
-on the Connectomics Challenge. Given its simplicity and good performance, we
+We outlined a simple but efficient methodology for the problem
+of connectome inference from calcium imaging data consisting in processing the raw signals and then inferring the degree of association between neurons from partial correlation statistics. 
+Its \textbf{simplified variant outperforms other
+network inference methods} while \textbf{its optimized version proved to be the best method
+on the Connectomics Challenge}.
+Given its simplicity and good performance, we
 therefore believe that the methodology presented in this work
 would constitute a solid and easily-reproducible baseline for further work in
 the field of connectome inference.
+
+% \textbf{All ressources} for  the ``Full Method'' and its simplified variant are \textbf{available} at \\
+
+% \begin{center}
+% \vspace{-0.9cm}
+% \textbf{{\fontsize{16}{14} \url{https://github.com/asutera/kaggle-connectomics}}}.
+% \end{center}
+
 \end{shaded}
 \end{minipage}
 \end{center}
 
-\vspace{-0.3cm}
+\vspace{-1cm}
 
 \end{block}
 
 \end{textblock}
 
-\begin{textblock}{1}(0.01,0.99)
-{\fontsize{12}{10}\textbf{Acknowledgments:}}
-{\fontsize{8}{10}\textbf{A. Joly and G. Louppe are research fellows of the FNRS, Belgium. A. Sutera is a
-recipient of an FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
-PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
-Office.}}
-\end{textblock}
+% \begin{textblock}{1}(0.01,0.99)
+% {\fontsize{12}{10}\textbf{Acknowledgments:}}
+% {\fontsize{8}{10}\textbf{A. Joly and G. Louppe are research fellows of the FNRS, Belgium. A. Sutera is a
+% recipient of an FRIA fellowship of FRS-FNRS, Belgium. This work is supported by
+% PASCAL2 and the IUAP DYSCO, initiated by the Belgian State, Science Policy
+% Office.}}
+% \end{textblock}
 
 \end{frame}
 \end{document}
