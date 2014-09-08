@@ -1,5 +1,7 @@
 \documentclass[final]{beamer}
 
+\usepackage{textpos}
+
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
 \usepackage{verbatim}
@@ -61,6 +63,7 @@ correlation statistics in calcium imaging}
 
 \begin{frame}
 	
+
 \vspace{-0cm}
 
 	\begin{center}
@@ -88,7 +91,15 @@ correlation statistics in calcium imaging}
 
 From {\color{i6blue} time-series of the neuron activity}, the \textbf{goal} is to {\color{red} \textbf{infer} the directed connections between neurons}.
 
+\note{
+	
+	Before the main part of this presentation, I would like to mention that we are not biologist and we are not expert of the connectome inference. We see the challenge as an inference problem and maybe in a naive point of view for some points.
+
+}
+
 \end{frame}
+
+
 
 %% Slide 3 ==================================================================
 
@@ -97,18 +108,27 @@ From {\color{i6blue} time-series of the neuron activity}, the \textbf{goal} is t
 \frametitle{Introduction}
 
 
+\vspace{-100pt}
 But this problem is \textbf{difficult} because of...
 
 
-\begin{tabular*}{\textwidth}{l r} \hline
-&\multirow{3}{*}{\includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}}\\ 
-
+\begin{textblo}
+\begin{minipage}{0.95\linewidth}
 {\color{red} \textbf{masking} effects}
-& \\ 
-& \\
-\end{tabular}
+\end{minipage}
 
-% \begin{itemize}
+\begin{minipage}{0.95\linewidth}
+{\color{red} \textbf{masking} effects}
+\end{minipage}
+
+
+% \begin{tabular*}{\textwidth}{l r} \hline
+% &\multirow{3}{*}{\includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}}\\ 
+
+% {\color{red} \textbf{masking} effects}
+% & \\ 
+% & \\
+
 % \item {\color{red} \textbf{masking} effects},
 % \includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}
 % \item {\color{red} \textbf{low} sampling rate},
