@@ -1,6 +1,6 @@
 \documentclass[final]{beamer}
 
-\usepackage{textpos}
+\usepackage[absolute,overlay]{textpos}
 
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
@@ -10,6 +10,9 @@
 \usepackage{hyperref}
 \usepackage{verbatim}
 \usepackage{url}
+
+\usepackage[pdf]{pstricks}
+
 
 \usepackage{pifont}
 \newcommand{\cmark}{\ding{51}}%
@@ -22,6 +25,10 @@
 \setbeamertemplate{sections/subsections in toc}[circle]
 
 \selectcolormodel{cmyk}
+
+
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
 
 \definecolor{i6blue}{cmyk}{1,0.305,0,0.06}
 \definecolor{i6bluedark}{rgb}{0.0156,0.2578,0.5625}
@@ -48,14 +55,18 @@
 \definecolor{lightgray}{rgb}{0.8,0.8,0.8}
 \definecolor{shadecolor}{rgb}{0.9,0.9,0.9}
 
-\usepackage{multirow}
 
 \title{Simple connectome inference from partial\\[1ex]
 correlation statistics in calcium imaging}
-\author{{\small Antonio Sutera, Arnaud Joly, Vincent François-Lavet, Zixiao Aaron Qiu\\[1ex] Gilles Louppe, Damien Ersnt and Pierre Geurts.}}
+\author{{\small Antonio Sutera, Arnaud Joly, Vincent François-Lavet, Zixiao Aaron Qiu\\[1ex] Gilles Louppe, Damien Ernst and Pierre Geurts.}}
 \date{}
 
-
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
 
 \begin{document}
 
@@ -107,35 +118,87 @@ From {\color{i6blue} time-series of the neuron activity}, the \textbf{goal} is t
 
 \frametitle{Introduction}
 
-
 \vspace{-100pt}
 But this problem is \textbf{difficult} because of...
 
 
-\begin{textblo}
-\begin{minipage}{0.95\linewidth}
-{\color{red} \textbf{masking} effects}
-\end{minipage}
-
-\begin{minipage}{0.95\linewidth}
-{\color{red} \textbf{masking} effects}
-\end{minipage}
+\begin{textblock}{0.3}(0.01,0.35)
+\begin{itemize}
+\item{\color{red}\textbf{masking} effects}
+\end{itemize}
+\end{textblock}
 
 
-% \begin{tabular*}{\textwidth}{l r} \hline
-% &\multirow{3}{*}{\includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}}\\ 
+\begin{textblock}{0.5}(0.55,0.25)
 
+% \begin{pspicture}(20,20)
+
+% 	\pscircle[linewidth=2pt](10,10)
+
+%     \end{pspicture}
+% \scalebox{1}{\includegraphics[width=\paperwidth]{slides-pics.pdf}}
+
+
+\includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}
+
+% \begin{pspicture}(0.99\textwidth,0.99\textheight)
+
+% \psframe[linewidth=0pt, linecolor=black!1](0,0)(\paperwidth,)
+
+%  	       	% \psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{->}(0.5\paperwidth,\paperheight)(0.5\paperwidth,0)
+
+%     \end{pspicture}
+% \scalebox{1}{\includegraphics[width=\paperwidth]{slides-pics.pdf}}
+
+\end{textblock}
+
+
+\begin{textblock}{1}(0.01,0.55)
+\begin{itemize}
+\item {\color{red} \textbf{low} sampling rate}
+\end{itemize}
+\end{textblock}
+
+\begin{textblock}{1}(0.40,0.45)
+\includegraphics[width=3.5cm]{images/original_curve_sampling.pdf} $\Rightarrow$
+\includegraphics[width=3.5cm]{images/original_curve_sampling_2.pdf}
+\end{textblock}
+
+
+\begin{textblock}{1}(0.01,0.75)
+\begin{itemize}
+\item {\color{red} \textbf{slow} decay} of fluorescence.
+\end{itemize}
+\end{textblock}
+
+\begin{textblock}{1}(0.55,0.75)
+\includegraphics[width=3.5cm]{images/original_curve_gr_2.pdf}
+\end{textblock}
+
+% \begin{textblo}
+% \begin{minipage}{0.95\linewidth}
 % {\color{red} \textbf{masking} effects}
-% & \\ 
-% & \\
+% \end{minipage}
 
-% \item {\color{red} \textbf{masking} effects},
-% \includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}
-% \item {\color{red} \textbf{low} sampling rate},
-% \includegraphics[width=4cm]{images/slowsamplingrate.png}
-% \item {\color{red} \textbf{slow} decay} of fluorescence.
-% \includegraphics[width=4cm]{images/original_curve_gr}
-% \end{itemize}
+% \begin{minipage}{0.95\linewidth}
+% {\color{red} \textbf{masking} effects}
+% \end{minipage}
+
+
+% % \begin{tabular*}{\textwidth}{l r} \hline
+% % &\multirow{3}{*}{\includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}}\\ 
+
+% % {\color{red} \textbf{masking} effects}
+% % & \\ 
+% % & \\
+
+% % \item {\color{red} \textbf{masking} effects},
+% % \includegraphics[width=2cm]{images/miss.png} \includegraphics[width=2cm]{images/hidden.png}
+% % \item {\color{red} \textbf{low} sampling rate},
+% % \includegraphics[width=4cm]{images/slowsamplingrate.png}
+% % \item {\color{red} \textbf{slow} decay} of fluorescence.
+% % \includegraphics[width=4cm]{images/original_curve_gr}
+% % \end{itemize}
 
 \end{frame}
 
@@ -149,7 +212,7 @@ But this problem is \textbf{difficult} because of...
 \begin{enumerate}
 \item \textbf{Deal} with calcium fluorescence signals: {\color{i6blue} signal processing}.
 \item \textbf{Find} the network: the {\color{i6blue} {inference} method}.
-\item \textbf{Improve} the method: our {\color{i6blue} {tricks}}.
+\item \textbf{Improve} the method: {\color{i6blue} {averaging}} and {\color{i6blue} {tuning}}.
 \end{enumerate}\vskip5pt
 
 {\color{red} One step further}:
@@ -171,19 +234,82 @@ But this problem is \textbf{difficult} because of...
 
 \frametitle{Signal processing}
 
-\begin{overprint}
-\onslide<1> 
-a-b
+\begin{textblock}{1}(0.00,0.001)
+\begin{pspicture}(0.99\textwidth,0.99\textheight)
 
-\onslide<2>
-a-b-c
+\psframe[linewidth=0pt, linecolor=black!1](0,0)(\paperwidth,\paperheight)
 
-\onslide<3>
-a-b-c-d
+ 	       	% \psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{->}(0.5\paperwidth,\paperheight)(0.5\paperwidth,0)
 
-\onslide<4>
-a-b-c-d-e
-\end{overprint}
+\psline[linewidth=2pt, linecolor=lightblue, linestyle=dashed]{->}(0.15\paperwidth,0.75\paperheight)(0.15\paperwidth,0.5\paperheight)
+
+
+
+\psline[linewidth=2pt, linecolor=lightblue, linestyle=dashed]{->}(0.85\paperwidth,0.5\paperheight)(0.85\paperwidth,0.60\paperheight)
+
+
+\psarc[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{->}(0.33\paperwidth,0.40\paperheight){2.5}{180}{275}
+
+\psarc[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{->}(0.65\paperwidth,0.40\paperheight){2.5}{270}{325}
+
+
+\psline[linewidth=4pt, linecolor=lightblue, linestyle=solid]{->}(0.30\paperwidth,0.75\paperheight)(0.7\paperwidth,0.75\paperheight)
+
+\rput(0.12\paperwidth,0.58\paperheight){{\color{lightblue} 1}}
+\rput(0.20\paperwidth,0.16\paperheight){{\color{lightblue} 2}}
+\rput(0.77\paperwidth,0.16\paperheight){{\color{lightblue} 3}}
+\rput(0.88\paperwidth,0.555\paperheight){{\color{lightblue} 4}}
+\rput(0.50\paperwidth,0.80\paperheight){{\color{lightblue} \textbf{Signal processing}}}
+
+    \end{pspicture}
+\scalebox{1}{\includegraphics[width=\paperwidth]{images/signal_processing.pdf}}
+\end{textblock}
+
+
+\begin{textblock}{1}(0.01,0.15)
+\includegraphics[width=3.5cm]{images/original_curve_2.pdf}
+\end{textblock}
+
+
+\begin{textblock}{1}(0.01,0.50)
+\includegraphics[width=3.5cm]{images/filter_curve_2.pdf}
+\end{textblock}
+
+\begin{textblock}{1}(0.35,0.75)
+\includegraphics[width=3.5cm]{images/diff_curve_2.pdf}
+\end{textblock}
+
+\begin{textblock}{1}(0.70,0.50)
+\includegraphics[width=3.5cm]{images/threshold_curve_3.pdf}
+\end{textblock}
+
+\begin{textblock}{1}(0.70,0.15)
+\includegraphics[width=3.5cm]{images/weights_curve_3.pdf}
+\end{textblock}
+
+\begin{textblock}{0.35}(0.3,0.3)
+
+{\footnotesize 
+\begin{enumerate}
+\item Applying a low-pass filter
+\item Applying a high-pass filer
+\item Applying a hard-threshold filter 
+\item Magnify the importance of spikes that occur in case of low global activity
+\end{enumerate}}
+
+\end{textblock}
+
+
+
+% \onslide<2>
+% a-b-c
+
+% \onslide<3>
+% a-b-c-d
+
+% \onslide<4>
+% a-b-c-d-e
+% \end{overprint}
 
 \end{frame}
 
@@ -194,18 +320,32 @@ a-b-c-d-e
 \frametitle{Connectome \textbf{inference} from {\color{red} partial correlation statistics}}
 
 \begin{columns}
-\begin{column}{0.5\linewidth}
-diag
-\end{column}
-\begin{column}{0.5\linewidth}
+\begin{column}{0.55\linewidth}
 
+\includegraphics[width=6cm]{images/network.pdf}
+\vspace{10pt}
+\textbf{\textit{Partial correlation}} coefficient $p_{i,j}$ between neurons $i$ and $j$ defined by:
+\begin{align*}
+p_{i,j} =
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
+\end{align*}
+
+\end{column}
+
+\begin{column}{0.45\linewidth}
+
+
+\textbf{Advantages and drawbacks}:
 \begin{itemize}
 \item[{\color{green} \cmark}] Only direct associations
 \item[{\color{green} \cmark}] Filter out spurious indirect effects
-\item[{\color{green} \cmark}] Symmetric \\[5ex]
+\item[{\color{green} \cmark}] Symmetric 
+\item[{\color{green} \cmark}] Easy to compute \\ (with lots of data) \\[2ex]
 \item[{\color{red} \xmark}] Edge orientation
 \item[{\color{red} \xmark}] Sensitive to the value of parameters in the filtering process
 \end{itemize}
+
+
 
 \end{column}
 
@@ -233,29 +373,35 @@ diag
 %% Slide 8 ==================================================================
 
 \begin{frame}
-\frametitle{Each stage of our solution is good!}
+\frametitle{Each stage of our solution brings some improvement}
 
 
-\begin{table}[t]
-\caption{Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.}
-\label{tab:comparison}
-\centering
-\tiny
-\begin{tabular}{| l | c c c c | c c c c |}
-\hline
-& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
-\textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
-\hline
-\hline
-No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
-$ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
-$ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
-+ PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
-Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
-Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & \textbf{0.939} & \textbf{0.403} & \textbf{0.404} & \textbf{0.398} & \textbf{0.388}\\
-\hline
-\end{tabular}
-\end{table}
+\begin{center}
+\textit{Average scores on normal-{1,2,3,4} datasets.
+}
+\includegraphics[width=8cm]{images/data_stage.png}
+\end{center}
+
+% \begin{table}[t]
+% \caption{Performance on \textit{normal-1,2,3,4} with partial correlation and different filtering functions.}
+% \label{tab:comparison}
+% \centering
+% \tiny
+% \begin{tabular}{| l | c c c c | c c c c |}
+% \hline
+% & \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+% \textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+% \hline
+% \hline
+% No  filtering       					& 0.777 & 0.767 & 0.772 & 0.774 & 0.070 & 0.064 & 0.068 & 0.072\\
+% $ h \circ g \circ f_1$                  & 0.923 & 0.925 & 0.923 & 0.922 & 0.311 & 0.315 & 0.313 & 0.304\\
+% $ w \circ h \circ g \circ f_1$          & 0.931 & 0.929 & 0.928 & 0.926 & 0.326 & 0.323 & 0.319 & 0.303\\
+% + PCA         							& 0.932 & 0.930 & 0.928 & 0.926 & 0.355 & 0.353 & 0.350 & 0.333\\
+% Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
+% Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & \textbf{0.939} & \textbf{0.403} & \textbf{0.404} & \textbf{0.398} & \textbf{0.388}\\
+% \hline
+% \end{tabular}
+% \end{table}
 
 
 
@@ -267,28 +413,32 @@ Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & 
 \frametitle{Comparison with other methods}
 
 
+\begin{center}
+\textit{Average scores on normal-{1,2,3,4} datasets.
+}
+\includegraphics[width=9cm]{images/data_method.png}
+\end{center}
+% \begin{table}[t]
 
-\begin{table}[t]
-
-\caption{Performance on \textit{normal-1,2,3,4} with different methods.}
-\label{tab:comparison}
-\centering
-\tiny
-\begin{tabular}{| l | c c c c | c c c c |}
-\hline
-& \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
-\textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
-\hline
-\hline
-Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
-Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & \textbf{0.939} & \textbf{0.403} & \textbf{0.404} & \textbf{0.398} & \textbf{0.388}\\
-\hline
-PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
-GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
-GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
-\hline
-\end{tabular}
-\end{table}
+% \caption{Performance on \textit{normal-1,2,3,4} with different methods.}
+% \label{tab:comparison}
+% \centering
+% \tiny
+% \begin{tabular}{| l | c c c c | c c c c |}
+% \hline
+% & \multicolumn{4}{c|}{AUROC} & \multicolumn{4}{c|}{AUPRC} \\
+% \textit{Method} $\backslash$ \textit{normal-} & \textit{1} & \textit{2} & \textit{3} & \textit{4} & \textit{1} & \textit{2} & \textit{3} & \textit{4} \\
+% \hline
+% \hline
+% Averaging           					& 0.937 & 0.935 & 0.935 & 0.931 & 0.391 &  0.390 &  0.385 & 0.375\\
+% Full method           					& \textbf{0.943} & \textbf{0.942} & \textbf{0.942} & \textbf{0.939} & \textbf{0.403} & \textbf{0.404} & \textbf{0.398} & \textbf{0.388}\\
+% \hline
+% PC & 0.886 & 0.884 & 0.891 &  0.877 & 0.153 & 0.145 & 0.170 & 0.132\\
+% GTE & 0.890 & 0.893 & 0.894 & 0.873 & 0.171 & 0.174 & 0.197 & 0.142\\
+% GENIE3 & 0.892 & 0.891 & 0.887 & 0.887 & 0.232 & 0.221 & 0.237 & 0.215 \\
+% \hline
+% \end{tabular}
+% \end{table}
 
 \end{frame}
 
