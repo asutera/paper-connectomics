@@ -40,6 +40,7 @@ would build the section and let you edit it to correct mistakes or add
 precisions.\\
 }
 
+<<<<<<< HEAD
 The inference problem reduced to its simpliest shape is the identification of
 neuron pairs that are directly connected in the network. Intuitively, such
 pairs should be related somehow and in particular their activities have to be
@@ -71,6 +72,16 @@ quality of the estimates of both measures.
 Accordingly, ahead of (partial) correlation, filters are applied on fluorescent data in order to (i) smoothe the signal\footnote{I assume that noise will have been explained at this stage of the paper. Otherwise, we should mention something like this :\textit{Noise is due to fluctuations independent of calcium, calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues that have been mistakenly captured, or simply by the imaging process.}}; (ii) emphasise short spikes that are indirect indicator of neuron communication; and (iii) artificially magnify spikes that occur during normal activity because we have conjectured that when a large part of the network is firing (i.e., called a network burst \citep{stetter2012model}), the estimation of degree of assocation is meaningless \citep{sutera2014simple}.
 
 
+=======
+A simple yet effective solution to the problem of connectome inference in
+calcium imaging data consists of two steps. \cite{sutera2014simple} First,
+processing the raw signals and to detect neural peak activities while filtering
+noise. Second, inferring the degree of association between neurons from partial
+correlation statistics, the inverse of the correlation matrix. This statitical
+measure has the property to filter indirect associations between neuron and
+gives a high degree of association between directly connected neurons. This
+approach is the winning methods of the Connectomics challenge.
+>>>>>>> b4c65e0e20727be7cd8b419c71162382dee44334
 
 \section{Method}
 \emph{A second mini-text I ask you will converge to the Methods section. Here I need
@@ -78,6 +89,10 @@ a more detailed presentation of your method. However, it has to be precise, but
 still understandable for a biologist. A bit like a recipe in a cookbook for
 beginners.}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b4c65e0e20727be7cd8b419c71162382dee44334
 
 \newpage
 \bibliography{references}
