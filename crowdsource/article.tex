@@ -37,17 +37,49 @@ public of... ignorant biologists! What's the logic of making a certain step?
 How does the method work in a nutshell, without using equations but expressed
 in plain words, etc. ? Then, based on all the texts I will collect from you, I
 would build the section and let you edit it to correct mistakes or add
-precisions.
+precisions.\\
 }
 
+The inference problem reduced to its simpliest shape is the identification of
+neuron pairs that are directly connected in the network. Intuitively, such
+pairs should be related somehow and in particular their activities have to be
+similar since their are dependent on the connectivity network. Therefore a way
+to identify them is to measure, or at least estimate, how closely related two
+neurons are regarding their activities. The most common measure for that
+purpose is the (Pearson) correlation.  However, correlation also measures the
+degree of association between neurons that are connected through others and so 
+connected indirectly. It means all related neurons are found but direct pairs
+are indinstinguishable from indirect ones.
+
+A variant of this classic approach is the partial correlation which measures
+the degree of association between neurons but takes into account the state
+(here, the activity state) of other neurons. If all other neurons are
+considered, the partial correlation is known as the inverse covariance. By
+conditioning on them (and under a few assumptions), inverse correlation only
+detects direct association between neuron pairs and filter out indirect
+relationships that may also be observed in data \citep{sutera2014simple}. The
+interest of partial correlation as an association measure has already been
+shown for the inference of gene regulatory networks \citep{de2004discovery,Schafer:2005}.
+
+Nevertheless, in particular for the connectome inference from fluorescent
+data, a pre-processing is required before applying either of both measures.
+Such processes (i) abstract the activity signal from fluorescent data; and
+(ii) highlight characteristics of activity signals (e.g., spikes) to make
+easier the assessement of the degree of association and therefore improve the
+quality of the estimates of both measures.
+
+Accordingly, ahead of (partial) correlation, filters are applied on fluorescent data in order to (i) smoothe the signal\footnote{I assume that noise will have been explained at this stage of the paper. Otherwise, we should mention something like this :\textit{Noise is due to fluctuations independent of calcium, calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues that have been mistakenly captured, or simply by the imaging process.}}; (ii) emphasise short spikes that are indirect indicator of neuron communication; and (iii) artificially magnify spikes that occur during normal activity because we have conjectured that when a large part of the network is firing (i.e., called a network burst \citep{stetter2012model}), the estimation of degree of assocation is meaningless \citep{sutera2014simple}.
+
+
+
 \section{Method}
-\empht{A second mini-text I ask you will converge to the Methods section. Here I need
+\emph{A second mini-text I ask you will converge to the Methods section. Here I need
 a more detailed presentation of your method. However, it has to be precise, but
 still understandable for a biologist. A bit like a recipe in a cookbook for
 beginners.}
 
-\cite{sutera2014simple}
 
+\newpage
 \bibliography{references}
 
 \end{document}
