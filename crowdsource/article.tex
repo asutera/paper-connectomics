@@ -8,6 +8,8 @@
 \usepackage[super]{nth}
 \setlength{\textfloatsep}{15pt}
 
+\usepackage{algorithmic}
+
 \jmlryear{2014}
 \jmlrworkshop{Neural Connectomics Workshop}
 
@@ -87,7 +89,7 @@ A simple yet effective solution to the problem of connectome inference in
 calcium imaging data consists of two steps. \cite{sutera2014simple} First,
 processing the raw signals and to detect neural peak activities while filtering
 noise. Second, inferring the degree of association between neurons from partial
-correlation statistics, the inverse of the correlation matrix. This statitical
+correlation statistics, the inverse of the correlation matrix. This statistical
 measure has the property to filter indirect associations between neuron and
 gives a high degree of association between directly connected neurons. This
 approach is the winning methods of the Connectomics challenge.
@@ -96,11 +98,105 @@ approach is the winning methods of the Connectomics challenge.
 \emph{A second mini-text I ask you will converge to the Methods section. Here I need
 a more detailed presentation of your method. However, it has to be precise, but
 still understandable for a biologist. A bit like a recipe in a cookbook for
-beginners.}
+beginners.\\}
+
+The method involving inverse covariance, fully described in \cite{sutera2014simple}, is presented in Table~\ref{alg:inverse-covariance-pseudocode}. Under the simplifying assumption that neurons are on-off units defined by short intense periods of activity (i.e., spikes) and long periods of inactivity, it is possible to extract that information from the fluorescent data by appling several filters, common in the field of signal processing \citep{kaiser1977data, oppenheim1983signals}.
+
+The first step of our pipeline is to smoothe the fluorescence signal by applying a low-pass filter for filtering out high frequency noise:
+\begin{align}
+f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
+\label{eq:weighted-asymetric-median}
+\end{align}
+
+To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time-series into its backward difference
+\begin{align}
+g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
+\end{align}
+
+To filter out small variations in the signal obtained after applying the function $g$, as well
+as to eliminate negative values, we use the following hard-threshold filter
+\begin{align}\label{eqn:hfilter}
+h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
+\end{align}
+where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator function.
 
 
-As 
+The objective of the last step of our filtering procedure is to decrease the importance of spikes that occur when there is high global activity in the network with respect to spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough to be able to detect interactions, and that it would therefore be preferable to lower their importance by changing their magnitude appropriately. Additionally, it is well-known that neurons may also spike because of a high global activity \citep{stetter2012model}. In such context, detecting pairwise neuron interactions from the firing activity is meaningless. As such, the signal output by h is finally applied to the following function
+\begin{align}
+ w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}, \label{eq:magnify-filter}
+\end{align}
+whose effect is to magnify the importance of spikes that occur in cases of low global activity (measured by $\sum_j x^t_j$).\\
 
+
+Under the assumption that fluorescence level neuron are jointly gaussian, \textit{partial correlation} thus measures conditional dependencies between variables ; therefore it should naturally only detect direct associations between neurons and filter out spurious indirect effects as mentioned before.
+
+Practically speaking, the computation of all $p_{i,j}$ coefficients requires the estimation of the covariance matrix $\Sigma$
+and then computing its inverse. Given that typically we have more
+samples than neurons, the covariance matrix can be inverted in a
+straightforward way. We nevertheless obtained some improvement by
+replacing the exact inverse with an approximation using only the $M$
+first principal components \citep{bishop2006pattern} (more details in \citep{sutera2014simple}). 
+
+\begin{table}[ht]
+\begin{algorithmic}
+ \algsetup{linenodelimiter= }
+
+\STATE \textbf{Given} the sampled observation of $p$ neurons for $T$ time intervals.\\[2ex]
+
+\FOR{$(f,\tau) \in (\{f_1, f_2\}, \{\tau_1, \tau_2, \dots \})$}
+
+\STATE \vspace{1em} \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.
+\FOR{$x \in \{1,\dots,T\} $}
+\STATE $\bar{x}^t_i  \leftarrow w \circ h_{\tau} \circ g \circ f (x^t_i)$
+\ENDFOR\\[2ex]
+
+\STATE \textbf{Phase 2:} Compute \textit{Partial correlation} coefficient $p_{i,j}$ for each neuron pair $(i,j)$.
+\FOR{all pair $(i,j)$}
+\STATE Estimation of the covariance matrix $\Sigma$
+\STATE Computing $\Sigma^{-1}$, the inverse of $\Sigma$
+\STATE $p_{i,j} =
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}$
+
+\ENDFOR\\[2ex]
+\ENDFOR
+
+\end{algorithmic}
+\caption{Inverse covariance pseudo-code}
+\label{alg:inverse-covariance-pseudocode}
+\end{table}
+
+
+
+
+
+% \begin{algorithm}[h]
+%  \KwData{Given the sampled observation $\{ x^t_i \in \mathbb{R} | i \in V, t = 1, \dots, T \}$ of $p$ neurons for T time intervals}
+%  % \KwResult{how to write algorithm with \LaTeX2e }
+
+
+%  \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.\;\;
+% \ \ For 
+
+
+% {\Indp
+%  \For{$x \in \{1,\dots,T\} $}{
+% 		$\bar{x}^t_i  \leftarrow w \circ h \circ g \circ f (x^t_i)$
+%  }
+%  }
+
+%  \While{not at end of this document}{
+%   read current\;
+%   \eIf{understand}{
+%    go to next section\;
+%    current section becomes this one\;
+%    }{
+%    go back to the beginning of current section\;
+%   }
+%  }
+%  \caption{Inverse covariance pseudo-code}
+%  \label{alg:inverse-covariance-pseudocode}
+% \end{algorithm}
 
 
 \newpage
