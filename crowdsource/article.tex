@@ -8,6 +8,7 @@
 \usepackage[super]{nth}
 \setlength{\textfloatsep}{15pt}
 
+\usepackage{algorithm}
 \usepackage{algorithmic}
 
 \jmlryear{2014}
@@ -39,60 +40,23 @@ public of... ignorant biologists! What's the logic of making a certain step?
 How does the method work in a nutshell, without using equations but expressed
 in plain words, etc. ? Then, based on all the texts I will collect from you, I
 would build the section and let you edit it to correct mistakes or add
-precisions.\\
-}
+precisions.\\}
 
-\paragraph{A first version}
-The inference problem reduced to its simpliest shape is the identification of
-neuron pairs that are directly connected in the network. Intuitively, such
-pairs should be related somehow and in particular their activities have to be
-similar since their are dependent on the connectivity network. Therefore a way
-to identify them is to measure, or at least estimate, how closely related two
-neurons are regarding their activities. The most common measure for that
-purpose is the (Pearson) correlation.  However, correlation also measures the
-degree of association between neurons that are connected through others and so 
-connected indirectly. It means all related neurons are found but direct pairs
-are indinstinguishable from indirect ones.
 
-A variant of this classic approach is the partial correlation which measures
-the degree of association between neurons but takes into account the state
-(here, the activity state) of other neurons. If all other neurons are
-considered, the partial correlation is known as the inverse covariance. By
-conditioning on them (and under a few assumptions), inverse correlation only
-detects direct association between neuron pairs and filter out indirect
-relationships that may also be observed in data \citep{sutera2014simple}. The
-interest of partial correlation as an association measure has already been
-shown for the inference of gene regulatory networks \citep{de2004discovery,Schafer:2005}.
-
-Nevertheless, in particular for the connectome inference from fluorescent
-data, a pre-processing is required before applying either of both measures.
-Such processes (i) abstract the activity signal from fluorescent data; and
-(ii) highlight characteristics of activity signals (e.g., spikes) to make
-easier the assessement of the degree of association and therefore improve the
-quality of the estimates of both measures.
-
-Accordingly, ahead of (partial) correlation, filters are applied on
-fluorescent data in order to (i) smoothe the signal\footnote{I assume that
-noise will have been explained at this stage of the paper. Otherwise, we
-should mention something like this :\textit{Noise is due to fluctuations
-independent of calcium, calcium fluctuations independent of spiking activity,
-calcium fluctuations in nearby tissues that have been mistakenly captured, or
-simply by the imaging process.}}; (ii) emphasise short spikes that are
-indirect indicator of neuron communication; and (iii) artificially magnify
-spikes that occur during normal activity because we have conjectured that when
-a large part of the network is firing (i.e., called a network burst
-\citep{stetter2012model}), the estimation of degree of assocation is
-meaningless \citep{sutera2014simple}.
-
-\paragraph{Alternative}
-A simple yet effective solution to the problem of connectome inference in
-calcium imaging data consists of two steps. \cite{sutera2014simple} First,
-processing the raw signals and to detect neural peak activities while filtering
-noise. Second, inferring the degree of association between neurons from partial
-correlation statistics, the inverse of the correlation matrix. This statistical
-measure has the property to filter indirect associations between neuron and
-gives a high degree of association between directly connected neurons. This
-approach is the winning methods of the Connectomics challenge.
+A partial correlation approach \cite{sutera2014simple}  is a simple yet effective
+solution to the problem of connectome inference in calcium imaging data.
+This winning approach of the Connectomics challenge consists of two steps.
+First, time-series are processed using standard
+signal processing filters in order to : (i) remove noise mainly due to
+fluctuations independent of calcium, calcium fluctuations independent of
+spiking activity, calcium fluctuations in nearby tissues that have been
+mistakenly captured, or simply by the imaging process ; (ii) to account for
+fluorescence low decay ; and (iii) to reduce the importance of high global
+activity in the network. Secondly, inferring the degree of association between
+neurons is then made with partial correlation statistics, the inverse of the
+correlation matrix. This statistical measure has the property to filter
+indirect associations between neurons and gives a high degree of association
+between directly connected neurons.
 
 \section{Method}
 \emph{A second mini-text I ask you will converge to the Methods section. Here I need
@@ -100,9 +64,43 @@ a more detailed presentation of your method. However, it has to be precise, but
 still understandable for a biologist. A bit like a recipe in a cookbook for
 beginners.\\}
 
-The method involving inverse covariance, fully described in \cite{sutera2014simple}, is presented in Table~\ref{alg:inverse-covariance-pseudocode}. Under the simplifying assumption that neurons are on-off units defined by short intense periods of activity (i.e., spikes) and long periods of inactivity, it is possible to extract that information from the fluorescent data by appling several filters, common in the field of signal processing \citep{kaiser1977data, oppenheim1983signals}.
+The inference problem reduced to its simplest shape is the identification of
+neuron pairs that are directly connected in the network. Intuitively, such
+pairs should be related somehow and in particular their activities have to be
+similar since their are dependent on the connectivity network. Therefore a way
+to identify them is to measure, or at least estimate, how closely related two
+neurons are regarding their activities. The most common measure for that
+purpose is the (Pearson) correlation.  However, correlation also measures the
+degree of association between neurons that are connected through others and so
+connected indirectly. It means all related neurons are found but direct pairs
+are indistinguishable from indirect ones.
 
-The first step of our pipeline is to smoothe the fluorescence signal by applying a low-pass filter for filtering out high frequency noise:
+A variant of this classic approach is the partial correlation
+\citep{sutera2014simple}, also known as the inverse of the correlation, which
+measures the degree of association between two neurons taking into account the
+state of all other neurons. Under technical assumptions, the inverse
+correlation can be interpreted as a measure of association between directly
+connected pairs of neurons and filter out indirectly connected pairs of
+neurons. In genetics network, partial correlation have already shown to be
+effective way to infer gene regulatory networks
+\citep{de2004discovery,Schafer:2005}. This approach is fully described in
+\cite{sutera2014simple} and is presented in Algorithm~\ref{alg:inverse-
+covariance- pseudocode}. We first describe the pre-processing of the signal,
+then explained how to compute the partial  correlation statistics.
+
+
+Under the simplifying assumption that neurons are on-off units, characterised
+by short periods of intense activity, or peaks, and longer periods of
+inactivity, the first part of our algorithm consists of cleaning the raw
+fluorescence data. More specifically, time-series are processed using standard
+signal processing filters in order to : (i) remove noise mainly due to
+fluctuations independent of calcium, calcium fluctuations independent of
+spiking activity, calcium fluctuations in nearby tissues that have been
+mistakenly captured, or simply by the imaging process ; (ii) to account for
+fluorescence low decay ; and (iii) to reduce the importance of high global
+activity in the network. This data pre-processing is standard  in the field of
+signal processing \citep{kaiser1977data, oppenheim1983signals}.
+The first step of our pipeline is to smooth the fluorescence signal by applying a low-pass filter for filtering out high frequency noise:
 \begin{align}
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
 f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
@@ -114,31 +112,46 @@ To have a signal that only has high magnitude around instances where the spikes 
 g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
 \end{align}
 
-To filter out small variations in the signal obtained after applying the function $g$, as well
-as to eliminate negative values, we use the following hard-threshold filter
+To filter out small variations in the signal obtained after applying the
+function $g$, as well as to eliminate negative values, we use the following
+hard-threshold filter
 \begin{align}\label{eqn:hfilter}
 h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
-where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator function.
+where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator
+function.
 
-
-The objective of the last step of our filtering procedure is to decrease the importance of spikes that occur when there is high global activity in the network with respect to spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough to be able to detect interactions, and that it would therefore be preferable to lower their importance by changing their magnitude appropriately. Additionally, it is well-known that neurons may also spike because of a high global activity \citep{stetter2012model}. In such context, detecting pairwise neuron interactions from the firing activity is meaningless. As such, the signal output by h is finally applied to the following function
+The objective of the last step of our filtering procedure is to decrease the
+importance of spikes that occur when there is high global activity in the
+network with respect to spikes that occur during normal activity. Indeed, we
+have conjectured that when a large part of the network is firing, the rate at
+which observations are made is not high enough to be able to detect
+interactions, and that it would therefore be preferable to lower their
+importance by changing their magnitude appropriately. Additionally, it is well-
+known that neurons may also spike because of a high global activity
+\citep{stetter2012model}. In such context, detecting pairwise neuron
+interactions from the firing activity is meaningless. As such, the signal
+output by h is finally applied to the following function
 \begin{align}
  w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}, \label{eq:magnify-filter}
 \end{align}
-whose effect is to magnify the importance of spikes that occur in cases of low global activity (measured by $\sum_j x^t_j$).\\
+whose effect is to magnify the importance of spikes that occur in cases of low
+global activity (measured by $\sum_j x^t_j$).
 
+Under the assumption that fluorescence level neuron are jointly Gaussian,
+\textit{partial correlation} thus measures conditional dependencies between
+variables ; therefore it should naturally only detect direct associations
+between neurons and filter out spurious indirect effects as mentioned before.
 
-Under the assumption that fluorescence level neuron are jointly gaussian, \textit{partial correlation} thus measures conditional dependencies between variables ; therefore it should naturally only detect direct associations between neurons and filter out spurious indirect effects as mentioned before.
+Practically speaking, the computation of all $p_{i,j}$ coefficients requires
+the estimation of the covariance matrix $\Sigma$ and then computing its
+inverse. Given that typically we have more samples than neurons, the covariance
+matrix can be inverted in a straightforward way. We nevertheless obtained some
+improvement by replacing the exact inverse with an approximation using only the
+$M$ first principal components \citep{bishop2006pattern} (more details in
+\citep{sutera2014simple}).
 
-Practically speaking, the computation of all $p_{i,j}$ coefficients requires the estimation of the covariance matrix $\Sigma$
-and then computing its inverse. Given that typically we have more
-samples than neurons, the covariance matrix can be inverted in a
-straightforward way. We nevertheless obtained some improvement by
-replacing the exact inverse with an approximation using only the $M$
-first principal components \citep{bishop2006pattern} (more details in \citep{sutera2014simple}). 
-
-\begin{table}[ht]
+\begin{algorithm}[ht]
 \begin{algorithmic}
  \algsetup{linenodelimiter= }
 
@@ -164,7 +177,7 @@ first principal components \citep{bishop2006pattern} (more details in \citep{sut
 \end{algorithmic}
 \caption{Inverse covariance pseudo-code}
 \label{alg:inverse-covariance-pseudocode}
-\end{table}
+\end{algorithm}
 
 
 
@@ -176,7 +189,7 @@ first principal components \citep{bishop2006pattern} (more details in \citep{sut
 
 
 %  \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.\;\;
-% \ \ For 
+% \ \ For
 
 
 % {\Indp
