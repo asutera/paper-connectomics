@@ -43,20 +43,17 @@ would build the section and let you edit it to correct mistakes or add
 precisions.\\}
 
 
-A partial correlation approach \cite{sutera2014simple}  is a simple yet effective
-solution to the problem of connectome inference in calcium imaging data.
-This winning approach of the Connectomics challenge consists of two steps.
-First, time-series are processed using standard
-signal processing filters in order to : (i) remove noise mainly due to
-fluctuations independent of calcium, calcium fluctuations independent of
-spiking activity, calcium fluctuations in nearby tissues that have been
-mistakenly captured, or simply by the imaging process ; (ii) to account for
-fluorescence low decay ; and (iii) to reduce the importance of high global
-activity in the network. Secondly, inferring the degree of association between
-neurons is then made with partial correlation statistics, the inverse of the
-correlation matrix. This statistical measure has the property to filter
-indirect associations between neurons and gives a high degree of association
-between directly connected neurons.
+A partial correlation approach \cite{sutera2014simple}  is a simple yet
+effective solution to the problem of connectome inference in calcium imaging
+data. This partial correlation statistics, the inverse of the correlation
+measure, has  the property to filter indirect associations between neurons and
+gives a high degree of association between directly connected neurons. The
+winning solution of the Connectomics challenge combines two main steps:
+(i) data are pre-processed using signal processing filters; (ii)
+the network is infered through partial correlation. The pre-processing step
+highly improves the infered network by removing noise and taking into account
+specifities of the fluorecense signals.
+
 
 \section{Method}
 \emph{A second mini-text I ask you will converge to the Methods section. Here I need
