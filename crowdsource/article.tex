@@ -69,7 +69,7 @@ to identify them is to measure, or at least estimate, how closely related two
 neurons are regarding their activities. The most common measure for that
 purpose is the (Pearson) correlation.  However, correlation also measures the
 degree of association between neurons that are connected through others and so
-connected indirectly. It means all related neurons are found but direct pairs
+connected indirectly. It means all related neurons are found but direct pairs (i.e., without any intermediates)
 are indistinguishable from indirect ones.
 
 A variant of this classic approach is the partial correlation
@@ -77,36 +77,37 @@ A variant of this classic approach is the partial correlation
 measures the degree of association between two neurons taking into account the
 state of all other neurons. Under technical assumptions, the inverse
 correlation can be interpreted as a measure of association between directly
-connected pairs of neurons and filter out indirectly connected pairs of
+connected pairs of neurons while filtering out indirectly connected pairs of
 neurons. In genetics network, partial correlation have already shown to be
 effective way to infer gene regulatory networks
 \citep{de2004discovery,Schafer:2005}. This approach is fully described in
-\cite{sutera2014simple} and is presented in Algorithm~\ref{alg:inverse-
-covariance- pseudocode}. We first describe the pre-processing of the signal,
-then explained how to compute the partial  correlation statistics.
+\cite{sutera2014simple}. 
 
+In the following paragraphs, we first describe the pre-processing of the signal,
+then explained how to compute the partial correlation statistics.
 
 Under the simplifying assumption that neurons are on-off units, characterised
 by short periods of intense activity, or peaks, and longer periods of
-inactivity, the first part of our algorithm consists of cleaning the raw
-fluorescence data. More specifically, time-series are processed using standard
-signal processing filters in order to : (i) remove noise mainly due to
-fluctuations independent of calcium, calcium fluctuations independent of
+inactivity, the first part of our algorithm consists in cleaning the raw
+fluorescence data. More specifically, time-series are pre-processed using
+standard signal processing filters in order to : (i) remove noise mainly due
+to fluctuations independent of calcium, calcium fluctuations independent of
 spiking activity, calcium fluctuations in nearby tissues that have been
 mistakenly captured, or simply by the imaging process ; (ii) to account for
 fluorescence low decay ; and (iii) to reduce the importance of high global
-activity in the network. This data pre-processing is standard  in the field of
-signal processing \citep{kaiser1977data, oppenheim1983signals}.
-The first step of our pipeline is to smooth the fluorescence signal by applying a low-pass filter for filtering out high frequency noise:
-\begin{align}
-f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
-\label{eq:weighted-asymetric-median}
+activity in the network. The first step of our pipeline is to smooth the
+fluorescence signal by applying a low-pass filter for filtering out high
+frequency noise:  
+\begin{align} f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i,
+\label{eq:symetric-median} \\ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i +
+0.8 x^{t-1}_i + x_i^t. \label{eq:weighted- asymetric-median} 
 \end{align}
 
-To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time-series into its backward difference
-\begin{align}
-g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i. \label{eq:high-pass-filter}
+To have a signal that only has high magnitude around instances where the
+spikes occur, the second step of our pipeline transforms the time-series into
+its backward difference 
+\begin{align} g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i.
+\label{eq:high-pass-filter}
 \end{align}
 
 To filter out small variations in the signal obtained after applying the
@@ -124,8 +125,8 @@ network with respect to spikes that occur during normal activity. Indeed, we
 have conjectured that when a large part of the network is firing, the rate at
 which observations are made is not high enough to be able to detect
 interactions, and that it would therefore be preferable to lower their
-importance by changing their magnitude appropriately. Additionally, it is well-
-known that neurons may also spike because of a high global activity
+importance by changing their magnitude appropriately. Additionally, it is well-known
+that neurons may also spike because of a high global activity
 \citep{stetter2012model}. In such context, detecting pairwise neuron
 interactions from the firing activity is meaningless. As such, the signal
 output by h is finally applied to the following function
@@ -136,7 +137,7 @@ whose effect is to magnify the importance of spikes that occur in cases of low
 global activity (measured by $\sum_j x^t_j$).
 
 Under the assumption that fluorescence level neuron are jointly Gaussian,
-\textit{partial correlation} thus measures conditional dependencies between
+partial correlation thus measures conditional dependencies between
 variables ; therefore it should naturally only detect direct associations
 between neurons and filter out spurious indirect effects as mentioned before.
 
@@ -152,27 +153,28 @@ $M$ first principal components \citep{bishop2006pattern} (more details in
 \begin{algorithmic}
  \algsetup{linenodelimiter= }
 
-\STATE \textbf{Given} the sampled observation of $p$ neurons for $T$ time intervals.\\[2ex]
+\STATE Here the pseudo-code.
+% \STATE \textbf{Given} the sampled observation of $p$ neurons for $T$ time intervals.\\[2ex]
 
-\FOR{$(f,\tau) \in (\{f_1, f_2\}, \{\tau_1, \tau_2, \dots \})$}
+% \FOR{$(f,\tau) \in (\{f_1, f_2\}, \{\tau_1, \tau_2, \dots \})$}
 
-\STATE \vspace{1em} \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.
-\FOR{$x \in \{1,\dots,T\} $}
-\STATE $\bar{x}^t_i  \leftarrow w \circ h_{\tau} \circ g \circ f (x^t_i)$
-\ENDFOR\\[2ex]
+% \STATE \vspace{1em} \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.
+% \FOR{$x \in \{1,\dots,T\} $}
+% \STATE $\bar{x}^t_i  \leftarrow w \circ h_{\tau} \circ g \circ f (x^t_i)$
+% \ENDFOR\\[2ex]
 
-\STATE \textbf{Phase 2:} Compute \textit{Partial correlation} coefficient $p_{i,j}$ for each neuron pair $(i,j)$.
-\FOR{all pair $(i,j)$}
-\STATE Estimation of the covariance matrix $\Sigma$
-\STATE Computing $\Sigma^{-1}$, the inverse of $\Sigma$
-\STATE $p_{i,j} =
--\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}$
+% \STATE \textbf{Phase 2:} Compute \textit{Partial correlation} coefficient $p_{i,j}$ for each neuron pair $(i,j)$.
+% \FOR{all pair $(i,j)$}
+% \STATE Estimation of the covariance matrix $\Sigma$
+% \STATE Computing $\Sigma^{-1}$, the inverse of $\Sigma$
+% \STATE $p_{i,j} =
+% -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}$
 
-\ENDFOR\\[2ex]
-\ENDFOR
+% \ENDFOR\\[2ex]
+% \ENDFOR
 
 \end{algorithmic}
-\caption{Inverse covariance pseudo-code}
+\caption{Inverse covariance pseudo-code \textcolor{red}{TO DO}}
 \label{alg:inverse-covariance-pseudocode}
 \end{algorithm}
 
