@@ -42,17 +42,23 @@ in plain words, etc. ? Then, based on all the texts I will collect from you, I
 would build the section and let you edit it to correct mistakes or add
 precisions.\\}
 
-
-A partial correlation approach \cite{sutera2014simple}  is a simple yet
-effective solution to the problem of connectome inference from calcium imaging
-data. This partial correlation statistics, equivalent to the inverse of the correlation
-measure, has  the property to filter out indirect associations between neurons and
-only gives a high degree of association between directly connected neurons. The
-winning solution of the Connectomics challenge combines two main steps:
-(i) A pre-processing of the data using signal processing filters; and (ii)
-The inference of the network through partial correlation. The pre-processing procedure
-highly improves the infered network quality by filtering out noise and taking into account
-specifities of the fluorecense signals.
+The winning solution of the Connectomics challenge \citep{sutera2014simple}
+combines two main steps: (i) a pre-processing of the raw signals to detect
+neural peak activities; and (ii) the inference of the network through partial
+correlation statistics. The pre-processing step is crucial to obtain optimal
+performance. It combines several standard filtering functions with three main
+goals: to remove the noise introduced at different levels, to account for
+fluorescence low decay, and to reduce the importance of high global activity in
+the network. From the filtered signals, the strength of the connection between two
+neurons is then assessed using partial correlations. The partial correlation
+between two random variables measures their conditional dependencies, i.e.,
+their associations when the effect of all the other variables has been
+removed. With respect to plain correlation, the main advantage of partial
+correlation for network inference is to only give a high degree of association
+to directly connected neurons and thus to filter out spurious indirect
+associations. Practically, partial correlations are also easily computed for
+all pairs of neurons at once from a simple inversion of the data covariance
+matrix.
 
 
 \section{Method}
@@ -61,155 +67,112 @@ a more detailed presentation of your method. However, it has to be precise, but
 still understandable for a biologist. A bit like a recipe in a cookbook for
 beginners.\\}
 
-The inference problem reduced to its simplest shape is the identification of
-neuron pairs that are directly connected in the network. Intuitively, such
-pairs should be related somehow and in particular their activities have to be
-similar since their are dependent on the connectivity network. Therefore a way
-to identify them is to measure, or at least estimate, how closely related two
-neurons are regarding their activities. The most common measure for that
-purpose is the (Pearson) correlation.  However, correlation also measures the
-degree of association between neurons that are connected through others and so
-connected indirectly. It means all related neurons are found but direct pairs (i.e., without any intermediates)
-are indistinguishable from indirect ones.
+Our approach consists of two main steps: (i) a pre-processing of the raw
+signals with several signal processing filters; and (ii) the inference of the
+network through partial correlation statistics. We describe the details of
+these two steps below as well as two techniques that slightly improve
+performance, averaging and edge orientation. Further motivations for all steps
+are given in \citep{sutera2014simple}. A simplified method is also proposed in
+the same paper with only slightly lower performance.
 
-A variant of this classic approach is the partial correlation
-\citep{sutera2014simple}, also known as the inverse of the correlation, which
-measures the degree of association between two neurons taking into account the
-state of all other neurons. Under technical assumptions, the inverse
-correlation can be interpreted as a measure of association between directly
-connected pairs of neurons while filtering out indirectly connected pairs of
-neurons. In genetics network, partial correlation have already shown to be
-effective way to infer gene regulatory networks
-\citep{de2004discovery,Schafer:2005}. This approach is fully described in
-\cite{sutera2014simple}. 
-
-In the following paragraphs, we first describe the pre-processing of the signal,
-then explained how to compute the partial correlation statistics.
+\paragraph{Pre-processing.}
 
 Under the simplifying assumption that neurons are on-off units, characterised
 by short periods of intense activity, or peaks, and longer periods of
 inactivity, the first part of our algorithm consists in cleaning the raw
-fluorescence data. More specifically, time-series are pre-processed using
-standard signal processing filters in order to : (i) remove noise mainly due
-to fluctuations independent of calcium, calcium fluctuations independent of
-spiking activity, calcium fluctuations in nearby tissues that have been
-mistakenly captured, or simply by the imaging process ; (ii) to account for
-fluorescence low decay ; and (iii) to reduce the importance of high global
-activity in the network. The first step of our pipeline is to smooth the
-fluorescence signal by applying a low-pass filter for filtering out high
-frequency noise:  
-\begin{align} f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i,
-\label{eq:symetric-median} \\ f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i +
-0.8 x^{t-1}_i + x_i^t. \label{eq:weighted- asymetric-median} 
+fluorescence data. This pre-processing applies successively four
+filtering functions to the original signal:
+\begin{itemize}
+  \item The first function smooths the fluorescence signal, using one of the following
+low-pass filters for filtering out high frequency noise:
+\begin{align} f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
+  f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.\label{eq:weighted-asymetric-median}\\
+  f_3(x^t_i) &= x^{t-1}_i + x^{t}_i + x^{t+1}_i + x^{t+2}_i, \label{eq:asymetric-median-forward} \\
+f_4(x^t_i) &=  x_i^t + x^{t+1}_i  + x^{t+2}_i + x^{t+3}_i. \label{eq:asymetric-median}
 \end{align}
-
-To have a signal that only has high magnitude around instances where the
-spikes occur, the second step of our pipeline transforms the time-series into
+\item To have a signal that only has high magnitude around instances where the
+spikes occur, the second filter function transforms the time-series into
 its backward difference 
 \begin{align} g(x^{t}_{i}) &= x^{t}_i - x^{t-1}_i.
 \label{eq:high-pass-filter}
 \end{align}
-
-To filter out small variations in the signal obtained after applying the
-function $g$, as well as to eliminate negative values, we use the following
+\item To filter out small variations in the signal obtained after applying the
+function $g$, as well as to eliminate negative values, we then use the following
 hard-threshold filter
 \begin{align}\label{eqn:hfilter}
-h(x^{t}_i) &= x^{t}_i \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
+h(x^{t}_i) &= (x^{t}_i)^c \mathbb{1}(x^{t}_i \geq \tau) \text{ with } \tau > 0,
 \end{align}
-where $\tau$ is the threshold parameter and $\mathbb{1}$ is the indicator
+where $\tau$ is the threshold parameter, $c$ is equal to 0.9, and $\mathbb{1}$ is the indicator
 function.
-
-The objective of the last step of our filtering procedure is to decrease the
-importance of spikes that occur when there is high global activity in the
-network with respect to spikes that occur during normal activity. Indeed, we
-have conjectured that when a large part of the network is firing, the rate at
-which observations are made is not high enough to be able to detect
-interactions, and that it would therefore be preferable to lower their
-importance by changing their magnitude appropriately. Additionally, it is well-known
-that neurons may also spike because of a high global activity
-\citep{stetter2012model}. In such context, detecting pairwise neuron
-interactions from the firing activity is meaningless. As such, the signal
-output by h is finally applied to the following function
+\item The last filtering functions is defined as:
 \begin{align}
- w(x^{t}_i) &= (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}}, \label{eq:magnify-filter}
+ w^*(x^{t}_i) &= {(x^{t}_i + 1 )^{\left (1 + \frac{1}{\sum_{j} x^{t}_j}\right )}}^{k(\sum_{j} x^{t}_j)}
 \end{align}
-whose effect is to magnify the importance of spikes that occur in cases of low
-global activity (measured by $\sum_j x^t_j$).
+where the function $k$ is a piecewise linear function optimised
+separately for each filter $f_1$, $f_2$, $f_3$ and $f_4$ (see the
+implementation for full details). The effect of this filtering is to
+magnify the importance of spikes that occur in cases of low global
+activity (measured by $\sum_j x^t_j$).
+\end{itemize}
+The pre-processed times-series are then obtained by the application of
+the following function: $w^*\circ h \circ g \circ f_i$ (with
+$i=1$, 2, 3, or 4). 
+  
+\paragraph{Partial correlation.}
+In the second main step of our approach, partial correlation is used as a
+measure of the strength of the connection between neurons. Considering each
+time point of the pre-processed signals as an independent measurement
+of $p$ random variables, one for each of the $p$ neurons,
+the partial correlation coefficient $p_{i,j}$ between neurons $i$ and $j$ is
+defined by:
+\begin{equation}
+p_{i,j} =
+-\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}, \label{eq:inverse}
+\end{equation}
+where $\Sigma^{-1}$, known as the precision or concentration matrix, is the
+inverse of the covariance matrix $\Sigma$ of the data. The computation of all
+$p_{i,j}$ coefficients thus requires the estimation of the covariance matrix
+$\Sigma$ and then computing its inverse. Given that typically we have more
+samples (i.e., time points) than neurons, the covariance matrix can be inverted
+in a straightforward way. We nevertheless obtained some improvement by
+replacing the exact inverse with an approximation using only the $M$ first
+principal components, with $M=0.8p$ \citep{bishop2006pattern}.
 
-Under the assumption that fluorescence level neuron are jointly Gaussian,
-partial correlation thus measures conditional dependencies between
-variables ; therefore it should naturally only detect direct associations
-between neurons and filter out spurious indirect effects as mentioned before.
+\paragraph{Averaging.}
+The performance of our method is sensitive to the values of the pre-processing
+parameters: the parameter $\tau$ of the hard-threshold filter $h$ (see Equation
+\ref{eqn:hfilter}), and the choice of the low-pass filter (among $\{f_1,
+f_2, f_3, f_4\}$). To improve robustness, we average partial correlation
+statistics obtained for all pairs $(\tau,\mbox{low-pass filter}) \in
+\{0.100,0.101,\ldots,0.209\}\times \{f_1, f_2, f_3, f_4\}$. In this averaging,
+functions $f_1$, $f_2$, $f_3$, and $f_4$ were given weights respectively equal
+to $0.383$, $0.345$, $0.004$, and $0.268$.
 
-Practically speaking, the computation of all $p_{i,j}$ coefficients requires
-the estimation of the covariance matrix $\Sigma$ and then computing its
-inverse. Given that typically we have more samples than neurons, the covariance
-matrix can be inverted in a straightforward way. We nevertheless obtained some
-improvement by replacing the exact inverse with an approximation using only the
-$M$ first principal components \citep{bishop2006pattern} (more details in
-\citep{sutera2014simple}).
+\paragraph{Edge orientation.}
 
-\begin{algorithm}[ht]
-\begin{algorithmic}
- \algsetup{linenodelimiter= }
-
-\STATE Here the pseudo-code.
-% \STATE \textbf{Given} the sampled observation of $p$ neurons for $T$ time intervals.\\[2ex]
-
-% \FOR{$(f,\tau) \in (\{f_1, f_2\}, \{\tau_1, \tau_2, \dots \})$}
-
-% \STATE \vspace{1em} \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.
-% \FOR{$x \in \{1,\dots,T\} $}
-% \STATE $\bar{x}^t_i  \leftarrow w \circ h_{\tau} \circ g \circ f (x^t_i)$
-% \ENDFOR\\[2ex]
-
-% \STATE \textbf{Phase 2:} Compute \textit{Partial correlation} coefficient $p_{i,j}$ for each neuron pair $(i,j)$.
-% \FOR{all pair $(i,j)$}
-% \STATE Estimation of the covariance matrix $\Sigma$
-% \STATE Computing $\Sigma^{-1}$, the inverse of $\Sigma$
-% \STATE $p_{i,j} =
-% -\frac{\Sigma^{-1}_{ij}}{\sqrt{\Sigma^{-1}_{ii} \Sigma^{-1}_{jj}}}$
-
-% \ENDFOR\\[2ex]
-% \ENDFOR
-
-\end{algorithmic}
-\caption{Inverse covariance pseudo-code \textcolor{red}{TO DO}}
-\label{alg:inverse-covariance-pseudocode}
-\end{algorithm}
-
-
-
-
-
-% \begin{algorithm}[h]
-%  \KwData{Given the sampled observation $\{ x^t_i \in \mathbb{R} | i \in V, t = 1, \dots, T \}$ of $p$ neurons for T time intervals}
-%  % \KwResult{how to write algorithm with \LaTeX2e }
-
-
-%  \textbf{Phase 1:} Apply the composed function $w \circ h \circ g \circ f$ to each fluorescent signal.\;\;
-% \ \ For
-
-
-% {\Indp
-%  \For{$x \in \{1,\dots,T\} $}{
-% 		$\bar{x}^t_i  \leftarrow w \circ h \circ g \circ f (x^t_i)$
-%  }
-%  }
-
-%  \While{not at end of this document}{
-%   read current\;
-%   \eIf{understand}{
-%    go to next section\;
-%    current section becomes this one\;
-%    }{
-%    go back to the beginning of current section\;
-%   }
-%  }
-%  \caption{Inverse covariance pseudo-code}
-%  \label{alg:inverse-covariance-pseudocode}
-% \end{algorithm}
-
+Partial correlation is a symmetric measure that can not be used to predict edge
+orientation. A post-processing heuristic was proposed to derive an asymmetric
+association score from the partial correlation coefficient. This heuristic is
+based on the observation that if there is directed edges from $i$ to $j$ then
+the activation of $i$ should be followed by the activation of $j$ after a
+slight delay. For every pairs $(i,j)$, we computed the following term:
+\begin{align}
+s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
+\end{align}
+that could be interpreted as an image of the number of times that neuron $i$
+activates neuron $j$. $\phi_1$ and $\phi_2$ are parameters whose values have
+been chosen equal to $0.2$ and $0.5$, respectively. The
+final association score for an edge from $i$ to $j$ was
+then the following:
+\begin{align}
+q_{i,j} = weight * p_{i,j} + (1-weight) * (s_{i,j}-s_{j,i}),
+\label{eqn:qij}
+\end{align}
+with $p_{i,j}$ the average partial correlation coefficient and the parameter
+$weight$ chosen close to 1 ($weight=0.997$). The second term is expected to be
+greater (resp. lower) than 0 when $i$ more often activates $j$ than the
+opposite and therefore in this case it makes $q_{i,j}$ greater (resp. lower)
+than $q_{j,i}$.
 
 \newpage
 \bibliography{references}
