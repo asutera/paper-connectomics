@@ -158,8 +158,9 @@ slight delay. For every pairs $(i,j)$, we computed the following term:
 \begin{align}
 s_{i,j} = \sum_{t=1}^{T - 1} \mathbb{1}((x_j^{t+1} - x_i^t) \in \left[\phi_1, \phi_2\right])
 \end{align}
-where $\phi_1$ and $\phi_2$ are parameters whose values have been
-optimized through experiments to $0.2$ and $0.5$, respectively. The
+that could be interpreted as an image of the number of times that neuron $i$
+activates neuron $j$. $\phi_1$ and $\phi_2$ are parameters whose values have
+been chosen equal to $0.2$ and $0.5$, respectively. The
 final association score for an edge from $i$ to $j$ was
 then the following:
 \begin{align}
@@ -167,7 +168,10 @@ q_{i,j} = weight * p_{i,j} + (1-weight) * (s_{i,j}-s_{j,i}),
 \label{eqn:qij}
 \end{align}
 with $p_{i,j}$ the average partial correlation coefficient and the parameter
-$weight$ optimized close to 1 ($weight=0.997$). 
+$weight$ chosen close to 1 ($weight=0.997$). The second term is expected to be
+greater (resp. lower) than 0 when $i$ more often activates $j$ than the
+opposite and therefore in this case it makes $q_{i,j}$ greater (resp. lower)
+than $q_{j,i}$.
 \newpage
 \bibliography{references}
 
