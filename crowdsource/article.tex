@@ -81,7 +81,7 @@ Under the simplifying assumption that neurons are on-off units, characterised
 by short periods of intense activity, or peaks, and longer periods of
 inactivity, the first part of our algorithm consists in cleaning the raw
 fluorescence data. This pre-processing applies successively four
-filtering functions to the original signal:
+filtering functions to the original signal $x^t_i$ of each neuron $i$ where $t$ is the time step:
 \begin{itemize}
   \item The first function smooths the fluorescence signal, using one of the following
 low-pass filters for filtering out high frequency noise:
