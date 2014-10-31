@@ -22,7 +22,7 @@ from directivity import make_prediction_directivity
 
 # Cache accelerator may be removed to save disk space
 from sklearn.externals.joblib import Memory
-from clusterlib import sqlite3_dumps
+from clusterlib.storage import sqlite3_dumps
 
 WORKING_DIR = "~/scikit_learn_data/connectomics"
 
@@ -30,13 +30,14 @@ memory = Memory(cachedir=os.path.join(WORKING_DIR, "cachedir"), verbose=0)
 np.loadtxt = memory.cache(np.loadtxt)
 
 
-def get_sqlite3_path(dataset):
-    return os.path.join(WORKING_DIR, "%s.sqlite3" % dataset)
+def get_sqlite3_path():
+    return os.path.join(WORKING_DIR, "experiment.sqlite3")
 
 
 def make_hash(args):
     """Generate a unique hash for the experience"""
-    return '-'.join([args[k] for k in ["network", "method", "directivity"]])
+    return '-'.join([str(args[k]) for k in ["network", "method",
+                                            "directivity"]])
 
 
 def parse_arguments(args=None):
@@ -48,7 +49,7 @@ def parse_arguments(args=None):
                         help='Path to the fluorescence file')
     # parser.add_argument('-p', '--position', type=str, required=False,
     #                     help='Path to the network position file')
-    parser.add_argument('-o', '--output', type=str,
+    parser.add_argument('-o', '--output_dir', type=str,
                         help='Path of the prediction file if wanted')
 
     parser.add_argument('-n', '--network', type=str, required=True,
@@ -91,8 +92,8 @@ if __name__ == "__main__":
         score = y_pca
 
     # Save data
-    if "output" in args:
-        outname = args["output"] + name
+    if "output_dir" in args:
+        outname = args["output_dir"] + name
 
         # Generate the submission file ##
         with open(outname, 'w') as fname:
