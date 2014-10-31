@@ -14,4 +14,5 @@ clean:
 
 
 zip: article
+	rm article.zip
 	zip -r article.zip *.tex *.cls *.bib images article.pdf Makefile
