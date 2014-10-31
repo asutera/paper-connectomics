@@ -94,7 +94,7 @@ if __name__ == "__main__":
                          time="48:00:00",
                          memory=5000,
                          log_directory=LOG_DIRECTORY,
-                         backend="slurm") + ' --quiet --partition XLong'
+                         backend="slurm") + ' --partition XLong'
 
             if not args["debug"]:
                 os.system(cmd)
