@@ -90,8 +90,8 @@ if __name__ == "__main__":
             cmd = submit(job_command="%s main.py %s"
                                      % (sys.executable, cmd_parameters),
                          job_name=job_hash,
-                         time="24:00:00",
-                         memory=10000,
+                         time="48:00:00",
+                         memory=5000,
                          log_directory=LOG_DIRECTORY,
                          backend="slurm") + ' --quiet '
 
