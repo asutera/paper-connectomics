@@ -22,7 +22,9 @@ LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 ALL_FLUORESCENCE = [x for x in os.listdir(os.path.join(WORKING_DIR,
                                           "datasets"))
                     if (x.startswith("fluorescence_") or
-                        x.startswith("normal"))]
+                        x.startswith("normal") or
+                        x.startswith("valid") or
+                        x.startswith("test"))]
 
 ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
                 for x in ALL_FLUORESCENCE]
