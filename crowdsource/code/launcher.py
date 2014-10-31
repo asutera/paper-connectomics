@@ -19,7 +19,7 @@ from main import get_sqlite3_path
 
 LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 
-ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, x)
+ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, "datasets", x)
                     for x in os.listdir(os.path.join(WORKING_DIR,
                                                      "datasets"))
                     if (x.startswith("fluorescence_") or
@@ -94,7 +94,7 @@ if __name__ == "__main__":
                          time="48:00:00",
                          memory=5000,
                          log_directory=LOG_DIRECTORY,
-                         backend="slurm") + ' --partition XLong'
+                         backend="slurm")
 
             if not args["debug"]:
                 os.system(cmd)
