@@ -37,8 +37,7 @@ def get_sqlite3_path():
 
 def make_hash(args):
     """Generate a unique hash for the experience"""
-    return '-'.join([str(args[k]) for k in ["network", "method",
-                                            "directivity"]])
+    return "%(network)s-m=%(method)s-d=%(directivity)s" % args
 
 
 def parse_arguments(args=None):
@@ -94,7 +93,7 @@ if __name__ == "__main__":
 
     # Save data
     if "output_dir" in args:
-        outname = args["output_dir"] + name
+        outname = os.path.join(args["output_dir"], job_hash)
 
         # Generate the submission file ##
         with open(outname, 'w') as fname:
