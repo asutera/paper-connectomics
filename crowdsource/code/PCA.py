@@ -25,7 +25,7 @@ def f2(X):
     return X + np.roll(X, 1, axis=0) + 0.8 * np.roll(X, 2, axis=0) + 0.4 * np.roll(X, 3, axis=0)
 
 def g(X):
-    return np.diff(X, axis=0) 
+    return np.diff(X, axis=0)
 
 def h(X, threshold = 0.11):
     threshold1 = X < threshold * 1
@@ -59,7 +59,7 @@ def simple_filter(X, LP='f1', threshold=0.11, weights=True):
     X = h(X)
     if weights:
         X = w(X)
-    return X 
+    return X
 
 def tuned_filter(X, LP='f1', threshold=0.11, weights=True):
     if LP == 'f1':
@@ -78,9 +78,9 @@ def tuned_filter(X, LP='f1', threshold=0.11, weights=True):
 
     if weights:
         X = w_star(X)
-    return X 
+    return X
 
-@profile
+
 def make_simple_inference(X):
 
     print('Making simple inference...')
@@ -133,7 +133,7 @@ def f4(X):
     return X + np.roll(X, -1, axis=0) + np.roll(X, -2, axis=0) + np.roll(X, -3, axis=0)
 
 def r(X):
-    return X**0.9 
+    return X**0.9
 
 def w_star(X, filtering = "f1"):
 
