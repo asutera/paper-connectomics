@@ -19,13 +19,22 @@ from main import get_sqlite3_path
 
 LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 
+ALL_FLUORESCENCE = [x for x in os.listdir(os.path.join(WORKING_DIR,
+                                          "datasets"))
+                    if (x.startswith("fluorescence_") or
+                        x.startswith("normal"))]
+
+ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
+                for x in ALL_FLUORESCENCE]
+ALL_NETWORKS = [os.path.splitext(x)[0] for x in ALL_NETWORKS]
+
 PARAMETER_GRID = ParameterGrid({
     "output_dir": [os.path.join(WORKING_DIR, "submission")],
     "network": [network],
     "fluorescence": [fluorescence],
     "method": ["simple", "tuned"],
     "directivity": [0, 1],
-} for network, fluorescence in [("TODO", "TODO")])
+} for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS))
 
 TIME = dict()
 MEMORY = dict()

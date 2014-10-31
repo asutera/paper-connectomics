@@ -24,7 +24,8 @@ from directivity import make_prediction_directivity
 from sklearn.externals.joblib import Memory
 from clusterlib.storage import sqlite3_dumps
 
-WORKING_DIR = "~/scikit_learn_data/connectomics"
+WORKING_DIR = os.path.join(os.environ["HOME"],
+                           "scikit_learn_data/connectomics")
 
 memory = Memory(cachedir=os.path.join(WORKING_DIR, "cachedir"), verbose=0)
 np.loadtxt = memory.cache(np.loadtxt)
