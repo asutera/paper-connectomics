@@ -4,10 +4,10 @@ HOST = hercules
 
 
 launch: sync-git
-	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launch.py"
+	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launcher.py"
 
 launch-debug: sync-git
-	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launch.py -dv"
+	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launcher.py -dv"
 
 retrieve:
 	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/*.sqlite3 ${DATA_DIRECTORY}
