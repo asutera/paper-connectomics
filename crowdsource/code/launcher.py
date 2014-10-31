@@ -64,7 +64,6 @@ if __name__ == "__main__":
 
     # Launch if necessary experiments
     for parameters in PARAMETER_GRID:
-        print(parameters)
         job_hash = make_hash(parameters)
 
         if job_hash in all_jobs_running:
