@@ -22,14 +22,11 @@ LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, "datasets", x)
                     for x in os.listdir(os.path.join(WORKING_DIR,
                                                      "datasets"))
-                    if (x.startswith("fluorescence_") or
-                        x.startswith("normal") or
-                        x.startswith("valid") or
-                        x.startswith("test") and x.endswith(".txt"))]
+                    if (x.startswith("fluorescence_"))]
 
 ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
                 for x in ALL_FLUORESCENCE]
-ALL_NETWORKS = [os.path.splitext(x)[0] for x in ALL_NETWORKS]
+ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]) for x in ALL_NETWORKS]
 
 PARAMETER_GRID = ParameterGrid({
     "output_dir": [os.path.join(WORKING_DIR, "submission")],
