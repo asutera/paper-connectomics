@@ -24,7 +24,7 @@ ALL_FLUORESCENCE = [x for x in os.listdir(os.path.join(WORKING_DIR,
                     if (x.startswith("fluorescence_") or
                         x.startswith("normal") or
                         x.startswith("valid") or
-                        x.startswith("test"))]
+                        x.startswith("test") and x.endswith(".txt"))]
 
 ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
                 for x in ALL_FLUORESCENCE]
