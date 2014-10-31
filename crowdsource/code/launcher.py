@@ -19,8 +19,9 @@ from main import get_sqlite3_path
 
 LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 
-ALL_FLUORESCENCE = [x for x in os.listdir(os.path.join(WORKING_DIR,
-                                          "datasets"))
+ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, x)
+                    for x in os.listdir(os.path.join(WORKING_DIR,
+                                                     "datasets"))
                     if (x.startswith("fluorescence_") or
                         x.startswith("normal") or
                         x.startswith("valid") or
