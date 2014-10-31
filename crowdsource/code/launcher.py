@@ -94,6 +94,8 @@ if __name__ == "__main__":
                          time="48:00:00",
                          memory=5000,
                          log_directory=LOG_DIRECTORY,
+                         email_address="arnaud.v.joly@gmail.com",
+                         email_options="ALL",
                          backend="slurm")
 
             if not args["debug"]:
