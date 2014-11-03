@@ -93,6 +93,9 @@ if __name__ == "__main__":
 
     # Save data
     if "output_dir" in args:
+        if os.path.exists(args["output_dir"]):
+            os.makedirs(args["output_dir"])
+
         outname = os.path.join(args["output_dir"], job_hash)
 
         # Generate the submission file ##
