@@ -61,7 +61,7 @@ htop:
 	ssh ${HOST} -tt htop
 
 squeue:
-	ssh vega 'squeue -u ajoly -a -o "%.7i %.9P %40j %.8T %.4C %.10m %.10M %.10l %R" '
+	ssh ${HOST} 'squeue -u ajoly -a -o "%.7i %.9P %40j %.8T %.4C %.10m %.10M %.10l %R" '
 
 scancel-all:
 	ssh ${HOST} "scancel -u ajoly"
