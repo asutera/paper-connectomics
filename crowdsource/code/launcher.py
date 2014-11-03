@@ -88,10 +88,8 @@ if __name__ == "__main__":
                                      % (sys.executable, cmd_parameters),
                          job_name=job_hash,
                          time="48:00:00",
-                         memory=10000,
+                         memory=15000,
                          log_directory=LOG_DIRECTORY,
-                         email="arnaud.v.joly@gmail.com",
-                         email_options="ALL",
                          backend="slurm")
 
             if not args["debug"]:
