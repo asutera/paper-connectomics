@@ -111,4 +111,4 @@ if __name__ == "__main__":
 
     # Indicate the job is finished
     print("job_hash %s" % job_hash)
-    sqlite3_dumps({job_hash: "JOB DONE"}, get_sqlite3_path(args["dataset"]))
+    sqlite3_dumps({job_hash: "JOB DONE"}, get_sqlite3_path())
