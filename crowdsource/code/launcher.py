@@ -88,7 +88,7 @@ if __name__ == "__main__":
                                      % (sys.executable, cmd_parameters),
                          job_name=job_hash,
                          time="48:00:00",
-                         memory=5000,
+                         memory=10000,
                          log_directory=LOG_DIRECTORY,
                          email="arnaud.v.joly@gmail.com",
                          email_options="ALL",
