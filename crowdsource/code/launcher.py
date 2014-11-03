@@ -88,7 +88,7 @@ if __name__ == "__main__":
                                      % (sys.executable, cmd_parameters),
                          job_name=job_hash,
                          time="48:00:00",
-                         memory=15000,
+                         memory=20000,
                          log_directory=LOG_DIRECTORY,
                          backend="slurm")
 
