@@ -67,13 +67,13 @@ scancel-all:
 	ssh ${HOST} "scancel -u ajoly"
 
 sacct:
-	ssh vega 'sacct -u ajoly --format JobID,JobName,AveCPU,cputime,elapsed,MaxVMSize,MaxVMSizeNode,MaxRSS'
+	ssh ${HOST} 'sacct -u ajoly --format JobID,JobName,AveCPU,cputime,elapsed,MaxVMSize,MaxVMSizeNode,MaxRSS'
 
 smem:
-	ssh vega 'for node in `squeue -u ajoly -o "%N" -h | uniq | sort`; \
-				do echo "$$node===="; \
-				ssh $$node "top -b -n 1 -i -u ajoly" ; \
-			  done'
+	ssh ${HOST} 'for node in `squeue -u ajoly -o "%N" -h | uniq | sort`; \
+					do echo "$$node===="; \
+					ssh $$node "top -b -n 1 -i -u ajoly" ; \
+				 done'
 
 which-python:
 	ssh ${HOST} "which python"
