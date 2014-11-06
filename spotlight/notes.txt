@@ -1,0 +1,85 @@
+Slide 1:
+
+Good morning ! This is Vincent and I'm Antonio and we will present the way we solved the connectomics challenge. 
+
+Before getting to the heart of the matter, we want to mention two points. Firstly, this achivement is a teamwork and each member of our team, AAAGV, has contribute to our solution. Secondly, we are not biologist experts and this challenge was the first time we studied, and even heard about, the connectome inference. So we saw this problem with our own way which may be sometimes naive or irrelevant from a biological point of view. 
+
+Slide 2:
+
+For those who have not actively participated to the connectomics challenge, let's recall the goal and the main difficulties in trying to retrieve a network from data. 
+
+Basically, we want to infer the directed connections between neurons from time-series of the neuron activity. In other words, we have signals of calcium fluorescent level representing the neuron activity and we want to derive, from these data, pairs of neurons that are directly connected to each other. 
+
+Slide 3:
+
+This is a difficult problem because this calcium imaging process is not perfect involving experimental issues including masking effects (i.e., som of the neurons are not observed or confounded with others), the low sampling rate of the optical device with respect to the neural activity speed, or the slow decay of fluorescence.
+
+
+Masking effects may imply that neurons can be confounded and wrongly associated because of an incomplete observation. 
+The low sampling rate mainly makes extremely difficult to find a time relationships between events, making the causation discovery impossible.
+The slow decay is an artefact of the imaging process and therefore it may impact the level of calcium fluorescence of the next event making it difficult to detect.
+
+Slide 4:
+
+This presentation follow the following table of content which is also the structure of method.  We will present a simplified - and almost as good - version of the winning method of the Connectomics Challenge. The first step is to deal with calcium fluorescence signals by processing the signal in order to clean the raw signals.
+The second step is the inference process in itself. We will describe and explain how the inference is made from the processed signals.
+But this is not enough and we will explain how to improve these two steps.
+
+After, we will characterize the performance of this method by describing the improving of each stage of our solution and then by comparing it with other inference methods.
+
+We will conclude this presentation with a few words about the full method which gave the best performances.
+
+
+Slide 5:
+Under the simplifying assumption that neurons are on-off units, characterised by short periods of intense activity, or peaks, and longer periods of inactivity, the first part of our algorithm consists of cleaning the raw fluorescence data. More specifically, time-series are processed using standard signal processing filters in order to : (i) remove noise mainly due to fluctuations independent of calcium, calcium fluctuations independent of spiking activity, calcium fluctuations in nearby tissues that have been mistakenly captured, or simply by the imaging process ; (ii) to account for fluorescence low decay ; and (iii) to reduce the importance of high global activity in the network.
+
+As it can be seen, the raw fluorescence signal is very noisy and we first apply a low-pass filter to smoothe the signal using standard filter in the signal processing field. 
+
+Furthermore, short spikes, characterized by a high frequency, can be seen as an indirect indicator of neuron communication, while low frequencies of the signal mainly correspond to the slow decay of fluorescence. To have a signal that only has high magnitude around instances where the spikes occur, the second step of our pipeline transforms the time-series into its backward difference.
+
+To filter out small variations in the signal obtained after applying the high-pass filter as well as to eliminate negative values, we use a hard-threshold filter setting to 0 values under a given threshold and keeping the real value over the same threshold.
+
+The objective of the last step of our filtering procedure is to decrease the importance of spikes that occur when there is high global activity in the network with respect to spikes that occur during normal activity. Indeed, we have conjectured that when a large part of the network is firing, the rate at which observations are made is not high enough to be able to detect interactions, and that it would therefore be preferable to lower their importance by changing their magnitude appropriately. Additionally, it is well-known that neurons may also spike because of a high global activity. In such context, detecting pairwise neuron interactions from the firing activity is meaningless.
+
+
+Slide 6:
+
+distribution, we then propose to use as a measure of the degree of association of the connection between two neurons i and j, the Partial correlation coefficient pi,j between their corresponding random variables Xi and Xj, defined by the following function where Σ−1, known as the precision or concentration matrix, is the inverse of the covariance matrix Σ of X. Assuming that the distribution PX is a multivariate Gaussian distribution N (μ, Σ), it can be shown that pi,j is zero if and only if Xi and Xj are independent given all other variables in X, i.e.,
+Xi ⊥Xj|X−i,j whereX−i,j =X\{Xi,Xj}.
+
+Therefore, by properties, the partial correlation measures only consider direct associations filtering out indirect effetcts. This measure is symmetric therefore the amount of coefficients to compute is divided by an half making this approach easy to compute even with lots of data. 
+
+However an obvious drawback with a symmetric measure is the absence of edge orientation. Moreover, it is sensitive to the value of parameters in the filtering process. 
+
+Slide 7: 
+
+We make two modifications in order to improve perfomances. First, we perform a principal component analysis and we observed that only 800 components are important. By computing a approximation of the partial correlation statistics using only the 800 first principal components, we improve the network inference quality. 
+
+One of the main drawbacks of our approach is the sensitivity to the value of parameters in the filtering process. Therefore, we averaged the partial correlation statistics over various values of the parameters. It allows to decrease this sensitivy implying an improvement of the robustness because the parameter values depend on the infered network, and a decrease of variance of its prediction. 
+
+Slide 8:
+
+These results clearly show the importance of the filters and PCA (especially
+for AUPRC). Taking the average
+over various parameter settings gives an improvement of 10% in AUPRC but only a minor change in AUROC. The last row (“Full method”) shows the final performance of the method specifically tuned for the challenge (see paper
+for all details). Although this tuning was decisive to obtain the best performance in the challenge, it does not significantly improve either AUROC or AUPRC.
+
+
+
+Slide 9: 
+
+Partial correlation and averaged
+partial correlation clearly outperform all other methods on all datasets. The improvement is more important in terms of AUPRC than in terms of AUROC. As expected, Pearson correlation performs very poorly in terms of AUPRC. GTE and GENIE3 work much better, but these two methods are nevertheless clearly below partial correlation.
+
+
+Slide 10:
+
+We presented a simplified - and almost as good - version of the winning method of the Connectomics Challenge. However, the winning method is highly tuned and used a weighted average. We also try to improve the performance by determining the edge orientation. This was small but necessery improvements.
+
+Slide 11:
+
+We voluntarily omit several details to make this presentation clear but all details are available in our paper, especially a full description of the full method.
+For those who want to give a try to our solution, the source code is available at this adress.
+
+
+

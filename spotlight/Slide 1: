@@ -1,0 +1,17 @@
+Slide 1:
+
+Good morning ! This is Vincent and I'm Antonio and we will present the way we solved the connectomics challenge. 
+
+Before getting to the heart of the matter, we want to mention two points. Firstly, this achivement is a teamwork and each member of our team, AAAGV, has contribute to our solution. Secondly, we are not biologist experts and this challenge was the first time we studied, and even heard about, the connectome inference. So we saw this problem with our own way which may be sometimes naive or irrelevant from a biological point of view. 
+
+Slide 2:
+
+For those who have not actively participated to the connectomics challenge, let's recall the goal and the main difficulties in trying to retrieve a network from data. 
+
+Basically, we want to infer the directed connections between neurons from time-series of the neuron activity. In other words, we have signals of calcium fluorescent level representing the neuron activity and we want to derive, from these data, pairs of neurons that are directly connected to each other. 
+
+Slide 3:
+
+This is a difficult problem because this calcium imaging process is not perfect involving experimental issues including masking effects (i.e., som of the neurons are not observed or confounded with others), the low sampling rate of the optical device with respect to the neural activity speed, or the slow decay of fluorescence.
+
+
