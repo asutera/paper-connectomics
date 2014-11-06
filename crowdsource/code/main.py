@@ -19,6 +19,7 @@ import numpy as np
 
 from PCA import make_simple_inference, make_tuned_inference
 from directivity import make_prediction_directivity
+from hidden import kill
 
 # Cache accelerator may be removed to save disk space
 from sklearn.externals.joblib import Memory
@@ -60,7 +61,9 @@ def parse_arguments(args=None):
     parser.add_argument('-d', '--directivity', type=int, required=False,
                         default=0, choices=[0, 1],
                         help='Consider information about directivity?')
-
+    parser.add_argument('-k', '--killing', type=int, required=False,
+                        default=0, choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        help='Should we "kill" some neurons?')
     return vars(parser.parse_args(args))
 
 if __name__ == "__main__":
@@ -76,6 +79,10 @@ if __name__ == "__main__":
     X = np.loadtxt(args["fluorescence"], delimiter=",")
     X = np.asfortranarray(X, dtype=np.float32)
     # pos = np.loadtxt(args["position"], delimiter=",")
+    if name in ["normal-3", "normal-4"]:
+        var_kill = args["killing"]
+        if var_kill != 0:
+            X = kill(X, name, var_kill)
 
     # Producing the prediction matrix
     if args["method"] == 'tuned':
