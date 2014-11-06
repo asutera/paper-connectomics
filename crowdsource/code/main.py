@@ -10,8 +10,10 @@
 
 from __future__ import division, print_function, absolute_import
 
+import os
 import argparse
 from itertools import product
+from pprint import pprint
 
 import numpy as np
 
@@ -20,48 +22,68 @@ from directivity import make_prediction_directivity
 
 # Cache accelerator may be removed to save disk space
 from sklearn.externals.joblib import Memory
-memory = Memory(cachedir="cachedir", verbose=0)
+from clusterlib.storage import sqlite3_dumps
+
+WORKING_DIR = os.path.join(os.environ["HOME"],
+                           "scikit_learn_data/connectomics")
+
+memory = Memory(cachedir=os.path.join(WORKING_DIR, "cachedir"), verbose=0)
 np.loadtxt = memory.cache(np.loadtxt)
 
-if __name__ == "__main__":
-    # Process arguments
+
+def get_sqlite3_path():
+    return os.path.join(WORKING_DIR, "experiment.sqlite3")
+
+
+def make_hash(args):
+    """Generate a unique hash for the experience"""
+    return "%(network)s-m=%(method)s-d=%(directivity)s" % args
+
+
+def parse_arguments(args=None):
+    parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
+
     parser = argparse.ArgumentParser(description='Perform Connectomics '
                                                  'modelling')
     parser.add_argument('-f', '--fluorescence', type=str, required=True,
                         help='Path to the fluorescence file')
-    parser.add_argument('-p', '--position', type=str, required=False,
-                        help='Path to the network position file')
-    parser.add_argument('-o', '--output', type=str, required=False,
-                        default="./", help='Path of the prediction file')
+    # parser.add_argument('-p', '--position', type=str, required=False,
+    #                     help='Path to the network position file')
+    parser.add_argument('-o', '--output_dir', type=str,
+                        help='Path of the prediction file if wanted')
+
     parser.add_argument('-n', '--network', type=str, required=True,
                         help='Network name')
-    parser.add_argument('-m', '--method', type=str, required=False,
-                        default='simple', help='Simplified or tuned method?')
+    parser.add_argument('-m', '--method', type=str, required=True,
+                        default='simple', help='Simplified or tuned method?',
+                        choices=["simple", "tuned"])
     parser.add_argument('-d', '--directivity', type=int, required=False,
-                        default=0,
+                        default=0, choices=[0, 1],
                         help='Consider information about directivity?')
-    parser.add_argument('-s', '--submission', type=int, required=False,
-                        default=0, help='Submission file?')
-    args = vars(parser.parse_args())
+
+    return vars(parser.parse_args(args))
+
+if __name__ == "__main__":
+    # Process arguments
+    args = parse_arguments()
+    pprint(args)
+    job_hash = make_hash(args)
 
     name = args["network"]
-    outname = args["output"] + name
 
     # Loading data
     print('Loading data...')
     X = np.loadtxt(args["fluorescence"], delimiter=",")
-
     X = np.asfortranarray(X, dtype=np.float32)
     # pos = np.loadtxt(args["position"], delimiter=",")
 
-    # Producing the prediction matrix ##
-
+    # Producing the prediction matrix
     if args["method"] == 'tuned':
         y_pca = make_tuned_inference(X)
     else:
         y_pca = make_simple_inference(X)
 
-    if bool(args["directivity"]):
+    if args["directivity"]:
         print('Using information about directivity...')
         y_directivity = make_prediction_directivity(X)
         # Perform stacking
@@ -69,7 +91,13 @@ if __name__ == "__main__":
     else:
         score = y_pca
 
-    if bool(args["submission"]):
+    # Save data
+    if "output_dir" in args:
+        if not os.path.exists(args["output_dir"]):
+            os.makedirs(args["output_dir"])
+
+        outname = os.path.join(args["output_dir"], job_hash)
+
         # Generate the submission file ##
         with open(outname, 'w') as fname:
             fname.write("NET_neuronI_neuronJ,Strength\n")
@@ -79,5 +107,8 @@ if __name__ == "__main__":
                                                   score[i, j])
                 fname.write(line)
 
-        print("Infered connectivity score is saved at %s"
-              % outname)
+        print("Infered connectivity score is saved at %s" % outname)
+
+    # Indicate the job is finished
+    print("job_hash %s" % job_hash)
+    sqlite3_dumps({job_hash: "JOB DONE"}, get_sqlite3_path())
