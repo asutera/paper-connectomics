@@ -58,7 +58,7 @@
 
 \title{Simple connectome inference from partial\\[1ex]
 correlation statistics in calcium imaging}
-\author{{\small Antonio Sutera, Arnaud Joly, Vincent François-Lavet, Zixiao Aaron Qiu\\[1ex] Gilles Louppe, Damien Ernst and Pierre Geurts.}}
+\author{{\small Antonio Sutera, Arnaud Joly, Vincent François-Lavet, Zixiao Aaron Qiu\\[1ex] Gilles Louppe, Damien Ernst and Pierre Geurts (aka The AAAGV Team).}}
 \date{}
 
 \addtobeamertemplate{navigation symbols}{}{%
@@ -99,14 +99,13 @@ correlation statistics in calcium imaging}
 
 \frametitle{Introduction}
 
+\vspace{2cm}
 
-From {\color{i6blue} time-series of the neuron activity}, the \textbf{goal} is to {\color{red} \textbf{infer} the directed connections between neurons}.
+From {\color{i6blue} time-series of the neuron activity}, the \textbf{goal} is to {\color{red} \textbf{infer} the directed connections between neurons}.\\[5ex]
 
-\note{
-	
-	Before the main part of this presentation, I would like to mention that we are not biologist and we are not expert of the connectome inference. We see the challenge as an inference problem and maybe in a naive point of view for some points.
-
-}
+\begin{center}
+\includegraphics[width=7cm]{images/network_2.pdf}
+\end{center}
 
 \end{frame}
 
@@ -339,7 +338,7 @@ p_{i,j} =
 \begin{itemize}
 \item[{\color{green} \cmark}] Only direct associations
 \item[{\color{green} \cmark}] Filter out spurious indirect effects
-\item[{\color{green} \cmark}] Symmetric 
+% \item[{\color{green} \cmark}] Symmetric 
 \item[{\color{green} \cmark}] Easy to compute \\ (with lots of data) \\[2ex]
 \item[{\color{red} \xmark}] Edge orientation
 \item[{\color{red} \xmark}] Sensitive to the value of parameters in the filtering process
@@ -379,7 +378,7 @@ p_{i,j} =
 \begin{center}
 \textit{Average scores on normal-{1,2,3,4} datasets.
 }
-\includegraphics[width=8cm]{images/data_stage.png}
+\includegraphics[width=8.5cm]{images/data_stage.png}
 \end{center}
 
 % \begin{table}[t]
@@ -416,7 +415,7 @@ p_{i,j} =
 \begin{center}
 \textit{Average scores on normal-{1,2,3,4} datasets.
 }
-\includegraphics[width=9cm]{images/data_method.png}
+\includegraphics[width=10cm]{images/data_method.png}
 \end{center}
 % \begin{table}[t]
 

@@ -335,12 +335,12 @@ w(x^{t}_i) = (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 % \includegraphics[width=\linewidth]{images/partial2.png}
 \vspace{1cm}
 
-\scalebox{2}{\includegraphics{poster-pics.pdf}}
+\scalebox{2}{\includegraphics{network_poster.pdf}}
 {    \begin{pspicture}(20,20)
 
 
- 	   \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](2,3)(1.8,2.8)
- 	   \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](8.3,3)(1.5,2.8)
+ 	   % \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](2,3)(1.8,2.8)
+ 	   % \psellipse[fillstyle=solid,linewidth=2pt,linecolor=lightgreen,linestyle=dashed,fillcolor=lightgreen!10](8.3,3)(1.5,2.8)
 
     	% False network left 
     	\psline[linewidth=2pt,linecolor=lightblue, linestyle=dashed]{--}(1.5,5)(2.7,4.3)
@@ -385,16 +385,19 @@ w(x^{t}_i) = (x^{t}_i + 1 )^{1 + \frac{1}{\sum_{j} x^{t}_j}},
 		% right node
 		\pscircle[fillstyle=solid,fillcolor=lightblue!20,linewidth=2pt,linecolor=lightblue](6.2,3){0.5}
 
+		\rput(4.5,3){{\color{lightblue} \textbf{i}}}
+		\rput(6.2,3){{\color{lightblue}  \textbf{j}}}
+
 		% text
-		\rput(5.35,3.3){$p_{i,j}$}
-		\rput(5.35,2.3){{$_{\textit{partial correlation}}$}}
-		\rput(5.35,1.9){{$_=$}}
-		\rput(5.35,1.5){{$_{\textit{degree of association}}$}}
-		\rput(5.3,1.1){{$_{\textit{between neurons i and j}}$}}
+		% \rput(5.35,3.3){$p_{i,j}$}
+		% \rput(5.35,2.3){{$_{\textit{partial correlation}}$}}
+		% \rput(5.35,1.9){{$_=$}}
+		% \rput(5.35,1.5){{$_{\textit{degree of association}}$}}
+		% \rput(5.3,1.1){{$_{\textit{between neurons i and j}}$}}
 
-		\rput(4.2,5){{\color{lightgreen} \textbf{known}}}
+		% \rput(4.2,5){{\color{lightgreen} \textbf{known}}}
 
-		\rput(6.3,0.6){{\color{lightgreen} \textbf{known}}}
+		% \rput(6.3,0.6){{\color{lightgreen} \textbf{known}}}
 
 
         % \psline[linewidth=2pt,linecolor=lightblue]{--}(5,9.5)(8,9.5)

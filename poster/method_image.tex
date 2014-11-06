@@ -1,0 +1,167 @@
+\documentclass[12pt]{article}
+\parindent=0pt
+\usepackage{animate}
+
+\usepackage{pst-plot,pst-xkey}
+\SpecialCoor
+\makeatletter
+\pst@addfams{demo}%     add family demo to the list
+\define@boolkey[psset]{demo}[Pst@]{showcircles}[true]{}% prefix is \Pst@
+\define@boolkey[psset]{demo}[Pst@]{hypocycloid}[true]{}%  "    "   "
+\define@key[psset]{demo}{nAngle}{\pst@getint{#1}\psk@nAngle}
+\define@key[psset]{demo}{dAngle}{\pst@getangle{#1}\psk@dAngle}
+%
+\psset[demo]{showcircles=false,nAngle=6,dAngle=60,hypocycloid=false}
+\newpsstyle{cycloid}{linecolor=black,linewidth=0.2\pslinewidth}
+%
+\def\psCycloid{\pst@object{psCycloid}}
+% A pstricks object reads a star and the optional arguments
+% and then cintinues with <name>@i
+% we use (#1), but will test, if we have another (#2,#3),
+% otherwise we use the default (0,720)
+\def\psCycloid@i(#1){%
+  \@ifnextchar({\psCycloid@ii(#1)}{\psCycloid@ii(#1)(0,360)}}
+% (#1)   : origin
+% (#2,#3): start and end angle for the parametrix plot
+% #4     : radius R of the big circle 
+% #5     : radius r of the small circle
+% #6     : radius A of the rotatetd point 
+\def\psCycloid@ii(#1)(#2,#3)#4#5#6{%
+  \pst@killglue                 % no whitespace
+  \begingroup%                  % hold all local
+  \addbefore@par{plotpoints=500}% can be overwritten by a following user set
+  \use@par%                     % set the optional arguments
+  \pst@getlength{#4}\pst@tempB% get the radius in pt (screen coors)
+  \pst@getlength{#5}\pst@tempC% get the 2nd radius in pt
+  \pst@getlength{#6}\pst@tempD% get the distance for a in pt
+  \pstVerb{                     % define it only once (in user coors!!!)
+    /R \pst@tempB \pst@number\psunit div def 
+    /r \pst@tempC \pst@number\psunit div def 
+    /A \pst@tempD \pst@number\psunit div def
+    /Rr R r \ifPst@hypocycloid sub \else add \fi def        % R +- r
+    /RDivr R r div def          % R/r
+    /RrDivr RDivr 1 \ifPst@hypocycloid sub \else add \fi def % (R+-r)/r
+  }%
+  \if@star\psset{fillstyle=eofill,fillcolor=\pslinecolor}\fi%
+  \parametricplot{#2}{#3}{%
+      Rr t cos mul t RrDivr mul cos A mul sub  % x(t)
+      Rr t sin mul t RrDivr mul sin A mul 
+      \ifPst@hypocycloid add \else sub \fi }% y(t)
+  \ifPst@showcircles%
+    \psset{style=cycloid}%
+    \pscircle(#1){#4}%
+    \multido{\rA=0.0+\psk@dAngle}{\psk@nAngle}{%
+     \rput(!#4 #5 \ifPst@hypocycloid sub \else add \fi dup 
+       \rA\space cos mul exch \rA\space sin mul){% user coors!!
+        \pscircle{#5}\psline[linecolor=blue]{*-o}(!%
+          \rA\space RrDivr mul dup % the angle
+          cos A mul neg 
+          exch sin A mul \ifPst@hypocycloid\else neg \fi)%
+    }}%
+    \psarc[arrowscale=2]{->}(#1){0.5cm}{0}{270}
+  \fi%
+  \endgroup%                    end of local macro
+  \ignorespacesafterend%                no whitespace at the end
+} 
+\makeatother
+\pagestyle{empty}
+\parindent=0pt
+
+\def\oneShot#1{%
+\begin{pspicture}(-3,-3)(3,3)
+  \psCycloid[linecolor=red,linewidth=1.5pt,showcircles,
+     dAngle=10,nAngle=1][#1](0,0){2}{0.5}{0.6}
+\end{pspicture}}
+
+\begin{document}
+
+
+
+    \begin{pspicture}(14,11)
+    % Grid
+    %\psgrid[subgriddiv=1,griddots=10,gridlabels=7pt]
+    % Calcul
+    \rput[l](9,9.5){\color{gray}{$i(t) = 0.97$}}
+    \rput[l](9,8.5){\color{gray}{$i(t_L) = 0.65$}}
+    \rput[l](9,7.5){\color{gray}{$i(t_R) = 0.81$}}
+    \rput[l](9,6.5){\color{gray}{$\Delta i(t) = i(t) - \frac{12}{20} i(t_L) - \frac{8}{20} i(t_R)$}}
+    \rput[l](10.55,5.5){\color{gray}{$= 0.25$}}
+    % Parent node
+        % Arrows
+        \psline[linewidth=2pt,linecolor=blue]{->}(4.5,10.5)(5,10)
+        \psline[linewidth=2pt,linecolor=blue]{->}(5,9)(3,7)
+        \psline[linewidth=2pt,linecolor=blue]{->}(5,9)(7,7)
+        % Node
+        \pscircle[fillstyle=solid,fillcolor=white,linewidth=2pt,linecolor=blue](5,9){1}
+        % Samples
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](4.3,9.35)(4.5,9.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.6,9.35)(4.8,9.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.9,9.35)(5.1,9.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](5.2,9.35)(5.4,9.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](5.5,9.35)(5.7,9.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.3,9.05)(4.5,9.25)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](4.6,9.05)(4.8,9.25)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](4.9,9.05)(5.1,9.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](5.2,9.05)(5.4,9.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](5.5,9.05)(5.7,9.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.3,8.75)(4.5,8.95)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](4.6,8.75)(4.8,8.95)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.9,8.75)(5.1,8.95)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](5.2,8.75)(5.4,8.95)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](5.5,8.75)(5.7,8.95)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.3,8.45)(4.5,8.65)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](4.6,8.45)(4.8,8.65)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](4.9,8.45)(5.1,8.65)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](5.2,8.45)(5.4,8.65)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](5.5,8.45)(5.7,8.65)
+        % Text
+        \rput(6,10){$t$}
+    % Left node
+        % Arrows
+        %\psline[linewidth=2pt,linecolor=gray](3,6)(2,5)
+        %\psline[linewidth=2pt,linecolor=gray](3,6)(4,5)
+        % Node
+        \psline[linewidth=2pt,linecolor=lightgray]{-}(3,6)(2,5)
+        \psline[linewidth=2pt,linecolor=lightgray]{-}(3,6)(4,5)
+        \pscircle[fillstyle=solid,fillcolor=white,linewidth=2pt,linecolor=lightgray](3,6){1}
+        % Samples
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.3,6.35)(2.5,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.6,6.35)(2.8,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.9,6.35)(3.1,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](3.2,6.35)(3.4,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](3.5,6.35)(3.7,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.3,6.05)(2.5,6.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.6,6.05)(2.8,6.25)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](2.9,6.05)(3.1,6.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](3.2,6.05)(3.4,6.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](3.5,6.05)(3.7,6.25)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](2.3,5.75)(2.5,5.95)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](2.6,5.75)(2.8,5.95)
+        % Text
+        \rput(4,7){$t_L$}
+        \rput(2.5,8){$X_m = 0$}
+    % Right node
+        % Arrows
+        %\psline[linewidth=2pt,linecolor=gray](7,6)(6,5)
+        %\psline[linewidth=2pt,linecolor=gray](7,6)(8,5)
+        % Node
+        \psline[linewidth=2pt,linecolor=lightgray]{-}(7,6)(6,5)
+        \psline[linewidth=2pt,linecolor=lightgray]{-}(7,6)(8,5)
+        \pscircle[fillstyle=solid,fillcolor=white,linewidth=2pt,linecolor=lightgray](7,6){1}
+        % Samples
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](6.3,6.35)(6.5,6.55)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](6.6,6.35)(6.8,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](6.9,6.35)(7.1,6.55)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](7.2,6.35)(7.4,6.55)
+        \psframe[fillstyle=solid,fillcolor=blue,linecolor=blue](7.5,6.35)(7.7,6.55)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](6.3,6.05)(6.5,6.25)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](6.6,6.05)(6.8,6.25)
+        \psframe[fillstyle=solid,fillcolor=red,linecolor=red](6.9,6.05)(7.1,6.25)
+        % Text
+        \rput(8,7){$t_R$}
+        \rput(7.5,8){$X_m = 1$}
+    \end{pspicture}
+
+
+\end{document}
+
