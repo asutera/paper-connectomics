@@ -49,7 +49,7 @@ for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS)
 if network in ("fluorescence_normal-3", "fluorescence_normal-4")
 ]
 
-PARAMETER_GRID = ParameterGrid(NORMAL)
+PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 
 TIME = dict()
 MEMORY = dict()
