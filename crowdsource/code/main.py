@@ -35,7 +35,7 @@ def get_sqlite3_path():
 def make_hash(args):
     """Generate a unique hash for the experience"""
     if "killing" in args:
-        return "%(network)s-m=%(method)s-d=%(directivity)s-k%(killing)s=" % args
+        return "%(network)s-m=%(method)s-d=%(directivity)s-k=%(killing)s" % args
 
     else:
         return "%(network)s-m=%(method)s-d=%(directivity)s" % args
