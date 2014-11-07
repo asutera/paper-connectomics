@@ -1,8 +1,8 @@
-slides.pdf: slides.tex beamerthemeRJH.sty
-	pdflatex -shell-escape slides
+spotlight.pdf: spotlight.tex beamerthemeRJH.sty
+	pdflatex -shell-escape spotlight
 
-all: slides.tex beamerthemeRJH.sty
-	pdflatex -shell-escape slides && open slides.pdf
+all: spotlight.tex beamerthemeRJH.sty
+	pdflatex -shell-escape spotlight && open spotlight.pdf
 
 
 clean:
