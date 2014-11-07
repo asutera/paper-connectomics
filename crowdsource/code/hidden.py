@@ -22,7 +22,7 @@ def kill(X, name, var):
     name = name[len("fluorescence_"):]
 
     # load name_kill_var
-    killing_file = os.path.join(WORKING_DIR, "datasets", "hidden-neurons",s
+    killing_file = os.path.join(WORKING_DIR, "datasets", "hidden-neurons",
                                 "{0}_kill_{1}.txt".format(name, var))
     kill = np.loadtxt(killing_file, dtype=np.int)
 
