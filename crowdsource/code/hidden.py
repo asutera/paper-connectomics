@@ -28,7 +28,7 @@ def kill(X, name, var):
 
     # make a mask
     alive = np.ones((n_nodes,), dtype=bool)
-    alive[kill] = False
+    alive[kill - 1] = False  # we need to make -1 since it's matlab indexing
 
     # kill neurons
     X_kill = X[:, alive]
