@@ -22,7 +22,8 @@ def kill(X, name, var):
     name = name[len("fluorescence_"):]
 
     # load name_kill_var
-    killing_file = WORKING_DIR + "{0}_kill/{0}_kill_{1}.txt".format(name, var)
+    killing_file = os.path.join(WORKING_DIR,
+                                "{0}_kill/{0}_kill_{1}.txt".format(name, var))
     kill = np.loadtxt(killing_file, dtype=np.int)
 
     # make a mask
