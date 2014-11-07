@@ -58,7 +58,7 @@ def parse_arguments(args=None):
                         default=0, choices=[0, 1],
                         help='Consider information about directivity?')
     parser.add_argument('-k', '--killing', type=int, required=False,
-                        default=0, choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        choices=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                         help='Should we "kill" some neurons?')
     return vars(parser.parse_args(args))
 
@@ -75,10 +75,10 @@ if __name__ == "__main__":
     X = np.loadtxt(args["fluorescence"], delimiter=",")
     X = np.asfortranarray(X, dtype=np.float32)
     # pos = np.loadtxt(args["position"], delimiter=",")
-    if name in ["normal-3", "normal-4"]:
-        var_kill = args["killing"]
-        if var_kill != 0:
-            X = kill(X, name, var_kill)
+
+    # Should we remove some neurons?
+    if "killing" in args and name in ["normal-3", "normal-4"]:
+        X = kill(X, name, args["killing"])
 
     # Producing the prediction matrix
     if args["method"] == 'tuned':
