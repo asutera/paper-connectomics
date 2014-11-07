@@ -28,13 +28,28 @@ ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
                 for x in ALL_FLUORESCENCE]
 ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]) for x in ALL_NETWORKS]
 
-PARAMETER_GRID = ParameterGrid({
+
+NORMAL = [{
     "output_dir": [os.path.join(WORKING_DIR, "submission")],
     "network": [network],
     "fluorescence": [fluorescence],
     "method": ["simple", "tuned"],
     "directivity": [0, 1],
-} for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS))
+} for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS)]
+
+HIDDEN_NEURON = [{
+    "output_dir": [os.path.join(WORKING_DIR, "submission")],
+    "network": [network],
+    "fluorescence": [fluorescence],
+    "method": ["simple", "tuned"],
+    "directivity": [0, 1],
+    "killing": range(1, 11),
+}
+for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS)
+if network in ("fluorescence_normal-3", "fluorescence_normal-4")
+]
+
+PARAMETER_GRID = ParameterGrid(NORMAL)
 
 TIME = dict()
 MEMORY = dict()

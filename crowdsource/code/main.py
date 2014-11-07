@@ -77,8 +77,12 @@ if __name__ == "__main__":
     # pos = np.loadtxt(args["position"], delimiter=",")
 
     # Should we remove some neurons?
-    if "killing" in args and name in ["normal-3", "normal-4"]:
-        X = kill(X, name, args["killing"])
+    if "killing" in args:
+        if args["network"] in ["fluorescence_normal-3",
+                               "fluorescence_normal-4"]:
+            X = kill(X, args["network"], args["killing"])
+        else:
+            raise ValueError("No killing specified for %s" % args["network"])
 
     # Producing the prediction matrix
     if args["method"] == 'tuned':
