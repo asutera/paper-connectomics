@@ -42,9 +42,6 @@ def make_hash(args):
 
 def parse_arguments(args=None):
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
-
-    parser = argparse.ArgumentParser(description='Perform Connectomics '
-                                                 'modelling')
     parser.add_argument('-f', '--fluorescence', type=str, required=True,
                         help='Path to the fluorescence file')
     # parser.add_argument('-p', '--position', type=str, required=False,
