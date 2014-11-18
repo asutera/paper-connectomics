@@ -24,9 +24,8 @@ ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, "datasets", x)
                                                      "datasets"))
                     if (x.startswith("fluorescence_"))]
 
-ALL_NETWORKS = [x.split("_", 1)[1] if x.startswith("fluorescence_") else x
+ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]).split("_", 1)[1]
                 for x in ALL_FLUORESCENCE]
-ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]) for x in ALL_NETWORKS]
 
 
 NORMAL = [{
@@ -46,7 +45,7 @@ HIDDEN_NEURON = [{
     "killing": range(1, 11),
 }
 for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS)
-if network in ("fluorescence_normal-3", "fluorescence_normal-4")
+if network in ("normal-3", "normal-4")
 ]
 
 PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)

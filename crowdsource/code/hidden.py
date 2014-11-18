@@ -19,7 +19,7 @@ def kill(X, name, var):
 
     n_samples, n_nodes = X.shape
 
-    name = name[len("fluorescence_"):]
+    # name = name[len("fluorescence_"):]
 
     # load name_kill_var
     killing_file = os.path.join(WORKING_DIR, "datasets", "hidden-neurons",

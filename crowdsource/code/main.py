@@ -78,8 +78,8 @@ if __name__ == "__main__":
 
     # Should we remove some neurons?
     if "killing" in args:
-        if args["network"] in ["fluorescence_normal-3",
-                               "fluorescence_normal-4"]:
+        if args["network"] in ["normal-3",
+                               "normal-4"]:
             X = kill(X, args["network"], args["killing"])
         else:
             raise ValueError("No killing specified for %s" % args["network"])
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         if not os.path.exists(args["output_dir"]):
             os.makedirs(args["output_dir"])
 
-        outname = os.path.join(args["output_dir"], job_hash)
+        outname = os.path.join(args["output_dir"], "%s.csv" % job_hash)
 
         # Generate the submission file ##
         with open(outname, 'w') as fname:
