@@ -113,7 +113,7 @@ Accordingly, the first step of our pipeline is to smoothe the signal, using
 one of the following low-pass filters for filtering out high frequency noise:
 \begin{align}
 f_1(x^t_i) &= x^{t-1}_i + x^t_i + x^{t+1}_i, \label{eq:symetric-median} \\
-f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.6 x^{t-2}_i + 0.8 x^{t-1}_i + x_i^t.
+f_2(x^t_i) &= 0.4 x^{t-3}_i + 0.8 x^{t-2}_i + x^{t-1}_i + x_i^t.
 \label{eq:weighted-asymetric-median}
 \end{align}
 These filters are standard in the signal processing field \citep{kaiser1977data, oppenheim1983signals}. For the purposes of illustration, the effect of the filter $f_1$ on the signal
@@ -430,7 +430,7 @@ As discussed in Section \ref{sec:inference}, the performance of the method (in
 terms of AUROC) is sensitive to the value of the parameter $\tau$ of the
 hard-threshold filter $h$ (see Equation \ref{eqn:hfilter}), and to the choice
 of the low-pass filter (among $\{f_1, f_2, f_3, f_4\}$).
-As in the simplified method, we have averaged the partial correlation statistics obtained for all the pairs $(\tau,\mbox{low-pass filter}) \in \{0.100,0.101,\ldots,0.209\}\times \{f_1, f_2, f_3, f_4\}$.
+As in the simplified method, we have averaged the partial correlation statistics obtained for all the pairs $(\tau,\mbox{low-pass filter}) \in \{0.100,0.101,\ldots,0.210\}\times \{f_1, f_2, f_3, f_4\}$.
 
 Filters $f_1$ and $f_2$ display similar performances and thus were given similar
 weights (i.e., resp. $0.383$ and $0.345$). These weights were chosen equal to the weights selected for the simplified method. In contrast, filters $f_3$
