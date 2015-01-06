@@ -1,0 +1,41 @@
+\documentclass[wcp]{jmlr}
+
+\usepackage{enumerate}
+\usepackage{bbold}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage[super]{nth}
+\setlength{\textfloatsep}{15pt}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\jmlryear{2014}
+\jmlrworkshop{Neural Connectomics Workshop}
+
+\title{Simple connectome inference from partial correlation statistics in calcium imaging}
+
+  \author{\Name{Antonio Sutera},
+   \Name{Arnaud Joly},
+   \Name{Vincent François-Lavet}, \Email{a.sutera@ulg.ac.be}\\
+   \Name{Zixiao Aaron Qiu},
+   \Name{Gilles Louppe},
+   \Name{Damien Ernst}\and\Name{Pierre Geurts}
+    \\
+   \addr Department of EE and CS \& GIGA-R, University of Li\`ege, Belgium}
+
+\begin{document}
+
+\section*{Abstract}
+The human brain is a complex biological organ made of 100 billions of neurons, each connected to 7000 other neurons on average. Unfortunately, direct observation of the connectome, the wiring diagram of the brain, is not yet technically feasible. Without being perfect, calcium imaging currently allows the real-time and simultaneous observation of neuron activities from thousands of neurons, producing individual time series representing their fluorescence intensity. From these data, the connectome inference problem amounts to retrieving the synaptic connections between neurons on the basis of the fluorescence time series. This problem is however very difficult because of various experimental issues.
+
+In this work, we propose a novel simple yet effective solution to the problem of connectome inference in calcium imaging data. The method consists of two steps. (i) a pre-processing of the raw signals to detect neural peak activities; and (ii) the inference of the network through partial correlation statistics. The pre-processing combines several standard filters to remove the noise introduced at different levels, to account for fluorescence low decay, and to reduce the importance of high global activity in the network. From the filtered signals, the strength of the connection between two neurons is then assessed using partial correlations. With respect to plain correlation, the main advantage of partial correlation for network inference is to only give a high degree of association to directly connected neurons and thus to filter out spurious indirect associations.
+
+This method was applied in the context of the recent Connectomics challenge (\url{http://connectomics.chalearn.org}), where we won the first position among more than 100 participating teams. The poster will present various experiments on the challenge data. The goal of these experiments is to provide a separate assessment of each step of the method and to compare it with other inference methods from the literature.
+
+\cite{}
+\newpage
+\bibliography{references}
+
+\end{document}
