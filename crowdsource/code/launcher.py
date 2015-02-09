@@ -77,6 +77,7 @@ def compute_scores(f_ground_truth, f_prediction):
 
         for line in fhandle:
             prefix, score = line.split(",")
+            print(score)
             scores.append(float(scores))
             _, row, col = prefix.split("_")
             rows.append(int(row))
