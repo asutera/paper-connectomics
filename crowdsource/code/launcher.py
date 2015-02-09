@@ -102,7 +102,7 @@ def compute_scores(f_ground_truth, f_prediction):
 
     # Compute scores
     measures = dict((name, metric(y_true, y_scores, average="micro"))
-                    for name, metric in METRICS)
+                    for name, metric in METRICS.items())
 
     return measures
 
