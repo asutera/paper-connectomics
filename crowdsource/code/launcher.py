@@ -68,6 +68,9 @@ METRICS = {
 
 
 def compute_scores(f_ground_truth, f_prediction):
+    print(f_ground_truth)
+
+
     # Load predictions
     rows = []
     cols = []
@@ -78,7 +81,7 @@ def compute_scores(f_ground_truth, f_prediction):
         for line in fhandle:
             line = line.strip()
 
-            prefix, score = line.rsplit(",")
+            prefix, score = line.rsplit(",", maxsplit=1)
             scores.append(float(score))
             row, col = prefix.split("_")[-2:]
             rows.append(int(row))
@@ -86,7 +89,6 @@ def compute_scores(f_ground_truth, f_prediction):
     y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
 
     # Load ground truth
-    print(f_ground_truth)
     raw_graph = np.loadtxt(f_ground_truth, delimiter=",")
     row = raw_graph[:, 0] - 1
     col = raw_graph[:, 1] - 1
