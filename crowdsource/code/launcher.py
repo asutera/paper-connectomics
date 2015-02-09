@@ -101,6 +101,7 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
         # make a mask
         alive = np.ones((y_true.shape[0],), dtype=bool)
         alive[kill - 1] = False  # we need to make -1 since it's matlab indexing
+        print(y_true[alive].shape)
         y_true = y_true[alive][alive]
         print(y_true.sum())
 
