@@ -150,9 +150,9 @@ if __name__ == "__main__":
                 if "normal-" in parameters["network"]:
                     network = parameters["network"][:len("normal-") + 1]
                 elif "test" in parameters["network"]:
-                    network = "test"
+                    continue
                 elif "valid" in parameters['network']:
-                    network = "valid"
+                    continue
                 else:
                     raise ValueError("Unknown network")
 
