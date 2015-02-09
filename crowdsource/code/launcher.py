@@ -76,22 +76,6 @@ METRICS = {
 
 
 def compute_scores(f_ground_truth, f_prediction, parameters):
-    # Load predictions
-    rows = []
-    cols = []
-    scores = []
-    with open(f_prediction) as fhandle:
-        fhandle.next()
-
-        for line in fhandle:
-            line = line.strip()
-
-            prefix, score = line.rsplit(",", 1)
-            scores.append(float(score))
-            row, col = prefix.split("_")[-2:]
-            rows.append(int(row) - 1)
-            cols.append(int(col) - 1)
-    y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
 
     # Load ground truth
     raw_graph = np.loadtxt(f_ground_truth, delimiter=",")
@@ -120,8 +104,26 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
         y_true = y_true[alive, alive]
         print(y_true.sum())
 
+
+    # Load predictions
+    rows = []
+    cols = []
+    scores = []
+    with open(f_prediction) as fhandle:
+        fhandle.next()
+
+        for line in fhandle:
+            line = line.strip()
+
+            prefix, score = line.rsplit(",", 1)
+            scores.append(float(score))
+            row, col = prefix.split("_")[-2:]
+            rows.append(int(row) - 1)
+            cols.append(int(col) - 1)
+    y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
+
     # Compute scores
-    measures = dict((name, metric(y_true.ravel(), y_scores.ravel(), average="micro"))
+    measures = dict((name, metric(y_true.ravel(), y_scores.ravel()))
                     for name, metric in METRICS.items())
 
     return measures
