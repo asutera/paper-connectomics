@@ -67,7 +67,7 @@ METRICS = {
 }
 
 
-def compute_scores(f_ground_truth, f_prediction):
+def compute_scores(f_ground_truth, f_prediction, parameters):
     # Load predictions
     rows = []
     cols = []
@@ -92,10 +92,23 @@ def compute_scores(f_ground_truth, f_prediction):
     data = raw_graph[:, 2]
     valid_index = data > 0
     y_true = coo_matrix((data[valid_index],
-                         (row[valid_index], col[valid_index])),
-                        shape=y_scores.shape)
+                         (row[valid_index], col[valid_index])))
 
     y_true = y_true.toarray()
+
+    if parameters.get("killing", None):
+
+        # load name_kill_var
+        killing_file = os.path.join(WORKING_DIR, "datasets", "hidden-neurons",
+                                    "{0}_kill_{1}.txt"
+                                    "".format(parameters["network"],
+                                              parameters["killing"]))
+        kill = np.loadtxt(killing_file, dtype=np.int)
+
+        # make a mask
+        alive = np.ones((y_true.shape[0],), dtype=bool)
+        alive[kill - 1] = False  # we need to make -1 since it's matlab indexing
+        y_true = y_true[alive, alive]
 
     # Compute scores
     measures = dict((name, metric(y_true, y_scores, average="micro"))
