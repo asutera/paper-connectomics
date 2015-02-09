@@ -164,6 +164,7 @@ if __name__ == "__main__":
                 measure = compute_scores(ground_truth, fname)
                 row = deepcopy(parameters)
                 row.update(measure)
+                pprint(row)
                 results.append(row)
 
 
