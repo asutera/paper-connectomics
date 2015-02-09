@@ -84,8 +84,8 @@ def compute_scores(f_ground_truth, f_prediction):
             prefix, score = line.rsplit(",", 1)
             scores.append(float(score))
             row, col = prefix.split("_")[-2:]
-            rows.append(int(row))
-            cols.append(int(col))
+            rows.append(int(row) - 1)
+            cols.append(int(col) - 1)
     y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
 
     # Load ground truth
