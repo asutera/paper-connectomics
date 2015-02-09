@@ -73,6 +73,8 @@ def compute_scores(f_ground_truth, f_prediction):
     cols = []
     scores = []
     with open(f_ground_truth) as fhandle:
+        fhandle.next()
+
         for line in fhandle:
             prefix, score = line.split(",")
             scores.append(float(scores))
