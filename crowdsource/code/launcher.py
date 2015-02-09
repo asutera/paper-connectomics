@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
                 ground_truth = os.path.join(WORKING_DIR, "datasets",
                                             "network_%s.txt" % network)
-                measure = compute_scores(fname, ground_truth)
+                measure = compute_scores(ground_truth, fname)
                 row = deepcopy(parameters)
                 row.update(measure)
                 results.append(row)
