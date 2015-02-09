@@ -122,6 +122,9 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
             cols.append(int(col) - 1)
     y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
 
+    print(y_true.shape)
+    print(y_scores.shape)
+
     # Compute scores
     measures = dict((name, metric(y_true.ravel(), y_scores.ravel()))
                     for name, metric in METRICS.items())
