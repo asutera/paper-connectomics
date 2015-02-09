@@ -61,9 +61,9 @@ PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 TIME = dict()
 MEMORY = dict()
 
-def _roc_auc_score(y_true, y_score, average):
+def _roc_auc_score(y_true, y_score):
     try:
-        return roc_auc_score(y_true, y_score, average)
+        return roc_auc_score(y_true, y_score)
     except ValueError:
         return np.nan
 
