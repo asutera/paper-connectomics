@@ -101,7 +101,7 @@ def compute_scores(f_ground_truth, f_prediction):
     y_true = y_true.toarray()
 
     # Compute scores
-    measures = dict((name, metric(y_true.ravel(), y_scores.ravel()))
+    measures = dict((name, metric(y_true, y_scores, average="micro"))
                     for name, metric in METRICS)
 
     return measures
