@@ -68,9 +68,6 @@ METRICS = {
 
 
 def compute_scores(f_ground_truth, f_prediction):
-    print(f_ground_truth)
-
-
     # Load predictions
     rows = []
     cols = []
