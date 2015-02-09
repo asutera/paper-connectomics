@@ -86,6 +86,7 @@ def compute_scores(f_ground_truth, f_prediction):
     y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
 
     # Load ground truth
+    print(f_ground_truth)
     raw_graph = np.loadtxt(f_ground_truth, delimiter=",")
     row = raw_graph[:, 0] - 1
     col = raw_graph[:, 1] - 1
