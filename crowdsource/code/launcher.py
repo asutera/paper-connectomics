@@ -28,8 +28,10 @@ ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]).split("_", 1)[1]
                 for x in ALL_FLUORESCENCE]
 
 
+OUTPUT_DIR = os.path.join(WORKING_DIR, "submission")
+
 NORMAL = [{
-    "output_dir": [os.path.join(WORKING_DIR, "submission")],
+    "output_dir": [OUTPUT_DIR],
     "network": [network],
     "fluorescence": [fluorescence],
     "method": ["simple", "tuned"],
@@ -37,7 +39,7 @@ NORMAL = [{
 } for fluorescence, network in zip(ALL_FLUORESCENCE, ALL_NETWORKS)]
 
 HIDDEN_NEURON = [{
-    "output_dir": [os.path.join(WORKING_DIR, "submission")],
+    "output_dir": [OUTPUT_DIR],
     "network": [network],
     "fluorescence": [fluorescence],
     "method": ["simple", "tuned"],
@@ -53,6 +55,11 @@ PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 TIME = dict()
 MEMORY = dict()
 
+def compute_scores(f_ground_truth, f_prediction):
+    print("--")
+    print(f_ground_truth)
+    print(f_prediction)
+
 
 if __name__ == "__main__":
 
@@ -60,6 +67,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--debug', default=False, action="store_true")
     parser.add_argument('-v', '--verbose', default=False, action="store_true")
+    parser.add_argument('-s', '--scores', default=False, action="store_true",
+                        help="compute scores")
+
     args = vars(parser.parse_args())
 
 
@@ -85,6 +95,15 @@ if __name__ == "__main__":
 
         elif job_hash in all_jobs_done:
             n_jobs_done += 1
+
+            if args["scorse"]:
+                fname = os.path.join(OUTPUT_DIR, "%s.csv" % job_hash)
+                ground_truth = os.path.join(WORKING_DIR, "datasets",
+                                            "network_%s.txt"
+                                            % parameters["network"])
+                compute_scores(fname, ground_truth)
+
+
 
         else:
             n_jobs_launched += 1

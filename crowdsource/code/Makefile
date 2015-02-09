@@ -9,6 +9,9 @@ launch: sync-git
 launch-debug: sync-git
 	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launcher.py -dv"
 
+launch-result: sync-git
+	ssh ${HOST} "cd ${GIT_DIRECTORY}/crowdsource/code && python launcher.py -ds"
+
 retrieve:
 	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/*.sqlite3 ${DATA_DIRECTORY}
 
