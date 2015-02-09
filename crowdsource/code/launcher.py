@@ -92,7 +92,8 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
     data = raw_graph[:, 2]
     valid_index = data > 0
     y_true = coo_matrix((data[valid_index],
-                         (row[valid_index], col[valid_index])))
+                         (row[valid_index], col[valid_index])),
+                        shape=(1000, 1000))
 
     y_true = y_true.toarray()
 
