@@ -65,7 +65,7 @@ def _roc_auc_score(y_true, y_score, average):
     try:
         return roc_auc_score(y_true, y_score, average)
     except ValueError:
-        return 0.5
+        return np.nan
 
 METRICS = {
     "roc_auc_score": _roc_auc_score,
@@ -121,7 +121,7 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
         print(y_true.sum())
 
     # Compute scores
-    measures = dict((name, metric(y_true, y_scores, average="micro"))
+    measures = dict((name, metric(y_true.ravel(), y_scores.ravel(), average="binary"))
                     for name, metric in METRICS.items())
 
     return measures
