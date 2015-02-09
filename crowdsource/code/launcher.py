@@ -75,7 +75,7 @@ def compute_scores(f_ground_truth, f_prediction):
     rows = []
     cols = []
     scores = []
-    with open(f_ground_truth) as fhandle:
+    with open(f_prediction) as fhandle:
         fhandle.next()
 
         for line in fhandle:
