@@ -3,8 +3,10 @@ import sys
 import argparse
 import shlex
 from pprint import pprint
+from copy import deepcopy
 
 import numpy as np
+from scipy.sparse import coo_matrix
 
 from sklearn.grid_search import ParameterGrid
 
@@ -12,10 +14,14 @@ from clusterlib.scheduler import queued_or_running_jobs
 from clusterlib.scheduler import submit
 from clusterlib.storage import sqlite3_loads
 
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import roc_auc_score
+
 from main import WORKING_DIR
 from main import make_hash
 from main import parse_arguments
 from main import get_sqlite3_path
+from utils import scale
 
 LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 
@@ -55,10 +61,44 @@ PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 TIME = dict()
 MEMORY = dict()
 
+METRICS = {
+    "roc_auc_score": roc_auc_score,
+    "average_precision_score": average_precision_score,
+}
+
+
 def compute_scores(f_ground_truth, f_prediction):
-    print("--")
-    print(f_ground_truth)
-    print(f_prediction)
+    # Load predictions
+    rows = []
+    cols = []
+    scores = []
+    with open(f_ground_truth) as fhandle:
+        for line in fhandle:
+            prefix, score = line.split(",")
+            scores.append(float(scores))
+            _, row, col = prefix.split("_")
+            rows.append(int(row))
+            cols.append(int(col))
+    y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
+
+    # Load ground truth
+    raw_graph = np.loadtxt(f_ground_truth, delimiter=",")
+    row = raw_graph[:, 0] - 1
+    col = raw_graph[:, 1] - 1
+    data = raw_graph[:, 2]
+    valid_index = data > 0
+    y_true = coo_matrix((data[valid_index],
+                         (row[valid_index], col[valid_index])),
+                        shape=y_scores.shape)
+
+    y_true = y_true.toarray()
+
+    # Compute scores
+    measures = dict((name, metric(y_true.ravel(), y_scores.ravel()))
+                    for name, metric in METRICS)
+
+    return measures
+
 
 
 if __name__ == "__main__":
@@ -86,6 +126,8 @@ if __name__ == "__main__":
     n_jobs_done = 0
     n_jobs_launched = 0
 
+    results = []
+
     # Launch if necessary experiments
     for parameters in PARAMETER_GRID:
         job_hash = make_hash(parameters)
@@ -98,11 +140,24 @@ if __name__ == "__main__":
 
             if args["scores"]:
                 fname = os.path.join(OUTPUT_DIR, "%s.csv" % job_hash)
-                ground_truth = os.path.join(WORKING_DIR, "datasets",
-                                            "network_%s.txt"
-                                            % parameters["network"])
-                compute_scores(fname, ground_truth)
 
+
+                network = parameters["network"]
+                if "normal-" in parameters["network"]:
+                    network = parameters["network"][:len("normal-") + 1]
+                elif "test" in parameters["network"]:
+                    network = "test"
+                elif "valid" in parameters['network']:
+                    network = "valid"
+                else:
+                    raise ValueError("Unknown network")
+
+                ground_truth = os.path.join(WORKING_DIR, "datasets",
+                                            "network_%s.txt" % network)
+                measure = compute_scores(fname, ground_truth)
+                row = deepcopy(parameters)
+                row.update(measure)
+                results.append(row)
 
 
         else:
@@ -141,3 +196,12 @@ if __name__ == "__main__":
     print("n_jobs_runnings = %s" % n_jobs_running)
     print("n_jobs_done = %s" % n_jobs_done)
     print("n_jobs_launched = %s" % n_jobs_launched)
+
+    if args["scores"]:
+        import pandas as pd
+        results = pd.DataFrame(results)
+
+        writer = pd.ExcelWriter(os.path.join(WORKING_DIR,
+                                             "summary_connectomics.xls"))
+        results.to_excel(writer)
+        writer.save()
