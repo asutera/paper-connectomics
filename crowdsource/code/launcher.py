@@ -80,7 +80,7 @@ def compute_scores(f_ground_truth, f_prediction):
 
             prefix, score = line.split(",")
             scores.append(float(score))
-            _, row, col = prefix.split("_")
+            row, col = prefix.split("_")[-2:]
             rows.append(int(row))
             cols.append(int(col))
     y_scores = scale(coo_matrix((scores, (rows, cols))).toarray())
