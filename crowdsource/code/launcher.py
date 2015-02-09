@@ -61,10 +61,18 @@ PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 TIME = dict()
 MEMORY = dict()
 
+def _roc_auc_score(y_true, y_score, average):
+    try:
+        return roc_auc_score(y_true, y_score, average)
+    except ValueError:
+        return 0.5
+
 METRICS = {
-    "roc_auc_score": roc_auc_score,
+    "roc_auc_score": _roc_auc_score,
     "average_precision_score": average_precision_score,
 }
+
+
 
 
 def compute_scores(f_ground_truth, f_prediction, parameters):
