@@ -101,8 +101,8 @@ if __name__ == "__main__":
             cmd = submit(job_command="%s main.py %s"
                                      % (sys.executable, cmd_parameters),
                          job_name=job_hash,
-                         time="48:00:00",
-                         memory=20000,
+                         time="100:00:00",
+                         memory=24000,
                          log_directory=LOG_DIRECTORY,
                          backend="slurm")
 
