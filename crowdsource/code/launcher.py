@@ -96,7 +96,7 @@ if __name__ == "__main__":
         elif job_hash in all_jobs_done:
             n_jobs_done += 1
 
-            if args["scorse"]:
+            if args["scores"]:
                 fname = os.path.join(OUTPUT_DIR, "%s.csv" % job_hash)
                 ground_truth = os.path.join(WORKING_DIR, "datasets",
                                             "network_%s.txt"
