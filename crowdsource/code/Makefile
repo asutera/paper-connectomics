@@ -15,6 +15,10 @@ launch-result: sync-git
 retrieve:
 	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/*.sqlite3 ${DATA_DIRECTORY}
 
+retrieve-all:
+	rsync -avz --progress -e ssh ${HOST}:${DATA_DIRECTORY}/ ${DATA_DIRECTORY}
+
+
 summary:
 	python launch.py -sd
 
@@ -49,7 +53,7 @@ clean-logs:
 	cd ${DATA_DIRECTORY}/logs && rm *
 	mkdir -p ${DATA_DIRECTORY}/logs
 
-# Retrieve generated data from cluster
+
 
 # retrieve-performance:
 # 	scp ${HOST}:${DATA_DIRECTORY}/exploration_performance.sqlite3 ${DATA_DIRECTORY}
