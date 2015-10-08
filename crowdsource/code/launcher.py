@@ -17,8 +17,6 @@ from main import parse_arguments
 from main import get_sqlite3_path
 
 
-LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
-
 # Make the grid of parameters to evaluate -------------------------------------
 
 ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, "datasets", x)
@@ -54,6 +52,7 @@ PARAMETER_GRID = ParameterGrid(NORMAL + HIDDEN_NEURON)
 
 # Useful constant for the job launch -------------------------------------
 
+LOG_DIRECTORY = os.path.join(WORKING_DIR, "logs")
 CLUSTER_MIN_TIME = 5
 CLUSTER_MAX_TIME = 63
 CLUSTER_MAX_N_JOBS = 1000
