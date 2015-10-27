@@ -58,7 +58,7 @@ CLUSTER_MIN_TIME = 5
 CLUSTER_MAX_TIME = 63
 CLUSTER_MAX_N_JOBS = 1000
 
-JOB_MIN_MEMORY = 5000
+JOB_MIN_MEMORY = 4000
 JOB_MIN_TIME = 100
 
 
@@ -72,6 +72,7 @@ def select_queue(memory, time):
         partitions.append('Short')
     if time < 360:
         partitions.append("Long")
+        partitions.append("XLong")
 
     return " -p %s " % ",".join(partitions)
 
