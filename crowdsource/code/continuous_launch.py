@@ -7,4 +7,4 @@ while True:
     os.system("make launch")
     print("End launch job at")
     os.system('date')
-    time.sleep(1800)
+    time.sleep(300)
