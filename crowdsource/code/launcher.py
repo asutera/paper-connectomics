@@ -166,6 +166,7 @@ if __name__ == "__main__":
         elif job_hash in all_jobs_running:
             n_jobs_running += 1
         elif job_hash in to_launch:
+            print("job_hash = %s" % job_hash)
             print("current parameters")
             pprint(parameters)
             print("already in")
