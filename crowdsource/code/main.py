@@ -34,11 +34,15 @@ def get_sqlite3_path():
 
 def make_hash(args):
     """Generate a unique hash for the experience"""
-    if "killing" in args:
-        return "%(network)s-m=%(method)s-d=%(directivity)s-k=%(killing)s" % args
 
-    else:
-        return "%(network)s-m=%(method)s-d=%(directivity)s" % args
+    format_job_hash = "%(network)s-m=%(method)s-d=%(directivity)s"
+    if "killing" in args:
+        format_job_hash += "-k=%(killing)s"
+    job_hash = format_job_hash % args
+
+    if "bursting" in args["fluorescence"]:
+        job_hash += "-b=%s" % args["fluorescence"].split("/")[-2]
+
 
 def parse_arguments(args=None):
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
