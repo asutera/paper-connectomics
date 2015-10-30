@@ -168,7 +168,9 @@ if __name__ == "__main__":
             n_jobs_running += 1
         elif job_hash in to_launch:
             print("current parameters")
-            print(parameters)
+            pprint(parameters)
+            print("already in")
+            pprint(to_launch[job_hash])
             raise ValueError("We have a hash collision")
         else:
             to_launch[make_hash(parameters)] = parameters
