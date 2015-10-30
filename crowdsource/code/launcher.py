@@ -19,10 +19,17 @@ from main import get_sqlite3_path
 
 # Make the grid of parameters to evaluate -------------------------------------
 
-ALL_FLUORESCENCE = [os.path.join(WORKING_DIR, "datasets", x)
-                    for x in os.listdir(os.path.join(WORKING_DIR,
-                                                     "datasets"))
-                    if (x.startswith("fluorescence_"))]
+
+ALL_FLUORESCENCE = []
+for directory in [os.path.join(WORKING_DIR, "datasets"),
+                  os.path.join(WORKING_DIR, "datasets", "normal-bursting"),
+                  os.path.join(WORKING_DIR, "datasets", "low-bursting"),
+                  os.path.join(WORKING_DIR, "datasets", "high-bursting")]:
+    if os.path.exists(directory):
+        for path in os.listdir(directory):
+            if path.startswith("fluorescence_"):
+                ALL_FLUORESCENCE.append(os.path.join(WORKING_DIR, "datasets",
+                                                     path))
 
 ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]).split("_", 1)[1]
                 for x in ALL_FLUORESCENCE]
