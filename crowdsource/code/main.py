@@ -42,6 +42,7 @@ def make_hash(args):
     if "bursting" in args["fluorescence"]:
         job_hash += "-b=%s" % args["fluorescence"].split("/")[-2]
 
+    return job_hash
 
 def parse_arguments(args=None):
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
