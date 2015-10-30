@@ -179,7 +179,7 @@ if __name__ == "__main__":
     time, memory = compute_memory_time(to_launch, show_log_error=args["logs"])
 
     # Launch if necessary experiments
-    max_n_launch = max(CLUSTER_MAX_N_JOBS - len(all_jobs_running), 0)
+    max_n_launch = max(CLUSTER_MAX_N_JOBS - n_jobs_running, 0)
     n_jobs_launched = 0
 
     for job_hash, parameters in list(to_launch.items())[:max_n_launch]:
