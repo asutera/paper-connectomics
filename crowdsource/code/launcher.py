@@ -65,7 +65,7 @@ CLUSTER_MAX_TIME = 63
 CLUSTER_MAX_N_JOBS = 1000
 
 JOB_MIN_MEMORY = 4000
-JOB_MIN_TIME = 100
+JOB_MIN_TIME = 24
 
 
 def select_queue(memory, time):
