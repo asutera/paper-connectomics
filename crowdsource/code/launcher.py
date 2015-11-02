@@ -30,8 +30,9 @@ for directory in [os.path.join(WORKING_DIR, "datasets"),
             if path.startswith("fluorescence_"):
                 ALL_FLUORESCENCE.append(os.path.join(directory, path))
 
-ALL_NETWORKS = set(os.path.basename(os.path.splitext(x)[0]).split("_", 1)[1]
-                   for x in ALL_FLUORESCENCE)
+ALL_NETWORKS = [os.path.basename(os.path.splitext(x)[0]).split("_", 1)[1]
+                for x in ALL_FLUORESCENCE]
+
 
 OUTPUT_DIR = os.path.join(WORKING_DIR, "submission")
 
