@@ -61,8 +61,8 @@ def compute_scores(f_ground_truth, f_prediction, parameters):
     cols = []
     scores = []
     with open(f_prediction) as fhandle:
-        print(f_prediction)
-        fhandle.next()
+        # Skip head line
+        fhandle.readline()
 
         for line in fhandle:
             line = line.strip()
