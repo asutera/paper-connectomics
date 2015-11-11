@@ -98,8 +98,6 @@ if __name__ == "__main__":
                     "valid" in parameters['network']):
                 # We don't have the ground truth network
                 continue
-            else:
-                raise ValueError("Unknown network")
 
             ground_truth = os.path.join(WORKING_DIR, "datasets",
                                         "network_%s.txt" % network)
