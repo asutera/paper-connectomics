@@ -99,6 +99,17 @@ if __name__ == "__main__":
                 # We don't have the ground truth network
                 continue
 
+            for bursting_type in ["normal-bursting", "low-bursting",
+                                  "high-bursting"]:
+                if bursting_type in parameters["fluorescence"]:
+                    ground_truth = os.path.join(WORKING_DIR, "datasets",
+                                                bursting_type,
+                                                "network_%s.txt" % network)
+                    break
+            else:
+                ground_truth = os.path.join(WORKING_DIR, "datasets",
+                                            "network_%s.txt" % network)
+
             ground_truth = os.path.join(WORKING_DIR, "datasets",
                                         "network_%s.txt" % network)
             measure = compute_scores(ground_truth, fname, parameters)

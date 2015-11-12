@@ -13,10 +13,8 @@ launch-result: sync-git
 
 retrieve:
 	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/*.sqlite3 ${DATA_DIRECTORY}
-
-retrieve-all:
-	rsync -avz --progress -e ssh ${HOST}:${DATA_DIRECTORY}/ ${DATA_DIRECTORY}
-
+	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/submission ${DATA_DIRECTORY}
+	rsync -avz -e ssh ${HOST}:${DATA_DIRECTORY}/*.xls ${DATA_DIRECTORY}
 
 summary:
 	python launch.py -sd
